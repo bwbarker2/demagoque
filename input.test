@@ -1,0 +1,30 @@
+! ........... READ AND WRITE PARAMETERS
+1 ! ntime
+! ........... PHYSICAL PARAMETERS
+0.5 ! delt [fm/c]
+100 ! Nevt
+0   ! Nmax
+25.0 ! EA [MeV]
+25.0  ! xLa [fm]
+25.0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
+! ............. POTENTIAL PARAMETERS
+0  ! potInitial
+0  ! potFinal
+1 1 1  ! tad,wtad,Nad
+0  ! iadib
+
+
+!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+! INPUT FILE FOR THE EVOLUTION PROGRAM
+! ntime ->  Controls how often the data is written
+! delt -> Time interval                                                    c
+! Nt -> Number of time intervals                                           c
+! Nmax -> Maximum oscillator shell
+! EA  -> initial kinetic energy per particle
+! xLa -> Total length of the box in average coordinate xa=(x+x')/2 is 2*xLa
+! xLr -> Total length of the box in relative coordinate xr=x-x' is 2*xLr
+! Nxa -> number of grid points in average coordinate
+! Nxr -> number of grid points in relative coordinate
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
