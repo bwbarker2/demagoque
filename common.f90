@@ -101,7 +101,7 @@ MODULE phys_cons
   REAL (Long) , PARAMETER :: a0=931.494028d0   !atomic mass unit
   REAL (long) , PARAMETER :: hm=hbc*hbc/(2.d0*m0)   !hbar^2/2m (useful for kinetic 
                                              ! time evolution)
-  REAL (long) , PARAMETER :: deg=4.d0
+  REAL (long) , PARAMETER :: deg=4.d0 ! degeneracy
 
 !  integer :: usePotHOext ! use external HO potential in evolution?
 !  integer :: usePotHOmf  ! use meanfield HO potential in evolution?

@@ -109,6 +109,7 @@ PROGRAM dmtdhf
   open(unit=69,file='results/2dwre.dat')
   OPEN(unit=70,file='results/pk2.dat')
   OPEN(unit=71,file='results/sumsquarediff.dat')
+  open(unit=45,file='results/denmatan_x_t.dat') 
 !  open(unit=101,file='results/pot_diag.dat')
 
   Nt=Nevt
@@ -137,6 +138,7 @@ PROGRAM dmtdhf
   close(42)
   close(43)
   close(44)
+  close(45)
   close(61)
   close(62)
   close(66)

@@ -84,6 +84,7 @@ MODULE mesh
      else
       if(ixa<0) then
        getDenX=denmat(ixa+Nxa2,-ixr)  ! should this and the next 2 be DCONJG?
+                                      ! in principle, these should be real values - BWB 2011-01-05
       elseif(ixa < Nxa2) then
        getDenX=denmat(ixa-Nxa2,-ixr)
       else

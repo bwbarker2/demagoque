@@ -24,9 +24,11 @@ SUBROUTINE output
 !     write(*,*)'starting outK'
      CALL outK
 !     write(*,*)'ending outK'
+     call outW
      CALL outX
   ELSE
      CALL outX
+     call outW
      CALL outK
   ENDIF
 
@@ -41,6 +43,7 @@ END SUBROUTINE output
 
 SUBROUTINE outX
   use mesh
+  use osc_pars
   IMPLICIT NONE
 
   call setState(SPACE)
@@ -48,6 +51,9 @@ SUBROUTINE outX
   CALL outDiagX
   CALL outDenMat(61,62)
   call ener_x
+
+  ! output analytic oscillator to compare with numeric
+  if(potFinal==0.AND.Nmax==0) call outAnalHarmonic
 !  call howHermitian
 
 END SUBROUTINE outX
@@ -93,8 +99,8 @@ SUBROUTINE outDenMat(fileim_u, filere_u)
   WRITE(filere_u,*)'# time=',t,'fm/c'
 
   DO ixr=-Nxr2,Nxr2
-     WRITE(fileim_u,919) (DIMAG(getDen(ixa,ixr))*facd,ixa=-Nxa2,Nxa2)
-     WRITE(filere_u,919) (DBLE(getDen(ixa,ixr))*facd,ixa=-Nxa2,Nxa2)
+     WRITE(fileim_u,919) (DIMAG(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2)
+     WRITE(filere_u,919) (DBLE(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2)
   ENDDO
 
   ! two blank lines give proper formatting for gnuplot

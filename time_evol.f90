@@ -193,10 +193,9 @@ SUBROUTINE evol_k(dtim)
         
         call getK12(ika,ikr,k1,k2)
 
-        !time evolution operator = exp(-i(E'-E)t/h)
-        !                        = exp(-ih/2m(k'^2-k^2))
-        !                        = exp(ih/(2m)*2*kr*ka*dt)
-        edt=-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim
+        !time evolution operator = exp(-i(E-E')t/h)
+        !                        = exp(-ih/2m(k^2-k'^2))
+        edt=-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim !*8d0 is for testing - BWB 2010-12-24
         cos2k=dcos(edt)
         sin2k=dsin(edt)
 !        if(sin2k.gt.1.or.sin2k.lt.-1)write(*,*)cos2k
