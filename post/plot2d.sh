@@ -2,8 +2,11 @@
 #
 # plots 2d density matrices
 
+path_to_results="../results/"
+path_from_results="../post/"
+
 # test file to get timestep information
-filetest=2dxre
+filetest="${path_to_results}/2dxre"
 
 filelistx="2dxre 2dxim"
 filelistk="2dkre 2dkim"
@@ -39,6 +42,8 @@ for ((index=0; index < nindex; index++)) ; do
 
     echo time = ${times[index]}
   
+  cd ${path_to_results}
+
   for i in $filelistx ;  do
       
       # create subdirectory if none exists
@@ -46,8 +51,10 @@ for ((index=0; index < nindex; index++)) ; do
       
       echo $i
 
+      i=${i}
+
     sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$index/" \
-	2dx.plt | gnuplot
+	${path_from_results}/2dx.plt | gnuplot
   done
 
   for i in $filelistk ;  do
@@ -57,8 +64,10 @@ for ((index=0; index < nindex; index++)) ; do
 
       echo $i
       
-    sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$index/" \
-	2dk.plt | gnuplot
+      i=${i}
+
+      sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$index/" \
+	${path_from_results}/2dk.plt | gnuplot
   done
 
 done

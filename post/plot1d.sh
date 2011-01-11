@@ -2,8 +2,11 @@
 #
 # plots 1d diagonal time evolution in x,k space
 
+path_to_results="../results/"
+path_from_results="../post/"
+
 # test file to get timestep information
-filetest=denmat_x_t
+filetest=${path_to_results}denmat_x_t
 
 filelist="denmat_x_t denmat_k_t"
 
@@ -40,12 +43,15 @@ for i in $filelist ;  do
   # iterate over real, imaginary columns in data
   for ((reim=2; reim <= 3; reim++)) ; do
 
+
     # set column to read from in data file
     if [ "$reim" = "2" ]; then
       fili="${i}_re"
     else
       fili="${i}_im"
     fi
+
+    cd ${path_to_results}
 
     # iterate over time indices
     for ((index=1; index <= nindex; index++)) ; do
@@ -65,7 +71,7 @@ for i in $filelist ;  do
           -e "s/INDEX/$ind1/g" \
           -e "s/TIME/${times[index]}/g" \
 	  -e "s/NUM/$reim/g" \
-	  denmat_diag.plt | gnuplot
+	  ${path_from_results}denmat_diag.plt | gnuplot
     done #time
   done #real,imag
 done #files
