@@ -64,7 +64,7 @@ subroutine transform_x_to_wigner_dumb
  use phys_cons
  implicit none
 
- integer :: ixa,ixr,ika,iarray,iixa,iixr
+ integer :: ixa,ixr,ika,iixa,iixr
  real*8 :: exparg
  complex*16 :: array(-Nxr:Nxr-1)
 

@@ -9,82 +9,25 @@ SUBROUTINE calcInitial
   use time
   implicit none
 
-  integer :: ixa,ixr,ikr,ika
 
-  Nxa2=Nxa/2
-  Nxr2=Nxr/2
-  Nkr2=Nxa2
-  Nka2=Nxr2
-  Nkr=Nxa
-  Nka=Nxr
+ 
+  call initializeMesh
 
-  !facd calc'd here because can't initialize with non-integer exponents
-  facd=dsqrt(5.d0/3.d0)*(deg*pi*(rho0**2)/6.d0)**(1.d0/3.d0)
-
-  write(*,*) '1D to 3D factor:',facd
 
   ! oscillator data
   w=hbc/m0*6.d0*(rho0/facd)**2/(Nmax+1.d0)!   *0.1
   whm=m0*w/hbc
 
-  ! mesh in x and k
-  delxa=(2.d0*xLa)/Nxa
-  delxr=(2.d0*xLr)/Nxr
-  delka=pi/(2.d0*xLr)
-  delkr=pi/xLa
-
-  write(*,*) 'Parameters of the calculation:'
+    write(*,*) 'Parameters of the calculation:'
   write(*,*) 'dxr=',delxr,'dxa=',delxa,'dkr=',delkr,'dka=',delka,'whm=',whm
   
-  ! allocate arrays
-  allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr2:Nxr2), ka(-Nka2:Nka2))
-  allocate(denmat(-Nxa2:Nxa2,-Nxr2:Nxr2))
-  allocate(denmat2(-Nxa2:Nxa2,-Nxr2:Nxr2))
+  
 !  allocate(tempdenmat(Nxa,Nxr))
   allocate(potx(-Nxa2:Nxa2))
 !  allocate(iNxa(Nxa), iNxr(Nxr), iNxa2(-Nxa2:Nxa2), iNxr2(-Nxr2:Nxr2))
-  allocate(potDiag(-Nxa2:Nxa2))
-  allocate(arraycos(0:Nxr), arraysin(0:Nxr-1), arraycnum(0:Nxr2))
+ allocate(arraycos(0:Nxr), arraysin(0:Nxr-1), arraycnum(0:Nxr2))
 
-  potDiag=0.0d0
 
-  do ixa=-Nxa2,Nxa2
-     xa(ixa)=ixa*delxa
-  enddo
-
-  do ixr=-Nxr2,Nxr2
-     xr(ixr)=ixr*delxr
-  enddo
-
-  do ikr=-Nkr2,Nkr2
-     kr(ikr)=ikr*delkr
-  enddo
-
-  do ika=-Nka2,Nka2
-     ka(ika)=ika*delka
-  !write(*,*)'ika,ka:',ika,ka(ika)
-  enddo
-  
-  kLa=ka(Nka2)
-
-  ! building transformation of indices
-  ! -Nx/2 - Nx/2 -> Range which is intuitive -> given by iNx[ar]2
-!  do i1=-Nxa/2,Nxa/2
-!     if(i1.lt.0)iNxa2(i1)=i1+Nxa+1
-!     if(i1.ge.0)iNxa2(i1)=i1+1
-!  enddo
-!
-!  do i1=-Nxr2,Nxr2
-!     if(i1.lt.0)iNxr2(i1)=i1+Nxr+1
-!     if(i1.ge.0)iNxr2(i1)=i1+1
-!  enddo
-
-!  iNkr2=iNxa2
-!  iNka2=iNxr2
-  
-  ! Initialization
-!  den_re=0.0_Long
-!  den_im=0.0_Long
   
 end SUBROUTINE calcInitial
 

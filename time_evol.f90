@@ -176,7 +176,7 @@ SUBROUTINE evol_k(dtim)
   use time
   IMPLICIT NONE
 
-  INTEGER ika, ikr, iika, iikr !loop variables
+  INTEGER ika, ikr !loop variables
   real (Long) :: dtim, cos2k, sin2k, edt, xre, xim,xre2,xim2   ! timestep,cos,sin part of exp, exponent itself, den_re, den_im
   real*8 :: k1,k2
 
@@ -237,7 +237,7 @@ SUBROUTINE evol_x(dtim)
 
  real*8, intent(in) :: dtim !timestep
 
- INTEGER ixr, ixa, iixr, iixa !loop variables
+ INTEGER ixr, ixa !loop variables
  real*8 :: cos2k, sin2k, udt !cos,sin part of exp, exponent itself
  real*8 :: xim,xre,xre2,xim2 !x density matrix, imaginary, real
  real*8 :: x1,x2,ux1,ux2 !position in x,x' basis, potential at x,x'
@@ -418,7 +418,7 @@ subroutine potHOmf(potX,ixa1)
 
   real (Long), intent(out) :: potX
   integer, intent(in) :: ixa1
-  integer :: ixa2,iixa2,iixr0,id,itry   ! loop variables
+  integer :: ixa2,id,itry   ! loop variables
 !  real (Long) :: testtot
 
 !  testtot=0

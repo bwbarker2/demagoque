@@ -43,6 +43,61 @@ MODULE mesh
 
   contains
 
+   subroutine initializeMesh
+    use osc_pars
+    use phys_cons
+    implicit none
+
+    integer :: ixa,ixr,ikr,ika
+
+    Nxa2=Nxa/2
+    Nxr2=Nxr/2
+    Nkr2=Nxa2
+    Nka2=Nxr2
+    Nkr=Nxa
+    Nka=Nxr
+
+    ! allocate arrays
+    allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
+    allocate(denmat(-Nxa2:Nxa2,-Nxr:Nxr)) !2x size in xr for naive FT - BWB 2011-01-10
+    allocate(denmat2(-Nxa2:Nxa2,-Nxr2:Nxr2))
+    allocate(potDiag(-Nxa2:Nxa2))
+ 
+    !facd calc'd here because can't initialize with non-integer exponents
+    facd=dsqrt(5.d0/3.d0)*(deg*pi*(rho0**2)/6.d0)**(1.d0/3.d0) 
+ 
+    write(*,*) '1D to 3D factor:',facd
+
+    ! mesh in x and k
+    delxa=(2.d0*xLa)/Nxa
+    delxr=(2.d0*xLr)/Nxr
+    delka=pi/(2.d0*xLr)
+    delkr=pi/xLa
+
+    potDiag=0.0d0
+
+    do ixa=-Nxa2,Nxa2
+     xa(ixa)=ixa*delxa
+    enddo
+
+    do ixr=-Nxr,Nxr
+     xr(ixr)=ixr*delxr
+    enddo
+
+    do ikr=-Nkr2,Nkr2
+     kr(ikr)=ikr*delkr
+    enddo
+
+    do ika=-Nka,Nka
+     ka(ika)=ika*delka
+    enddo
+  
+    kLa=ka(Nka2)
+
+   end subroutine initializeMesh
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
    complex*16 function getDen(i1,i2)
     !! getDen - returns value of density matrix, given the current denState
     implicit none
