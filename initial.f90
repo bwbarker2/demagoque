@@ -41,7 +41,7 @@ subroutine initialState
   integer :: ixa, ixr, iin
 
   do ixa=-Nxa2,Nxa2-1
-     do ixr=0,Nxr2
+     do ixr=-Nxr2,Nxr2-1
         !convert to x,x' representation
         call getX12(ixa,ixr,xx1,xx2)
 !        xx1=(xa(ixa)+xr(ixr)/2.d0)

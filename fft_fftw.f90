@@ -64,7 +64,7 @@ subroutine transform_x_to_wigner_dumb
  use phys_cons
  implicit none
 
- integer :: ixa,ixr,ika,iixa,iixr
+ integer :: ixa,ixr,ika
  real*8 :: exparg
  complex*16 :: array(-Nxr:Nxr-1)
 
@@ -72,34 +72,18 @@ subroutine transform_x_to_wigner_dumb
 
   ! fill arrays to be transformed
   do ixr=-Nxr,Nxr-1
-
-   if(ixr>=-Nxr2.and.ixr<Nxr2) then
-    iixa=ixa
-    iixr=ixr
-   else
-    if(ixa<0) then
-     iixa=ixa+Nxa2
-    else
-     iixa=ixa-Nxa2
-    endif
-    if(ixr>0) then
-     iixr=ixr-Nxr
-    else
-     iixr=ixr+Nxr
-    endif
-   endif
-
-   array(ixr)=DBLE(getDenX(iixa,iixr))
-!   write(*,*)getDenX(0,-1),getDenX(0,1)
+   array(ixr)=DBLE(getDenX(ixa,ixr))
   enddo
 
-  do ika=-Nka2,Nka2-1
+  do ika=-Nka,Nka-1
    denmat2(ixa,ika)=0d0
    do ixr=-Nxr,Nxr-1
     exparg=delxr*delka*ika*ixr
     denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
    enddo
-   denmat2(ixa,ika)=delxr*denmat2(ixa,ika)
+   denmat2(ixa,ika)=delxr*denmat2(ixa,ika)/sqrt(2.d0*pi)
+
+   ! if the cell is unreasonably large, write out
    if(DBLE(denmat2(ixa,ika))>2.d0) write(*,*)ixa,ika,denmat2(ixa,ika)
   enddo
 
@@ -183,11 +167,11 @@ subroutine transform_wigner_to_x_dumb
  denmat2=0d0
 
  do ixa=-Nxa2,Nxa2-1
-  do ixr=-Nxr2,Nxr2-1
-   do ika=-Nka2,Nka2-1
+  do ixr=-Nxr,Nxr-1
+   do ika=-Nka,Nka-1
     denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
    enddo
-   denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka/(2d0*pi)
+   denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka/sqrt(2d0*pi)
   enddo
  enddo
 
@@ -244,13 +228,13 @@ subroutine transform_wigner_to_k_dumb
 
  integer :: ixa,ika,ikr
 
- do ika=-Nka2,Nka2-1   !this shouldn't be -1, just for testing BWB 2010-11-17
-  do ikr=0,Nkr2
+ do ika=-Nka,Nka-1
+  do ikr=-Nkr2,Nkr2-1
    denmat2(ikr,ika)=0.d0
    do ixa=-Nxa2,Nxa2-1
     denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
    enddo
-   denmat2(ikr,ika)=denmat2(ikr,ika)*delxa
+   denmat2(ikr,ika)=denmat2(ikr,ika)*delxa/sqrt(2.d0*pi)
   enddo
  enddo
 
@@ -269,13 +253,13 @@ subroutine transform_k_to_wigner_dumb
 
   integer :: ixa,ika,ikr
 
- do ika=-Nka2,Nka2-1
+ do ika=-Nka,Nka-1
   do ixa=-Nxa2,Nxa2-1
    denmat2(ixa,ika)=0.d0
    do ikr=-Nkr2,Nka2-1
     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
    enddo
-   denmat2(ixa,ika)=denmat2(ixa,ika)*delkr/(2*pi)
+   denmat2(ixa,ika)=denmat2(ixa,ika)*delkr/sqrt(2*pi)
   enddo
  enddo
 
@@ -284,6 +268,8 @@ subroutine transform_k_to_wigner_dumb
  denState=WIGNER
 
 end subroutine transform_k_to_wigner_dumb
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine FT
  use fftw_constants

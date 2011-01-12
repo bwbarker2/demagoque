@@ -98,7 +98,7 @@ SUBROUTINE outDenMat(fileim_u, filere_u)
   WRITE(fileim_u,*)'# time=',t,'fm/c'
   WRITE(filere_u,*)'# time=',t,'fm/c'
 
-  DO ixr=-Nxr2,Nxr2
+  DO ixr=-Nxr,Nxr
      WRITE(fileim_u,919) (DIMAG(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2)
      WRITE(filere_u,919) (DBLE(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2)
   ENDDO

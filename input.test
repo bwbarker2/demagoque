@@ -6,7 +6,7 @@
 0   ! Nmax
 25.0 ! EA [MeV]
 25.0  ! xLa [fm]
-25.0 ! xLr [fm]
+12.5 ! xLr [fm]
 100 ! Nxa
 100 ! Nxr
 ! ............. POTENTIAL PARAMETERS

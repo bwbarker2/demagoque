@@ -34,7 +34,7 @@ PROGRAM dmtdhf
 
   CALL calcInitial
 
-  call fft_initial
+!  call fft_initial
 
   CALL initialState
 
@@ -117,16 +117,17 @@ PROGRAM dmtdhf
 !  write(*,*)'new Nt=',Nt
 
 !  CALL OUTPUT
-!  do it=1,100
-!   write(*,*)it
+  do it=1,10
+   write(*,*)it
 !   call output
+   call outX
+   call outW
 !   call outX
-!   call outW
-!   call outK
-!   call outW
-!  enddo
+   call outK
+   call outW
+  enddo
 
-  CALL time_evolution
+!  CALL time_evolution
 
 !  do it=1,100
 !   write(*,*)it

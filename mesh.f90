@@ -60,7 +60,7 @@ MODULE mesh
     ! allocate arrays
     allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
     allocate(denmat(-Nxa2:Nxa2,-Nxr:Nxr)) !2x size in xr for naive FT - BWB 2011-01-10
-    allocate(denmat2(-Nxa2:Nxa2,-Nxr2:Nxr2))
+    allocate(denmat2(-Nxa2:Nxa2,-Nxr:Nxr))
     allocate(potDiag(-Nxa2:Nxa2))
  
     !facd calc'd here because can't initialize with non-integer exponents
@@ -123,30 +123,7 @@ MODULE mesh
 
     integer, intent(in) :: ixa,ixr
 
-    if(ixr >= 0) then
-     if(ixa < Nxa2) then
-      getDenX=denmat(ixa,ixr)
-     else
-      getDenX=denmat(-Nxa2,ixr)
-     endif
-    else
-     if(ixr > -Nxr2) then
-      if(ixa < Nxa2) then
-       getDenX=DCONJG(denmat(ixa,-ixr))
-      else
-       getDenX=DCONJG(denmat(-Nxa2,-ixr))
-      endif
-     else
-      if(ixa<0) then
-       getDenX=denmat(ixa+Nxa2,-ixr)  ! should this and the next 2 be DCONJG?
-                                      ! in principle, these should be real values - BWB 2011-01-05
-      elseif(ixa < Nxa2) then
-       getDenX=denmat(ixa-Nxa2,-ixr)
-      else
-       getDenX=denmat(0,Nxr2)
-      endif
-     endif
-    endif
+    getDenX=denmat(ixa,ixr)
 
    end function getDenX
 
@@ -159,11 +136,7 @@ MODULE mesh
     integer, intent(in)    :: ixa,ixr
     complex*16, intent(in) :: value
 
-    if(ixr >= 0) then
-     if(ixa < Nxa2) then
-      denmat(ixa,ixr)=value
-     endif
-    endif
+    denmat(ixa,ixr)=value
 
    end subroutine setDenX
 
@@ -181,6 +154,7 @@ MODULE mesh
     else
      getDenW=DBLE(denmat(-Nxa2,ika))
     endif
+
    end function getDenW
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -213,93 +187,4 @@ MODULE mesh
 
    end subroutine setDenK
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-!   subroutine getDenPts(ixa,ixr,iixa,iixr)
-!    !! getDenPts - converts physical units (ixa,ixr) to matrix storage units (iixa,iixr, or from (ikr,ika) to (iikr,iika)
-!    implicit none
-!
-!    integer, intent(in)  :: ixa,ixr
-!    integer, intent(out) :: iixa,iixr
-!    
-!    if(ixr.ne.Nxr2) then
-!     iixr=ixr+Nxr2
-!     if(ixa.ne.Nxa2) then
-!      iixa=ixa+Nxa2
-!     else
-!      iixa=0
-!     endif
-!    else
-!     iixr=0
-!     if(ixa.lt.0) then
-!      iixa=ixa+Nxa2
-!     else
-!      iixa=ixa
-!     endif
-!    endif
-!
-!   end subroutine getDenPts
-
-   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-!   subroutine getDenPtsK(ikr,ika,iikr,iika)
-!    !! getDenPts - converts physical units (ixa,ixr) to matrix storage units (iixa,iixr, or from (ikr,ika) to (iikr,iika)
-!    implicit none
-!
-!    integer, intent(in)  :: ika,ikr
-!    integer, intent(out) :: iika,iikr
-!    
-!    if(ikr.ne.Nkr2) then
-!     iikr=ikr+Nkr2
-!     if(ika.ne.Nka2) then
-!      iika=ika+Nka2
-!     else
-!      iika=0
-!     endif
-!    else
-!     iikr=0
-!     if(ika.lt.0) then
-!      iika=ika+Nka2
-!     else
-!      iika=ika
-!     endif
-!    endif
-!
-!   end subroutine getDenPtsK
-!
-!   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!
-!
-!   complex*16 function getDen(ixa,ixr)
-!    !! getDen - returns density at physical cell numbers (ixa,ixr) or at (ikr,ika)
-!    implicit none
-!
-!    integer, intent(in) :: ixa,ixr
-!
-!    integer :: iixa,iixr
-!
-!    call getDenPts(ixa,ixr,iixa,iixr)
-!
-!    getDen=denmat(iixa,iixr)
-!
-!   end function getDen
-!
-!   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!
-!   subroutine setDen(ixa,ixr,cnum)
-!    implicit none
-!
-!    integer,    intent(in) :: ixa,ixr
-!    complex*16, intent(in) :: cnum
-!
-!    integer :: iixa,iixr
-!
-!    call getDenPts(ixa,ixr,iixa,iixr)
-!    
-!    denmat(iixa,iixr)=cnum
-!    den_re(iixa,iixr)=DBLE(cnum)
-!    den_im(iixa,iixr)=DIMAG(cnum)
-!
-!   end subroutine setDen
-!
 END MODULE mesh
