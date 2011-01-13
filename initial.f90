@@ -62,10 +62,55 @@ subroutine initialState
      enddo !ixr
   enddo !ixa
 
+  call copyExtra
+
   ! set density matrix to X state
   denState=SPACE
 
 end subroutine initialState
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine copyExtra
+ !! copyExtra - copies matrix to extra part (>Nxr2 and <-Nxr2)
+ use mesh
+ implicit none
+
+ integer :: ixr,ixa
+
+ !left side
+ do ixa=-Nxa2,-1
+
+  !upper left corner
+  do ixr=Nxr2,Nxr-1
+   denmat(ixa,ixr)=denmat(ixa+Nxa2,ixr-Nxr)
+  enddo
+
+  !lower left corner
+  do ixr=-Nxr,-Nxr2-1
+   denmat(ixa,ixr)=denmat(ixa+Nxa2,ixr+Nxr)
+  enddo
+
+ enddo
+
+ !right side
+ do ixa=0,Nxa2-1
+
+  !upper right corner
+  do ixr=Nxr2,Nxr-1
+   denmat(ixa,ixr)=denmat(ixa-Nxa2,ixr-Nxr)
+  enddo
+
+  !lower right corner
+  do ixr=-Nxr,-Nxr2-1
+   denmat(ixa,ixr)=denmat(ixa-Nxa2,ixr+Nxr)
+  enddo
+
+ enddo
+
+end subroutine copyExtra
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine boost
   use mesh

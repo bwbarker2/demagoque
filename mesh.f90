@@ -165,11 +165,7 @@ MODULE mesh
 
     integer, intent(in) :: ikr,ika
 
-    if(ikr >=0) then
-     getDenK=denmat(ikr,ika)
-    else
-     getDenK=DCONJG(denmat(-ikr,ika))
-    endif
+    getDenK=denmat(ikr,ika)
 
    end function getDenK
 
