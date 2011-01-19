@@ -70,9 +70,11 @@ subroutine transform_x_to_wigner_dumb
 
  do ixa=-Nxa2,Nxa2-1
 
+  array=0.d0
+
   ! fill arrays to be transformed
   do ixr=-Nxr,Nxr-1
-   array(ixr)=DBLE(getDenX(ixa,ixr))
+   array(ixr)=getDenX(ixa,ixr)
   enddo
 
   do ika=-Nka,Nka-1
@@ -164,7 +166,7 @@ subroutine transform_wigner_to_x_dumb
 
  integer :: ixa,ixr,ika
 
- denmat2=0d0
+ denmat2=CMPLX(0d0,0d0,8)
 
  do ixa=-Nxa2,Nxa2-1
   do ixr=-Nxr,Nxr-1

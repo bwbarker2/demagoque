@@ -264,8 +264,7 @@ end subroutine getrX12
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine getK12(ika,ikr,k1,k2)
-!! getK12 - converts ixa, ixr grid indices to values of x1,x2 space and
-!maintains periodicity.
+!! getK12 - converts ixa, ixr grid indices to values of x1,x2 space
  use mesh
  use prec_def
  implicit none

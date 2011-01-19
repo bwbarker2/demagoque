@@ -8,19 +8,6 @@ SUBROUTINE time_evolution
 !  integer :: ii
 
   it=0
-!  call howHermitian
-  call output
-!  call howHermitian
-  call output
-!  call howHermitian
-  call output
-!  call howHermitian
-  call output
-!  call howHermitian
-!  do ii=1,100
-!   call FT
-!   call IFT
-!  enddo
   call output
 
   DO it=1,Nt  !Nt  changed for debugging
@@ -176,8 +163,10 @@ SUBROUTINE evol_k(dtim)
   use time
   IMPLICIT NONE
 
+  real*8, intent(in) :: dtim
+
   INTEGER ika, ikr !loop variables
-  real (Long) :: dtim, cos2k, sin2k, edt, xre, xim,xre2,xim2   ! timestep,cos,sin part of exp, exponent itself, den_re, den_im
+  real*8 :: cos2k, sin2k, edt, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
   real*8 :: k1,k2
 
   call setState(MOMENTUM)
@@ -188,7 +177,7 @@ SUBROUTINE evol_k(dtim)
   !loop over all grid points
   DO ikr=-Nkr2,Nkr2-1
      
-     DO ika=-Nka2,Nka2-1
+     DO ika=-Nka,Nka-1
 !        call getDenPtsK(ikr,ika,iikr,iika)
         
         call getK12(ika,ikr,k1,k2)
@@ -208,12 +197,6 @@ SUBROUTINE evol_k(dtim)
         xim2=xre*sin2k + xim*cos2k
 
         call setDenK(ikr,ika,cmplx(xre2,xim2,8))
-
-! this is a horrible idea, don't do it, BWB 2010-07-21
-!        if(ikr.eq.0)then
-!         den_im(iikr,iika)=0.0
-!         write(*,*)t,ikr,den_im(iikr,iika)
-!        endif
 
      ENDDO
      

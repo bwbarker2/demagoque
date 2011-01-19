@@ -129,8 +129,8 @@ SUBROUTINE outDiagK
   WRITE(42,*)'# k [fm], real, imaginary amplitudes'
 
   DO ika=-Nka2,Nka2
-     ddre=DBLE(getDen(0,ika))/facd
-     dddim=DIMAG(getDen(0,ika))/facd
+     ddre=DBLE(getDen(0,ika))
+     dddim=DIMAG(getDen(0,ika))
      WRITE(42,93) ka(ika),ddre,dddim
   ENDDO
 
@@ -154,8 +154,8 @@ SUBROUTINE outDiagX
   WRITE(41,*)'# x [fm], real, imaginary amplitudes'
 
   DO ixa=-Nxa2,Nxa2
-     ddre=DBLE(getDen(ixa,0))*facd
-     dddim=DIMAG(getDen(ixa,0))*facd
+     ddre=DBLE(getDen(ixa,0))
+     dddim=DIMAG(getDen(ixa,0))
 !     write(*,*)'den_im,dddim:',den_im(iNxa2(ixa),iixr0),dddim
      WRITE(41,93) xa(ixa),ddre,dddim
   ENDDO

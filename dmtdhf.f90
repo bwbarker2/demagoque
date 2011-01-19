@@ -117,17 +117,17 @@ PROGRAM dmtdhf
 !  write(*,*)'new Nt=',Nt
 
 !  CALL OUTPUT
-  do it=1,10
-   write(*,*)it
+!  do it=1,10
+!   write(*,*)it
 !   call output
-   call outX
-   call outW
 !   call outX
-   call outK
-   call outW
-  enddo
+!   call outW
+!   call outX
+!   call outK
+!   call outW
+!  enddo
 
-!  CALL time_evolution
+  CALL time_evolution
 
 !  do it=1,100
 !   write(*,*)it
