@@ -9,6 +9,8 @@ SUBROUTINE time_evolution
 
   it=0
   call output
+  call output
+  call output
 
   DO it=1,Nt  !Nt  changed for debugging
 
@@ -19,18 +21,18 @@ SUBROUTINE time_evolution
      dt2=delt*0.5d0
 
      ! evolve in k-space
-!     CALL evol_k(dt2)
+     CALL evol_k(dt2)
 !     write(*,*)'finished first evol_x'
 !     call enforceHermiticityK
 !     call output
 
      ! evolve in x-space
-!     CALL evol_x(delt)
+     CALL evol_x(delt)
 !     write(*,*)'finished first evol_k'
 !     call enforceHermiticityX
 !     CALL output
 
-     CALL evol_k(delt)
+     CALL evol_k(dt2)
 !     write(*,*)'finished second evol_x'
 !  call howHermitian
 !     call enforceHermiticityK
@@ -220,25 +222,25 @@ SUBROUTINE evol_x(dtim)
 
  real*8, intent(in) :: dtim !timestep
 
- INTEGER ixr, ixa !loop variables
+ INTEGER :: ixr, ixa !loop variables
  real*8 :: cos2k, sin2k, udt !cos,sin part of exp, exponent itself
  real*8 :: xim,xre,xre2,xim2 !x density matrix, imaginary, real
  real*8 :: x1,x2,ux1,ux2 !position in x,x' basis, potential at x,x'
 
  integer :: ki !used by LIN_INT
 
- real*8, dimension(-Nxr2:Nxr2):: tpots !debugging vars
+! real*8, dimension(-Nxr2:Nxr2):: tpots !debugging vars
 
  ! initialize potential (esp. if no potential)
  ux1=0.0d0
  ux2=0.0d0
 
- tpots=0.d0
+! tpots=0.d0
 
  call setState(SPACE)
 
 !  write(*,*)'debug: dtim2=',dtim
- write(101,*)'# time=',t
+! write(101,*)'# time=',t
 
 !  write(*,*)'starting evol_k loop'
 
@@ -264,7 +266,7 @@ SUBROUTINE evol_x(dtim)
 
      !time evolution operator = exp(-i(U(x)-U(x'))t/h)
    udt=-(ux1-ux2)*dtim/hbc
-   tpots(ixr)=udt  !debugging
+!   tpots(ixr)=udt  !debugging
    cos2k=dcos(udt)
    sin2k=dsin(udt)
 !     if(ixr==0)write(*,*)'ixa,ixr,cos2k,sin2k=',ixa,ixr,cos2k,sin2k
@@ -280,12 +282,6 @@ SUBROUTINE evol_x(dtim)
 
    call setDenX(ixa,ixr,cmplx(xre2,xim2,8))
 
-! this is a horrible idea, don't do it, BWB 2010-07-21
-!   if(ixr.eq.0)then
-!    den_im(iixr,iixa)=0.0
-!    write(*,*)t,ixr,den_im(iixr,iixa)
-!   endif
-
 !   if(ixr>0) then
 !    write(*,*)'ixr,tpots-diff:',ixr,tpots(ixr)+tpots(-ixr)
 !   endif
@@ -293,8 +289,11 @@ SUBROUTINE evol_x(dtim)
    ENDDO
  ENDDO
 
- write(101,*)
- write(101,*)
+ !copy cells to extra redundant parts
+ call copyExtra
+
+! write(*,*)
+! write(*,*)
 
 END SUBROUTINE evol_x
 

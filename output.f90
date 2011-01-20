@@ -128,7 +128,7 @@ SUBROUTINE outDiagK
   WRITE(42,*)'# time=',t,'fm/c'
   WRITE(42,*)'# k [fm], real, imaginary amplitudes'
 
-  DO ika=-Nka2,Nka2
+  DO ika=-Nka2,Nka2-1
      ddre=DBLE(getDen(0,ika))
      dddim=DIMAG(getDen(0,ika))
      WRITE(42,93) ka(ika),ddre,dddim
@@ -153,7 +153,7 @@ SUBROUTINE outDiagX
   WRITE(41,*)'# time=',t,'fm/c'
   WRITE(41,*)'# x [fm], real, imaginary amplitudes'
 
-  DO ixa=-Nxa2,Nxa2
+  DO ixa=-Nxa2,Nxa2-1
      ddre=DBLE(getDen(ixa,0))
      dddim=DIMAG(getDen(ixa,0))
 !     write(*,*)'den_im,dddim:',den_im(iNxa2(ixa),iixr0),dddim

@@ -12,7 +12,7 @@ subroutine outAnalHarmonic
   WRITE(45,*)'# time=',t,'fm/c'
   WRITE(45,*)'# x [fm], real, imaginary amplitudes'
 
-  DO ixa=-Nxa2,Nxa2
+  DO ixa=-Nxa2,Nxa2-1
      ddre=calcHarmonicEv(ixa*delxa,t)
      WRITE(45,93) ixa*delxa,ddre,0.d0
   ENDDO

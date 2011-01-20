@@ -266,11 +266,10 @@ end subroutine getrX12
 subroutine getK12(ika,ikr,k1,k2)
 !! getK12 - converts ixa, ixr grid indices to values of x1,x2 space
  use mesh
- use prec_def
  implicit none
 
  integer,     intent(in)  :: ika, ikr !human-read index of grid in xa,xr space
- real (Long), intent(out) :: k1,k2    !x,x' position in x,x' space
+ real*8, intent(out) :: k1,k2    !x,x' position in x,x' space
 
  k1=ka(ika)+0.5d0*kr(ikr)
  k2=ka(ika)-0.5d0*kr(ikr)

@@ -1,8 +1,8 @@
 ! ........... READ AND WRITE PARAMETERS
-1 ! ntime
+10 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
-50 ! Nevt
+300 ! Nevt
 0   ! Nmax
 0.0 ! EA [MeV]
 25.0  ! xLa [fm]
