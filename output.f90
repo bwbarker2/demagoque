@@ -44,6 +44,7 @@ END SUBROUTINE output
 SUBROUTINE outX
   use mesh
   use osc_pars
+  use time
   IMPLICIT NONE
 
   call setState(SPACE)
@@ -53,7 +54,7 @@ SUBROUTINE outX
   call ener_x
 
   ! output analytic oscillator to compare with numeric
-  if(potFinal==0.AND.Nmax==0) call outAnalHarmonic
+  if(potFinal==0.AND.Nmax==0.AND.EA<1d-5) call outAnalHarmonic
 !  call howHermitian
 
 END SUBROUTINE outX
@@ -129,8 +130,8 @@ SUBROUTINE outDiagK
   WRITE(42,*)'# k [fm], real, imaginary amplitudes'
 
   DO ika=-Nka2,Nka2-1
-     ddre=DBLE(getDen(0,ika))
-     dddim=DIMAG(getDen(0,ika))
+     ddre=DBLE(getDenK(0,ika))
+     dddim=DIMAG(getDenK(0,ika))
      WRITE(42,93) ka(ika),ddre,dddim
   ENDDO
 

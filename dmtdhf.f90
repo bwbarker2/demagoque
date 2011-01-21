@@ -41,7 +41,7 @@ PROGRAM dmtdhf
   !write(*,*)'finished initialState'
 
   if (potInitial.NE.potFinal) useAdiabatic=.true.
-  useAdiabatic=.false.
+!  useAdiabatic=.false.
   !write(*,*)'useAdiabatic=',useAdiabatic
 
   if (useAdiabatic.and.iadib==1) then
@@ -91,10 +91,6 @@ PROGRAM dmtdhf
   endif !useAdiabatic
 
    useAdiabatic=.false.
-
-!  call boost
-
-!  write(*,*)'finished boost'
  
   ! open files to output time evolution information
   open(unit=41,file='results/denmat_x_t.dat')
@@ -117,17 +113,18 @@ PROGRAM dmtdhf
 !  write(*,*)'new Nt=',Nt
 
 !  CALL OUTPUT
-!  do it=1,10
-!   write(*,*)it
+  do it=1,10
+   write(*,*)it
 !   call output
-!   call outX
-!   call outW
-!   call outX
-!   call outK
-!   call outW
-!  enddo
+   call outX
+   call outW
+   call outK
+   call outW
+  enddo
 
-  CALL time_evolution
+!  call boost
+
+!  CALL time_evolution
 
 !  do it=1,100
 !   write(*,*)it

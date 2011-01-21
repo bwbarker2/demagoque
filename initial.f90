@@ -119,32 +119,30 @@ subroutine boost
   implicit none
 
   INTEGER ixr, ixa !loop variables
-  real (Long) :: kea !momentum, given ea
-  real (Long) :: cos2k, sin2k, epx !cos,sin part of exp, exponent itself
-  real (Long) :: xim,xre,xim2,xre2 !x density matrix, imaginary, real
-  real (Long) :: x1,x2   !position in x,x' basis
+  real*8 :: kea !momentum, given ea
+  real*8 :: cos2k, sin2k, epx !cos,sin part of exp, exponent itself
+  real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real
+  real*8 :: x1,x2   !position in x,x' basis
 
   call setState(SPACE)
 
   ! non-relativistic conversion
-  kea=dsqrt(2.d0*m0*ea)/hbc
+  kea=sqrt(2.d0*m0*ea)/hbc
 
   !loop over all grid points
-  DO ixa=-Nxa2,Nxa2
+  DO ixa=-Nxa2,Nxa2-1
      
-     DO ixr=-Nxr2,Nxr2
+     DO ixr=-Nxr2,Nxr2-1
         
         !convert into x,x' coordinates
         call getX12(ixa,ixr,x1,x2)
-!        x1=xa(ixa)+0.5*xr(ixr) 
-!        x2=xa(ixa)-0.5*xr(ixr) 
 
         !dispacement operator = exp(-iK(X'-X))
         epx=kea*(x1-x2)
 !        udt=m0*w**2*2*xa(ixa)*xr(ixr)*dtim/hbc/2.0_Long
 !        udt=0
-        cos2k=dcos(epx)
-        sin2k=dsin(epx)
+        cos2k=cos(epx)
+        sin2k=sin(epx)
 
         xre=DBLE(getDenX(ixa,ixr))
         xim=DIMAG(getDenX(ixa,ixr))
@@ -158,7 +156,8 @@ subroutine boost
      ENDDO
      
   ENDDO
- 
+
+  call copyExtra 
 
 end subroutine boost
 

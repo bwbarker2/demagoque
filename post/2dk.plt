@@ -6,10 +6,10 @@ set output "OUTPUTFILE.eps"
 
 set pm3d map
 
-set xrange [0:100]
-set yrange [0:100]
+#set xrange [0:100]
+#set yrange [0:100]
 #set zrange [-0.3:0.3]
-set cbrange [-0.001:0.001]
+#set cbrange [-0.001:0.001]
 
 set size ratio -1
 

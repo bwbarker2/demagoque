@@ -1,17 +1,17 @@
 ! ........... READ AND WRITE PARAMETERS
-10 ! ntime
+5 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
-300 ! Nevt
+30 ! Nevt
 0   ! Nmax
-0.0 ! EA [MeV]
-25.0  ! xLa [fm]
-12.5 ! xLr [fm]
-100 ! Nxa
-100 ! Nxr
+10.0 ! EA [MeV]
+10.0  ! xLa [fm]
+5.0 ! xLr [fm]
+40 ! Nxa
+20 ! Nxr
 ! ............. POTENTIAL PARAMETERS
-0  ! potInitial
-0  ! potFinal
+1  ! potInitial
+1  ! potFinal
 1 1 1  ! tad,wtad,Nad
 0  ! iadib
 
