@@ -2,18 +2,18 @@
 5 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
-30 ! Nevt
+50 ! Nevt
 0   ! Nmax
-10.0 ! EA [MeV]
-10.0  ! xLa [fm]
-5.0 ! xLr [fm]
-40 ! Nxa
-20 ! Nxr
+0.0d0 ! EA [MeV]
+25d0  ! xLa [fm]
+25d0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
 ! ............. POTENTIAL PARAMETERS
-1  ! potInitial
-1  ! potFinal
-1 1 1  ! tad,wtad,Nad
-0  ! iadib
+-1  ! potInitial
+-1 ! potFinal
+300 70 1200  ! tad,wtad,Nad
+1  ! iadib
 
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

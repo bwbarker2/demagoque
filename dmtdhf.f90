@@ -22,6 +22,7 @@ PROGRAM dmtdhf
 ! integers:
 !
 ! pot  definition
+! -1   no potential at all, free space
 ! 0    external harmonic oscillator centered at x=0
 ! 1    nonlocal meanfield harmonic oscillator
 ! 2    Skyrme-like contact potential (local density dependent)
@@ -60,7 +61,7 @@ PROGRAM dmtdhf
    !set number of timesteps for adiabatic switching
    Nt=Nad
 
-!   call time_evolution
+   call time_evolution
 
    call outDenUnf
 
@@ -113,18 +114,18 @@ PROGRAM dmtdhf
 !  write(*,*)'new Nt=',Nt
 
 !  CALL OUTPUT
-  do it=1,10
-   write(*,*)it
+!  do it=1,10
+!   write(*,*)it
 !   call output
-   call outX
-   call outW
-   call outK
-   call outW
-  enddo
+!   call outX
+!   call outW
+!   call outK
+!   call outW
+!  enddo
 
-!  call boost
+  call boost
 
-!  CALL time_evolution
+  CALL time_evolution
 
 !  do it=1,100
 !   write(*,*)it

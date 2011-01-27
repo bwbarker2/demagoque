@@ -10,7 +10,6 @@ SUBROUTINE time_evolution
   it=0
   call output
   call output
-  call output
 
   DO it=1,Nt  !Nt  changed for debugging
 
@@ -355,6 +354,8 @@ subroutine getPotX(potX,potType,ix)
 ! real (Long) :: potSkyrme  !functions
 
  select case (potType)
+  case (-1)
+   potX=0d0
   case (0)
    call potHO(potX,ix)
   case (1)

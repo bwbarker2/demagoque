@@ -47,6 +47,7 @@ subroutine initialState
 !        xx1=(xa(ixa)+xr(ixr)/2.d0)
 !        xx2=(xa(ixa)-xr(ixr)/2.d0)
 
+
         den0=0.0d0
         do iin=0,Nmax
            y1=wfnho(xx1,iin,whm)

@@ -142,7 +142,7 @@ MODULE mesh
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-   real*8 function getDenW(ixa,ika)
+   complex*16 function getDenW(ixa,ika)
     !! getDenW - returns value of Wigner density matrix at index (ixa,ika)
     ! NOTE: Only valid for ika<Nka2 (maybe)
     implicit none
@@ -150,9 +150,9 @@ MODULE mesh
     integer, intent(in) :: ixa,ika
 
     if(ixa<Nxa2) then
-     getDenW=DBLE(denmat(ixa,ika))
+     getDenW=denmat(ixa,ika)
     else
-     getDenW=DBLE(denmat(-Nxa2,ika))
+     getDenW=denmat(-Nxa2,ika)
     endif
 
    end function getDenW

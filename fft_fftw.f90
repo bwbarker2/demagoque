@@ -92,7 +92,6 @@ subroutine transform_x_to_wigner_dumb
  enddo
 
  denmat=denmat2
-
  denState=WIGNER
 
 end subroutine transform_x_to_wigner_dumb
@@ -258,10 +257,10 @@ subroutine transform_k_to_wigner_dumb
  do ika=-Nka,Nka-1
   do ixa=-Nxa2,Nxa2-1
    denmat2(ixa,ika)=0.d0
-   do ikr=-Nkr2,Nka2-1
+   do ikr=-Nkr2,Nkr2-1
     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
    enddo
-   denmat2(ixa,ika)=denmat2(ixa,ika)*delkr/sqrt(2*pi)
+   denmat2(ixa,ika)=denmat2(ixa,ika)*delkr/sqrt(2d0*pi)
   enddo
  enddo
 
