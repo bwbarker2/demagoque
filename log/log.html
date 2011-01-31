@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>Log: DMTDHF, 1D</title>
+<!-- <link rel="stylesheet" type="text/css" href="/user/barker/public_html/log.css" /> -->
+<style>
+ .todo {background-color:yellow}
+</style>
+</head>
+<body>
+
+<h1>Log: DMTDHF, 1D</h1>
+
+<p>Brent W. Barker, barker@nscl.msu.edu</p>
+
+<hr />
+
+<h3>2010-03-18 15:36 EDT</h3>
+<p>Starting new log today, hopefully will help me keep on track. It is in html so that, hopefully, I can link to files in a simple manner.</p>
+
+<p>Still have potential energy discrepancy. I believe this happens at multiple energies and grid sizes, but it is time to verify this.</p>
+
+<code><pre>
+2 ! ntime
+! ........... PHYSICAL PARAMETERS
+0.5 ! delt [fm/c]
+200 ! Nt
+1   ! Nmax
+25.0 ! EA [MeV]
+25.0  ! xLa [fm]
+25.0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
+</pre></code>
+
+<p>With this, either the potential or kinetic energy is off by a factor of 400 +- 5, depending on which 2 timesteps I use to calculate the discrepancy.</p>
+
+<hr />
+<h3>2010-03-20 4:06 EDT</h3>
+
+<p>I have coded automatic calculation of this factor, which I term "kinetic correction factor" - this is what the kinetic energy must be multiplied by to conserve energy. The command-line run is such:</p>
+
+<code><pre>
+$ ./time.x < input.test > input.out
+$ grep kinetic input.out | tail -n +2 | awk '{print $2,$3}' > ../log/kin_corr3.dat
+</pre></code>
+
+<p>This is saved in <a href="kin_corr1.dat">kin_corr1.dat</a>. Doubling the energy to EA=50.0 MeV gives an identical distribution(<a href="kin_corr2.dat">kin_corr2.dat</a>). Doubling average length to xLa=50.0 fm gives a new distribution now centered around 1000, with the same frequency and pattern, but the amplitude is different, and not by a constant factor. Saved as <a href="kin_corr3.dat">kin_corr3.dat</a>. Doubling relative length to xLr=25.0 fm gives the same distribution as the first case, but the factor is exactly doubled (<a href="kin_corr4.dat">kin_corr4.dat</a>).
+</p>
+
+<p>I should next verify whether the above variables change the potential energy, or the kinetic energy.</p>
+
+<hr />
+<h3>2010-03-25 10:46 EDT</h3>
+
+<p>Doubling the length in the relative direction, xLr, halves the kinetic energy calculated, without changing the potential energy calculated. Since this does not change dxa, this doesn't change the potential field along the diagonal. Since the potential field does not change, and the potential energy stays the same, the dynamics of the problem do not change with a change in xLr, merely the calculation of kinetic energy.</p>
+
+<p>Noticing that the calculated kinetic energy varied with dka, I multiply the final calculated kinetic energy by dka. This fixes the variance of KE with dka. Now when I change the xLa, both PE and KE change. Just varying xLa, the kinetic correction factor(KCF) is not constant, or even near constant. However, if I multiply  both xLa and Nxa by the same factor, the KCF is constant and is also multiplied by that factor.</p>
+
+<p>Next I should make a table of how these change. Meanwhile I've emailed Arnau to verify my initial calculation of dxa,dxr,dkr,dka.</p>
+
+<h4>13:58</h4>
+
+<p>What I really should be doing is making the problem simpler by turning off the potential and getting the kinetic energy correct first. In fact, I might make a flag to switch potentials on the fly. Sound useful much?</p>
+
+<p>Now I have a flag to turn the potential on and off. Let's get the kinetic energy correct.</p>
+
+<h4>16:46</h4>
+
+<p>While I wait on Arnau's response, I'll work on programming the wigner function transform. See the theory and derivation in notes 2010-01-07. For the transform, since 2D Fortran arrays are stored as incrementing the first index, then the second, I'll need to transpose the matrix first, since I want to FFT on xr, and the format of the matrix is (xa,xr).</p>
+
+<hr />
+<h3>2010-03-29 23:55 EDT</h3>
+
+<p>Worked with Arnau over the weekend to fix code. I had an incorrect continuous-discrete factor. With this fixed, the code works for <code>delxa==delxr</code>. If <code>delxa!=delxr</code>, the energy conservation is off by a factor that is periodic in time. I suspect I have the wrong <code>del(x|k)(a|r)</code> somewhere.
+
+<p>More precisely, from the original settings at top of log, and <code>Nt=100</code> for convenience, these are the results:
+
+<table border="1">
+<tr>
+<td><strong>variable</strong></td>
+<td><strong>original</strong></td>
+<td><strong>tested</strong></td>
+<td><strong>effect</strong></td>
+</tr>
+<tr>
+<td><code>delt</code></td>
+<td><code>0.5<code></td>
+<td><code>1.0<code></td>
+<td>no effect</td>
+</tr>
+<tr>
+<td><code>delt</code></td>
+<td><code>0.5<code></td>
+<td><code>0.25<code></td>
+<td>no effect</td>
+</tr>
+<tr>
+<td><code>xLa</code></td>
+<td><code>25.0<code></td>
+<td><code>50.0<code></td>
+<td>change in both </td>
+</tr>
+</table>
+<hr />
+
+<h2>2010-05-17 16:18 EDT</h2>
+<p>After a weekend of working with Arnau to pin this down, we found that the problem was in converting from the machine-stored k to the actual k. In calculating the total diagonal kinetic energy, I needed to multiply the sum of <code>hbc^2/(2m)*ka^2*denmat(kr=0,ka)</code> by <code>delxa*Nxa</code> instead of by <code>delka</code>.</p>
+<p><span class="todo">Pawel asked me to check why, in the paper he's reviewing, the reported CM energy of the collisions are off by a factor of about 3. I also need to implement the adiabatic switching (and thus the meanfield potential) and the Wigner transform. Also, I need to make it so the input to the program is in x-resolution and k-resolution, instead of x-ave and x-rel</span>. This should be extremely simple.</p>
+
+<h3>18:00 EDT</h3>
+<p>First, I'll check to see if, without any potential, my boosted gaussian wave has the lab energy that I think it does. Before this, I need to <span class="todo">code the HO meanfield potential</span>. Right now I only have a fixed potential. This also brings in the interpolation code.</p>
+<p><strong>Statement of the meanfield problem when <code>delxa != delxr</code>:</strong> To calculate the meanfield potential of an off-diagonal element, one must find the meanfield potential of the (x,x') points to which this point refers. If <code>delxa=delxr</code>, then these two points, (x,x) and (x',x'), can be found at exact grid points in the (xa,xr=0) line. If they are not equal or a multiple of each other, then the (xa,xr=0) point lies between two grid points. To solve this, I will solve for the meanfield potential of each grid point, then linearly interpolate to find in-between values. Thus, the following functions need to be created:</p>
+
+<ul>
+ <li><code>getPot(xa,xr)</code> Gets potential of arbitrary point.</li>
+ <li><code>calcPot()</code> Calculates meanfield potential at all diagonal points. Also requires a new common variable, <code>potMF(-nXa:nXa)</code>.</li>
+</ul>
+
+<hr />
+
+<h2>2010-05-18 13:17 EDT</h2>
+<p>I have confirmed that in the external HO potential, the input EA, lab energy of the particle, causes the system to have a maximum x value that corresponds to the correct one given all kinetic energy is converted to potential. In other words, conservation of energy, based on how far it moves and the calculated potential energy, is conserved. I have tested this for EA=20 and EA=217 MeV, which give a maximum x value of 3 and 10 fm, respectively.</p>
+
+<p>I have coded the calculation of the meanfield at each grid point. Now I will confirm that this potential energy equals the potential energy calculated for the external HO potential, as this is confirmed to match Arnau's code.</p>
+
+<p>For EA=0, the potential energy calculated for the external HO potential should be equal to that calculated with the meanfield potential. Currently, the external gives 6.715(4) MeV, and the meanfield gives 7.14(4) MeV (errors are only from integration). When I boost to finite kinetic energies, the MF potential does remain constant, within ~0.5%. This was tested at 20 and 200 MeV.</p>
+
+<hr />
+
+<h2>2010-05-20 15:31 EDT</h2>
+<p>Doing the variational method to find relation between the ground state wavefunction and the potential, I found that my potential should be V(x)=1/4*m*w**2*Integral,x'(rho(x')*(x-x')**2). Note the 1/4 instead of 1/2. This makes the total potential energy match that of the external potential.</p>
+<hr />
+
+<h2>2010-05-21 14:30 EDT</h2>
+<p>I have a suspicion that the meanfield HO potential is not treating correctly the boundary conditions. To illustrate, first I turn down the frequency 'w' to a tenth of original. This is to alleviate the too-large potential problem (it made the time evolution operator an essentially random phase). Then, I run for 400 timesteps, and set EA=80 MeV. Using the HO MF, I get <a href="20100521-1dxre.gif">this</a> as my 1d density over time, and <a href="20100521-2dxre.gif">this</a> as my 2d real x-space. Notice how, when the wave reaches the boundary, it transmits some, but mostly reflects.</p>
+<p>I should check to see if the effect lessens when I reduce xLr. This should reduce the amount of periodicity-needing points.</p>
+<hr />
+
+<h2>2010-05-25 11:04 EDT</h2>
+<p>I think the effect referenced in the above paragraph is due to the nonlocal potential not respecting the periodicity. For example, consider 2 points on the density matrix, above the xr=0 line, near the boundary of xa. One point, when dereferenced into x and x' coordinates, has both xa=x and xa=x' points directly below. As that point goes closer to the xa edge of the box, it suddenly is referencing a point outside of the box. Using the periodicity condition, this "outside the box" point actually refers to a point on the other side of the box. This is fine, except that the point on the other side of the box has a very different potential, as well as a suddenly different position (and thus (x-x')^2). The original way of constructing the potential at a given (xa,xr=0) point was to sum over all the other points in the grid and weight by (x-x')^2. My proposed solution is to sum over points an equal amount in each direction. That is, for 101 grid points, for the point ixa1, sum from ixa1-50 to ixa1+50, properly traversing boundaries periodically. This, in theory, should respect more the periodicity, in effect making it the potential due to a periodic chain of identical sources.</p>
+<p>In practice, so far, this has failed miserably. The evolution looks like noise. I need to check:</p>
+
+<ul>
+ <li>whether I'm implementing the above procedure correctly</li>
+ <li>whether the potential is small enough to make the exponent of the potential operator much less than one</li>
+ <li>whether this range, -50 to 50, is appropriate, and if this spring force is actually physically meaningful.</li>
+</ul>
+
+<p>This last could be the cause. I am modeling a force that <em>increases</em> with distance. This may not be appropriate for this kind of technique, especially if I'm assuming an infinite, periodic structure. I'll ask Pawel about this last one today at our meeting.</p>
+
+<h3>13:04 EDT</h3>
+<p>It looks like the actual numbers of the potential are comparable to that from the external potential. However, there are some discontinuities, where one (xa,xr) pair will have a very different (ux1-ux2) than the surrounding points in xr. Here is a sample of the pairs that exhibit this: (3,-36), (2,40), (2,8), (2,-8), (1,44), (4,32), (5,28), (5,4), (4,16), (4,-32), (3,-12). I see at least one pattern here, but I don't know what it means yet. I think I will stop this investigation soon and focus on the adiabatic switching and local density dependent nuclear meanfield.</p>
+<hr />
+
+<h2>2010-05-26 17:26 EDT</h2>
+<p>Here is my plan for implementing the adiabatic switching. I want to reuse my code as much as possible, so the trick will be to use the same code I have now, but substitute a time-varying potential (the adiabatic part), and output the adiabatic part to a different set of files than the evolution part. I will achieve this with changing global variables for the potential switch, and explicitly closing and opening files with the same file unit, allowing the output to proceed completely unchanged.</p>
+
+<h3>20:30 EDT</h3>
+
+<p>I figured out how I'm going to do this:</p>
+<ol>
+ <li>Rewrite the external HO potential subroutine to function in the same way as the others - calculate the potential at each diagonal grid point.</li>
+ <li>Choose which potential to use in dmtdhf, and pass that function as an argument to the evol_x subroutine. This way, the evol_x subroutine does the exact same thing no matter what potential I'm using.</li>
+ <li>Write the adiabatic switching to mix an 'initial' potential with a 'final' potential, with each of these being their own function that is passed to it. This allows me freedom in the potentials. Code the final potential once and use it for both the adiabatic switching and evolution.</li>
+ <li>Write the new adiabatic file open/close stuff in dmtdhf, test it.</li>
+ <li>Test the switching to go between the external and meanfield HO potential (if it doesn't work right away, forget about it for now).</li>
+ <li>Code the contact Skyrme meanfield.</li>
+</ol>
+<hr />
+
+<h2>2010-06-03 13:32 EDT</h2>
+<p>I confirmed that one can open and close and reopen different files with the same unit number. I am also moving to a new version number, rot3, since I am changing a major portion and implementing a new feature. Don't want to break stuff that's working.</p>
+<hr />
+
+<h2>2010-06-07 11:18 EDT</h2>
+<p>I made big changes to the rot3 code, implementing the adiabatic switching code, changing variables, etc. Now it is segfaulting somewhere in the evolution, so I'm debuging that now. This is being done with the adiabatic switching turned off.</p>
+
+<h3>13:44 EDT</h3>
+<p>It was just a missing argument in the function call getPotX. Now I'm getting crap evolution, even though I should be only using the external HO potential throughout. This may be because I changed the way potHO is calculated to match the other methods. This may mean that the linear interpolation is not good enough for this potential. I'll check by somehow converting to the older method of the potHO, giving an exact xx.</p>
+<hr />
+
+<h2>2010-06-29 11:08 EDT</h2>
+<p>I have confirmed that when I hard-code the original external HO potential in the new system, I get a correct evolution. I printed out both the original and the interpolated values, and found that the interpolated has a few points that are completely wrong. This leads me to think that my interpolator is borked. I'll find another one, one that I didn't write.</p>
+
+<h3>12:32 EDT</h3>
+<p>I replaced my interpolator with the one in Arnau's code, and it works fine now. Time to check the meanfield HO.</p>
+
+<p>Meanfield HO works, but not past the boundary conditions (<span class=todo>it doesn't come back from the other side properly</span>). I'm going to skip that for now and work on the Skyrme and adiabatic switching.</p>
+
+<hr />
+
+<h2>Thu Jul  8 13:36:14 EDT 2010</h2>
+<p>With adiabatic, attempting to shift from meanfield HO to SkyrmeMF. After the first timestep, this produces NaN values for energies and potentials.</p>
+<p>To confirm that the adiabatic machinery is working, I ran the code with potInitial=0 (external HO) and potFinal=1 (meanfield HO). This worked perfectly. The SkyrmeMF is when the problem happens.</p>
+<p>The equation for the Skyrme MF gives a complex potential for a negative density. Now, if the density is negative, the potential is set to zero. This creates a stable final state, but I will still check to see if this is proper. An alternative could be to calculate it as a positive density, then reverse the sign.</p>
+<hr />
+
+<h2>Mon Jul 12 13:39:51 EDT 2010</h2>
+<p>If the program respects the periodicity, when the slab moves off the grid, it should reenter on the other side. For the most sane settings, I set to have an even spacing in x1 and x2, so this is delxa=delxr. To have no truncation of the xr direction, xLr must be twice xLa. Here are the settings in input.test:</p>
+
+<pre>
+! ........... READ AND WRITE PARAMETERS
+10 ! ntime
+! ........... PHYSICAL PARAMETERS
+0.5 ! delt [fm/c]
+1200 ! Nevt
+3   ! Nmax
+100.0 ! EA [MeV]
+25.0 ! xLa [fm]
+50.0 ! xLr [fm]
+100 ! Nxa
+200 ! Nxr
+! ..........
+1   ! potInitial
+2   ! potFinal
+1000.0 70.0 4000 ! tad,wtad,Nad
+</pre>
+
+<p>The diagonal x evolution can be found <a href="denmat_x_t_re1200_100_25_50.gif">here</a>. Notice the left/right oscillation after it passes through the side of the grid. The effect is much more noticable in <a href="denmat_k_t_re1200_100_25_50.gif">momentum space</a>. Also relevant are the plots of <a href="cons_abs_k1200_100_25_50.eps">kinetic</a> and <a href="cons_abs_p1200_100_25_50.eps">potential</a> energy.</p>
+
+<h3>16:55</h3>
+<p>To test the two different negative density corrections mentioned on July 8, I run the following input:</p>
+
+<pre>
+! ........... READ AND WRITE PARAMETERS
+10 ! ntime
+! ........... PHYSICAL PARAMETERS
+0.5 ! delt [fm/c]
+1200 ! Nevt
+3   ! Nmax
+0.0 ! EA [MeV]
+25.0 ! xLa [fm]
+25.0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
+! ..........
+1   ! potInitial
+2   ! potFinal
+1000.0 70.0 4000 ! tad,wtad,Nad
+</pre>
+
+<p>Using the (if density.LT.0, pot=0) convention and fitting the kinetic energy vs. time to a straight line, the slope is -2.98(46)e-07. Fitting to a sine+line, the slope of the line is -3.26(23)e-07. In detail,</p>
+
+<pre>
+g(x)=c*sin(d*x+e)+a*x+b
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+
+a               = -3.26423e-07     +/- 2.267e-08    (6.944%)
+b               = 5.96434          +/- 7.853e-06    (0.0001317%)
+c               = 0.000107969      +/- 5.43e-06     (5.029%)
+d               = 0.048033         +/- 0.0003024    (0.6296%)
+e               = 11.2359          +/- 0.1029       (0.916%)
+</pre>
+
+<p>For the convention (pot(abs(density))*sign(density)), the straight-line slope was -1.73(46)e-07. For the sine+line, slope was -2.08(19)e-07. In detail,</p>
+
+<pre>
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+
+a               = -2.07621e-07     +/- 1.888e-08    (9.095%)
+b               = 5.96413          +/- 6.535e-06    (0.0001096%)
+c               = 0.000113694      +/- 4.499e-06    (3.958%)
+d               = 0.0481945        +/- 0.0002415    (0.501%)
+e               = 11.07            +/- 0.0823       (0.7435%)
+</pre>
+
+<p>First, <strong>compare the average energy:</strong> the Student's t-test is t=21. This is right out (between 1% and 2.5% probability of occurring, assuming 1 degree of freedom). <strong>Compare the slope (trend over time):</strong> this Student's t-test, t=4. This is between 5% and 10% chance of occurring, given the null hypothesis that they are equal.</p>
+
+<p><strong>Tue Jul 13 12:31:44 EDT 2010</strong> These can be compared graphically <a href="denpot2.eps">here</a>.</p>
+
+<p>For reference, the corresponding potential energy is <a href="denpotpot.eps">here</a>. Notice that this change is of the same order of magnitude, but is relatively less important (2 orders different relatively).</p>
+<hr />
+
+<h3>Tue Jul 20 11:29:37 EDT 2010</h3>
+
+<p>I feel like I need to be more careful about conservation of energy. So I'm going back to a stationary, external HO, and working my way up. I am not cutting any of the off-diagonals. This means that Nxa=Nxr, and xLa=0.5*xLr. This produces an even grid in (x,x') and has sufficient off-diagonal elements to connect the furthest 2 diagonal points. See the spreadsheet <a href='grid spaces'</a>here</a> for visual reassurance.</p>
+
+<p>For the following inputs, I looked at total energy over time. For Nxa=Nxr=100, <a href='extHOenergy_n100.eps'>this</a> is the plot. For Nxa=Nxr=200, <a href='extHOenergy_n200.eps'>this</a> is the plot.</p>
+
+<pre>
+! ........... READ AND WRITE PARAMETERS
+10 ! ntime
+! ........... PHYSICAL PARAMETERS
+0.5 ! delt [fm/c]
+1200 ! Nevt
+0   ! Nmax
+0.0 ! EA [MeV]
+25.0 ! xLa [fm]
+50.0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
+! ..........
+0   ! potInitial
+0   ! potFinal
+1000.0 70.0 4000 ! tad,wtad,Nad
+</pre>
+
+<p>The error bars on n=200 are solely from the integration. The error bars on n=100 are much, much bigger than the numbers, so they are left out. Strangely, the total energy is different for these 2 runs, by about 40 keV bigger for n=100.</p>
+
+<p>Hokay, verdict is in: it is much better to adiabatically switch from the external HO potential rather than from the nonlocal meanfield HO potential. CHECK.</p>
+
+<hr />
+
+<h3>Thu Jul 22 14:50:52 EDT 2010</h3>
+
+<p>I tried changing FFTs to fftw, the fastest fourier transform in the west. It may or may not be faster, but it is easier to use, support multi-threading, has many more options should I want them, includes 3d codes, is defaultly double precision, etc. It doesn't fix the new problem of having large imaginary numbers on the diagonal, where everything should be really real.</p>
+
+<p>The other problem, and also a big one, is that when the slab passes through the boundary of the box, it interacts with it and creates a horrible oscillating state that also does not conserve energy (+/-1 MeV).</p>
+
+<p><strong>FIXED!</strong> The boundary now behaves properly. We now obey pacman physics at the boundary. Still have the huge imaginary terms though. I'll try looking at the 2d imaginary matrix to get some ideas.</p>
+
+<h3>Wed Jul 28 12:07:53 EDT 2010</h3>
+
+<p>Running adiabatically switching to potSkyrme gives imaginaries on the diagonal of O(10^-6). Running adiabatically switching to 0.0 potential gives O(10^-4). Switching to nonlocal MF HO gives O(10^-13). Using delt=0.1d0 instead of 0.5d0 gives O(10^-7) (with increasing Nad to 20000). Increasing the adiabatic width to 140.0d0 had no effect. Changing to Nxa=Nxr=300 gives O(10^-5).</p>
+
+<h3>Tue Aug 17 11:56:59 EDT 2010</h3>
+
+<p>I made an observable to quantify how non-Hermitian the density matrix is. I call it square-sum. The observable is the sum of the squares of the elements that represent the difference between the density matrix and its conjugate transpose. It is calculated and output in the subroutine <code>howHermitian</code>, in the file <code>time_evol.f90</code>. <strong>I have found that the non-Hermiticity is generated in the initial state.</strong> The imaginary part is set manually to be identically zero. The real part is shown in <a href='2010-08-17-squaresumdiff.eps'>this file</a>. The finite parts are centered at index (ixa,ixr)=(0,4), (4,0), (0,-4), and (-4,0) and extend out along each axis respectively, until about ixa(ixr)=10, slowly getting smaller. The largest is ~0.05, with the ixa(ixr)=10 around ~0.015. This is with:</p>
+
+<pre>
+! ........... READ AND WRITE PARAMETERS
+1  ! ntime
+! ........... PHYSICAL PARAMETERS
+0.5d0 ! delt [fm/c]
+1 ! Nevt
+1   ! Nmax
+0.0d0 ! EA [MeV]
+25.0d0 ! xLa [fm]
+25.0d0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
+! ..........
+0   ! potInitial
+2   ! potFinal
+1000.0d0 70.0d0 4000 ! tad,wtad,Nad
+</pre>
+
+<p>Also, I turned off the adiabatic switching in the code, so it goes straight to using the SkyrmeMF. Bad physics, but I'm bug-hunting, so that's not important right now.</p>
+
+<p>Changing to <code>xLr=50.0d0</code>, the initial non-Hermiticity gets much worse: <a href='2010-08-17-squaresumdiff_25_50_100_100.eps'>file</a>.</p>
+
+<p>For today, I also enforced the periodicity in converting from xa,xr to x,x' in the initial state. This made the Hermiticity much better, to what we see in today's figures. It's still bad, but maybe a lot better. Let's look at magnitude of imaginary parts on the diagonal... Still quickly becomes O(10^-7). Let me turn the adiabatic switching back on. Same behavior as before. Let's hunt the non-Hermicity in the initial state a bit...</p>
+
+<p><strong>The above conclusions are wrong.</strong> I was calculating the conjugate transpose, while in the (xa,xr) coordinate system, the actual symmetry should not be around the (xa=xr) axis, but rather the (xr=-xr) axis. I'll rewrite the <code>howHermitian</code> subroutine to do this correctly. Time to recork the champagne.</p>
+
+<h3>Wed Aug 18 14:06:01 EDT 2010</h3>
+
+<p>I enforced the proper periodicity in converting (kr,ka) to (k1,k2) in the kinetic evolution term. This needed to be done, and probably fixed something down the road, but it didn't solve the current problem.</p>
+
+<p>As a test, and as a stopgap, I wrote 2 subroutines, <code>enforceHermiticityX/K</code>, which averages the values that should be equal in magnitude due to Hermiticity, and sets those values equal to the average, remembering the sign change in the imaginary part. This keeps the the imaginary diagonal to O(10^-17) at the worst, if I run them immediately after the corresponding evolution.</p>
+
+<p>The <code>howHermitian</code> is only valid for the spatial density matrix. I'll write a similar one for k-space.</p>
+
+<p>In the evolution series k,x,k, calling enforceHermiticityK after the second evol_k, but before the output, gives a low imaginary diagonal, O(10^-17). With just the enforceK after the first evol_k, O(10^-10). With the enforceX just after evol_x, O(10^-16). With no enforcing, O(10^-6). Using all 3 gives O(10^-17).</p>
+
+<p>I have confirmed that the phase for (ixa,ixr) is equal in magnitude, opposite in sign to the phase for (ixa,-ixr).<p>
+
+<p><strong>And now for the real problem:</strong> The edge cells, (ixa,Nxr2) and (ixa,-Nxr2), are represented by the same array element in the stored matrix. Thus, the phase applied to each cannot possibly be different. The only case where this works out fine with no adjustment is when the matrix is exactly square - that is, when there is no truncation whatsoever. In that case, the phase is zero, and so 0 is equal in magnitude, opposite in sign, to -0. I verified this in the following complete matrix:</p>
+
+<pre>
+25.0d0 ! xLa [fm]
+50.0d0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
+</pre>
+
+<p>Here, the two edges in (xa,xr) mentioned above resolve to the same points in (x,x') land. Further, when I evolve this in time, I get no imaginary diagonal part. So, by not evolving the rows that are edges in the relative directions in x and k space at all, the hermiticity is preserved and there is no imaginary diagonal.</p>
+
+<p>As a possible fix, I do not loop over ixr (ikr) = -Nxr2 (-Nkr2). I skip it. This means that row of points is never evolved in time. Not sure if that's okay.</p>
+
+<h3>Mon Aug 23 15:24:26 EDT 2010</h3>
+
+<p>Here's what <em>really</em> happened:</p>
+
+<p>In debugging the interaction with the boundary, I found that I was evolving the xa edges twice (since they are the same column). Therefore, I changed my loops to do ixa=-Nxa2,Nxa2-1 instead of ixa=-Nxa2,Nxa2. Erroneously, I also changed the xr loop similarly. This created the situation where the xr edge row was being multiplied by a finite phase (the full -Nxr2,Nxr2 evolution would have that row multiplied by a phase, then by the conjugate of that phase). Then I changed the initial state and momentum evolution codes to properly respect the periodicity in converting from (xa,xr) to (x,x')  (or the equivalent k). Then, when I changed the ixr and ikr loops back to -Nr2,Nr2 from -Nr2,Nr2-1, it was completely fixed.</p>
+
+<h3>Thu Aug 26 17:03:35 EDT 2010</h3>
+
+<p>I have written the displacement code, but have not tested it yet. I need to first derive the conversion from continuous to discrete Fourier transform for myself. I have done this, look on written notes, dated 2010-08-25. I also will be storing the matrix differently, so as to properly respect the tiling.</p>
+
+<p>Now that I have this working, I'm going to copy to a new directory to add the code to make colliding slabs.</p>
+
+<h3>Wed Nov 17 14:11:26 EST 2010</h3>
+
+<p>I have refactored the code in several ways. Now I do an intermediate transform to the Wigner representation. Right now I do that transform in the most straightforward, brute force way, rectangular integration, order N^2. The x to Wigner transform and inverse is finished coded and working. I have verified that the transform does what it's supposed to with a simple N=0 Gaussian wavefunction.</p>
+
+<p>So the <strong>plan</strong> is to finish coding the Wigner-Momentum transforms, and push through to a full time evolution of meanfield slabs in 1D, <em>before</em> I start using the libraries. Since the code is quite modular, I should be able to drop that in later with little difficulty.</p>
+
+<h3>Wed Nov 17 16:53:24 EST 2010</h3>
+
+<p>Wigner-momentum transforms are coded. I might have a normalization problem in the momentum representation, as my tr(rho) should equal 1, while I get 3.63. I'll look at the code for it now.</p>
+
+<p>However, the transforms seem robust. I did a forward/backward transform from x to Wigner to k and back 100 times, and the trace of the spatial matrix is the same in the middle and the end, to 12 decimal places. I <em>think</em> this confirms that my sums have the correct limits. I'll do a spot-check by changing the bounds by 1 and see if I get non-conservation.</p>
+
+<p>However, I was getting some really large values of the density matrix after spatial transform for ixa=0,-50 ; ika=0 (den=2 here). When I changed the limit in <code>transform_wigner_to_k_dumb</code> to <code>do ika=-Nka2,Nka2-1</code>, this fixes it, or at least it doesn't produce those large values...</p>
+
+<p>So it remains that I need to check these edge conditions thoroughly.</p>
+
+<h3>Thu Dec 16 13:43:39 EST 2010</h3>
+
+<p>I've resolved those edge conditions. I'll add that to the written notes soon. Past that, I first tried evolving in space only, with the harmonic oscillator potential.</p>
+
+<p>With just evolving in x (not in k) and outputing every 5 steps, I begin to lose 3e-4 of a particle every timestep at about 50 or 60 timesteps in to evol_x.</p>
+
+<p>As I fourier transform from x to k space and back more often between evolving in space, I lose particles less quickly. If I fourier transform every timestep, then I only lose about 9.5e-6 particles per step.</p>
+
+<p>The decrease, once it starts happening rapidly, is faster than log. That is, in a logscale, it has a negative inflection.</p>
+
+<h3>Wed Jan  5 15:36:39 EST 2011</h3>
+
+<p>When I ran the code with just k-space evolution (so in free space), and output every 1 timestep, I got a decay that was much slower than the analytic. When I output every 10 timesteps, it was very close to the analytic. This means that the Fourier transform is wrong.</p>
+
+<p>I suspected this would be the case, since I was going from 2N points in each rho(xa,xr) column to N points in each rho(xa,ka) column, thus losing information.</p>
+
+<p>So to do this correctly, I'll store and evolve all 2N points in k-space. Once that is working, then I'll see about being efficient.</p>
+
+<h3>Thu Jan 27 22:44:07 EST 2011</h3>
+
+<p>fixed bugs that caused the preceeding thing. Now code matches analytical. Now I'm testing benchmarks - going through each potential, looking at energy conservation and visually inspecting all density matrices.</p>
+
+<p>Nevt=50, stationary gaussian (external HO pot), nxa=nxr:</p>
+<ul>
+ <li>kinetic energy conserved</li>
+ <li>strange ripples of order 1e-8 in imaginary wigner...</li>
+ <li>2dxim - all terms(~1e-5) change sign around it=7</li>
+ <li>should rho(kr,ka) be symmetric about ka? even the imaginary part? looks to be hermitian symmetric</li>
+ <li>2dkim - all terms(~1e-5) also change sign around it=7</li>
+ <li>2dwim - line of transverse ripples passing through origin is rotating clockwise, crosses xa=0 line around it=7</li>
+</ul>
+
+<p>question: what do the imaginary off-diagonals of the spatial density matrix mean?</p>
+<p>maybe a better question: what do imaginary amplitudes mean in general?</p>
+
+</body>
+</html>
+

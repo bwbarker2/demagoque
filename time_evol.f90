@@ -8,6 +8,7 @@ SUBROUTINE time_evolution
 !  integer :: ii
 
   it=0
+  call calcPotDiag
   call output
   call output
 

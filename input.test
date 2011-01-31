@@ -10,8 +10,8 @@
 100 ! Nxa
 100 ! Nxr
 ! ............. POTENTIAL PARAMETERS
--1  ! potInitial
--1 ! potFinal
+0  ! potInitial
+0 ! potFinal
 300 70 1200  ! tad,wtad,Nad
 1  ! iadib
 
