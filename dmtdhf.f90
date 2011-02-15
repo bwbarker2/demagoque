@@ -40,6 +40,41 @@ PROGRAM dmtdhf
   CALL initialState
 
   !write(*,*)'finished initialState'
+  if (useImEvol) then
+
+   open(unit=41,file='results/imev_denmat_x_t.dat')
+   open(unit=42,file='results/imev_denmat_k_t.dat')
+   open(unit=43,file='results/imev_cons_rel.dat')
+   open(unit=44,file='results/imev_cons_abs.dat')
+   open(unit=45,file='results/imev_denmatan_x_t.dat') 
+   OPEN(unit=61,file='results/imev_2dxim.dat')
+   OPEN(unit=62,file='results/imev_2dxre.dat')
+   OPEN(unit=66,file='results/imev_2dkim.dat')
+   OPEN(unit=67,file='results/imev_2dkre.dat')
+   open(unit=68,file='results/imev_2dwim.dat')
+   open(unit=69,file='results/imev_2dwre.dat')
+   OPEN(unit=70,file='results/imev_pk2.dat')
+
+   Nt=Nimev
+
+   call time_evolution
+
+   useImEvol=.false.
+
+   close(41)
+   close(42)
+   close(43)
+   close(44)
+   close(45)
+   close(61)
+   close(62)
+   close(66)
+   close(67)
+   close(68)
+   close(69)
+   close(70)
+
+  endif !useImEvol
 
   if (potInitial.NE.potFinal) useAdiabatic=.true.
 !  useAdiabatic=.false.
@@ -51,11 +86,14 @@ PROGRAM dmtdhf
    open(unit=42,file='results/ad_denmat_k_t.dat')
    open(unit=43,file='results/ad_cons_rel.dat')
    open(unit=44,file='results/ad_cons_abs.dat')
+   open(unit=45,file='results/ad_denmatan_x_t.dat') 
    open(unit=54,file='results/obdm.dat', form='unformatted')
    OPEN(unit=61,file='results/ad_2dxim.dat')
    OPEN(unit=62,file='results/ad_2dxre.dat')
    OPEN(unit=66,file='results/ad_2dkim.dat')
    OPEN(unit=67,file='results/ad_2dkre.dat')
+   open(unit=68,file='results/ad_2dwim.dat')
+   open(unit=69,file='results/ad_2dwre.dat')
    OPEN(unit=70,file='results/ad_pk2.dat')
 
    !set number of timesteps for adiabatic switching
@@ -70,11 +108,14 @@ PROGRAM dmtdhf
    close(42)
    close(43)
    close(44)
+   close(45)
    close(54)
    close(61)
    close(62)
    close(66)
    close(67)
+   close(68)
+   close(69)
    close(70)
 
    useAdiabatic=.false.
@@ -222,5 +263,13 @@ SUBROUTINE getStdIn
   ! read from file?
   read(*,*) iadib
   write(*,*) 'read initial state from file, iadib=',iadib
+
+  read(*,*)
+
+  read(*,*) useImEvol
+  write(*,*) 'use imaginary evolution? useImEvol=',useImEvol
+
+  read(*,*) Nimev
+  write(*,*) 'timesteps for imaginary evolution, Nimev=',Nimev
 
 END SUBROUTINE getStdIn

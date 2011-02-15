@@ -53,6 +53,8 @@ module cons_laws
   real (Long) :: ep0    ! initial pot energy
   real (Long) :: ep0err ! error in initial
 
+  real (Long) :: nnum   ! number of particles/(Nmax+1)
+
 end module cons_laws
 
 module formatting
@@ -130,16 +132,20 @@ MODULE time
   USE prec_def
 
   INTEGER     :: it     ! current iteration of time
-  REAL (long) :: t      ! current time during time evolution [fm/c]
-  REAL (long) :: delt   ! timestep [fm/c]
+  REAL*8      :: t      ! current time during time evolution [fm/c]
+  REAL*8      :: delt   ! timestep [fm/c]
   integer     :: Nevt   ! number of timesteps for evolution
   INTEGER     :: Nt     ! number of timesteps in current mode (adiabatic or
                         !  time)
-  real (Long) :: ea     ! energy per particle [MeV]
+
+  logical     :: useImEvol   ! use imaginary evolution?
+  integer     :: Nimev  ! number of timesteps for imaginary evolution
+
+  real*8      :: ea     ! energy per particle [MeV]
 
   integer     :: iadib  ! 1 = run adiabatic, 0 = read adiabatic from file
   integer     :: Nad    !adiabatic switching parameters
-  real (Long) :: tad,wtad  
+  real*8      :: tad,wtad  
 END MODULE time
 
 

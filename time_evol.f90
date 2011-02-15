@@ -37,6 +37,9 @@ SUBROUTINE time_evolution
 !  call howHermitian
 !     call enforceHermiticityK
      call output
+
+   if(useImEvol) call renormalizeDM
+
   ENDDO
 
 END SUBROUTINE time_evolution
@@ -184,11 +187,15 @@ SUBROUTINE evol_k(dtim)
         
         call getK12(ika,ikr,k1,k2)
 
+       if(useImEvol)then
+        edt=-hbc/m0*0.5d0*(k1*k1+k2*k2)*dtim
+        call setDenK(ikr,ika,exp(edt)*getDenK(ikr,ika))
+       else
         !time evolution operator = exp(-i(E-E')t/h)
         !                        = exp(-ih/2m(k^2-k'^2))
-        edt=-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim !*8d0 is for testing - BWB 2010-12-24
-        cos2k=dcos(edt)
-        sin2k=dsin(edt)
+        edt=-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim
+        cos2k=cos(edt)
+        sin2k=sin(edt)
 !        if(sin2k.gt.1.or.sin2k.lt.-1)write(*,*)cos2k
 
         xre=DBLE(getDenK(ikr,ika))
@@ -199,6 +206,7 @@ SUBROUTINE evol_k(dtim)
         xim2=xre*sin2k + xim*cos2k
 
         call setDenK(ikr,ika,cmplx(xre2,xim2,8))
+       endif
 
      ENDDO
      
@@ -264,23 +272,29 @@ SUBROUTINE evol_x(dtim)
 !      write(101,*)x1,0.5*m0*(w*x1)**2,ux1
 !     endif
 
+   if(useImEvol) then
+    udt=-(ux1+ux2)*dtim/hbc
+    call setDenX(ixa,ixr,exp(udt)*getDenX(ixa,ixr))
+   else
      !time evolution operator = exp(-i(U(x)-U(x'))t/h)
-   udt=-(ux1-ux2)*dtim/hbc
-!   tpots(ixr)=udt  !debugging
-   cos2k=dcos(udt)
-   sin2k=dsin(udt)
-!     if(ixr==0)write(*,*)'ixa,ixr,cos2k,sin2k=',ixa,ixr,cos2k,sin2k
+    udt=-(ux1-ux2)*dtim/hbc
+ !   tpots(ixr)=udt  !debugging
+    cos2k=dcos(udt)
+    sin2k=dsin(udt)
+ !     if(ixr==0)write(*,*)'ixa,ixr,cos2k,sin2k=',ixa,ixr,cos2k,sin2k
+ 
+ !     if(ixr==0)write(*,*)'ixa,ixr,den_im-pree=',ixa,ixr,den_im(iixa,iixr)     
+    xre=DBLE(getDenX(ixa,ixr))
+    xim=DIMAG(getDenX(ixa,ixr))
+ 
+    ! exp(i*edt) = cos2k + i*sin2k
+    xre2=xre*cos2k - xim*sin2k
+    xim2=xre*sin2k + xim*cos2k
+ !   if(ixr==0)write(*,*)'ixa,ixr,den_im-post=',ixa,ixr,den_im(iixa,iixr)
+ 
+    call setDenX(ixa,ixr,cmplx(xre2,xim2,8))
 
-!     if(ixr==0)write(*,*)'ixa,ixr,den_im-pree=',ixa,ixr,den_im(iixa,iixr)     
-   xre=DBLE(getDenX(ixa,ixr))
-   xim=DIMAG(getDenX(ixa,ixr))
-
-   ! exp(i*edt) = cos2k + i*sin2k
-   xre2=xre*cos2k - xim*sin2k
-   xim2=xre*sin2k + xim*cos2k
-!   if(ixr==0)write(*,*)'ixa,ixr,den_im-post=',ixa,ixr,den_im(iixa,iixr)
-
-   call setDenX(ixa,ixr,cmplx(xre2,xim2,8))
+   endif !not useImEvol
 
 !   if(ixr>0) then
 !    write(*,*)'ixr,tpots-diff:',ixr,tpots(ixr)+tpots(-ixr)

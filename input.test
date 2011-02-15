@@ -1,9 +1,9 @@
 ! ........... READ AND WRITE PARAMETERS
-5 ! ntime
+1 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
-50 ! Nevt
-0   ! Nmax
+5 ! Nevt
+1   ! Nmax
 0.0d0 ! EA [MeV]
 25d0  ! xLa [fm]
 25d0 ! xLr [fm]
@@ -14,7 +14,9 @@
 0 ! potFinal
 300 70 1200  ! tad,wtad,Nad
 1  ! iadib
-
+! ............. IMAGINARY EVOLUTION PARAMETERS
+.true.     ! useImEvol - use imaginary evolution?
+10    ! nimev - number of timesteps for this evolution
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ! INPUT FILE FOR THE EVOLUTION PROGRAM
