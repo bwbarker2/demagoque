@@ -15,88 +15,7 @@ subroutine fft_initial
 
 end subroutine fft_initial
 
-subroutine setState(state)
- !! only implemented for x to wigner and inverse transforms so far
- use mesh
- implicit none
 
- integer, intent(in) :: state
-
- if(denState.NE.state) then
-  select case (denState)
-
-   case (SPACE)
-    select case (state)
-     case (WIGNER)
-      call transform_x_to_wigner_dumb
-     case (MOMENTUM)
-      call transform_x_to_wigner_dumb
-      call transform_wigner_to_k_dumb
-    end select
-
-   case (WIGNER)
-    select case (state)
-     case (SPACE)
-      call transform_wigner_to_x_dumb
-     case (MOMENTUM)
-      call transform_wigner_to_k_dumb
-    end select
-
-   case (MOMENTUM)
-    select case (state)
-     case (WIGNER)
-      call transform_k_to_wigner_dumb
-     case (SPACE)
-      call transform_k_to_wigner_dumb
-      call transform_wigner_to_x_dumb
-    end select
-  end select
- endif
-
-end subroutine setState
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-subroutine transform_x_to_wigner_dumb
- !! brute force method to test the theory
- use mesh
- use fftw_constants
- use phys_cons
- implicit none
-
- integer :: ixa,ixr,ika
- real*8 :: exparg
- complex*16 :: array(-Nxr:Nxr-1)
-
- do ixa=-Nxa2,Nxa2-1
-
-  array=0.d0
-
-  ! fill arrays to be transformed
-  do ixr=-Nxr,Nxr-1
-   array(ixr)=getDenX(ixa,ixr)
-  enddo
-
-  do ika=-Nka,Nka-1
-   denmat2(ixa,ika)=0d0
-   do ixr=-Nxr,Nxr-1
-    exparg=delxr*delka*ika*ixr
-    denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
-   enddo
-   denmat2(ixa,ika)=delxr*denmat2(ixa,ika)/sqrt(2.d0*pi)
-
-   ! if the cell is unreasonably large, write out
-   if(DBLE(denmat2(ixa,ika))>2.d0) write(*,*)ixa,ika,denmat2(ixa,ika)
-  enddo
-
- enddo
-
- denmat=denmat2
- denState=WIGNER
-
-end subroutine transform_x_to_wigner_dumb
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine transform_x_to_wigner
  !! transform_x_to_wigner - transform xr to ka variable. For
@@ -157,32 +76,7 @@ end subroutine transform_x_to_wigner
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine transform_wigner_to_x_dumb
- ! most straightforward way to compute inverse transform
- use mesh
- use phys_cons
- implicit none
 
- integer :: ixa,ixr,ika
-
- denmat2=CMPLX(0d0,0d0,8)
-
- do ixa=-Nxa2,Nxa2-1
-  do ixr=-Nxr,Nxr-1
-   do ika=-Nka,Nka-1
-    denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
-   enddo
-   denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka/sqrt(2d0*pi)
-  enddo
- enddo
-
- denmat=denmat2
-
- denState=SPACE
-
-end subroutine transform_wigner_to_x_dumb
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine transform_wigner_to_x
  !! this is just a standard inverse Fourier transform from ka to xr coordinate.
@@ -221,56 +115,6 @@ subroutine transform_wigner_to_x
 end subroutine transform_wigner_to_x
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-subroutine transform_wigner_to_k_dumb
- use mesh
- use phys_cons
- implicit none
-
- integer :: ixa,ika,ikr
-
- do ika=-Nka,Nka-1
-  do ikr=-Nkr2,Nkr2-1
-   denmat2(ikr,ika)=0.d0
-   do ixa=-Nxa2,Nxa2-1
-    denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
-   enddo
-   denmat2(ikr,ika)=denmat2(ikr,ika)*delxa/sqrt(2.d0*pi)
-  enddo
- enddo
-
- denmat=denmat2
-
- denState=MOMENTUM
-
-end subroutine transform_wigner_to_k_dumb
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-subroutine transform_k_to_wigner_dumb
- use mesh
- use phys_cons
- implicit none
-
-  integer :: ixa,ika,ikr
-
- do ika=-Nka,Nka-1
-  do ixa=-Nxa2,Nxa2-1
-   denmat2(ixa,ika)=0.d0
-   do ikr=-Nkr2,Nkr2-1
-    denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
-   enddo
-   denmat2(ixa,ika)=denmat2(ixa,ika)*delkr/sqrt(2d0*pi)
-  enddo
- enddo
-
- denmat=denmat2
-
- denState=WIGNER
-
-end subroutine transform_k_to_wigner_dumb
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine FT
  use fftw_constants
