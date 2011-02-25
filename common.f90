@@ -138,6 +138,8 @@ MODULE time
   INTEGER     :: Nt     ! number of timesteps in current mode (adiabatic or
                         !  time)
 
+  logical     :: firstOutput  ! first output of a given evolution
+
   logical     :: useImEvol   ! use imaginary evolution?
   integer     :: Nimev  ! number of timesteps for imaginary evolution
 

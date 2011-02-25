@@ -2,7 +2,7 @@
 1 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
-5 ! Nevt
+2 ! Nevt
 1   ! Nmax
 0.0d0 ! EA [MeV]
 25d0  ! xLa [fm]

@@ -35,6 +35,7 @@ subroutine initialState
   use mesh
   use osc_pars
   use prec_def
+  use time
   implicit none
 
   real (Long) :: wfnho,y1,y2,xx1,xx2,den0
@@ -47,13 +48,18 @@ subroutine initialState
 !        xx1=(xa(ixa)+xr(ixr)/2.d0)
 !        xx2=(xa(ixa)-xr(ixr)/2.d0)
 
-
         den0=0.0d0
         do iin=0,Nmax
            y1=wfnho(xx1,iin,whm)
            y2=wfnho(xx2,iin,whm)
 
-           den0=den0+y1*y2
+           if(useImEvol) then
+            ! multiply by e^(2 E t / hbc) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.
+            den0=den0+y1*y2*exp(2d0*w*(iin+0.5d0)*delt*Nimev)
+           else
+            den0=den0+y1*y2
+           endif
+
         enddo !in
 
         if(abs(den0).lt.1e-30) den0=0.0d0

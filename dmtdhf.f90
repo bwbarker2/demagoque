@@ -59,6 +59,8 @@ PROGRAM dmtdhf
 
    call time_evolution
 
+   call renormalizeDM
+
    useImEvol=.false.
 
    close(41)

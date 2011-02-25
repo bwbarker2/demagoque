@@ -38,6 +38,8 @@ SUBROUTINE output
   write(*,*)'timestep,kinetic_correction_factor:',it,(ep0+ek0-epot)/ekin
   !write(*,*)'timestep,kinetic_correction_factor:',it,(epot-ep0)/(ek0-ekin)
 
+ if(firstOutput)firstOutput=.false.
+
 END SUBROUTINE output
 
 
@@ -178,7 +180,7 @@ SUBROUTINE outEner
   real (Long) :: relekin, relekerr   ! relative kinetic energy
   real (Long) :: relepot, releperr   ! relative potential energy
 
-  if(it.eq.1)then
+  if(firstOutput)then
 
      ek0=ekin
      ek0err=ekerr

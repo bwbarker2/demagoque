@@ -1,16 +1,21 @@
 SUBROUTINE time_evolution
   !! time_evolution - evolves the density matrix forward in time
+  use mesh
   use time
   IMPLICIT NONE
   
   REAL (Long) :: dt2  ! half delt
 
-!  integer :: ii
+ firstOutput=.true.
 
   it=0
+  t=0d0
+
   call calcPotDiag
   call output
   call output
+
+ dt2=delt*0.5d0
 
   DO it=1,Nt  !Nt  changed for debugging
 
@@ -18,7 +23,6 @@ SUBROUTINE time_evolution
 
      ! update current time
      t=it*delt
-     dt2=delt*0.5d0
 
      ! evolve in k-space
      CALL evol_k(dt2)
@@ -38,127 +42,12 @@ SUBROUTINE time_evolution
 !     call enforceHermiticityK
      call output
 
-   if(useImEvol) call renormalizeDM
 
   ENDDO
 
 END SUBROUTINE time_evolution
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-
-!subroutine howHermitian
-!!! howHermitian - Gives number characterizing Hermiticity of the density matrix.
-! use mesh
-! use time
-! implicit none
-!
-!! complex*16 :: zdet2d   !complex double determinant function (in bmath.f90)
-! complex*16, dimension(:,:), allocatable :: denmatA, denmatZ   !density matrix in human-readable form
-! complex*16 :: mag  !subtraction of density matrix and its conjugate
-!                      !transpose. Should be zero if Hermitian
-! integer :: i1,i2,ii1,ii2  !loop variables
-!
-! allocate(denmatA(-Nxa2:Nxa2,-Nxr2:Nxr2))
-! allocate(denmatZ(-Nxa2:Nxa2,-Nxr2:Nxr2))
-!
-! do i1=-Nxa2,Nxa2
-!  do i2=-Nxr2,Nxr2
-!   call getDenPts(i1,i2,ii1,ii2)
-!   denmatA(i1,i2)=getDenX(i1,i2)
-!  enddo
-! enddo
-!
-! !subtract the conjugate transpose
-! do i1=-Nxa2,Nxa2
-!  do i2=-Nxr2,Nxr2
-!   denmatZ(i1,i2)=denmatA(i1,i2)-dconjg(denmatA(i1,-i2))
-!  enddo
-! enddo
-!
-! write(71,*)'# time = ',t,'fm/c'
-! do i2=-Nxr2,Nxr2
-!  write(71,*) (DBLE(denmatZ(i1,i2)),i1=-Nxa2,Nxa2)
-! enddo
-!
-! write(71,*)
-! write(71,*)
-!
-! !square each element
-!! denmatZ=denmatZ**2
-!
-! mag=0.d0
-!
-! !sum the squares
-! do i1=-Nxa2,Nxa2
-!  do i2=-Nxr2,Nxr2
-!   mag=mag+denmatZ(i1,i2)**2
-!  enddo
-! enddo
-!
-! write(*,*)'square-sums:',mag
-! 
-!
-!!919 FORMAT(1000e16.5)
-!
-!
-!end subroutine howHermitian
-
-!subroutine howHermitianX12
-!!! howHermitianX12 - Gives number characterizing Hermiticity of the density matrix.
-! ! This code is incorrect for the rotated matrix, as it assumes the (x,x') coordinate system. See howHermitian code for correct subroutine.
-! use mesh
-! use time
-! implicit none
-!
-!! complex*16 :: zdet2d   !complex double determinant function (in bmath.f90)
-! complex*16, dimension(:,:), allocatable :: denmatA, denmatZ   !density matrix in human-readable form
-! complex*16 :: mag  !subtraction of density matrix and its conjugate
-!                      !transpose. Should be zero if Hermitian
-! integer :: i1,i2,ii1,ii2  !loop variables
-!
-! denmat=cmplx(den_re,den_im,8)
-!
-! allocate(denmatA(-Nxa2:Nxa2,-Nxr2:Nxr2))
-! allocate(denmatZ(-Nxa2:Nxa2,-Nxr2:Nxr2))
-!
-! do i1=-Nxa2,Nxa2
-!  ii1=iNxa2(i1)
-!  do i2=-Nxr2,Nxr2
-!   ii2=iNxr2(i2)
-!   denmatA(i1,i2)=denmat(ii1,ii2)
-!  enddo
-! enddo
-!
-! !subtract the conjugate transpose
-! denmatZ=denmatA-DCONJG(transpose(denmatA))
-!
-! !square each element
-! denmatZ=denmatZ**2
-!
-! mag=0.d0
-!
-! !sum the squares
-! do i1=-Nxa2,Nxa2
-!  do i2=-Nxr2,Nxr2
-!   mag=mag+denmatZ(i1,i2)
-!  enddo
-! enddo
-!
-! write(*,*)'square-sums:',mag
-! 
-! write(71,*)'# time = ',t,'fm/c'
-! do i2=-Nxr2,Nxr2
-!  write(71,919) (DBLE(denmatZ(i1,i2)),i1=-Nxa2,Nxa2)
-! enddo
-!
-! write(71,*)
-! write(71,*)
-!
-!919 FORMAT(1000e16.5)
-!
-!! if(Nxa==Nxr)write(*,*)zdet2d(denmatA,Nxa2+Nxa2+1)
-!
-!end subroutine howHermitianX12
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 SUBROUTINE evol_k(dtim)
   !! evol_k - evolves density matrix according to the semiclassical kinetic energy
@@ -352,7 +241,7 @@ real*8 function getWeight()
 
 ! real (Long), intent(out) :: weight
 
- getWeight=1.d0/(1.d0+dexp((t-tad)/wtad))
+ getWeight=1.d0/(1.d0+exp((t-tad)/wtad))
 
 end function getWeight
 
