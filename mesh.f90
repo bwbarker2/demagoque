@@ -66,8 +66,8 @@ MODULE mesh
    write(*,*) '1D to 3D factor:',facd
 
    ! mesh in x and k
-   delxa=(2.d0*xLa)/Nxa
-   delxr=(2.d0*xLr)/Nxr
+   delxa=(2.d0*xLa)/dble(Nxa)
+   delxr=(2.d0*xLr)/dble(Nxr)
    delka=pi/(2.d0*xLr)
    delkr=pi/xLa
 
@@ -264,6 +264,58 @@ MODULE mesh
   end subroutine setState
   
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_x_to_wigner_trig
+   !! brute force method to test the theory, using cos/sin transforms. Theory in notes, BWB 2011-02-25p2
+   use fftw_constants
+   use phys_cons
+   implicit none
+  
+   integer :: ixa,ixr,ika
+   real*8 :: trigarg
+   real*8 :: wigden(-Nxa2:Nxa2-1,-Nka:Nka-1)
+   complex*16 :: array(0:Nxr)
+  
+   do ixa=-Nxa2,Nxa2-1
+  
+    array=0.d0
+  
+    ! fill arrays to be transformed
+    do ixr=0,Nxr-1
+     array(ixr)=getDenX(ixa,ixr)
+    enddo
+
+    array(Nxr)=getDenX(ixa,-Nxr)
+
+    do ika=-Nka,Nka-1
+     wigden(ixa,ika)=0d0
+     do ixr=1,Nxr-1
+      trigarg=delxr*delka*ika*ixr
+      wigden(ixa,ika)=wigden(ixa,ika)+DBLE(array(ixr))*cos(trigarg) &
+                                    +DIMAG(array(ixr))*sin(trigarg)
+     enddo
+     wigden(ixa,ika)=wigden(ixa,ika)*2d0
+     wigden(ixa,ika)=wigden(ixa,ika)+array(0)+array(Nxr)*(-1)**ika
+     wigden(ixa,ika)=wigden(ixa,ika)*delxr*sqrt(0.5d0/pi)
+  
+     ! if the cell is unreasonably large, write out
+!     if(DBLE(wigden(ixa,ika))>2.d0) write(*,*)ixa,ika,wigden(ixa,ika)
+    enddo
+  
+   enddo
+  
+   do ixa=-Nxa2,Nxa2-1
+    do ika=-Nka,Nka-1
+     call setDenW(ixa,ika,CMPLX(wigden(ixa,ika),0d0,8))
+    enddo
+   enddo
+  
+   denState=WIGNER
+  
+  end subroutine transform_x_to_wigner_trig
+ 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   
   subroutine transform_x_to_wigner_dumb
    !! brute force method to test the theory
@@ -293,7 +345,7 @@ MODULE mesh
      denmat2(ixa,ika)=delxr*denmat2(ixa,ika)/sqrt(2.d0*pi)
   
      ! if the cell is unreasonably large, write out
-     if(DBLE(denmat2(ixa,ika))>2.d0) write(*,*)ixa,ika,denmat2(ixa,ika)
+!     if(DBLE(denmat2(ixa,ika))>2.d0) write(*,*)ixa,ika,denmat2(ixa,ika)
     enddo
   
    enddo
@@ -309,6 +361,32 @@ MODULE mesh
   end subroutine transform_x_to_wigner_dumb
  
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_wigner_to_x_trig
+   ! most straightforward way to compute inverse transform
+   use phys_cons
+   implicit none
+
+   integer :: ixa,ixr,ika
+
+   denmat2=CMPLX(0d0,0d0,8)
+
+   do ixa=-Nxa2,Nxa2-1
+    do ixr=-Nxr,Nxr-1
+     do ika=-Nka,Nka-1
+      denmat2(ixa,ixr)=denmat2(ixa,ixr)+dble(getDenW(ixa,ika))*exp(imagi*delxr*delka*ixr*ika)
+     enddo
+     denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka/sqrt(2d0*pi)
+    enddo
+   enddo
+  
+   denmat=denmat2
+  
+   denState=SPACE
+  
+  end subroutine transform_wigner_to_x_trig
+  
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine transform_wigner_to_x_dumb
    ! most straightforward way to compute inverse transform
@@ -335,6 +413,81 @@ MODULE mesh
   end subroutine transform_wigner_to_x_dumb
   
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_k_to_wigner_trig
+   !! brute force method to test the theory, using cos/sin transforms. Theory in notes, BWB 2011-02-28p1
+   use fftw_constants
+   use phys_cons
+   implicit none
+  
+   integer :: ixa,ika,ikr
+   real*8 :: trigarg
+   real*8 :: wigden(-Nxa2:Nxa2-1,-Nka:Nka-1)
+   complex*16 :: array(0:Nkr2)
+  
+   do ika=-Nka,Nka-1
+  
+    array=0.d0
+  
+    ! fill arrays to be transformed
+    do ikr=0,Nkr2-1
+     array(ikr)=getDenK(ikr,ika)
+    enddo
+
+    array(Nkr2)=getDenK(-Nkr2,ika)
+
+    do ixa=-Nxa2,Nxa2-1
+     wigden(ixa,ika)=0d0
+     do ikr=1,Nkr2-1
+      trigarg=delxa*delkr*ikr*ixa
+      wigden(ixa,ika)=wigden(ixa,ika)+DBLE(array(ikr))*dcos(trigarg) &
+                                    -DIMAG(array(ikr))*dsin(trigarg)
+     enddo
+     wigden(ixa,ika)=wigden(ixa,ika)*2d0
+     wigden(ixa,ika)=wigden(ixa,ika)+DBLE(array(0))+DBLE(array(Nxr))*(-1)**ixa
+     wigden(ixa,ika)=wigden(ixa,ika)*delkr*sqrt(0.5d0/pi)
+  
+     ! if the cell is unreasonably large, write out
+!     if(DBLE(wigden(ixa,ika))>2.d0) write(*,*)ixa,ika,wigden(ixa,ika)
+    enddo
+  
+   enddo
+  
+   do ixa=-Nxa2,Nxa2-1
+    do ika=-Nka,Nka-1
+     call setDenW(ixa,ika,CMPLX(wigden(ixa,ika),0d0,8))
+    enddo
+   enddo
+  
+   denState=WIGNER
+  
+  end subroutine transform_k_to_wigner_trig
+ 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_wigner_to_k_trig
+   use phys_cons
+   implicit none
+
+   integer :: ixa,ika,ikr
+
+   do ika=-Nka,Nka-1
+    do ikr=-Nkr2,Nkr2-1
+     denmat2(ikr,ika)=0.d0
+     do ixa=-Nxa2,Nxa2-1
+      denmat2(ikr,ika)=denmat2(ikr,ika)+dble(getDenW(ixa,ika))*exp(-imagi*delxa*delkr*ixa*ikr)
+     enddo
+     denmat2(ikr,ika)=denmat2(ikr,ika)*delxa/sqrt(2.d0*pi)
+    enddo
+   enddo
+  
+   denmat=denmat2
+  
+   denState=MOMENTUM
+  
+  end subroutine transform_wigner_to_k_trig
+  
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine transform_wigner_to_k_dumb
    use phys_cons

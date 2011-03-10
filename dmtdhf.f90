@@ -166,7 +166,7 @@ PROGRAM dmtdhf
 !   call outW
 !  enddo
 
-  call boost
+!  call boost
 
   CALL time_evolution
 

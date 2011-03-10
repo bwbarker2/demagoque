@@ -14,6 +14,9 @@ SUBROUTINE time_evolution
   call calcPotDiag
   call output
   call output
+  call output
+  call output
+  call output
 
  dt2=delt*0.5d0
 
@@ -42,6 +45,7 @@ SUBROUTINE time_evolution
 !     call enforceHermiticityK
      call output
 
+   call renormalizeDM
 
   ENDDO
 
@@ -83,18 +87,18 @@ SUBROUTINE evol_k(dtim)
         !time evolution operator = exp(-i(E-E')t/h)
         !                        = exp(-ih/2m(k^2-k'^2))
         edt=-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim
-        cos2k=cos(edt)
-        sin2k=sin(edt)
-!        if(sin2k.gt.1.or.sin2k.lt.-1)write(*,*)cos2k
+        call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
+!        cos2k=cos(edt)
+!        sin2k=sin(edt)
 
-        xre=DBLE(getDenK(ikr,ika))
-        xim=DIMAG(getDenK(ikr,ika))
+!        xre=DBLE(getDenK(ikr,ika))
+!        xim=DIMAG(getDenK(ikr,ika))
         
         ! exp(i*edt) = cos2k + i*sin2k
-        xre2=xre*cos2k - xim*sin2k
-        xim2=xre*sin2k + xim*cos2k
+!        xre2=xre*cos2k - xim*sin2k
+!        xim2=xre*sin2k + xim*cos2k
 
-        call setDenK(ikr,ika,cmplx(xre2,xim2,8))
+!        call setDenK(ikr,ika,cmplx(xre2,xim2,8))
        endif
 
      ENDDO

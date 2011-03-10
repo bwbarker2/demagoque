@@ -53,12 +53,12 @@ subroutine initialState
            y1=wfnho(xx1,iin,whm)
            y2=wfnho(xx2,iin,whm)
 
-           if(useImEvol) then
-            ! multiply by e^(2 E t / hbc) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.
-            den0=den0+y1*y2*exp(2d0*w*(iin+0.5d0)*delt*Nimev)
-           else
+!           if(useImEvol) then
+!            ! multiply by e^(2 E t / hbc) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.
+!            den0=den0+y1*y2*exp(2d0*w*(iin+0.5d0)*delt*Nimev)
+!           else
             den0=den0+y1*y2
-           endif
+!           endif
 
         enddo !in
 
