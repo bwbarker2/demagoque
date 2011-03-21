@@ -36,6 +36,8 @@ MODULE mesh
   ! meanfield potential at each (xa,xr=0) point
  real*8, allocatable :: potDiag(:)
 
+ real*8 :: maxxim  !maximum imaginary value
+
  contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -68,7 +70,7 @@ MODULE mesh
    ! mesh in x and k
    delxa=(2.d0*xLa)/dble(Nxa)
    delxr=(2.d0*xLr)/dble(Nxr)
-   delka=pi/(2.d0*xLr)
+   delka=pi/(2d0*xLr)
    delkr=pi/xLa
 
    potDiag=0.0d0
@@ -238,8 +240,9 @@ MODULE mesh
        case (WIGNER)
         call transform_x_to_wigner_dumb
        case (MOMENTUM)
-        call transform_x_to_wigner_dumb
-        call transform_wigner_to_k_dumb
+        call transform_x_to_k_norepeat
+!        call transform_x_to_wigner_dumb
+!        call transform_wigner_to_k_dumb
       end select
   
      case (WIGNER)
@@ -247,15 +250,15 @@ MODULE mesh
        case (SPACE)
         call transform_wigner_to_x_dumb
        case (MOMENTUM)
-        call transform_wigner_to_k_dumb
+        call transform_wigner_to_k_fft_exp
       end select
   
      case (MOMENTUM)
       select case (state)
        case (WIGNER)
-        call transform_k_to_wigner_dumb
+        call transform_k_to_wigner_fft_exp
        case (SPACE)
-        call transform_k_to_wigner_dumb
+        call transform_k_to_wigner_fft_exp
         call transform_wigner_to_x_dumb
       end select
     end select
@@ -296,7 +299,7 @@ MODULE mesh
      enddo
      wigden(ixa,ika)=wigden(ixa,ika)*2d0
      wigden(ixa,ika)=wigden(ixa,ika)+array(0)+array(Nxr)*(-1)**ika
-     wigden(ixa,ika)=wigden(ixa,ika)*delxr*sqrt(0.5d0/pi)
+     wigden(ixa,ika)=wigden(ixa,ika)*delxr*invsqrt2pi
   
      ! if the cell is unreasonably large, write out
 !     if(DBLE(wigden(ixa,ika))>2.d0) write(*,*)ixa,ika,wigden(ixa,ika)
@@ -342,7 +345,7 @@ MODULE mesh
       exparg=delxr*delka*ika*ixr
       denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
      enddo
-     denmat2(ixa,ika)=delxr*denmat2(ixa,ika)/sqrt(2.d0*pi)
+     denmat2(ixa,ika)=delxr*denmat2(ixa,ika)*invsqrt2pi
   
      ! if the cell is unreasonably large, write out
 !     if(DBLE(denmat2(ixa,ika))>2.d0) write(*,*)ixa,ika,denmat2(ixa,ika)
@@ -376,7 +379,7 @@ MODULE mesh
      do ika=-Nka,Nka-1
       denmat2(ixa,ixr)=denmat2(ixa,ixr)+dble(getDenW(ixa,ika))*exp(imagi*delxr*delka*ixr*ika)
      enddo
-     denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka/sqrt(2d0*pi)
+     denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka*invsqrt2pi
     enddo
    enddo
   
@@ -402,7 +405,7 @@ MODULE mesh
      do ika=-Nka,Nka-1
       denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
      enddo
-     denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka/sqrt(2d0*pi)
+     denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka*invsqrt2pi
     enddo
    enddo
   
@@ -445,7 +448,7 @@ MODULE mesh
      enddo
      wigden(ixa,ika)=wigden(ixa,ika)*2d0
      wigden(ixa,ika)=wigden(ixa,ika)+DBLE(array(0))+DBLE(array(Nxr))*(-1)**ixa
-     wigden(ixa,ika)=wigden(ixa,ika)*delkr*sqrt(0.5d0/pi)
+     wigden(ixa,ika)=wigden(ixa,ika)*delkr*invsqrt2pi
   
      ! if the cell is unreasonably large, write out
 !     if(DBLE(wigden(ixa,ika))>2.d0) write(*,*)ixa,ika,wigden(ixa,ika)
@@ -477,7 +480,7 @@ MODULE mesh
      do ixa=-Nxa2,Nxa2-1
       denmat2(ikr,ika)=denmat2(ikr,ika)+dble(getDenW(ixa,ika))*exp(-imagi*delxa*delkr*ixa*ikr)
      enddo
-     denmat2(ikr,ika)=denmat2(ikr,ika)*delxa/sqrt(2.d0*pi)
+     denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
     enddo
    enddo
   
@@ -501,7 +504,7 @@ MODULE mesh
      do ixa=-Nxa2,Nxa2-1
       denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
      enddo
-     denmat2(ikr,ika)=denmat2(ikr,ika)*delxa/sqrt(2.d0*pi)
+     denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
     enddo
    enddo
   
@@ -511,6 +514,48 @@ MODULE mesh
   
   end subroutine transform_wigner_to_k_dumb
   
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_wigner_to_k_fft_exp
+   use lib_fftw
+   use phys_cons
+   implicit none
+
+   integer :: ixa,ika,ikr
+   complex*16, dimension(-Nxa2:Nxa2-1) :: arrin,arrout
+
+   arrin=cmplx(0d0,0d0,8)
+   arrout=cmplx(0d0,0d0,8)
+
+   !scan over ika
+   do ika=-Nka,Nka-1
+
+    !construct array to transform
+    do ixa=-Nxa2,Nxa2-1
+
+     arrin(ixa)=getDenW(ixa,ika)
+
+     !shift indices of transform by multiplying every other value by -1
+     ! (see paper notes BWB 2010-08-25)
+     arrin(ixa)=arrin(ixa)*(-1)**(ixa+Nxa2)
+    enddo
+
+    call ft_z2z_1d(arrin,arrout,Nxa)
+
+    denState=MOMENTUM
+
+    !shift k indices, multiply coefficients, write to density matrix
+    do ikr=-Nkr2,Nkr2-1
+     arrout(ikr)=arrout(ikr)*(-1)**(ikr+Nkr2)
+     arrout(ikr)=arrout(ikr)*delxa*invsqrt2pi
+     call setDenK(ikr,ika,arrout(ikr))
+    enddo
+
+   enddo
+
+  end subroutine transform_wigner_to_k_fft_exp
+
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
   subroutine transform_k_to_wigner_dumb
@@ -525,7 +570,7 @@ MODULE mesh
      do ikr=-Nkr2,Nkr2-1
       denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
      enddo
-     denmat2(ixa,ika)=denmat2(ixa,ika)*delkr/sqrt(2d0*pi)
+     denmat2(ixa,ika)=denmat2(ixa,ika)*delkr*invsqrt2pi
     enddo
    enddo
   
@@ -535,4 +580,132 @@ MODULE mesh
   
   end subroutine transform_k_to_wigner_dumb
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_k_to_wigner_fft_exp
+   use lib_fftw
+   use phys_cons
+   implicit none
+
+   integer :: ixa,ika,ikr
+   complex*16, dimension(-Nxa2:Nxa2-1) :: arrin,arrout
+
+   arrin=cmplx(0d0,0d0,8)
+   arrout=cmplx(0d0,0d0,8)
+
+   !scan over ika
+   do ika=-Nka,Nka-1
+
+    !construct array to transform
+    do ikr=-Nkr2,Nkr2-1
+
+     arrin(ikr)=getDenK(ikr,ika)
+
+     !shift indices of transform by multiplying every other value by -1
+     ! (see paper notes BWB 2010-08-25)
+     arrin(ikr)=arrin(ikr)*(-1)**(ikr+Nkr2)
+    enddo
+
+    call ift_z2z_1d(arrin,arrout,Nkr)
+
+    denState=WIGNER
+
+    !shift k indices, multiply coefficients, write to density matrix
+    do ixa=-Nxa2,Nxa2-1
+     arrout(ixa)=arrout(ixa)*(-1)**(ixa+Nxa2)
+     arrout(ixa)=arrout(ixa)*delkr*invsqrt2pi
+     call setDenW(ixa,ika,arrout(ixa))
+    enddo
+
+   enddo
+
+  end subroutine transform_k_to_wigner_fft_exp
+
+  subroutine transform_x_to_k_norepeat
+   !! transform_x_to_k_nozeroes - transforms from coordinate to momentum space, with no redundancy from periodic extensions. See paper notes BWB 2011-03-11.
+   use phys_cons
+   implicit none
+
+   integer    :: ikr,ikr2,ika,ika2,ixa,ixr
+   real*8     :: delka2,delkr2, exparg
+   complex*16 :: val
+
+   real :: elapsed(2)
+
+   delka2=2*delka
+   delkr2=2*delkr
+
+   !store in denmat2. Must zero it out first.
+   denmat2=cmplx(0d0,0d0,8)
+
+   write(*,*)'time at starting even k ft:',etime(elapsed)
+
+   !first transform even ka and kr
+   do ikr2=-Nkr2/2,Nkr2/2-1
+    ikr=ikr2*2
+
+    do ika2=-Nka2,Nka2-1
+     ika=ika2*2
+
+     val=cmplx(0d0,0d0,8)
+     do ixa=-Nxa2,Nxa2-1
+      do ixr=-Nxr2,Nxr2-1
+
+       exparg=delxa*delkr2*ixa*ikr2 &
+             +delxr*delka2*ixr*ika2
+       val=val+getDenX(ixa,ixr)*exp(-imagi*exparg)
+
+      enddo !ixr
+     enddo !ixa
+
+     val=val*delxa*delxr*invpi
+     denmat2(ikr,ika)=val
+
+    enddo !ikr2
+   enddo !ika2
+
+
+   write(*,*)'time at starting odd k ft:',etime(elapsed)
+
+   !now transform odd ka and kr
+   do ikr2=-Nkr2/2,Nkr2/2-1
+    ikr=ikr2*2+1
+
+    do ika2=-Nka2,Nka2-1
+     ika=ika2*2+1
+
+     val=cmplx(0d0,0d0,8)
+     do ixa=-Nxa2,Nxa2-1
+      do ixr=-Nxr2,Nxr2-1
+
+       exparg=delxa*delkr2*5d-1*ixa &
+             +delxr*delka2*5d-1*ixr &
+             +delxa*delkr2*ixa*ikr2 &
+             +delxr*delka2*ixr*ika2
+
+       val=val+getDenX(ixa,ixr)*exp(-imagi*exparg)
+
+      enddo !ixr
+     enddo !ixa
+
+     val=val*delxa*delxr*invpi
+     denmat2(ikr,ika)=val
+
+    enddo !ikr2
+   enddo !ika2
+
+   write(*,*)'time at finishing odd k ft:',etime(elapsed)
+
+   do ikr=-Nkr2,Nkr2-1
+    do ika=-Nka,Nka2-1
+     call setDenK(ikr,ika,denmat2(ikr,ika))
+    enddo
+   enddo
+
+   denState=MOMENTUM
+
+  end subroutine transform_x_to_k_norepeat
+ 
+
 END MODULE mesh
+

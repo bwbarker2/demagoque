@@ -26,10 +26,13 @@ PROGRAM dmtdhf
 ! 0    external harmonic oscillator centered at x=0
 ! 1    nonlocal meanfield harmonic oscillator
 ! 2    Skyrme-like contact potential (local density dependent)
+! 3    same as pot=0, but with exact evolution from Chin, Krotsheck, Phys Rev E72, 036705 (2005)
 !
   USE mesh
   USE time
   IMPLICIT NONE
+
+  real :: timeElapsed(2)
 
   CALL getStdIn
 
@@ -168,7 +171,11 @@ PROGRAM dmtdhf
 
 !  call boost
 
+  maxxim=0.d0
+
   CALL time_evolution
+
+  write(*,*)'maxxim:',maxxim
 
 !  do it=1,100
 !   write(*,*)it
@@ -190,6 +197,9 @@ PROGRAM dmtdhf
   close(70)
   close(71)
 !  close(101)
+
+  write(*,*)'total time:',etime(timeElapsed)
+  write(*,*)'user,walltime:',timeElapsed
 
 END PROGRAM dmtdhf
 

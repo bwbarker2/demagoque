@@ -28,18 +28,18 @@ SUBROUTINE time_evolution
      t=it*delt
 
      ! evolve in k-space
-     CALL evol_k(dt2)
+     CALL evol_x(dt2)
 !     write(*,*)'finished first evol_x'
 !     call enforceHermiticityK
 !     call output
 
      ! evolve in x-space
-     CALL evol_x(delt)
+     CALL evol_k(delt)
 !     write(*,*)'finished first evol_k'
 !     call enforceHermiticityX
 !     CALL output
 
-     CALL evol_k(dt2)
+     CALL evol_x(dt2)
 !     write(*,*)'finished second evol_x'
 !  call howHermitian
 !     call enforceHermiticityK
@@ -56,6 +56,7 @@ END SUBROUTINE time_evolution
 SUBROUTINE evol_k(dtim)
   !! evol_k - evolves density matrix according to the semiclassical kinetic energy
   use mesh
+  use osc_pars
   use phys_cons
   use prec_def
   use time
@@ -64,8 +65,8 @@ SUBROUTINE evol_k(dtim)
   real*8, intent(in) :: dtim
 
   INTEGER ika, ikr !loop variables
-  real*8 :: cos2k, sin2k, edt, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
-  real*8 :: k1,k2
+!  real*8 :: cos2k, sin2k, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
+  real*8 :: edt,k1,k2
 
   call setState(MOMENTUM)
 
@@ -80,13 +81,19 @@ SUBROUTINE evol_k(dtim)
         
         call getK12(ika,ikr,k1,k2)
 
+       if(potFinal==3)then
+        edt=sin(w*delt)/(w*delt)
+       else
+        edt=1d0
+       endif
+
        if(useImEvol)then
-        edt=-hbc/m0*0.5d0*(k1*k1+k2*k2)*dtim
+        edt=edt*(-hbc/m0*0.5d0*(k1*k1+k2*k2)*dtim)
         call setDenK(ikr,ika,exp(edt)*getDenK(ikr,ika))
        else
         !time evolution operator = exp(-i(E-E')t/h)
         !                        = exp(-ih/2m(k^2-k'^2))
-        edt=-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim
+        edt=edt*(-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim)
         call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
 !        cos2k=cos(edt)
 !        sin2k=sin(edt)
@@ -154,6 +161,8 @@ SUBROUTINE evol_x(dtim)
  DO ixa=-Nxa2,Nxa2-1
 
   DO ixr=-Nxr2,Nxr2-1
+
+
    call getX12(ixa,ixr,x1,x2)
 
    ki=1
@@ -189,6 +198,8 @@ SUBROUTINE evol_x(dtim)
 
    endif !not useImEvol
 
+   !find maximum value of imaginary component, BWB 2011-03-11
+   if(DIMAG(getDenX(ixa,ixr))>maxxim)maxxim=DIMAG(getDenX(ixa,ixr))
 !   if(ixr>0) then
 !    write(*,*)'ixr,tpots-diff:',ixr,tpots(ixr)+tpots(-ixr)
 !   endif
@@ -270,6 +281,8 @@ subroutine getPotX(potX,potType,ix)
    call potHOmf(potX,ix)
   case (2)
    call potSkyrme(potX,ix)
+  case (3)
+   call potHOexact(potX,ix)
   case default
    write(*,*)'getPotX: Improper potential type:',potType,'Assuming no potential'
    potX=0.d0
@@ -295,6 +308,23 @@ subroutine potHO(potX,ix)
   potX=0.5d0*m0*(w*xa(ix))**2
 
 end subroutine potHO
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine potHOexact(potX,ix)
+ !! potHOexact - computes exact evolution of external HO, from Chin, Krotsheck, Phys. Rev. E 72 (2005) 036705.
+ use mesh
+ use osc_pars
+ use phys_cons
+ use time
+ implicit none
+
+ real*8,  intent(out) :: potX
+ integer, intent(in)  :: ix
+
+ potX=0.5d0*m0*(w*xa(ix))**2*2*(1-cos(w*delt))/(w*delt*sin(w*delt))
+
+end subroutine potHOexact
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
