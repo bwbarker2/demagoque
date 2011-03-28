@@ -94,7 +94,8 @@ MODULE phys_cons
 
   complex*16,   parameter :: imagi=cmplx(0.d0,1.d0,8)  !sqrt(-1)
 
-  REAL (long) , PARAMETER :: pi=3.1415926535897932d0
+!  REAL (long) , PARAMETER :: pi=3.1415926535897932d0
+  REAL (long) , PARAMETER :: pi=4d0*atan(1d0)
   real (long) , parameter :: invpi=1d0/pi  !1/pi
   real (long) , parameter :: invsqrt2pi=1d0/sqrt(2d0*pi)
 

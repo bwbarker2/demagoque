@@ -169,7 +169,7 @@ PROGRAM dmtdhf
 !   call outW
 !  enddo
 
-!  call boost
+  call boost
 
   maxxim=0.d0
 

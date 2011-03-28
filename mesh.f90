@@ -231,35 +231,48 @@ MODULE mesh
    implicit none
    
    integer, intent(in) :: state
-  
+
+   real :: elapsed(2)
+   real :: totalelapsed  
+
    if(denState.NE.state) then
+
+   totalelapsed=etime(elapsed)
+
     select case (denState)
   
      case (SPACE)
       select case (state)
        case (WIGNER)
-        call transform_x_to_wigner_dumb
+        call transform_x_to_w_norepeat_fft
+        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
-        call transform_x_to_k_norepeat
-!        call transform_x_to_wigner_dumb
-!        call transform_wigner_to_k_dumb
+!        call transform_x_to_k_norepeat
+        call transform_x_to_w_norepeat_fft
+        call transform_wigner_to_k_fft_exp
+        write(*,*)'transform_x_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
   
      case (WIGNER)
       select case (state)
        case (SPACE)
-        call transform_wigner_to_x_dumb
+        call transform_w_to_x_norepeat_fft
+        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
         call transform_wigner_to_k_fft_exp
+        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
   
      case (MOMENTUM)
       select case (state)
        case (WIGNER)
         call transform_k_to_wigner_fft_exp
+        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (SPACE)
         call transform_k_to_wigner_fft_exp
-        call transform_wigner_to_x_dumb
+        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
+        call transform_w_to_x_norepeat_fft
+        write(*,*)'transform_k_to_x:',etime(elapsed)-totalelapsed,'seconds'
       end select
     end select
    endif
@@ -364,6 +377,139 @@ MODULE mesh
   end subroutine transform_x_to_wigner_dumb
  
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_w_to_x_norepeat_fft
+   !! implements simple FFT, as per notes BWB 2011-03-28p2
+   use lib_fftw
+   use phys_cons
+   implicit none
+
+   integer :: ixa, ika, ixr, sgnfac
+   complex*16 :: array(-Nxr:Nxr-1)
+
+   !only compute half of it
+   do ixa=-Nxa2,-1
+    sgnfac=1
+    do ika=-Nka,Nka-1
+     array(ika)=denmat(ixa,ika)*sgnfac
+     sgnfac=-sgnfac
+    enddo !ika
+
+    call ift_z2z_1d(array,array,2*Nxr)
+
+    do ixr=-Nxr+1,Nxr-1,2
+     array(ixr)=array(ixr)*(-1d0)
+    enddo
+
+    do ixr=-Nxr,Nxr-1
+     denmat(ixa,ixr)=array(ixr)*delka*invsqrt2pi
+    enddo
+
+   enddo !ixa
+
+   !now copy to second half of matrix
+   do ixa=0,Nxa2-1
+    do ixr=-Nxr,-1
+     denmat(ixa,ixr)=denmat(ixa-Nxa2,ixr+Nxr)
+    enddo !ixr
+    do ixr=0,Nxr-1
+     denmat(ixa,ixr)=denmat(ixa-Nxa2,ixr-Nxr)
+    enddo !ixr
+   enddo !ixa
+
+   denState=SPACE
+
+  end subroutine transform_w_to_x_norepeat_fft
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_w_to_x_norepeat_fft_bad
+   !! for derivation, see BWB notes 2011-03-25. Essentially this uses 2 sine transforms and 2 cosine transforms, needed because the exponent in the transform has pi/N instead of 2*pi/N.
+   ! NOTE: This is unfinished, because it is much too complicated. See notes BWB 2011-03-28p2
+   use lib_fftw
+   use phys_cons
+   implicit none
+
+   integer :: ixa,ika,ixr
+   real*8  :: array(0:Nka)
+
+   denmat2=0.d0
+
+   do ixa=0,Nxa2-1
+
+    !create first input array
+    array=0d0
+    do ika=1,Nka-1
+     array(ika)=0.5d0*(DBLE(denmat(ixa,ika))+DBLE(denmat(ixa,-ika)))
+    enddo !ika
+    array(0)=DBLE(denmat(ixa,0))
+    array(Nka)=DBLE(denmat(ixa,-Nka))
+
+    call ft_re_1d(array,array,Nka+1)
+
+    do ixr=0,Nxr-1
+     denmat2(ixa,ixr)=denmat2(ixa,ixr)+array(ixr)
+    enddo
+    denmat2(ixa,-Nxr)=denmat2(ixa,-Nxr)+array(ixr)
+
+    !second input array
+    array=0d0
+    do ika=1,Nka-1
+     array(ika-1)=0.5d0*(-DIMAG(denmat(ixa,ika))+DIMAG(denmat(ixa,-ika)))
+    enddo !ika
+
+    call ft_ro_1d(array,array,Nka-1)
+
+    do ixr=1,Nxr-1
+     denmat2(ixa,ixr)=denmat2(ixa,ixr)+array(ixr-1) &
+                                      -DIMAG(denmat(ixa,-Nka))*(-1)**ixr &
+                                      -DIMAG(denmat(ixa,0))
+    enddo
+    denmat2(ixa,-Nxr)=denmat2(ixa,-Nxr)+array(Nxr) &
+                                       -DIMAG(denmat(ixa,-Nka)) &
+                                       -DIMAG(denmat(ixa,0))
+ 
+    !third input array
+    array=0d0
+    do ika=1,Nka-1
+     array(ika)=0.5d0*(DIMAG(denmat(ixa,ika))+DIMAG(denmat(ixa,-ika)))
+    enddo !ika
+    array(0)=DIMAG(denmat(ixa,0))
+    array(Nka)=DIMAG(denmat(ixa,-Nka))
+
+    call ft_re_1d(array,array,Nka+1)
+
+    do ixr=0,Nxr-1
+     denmat2(ixa,ixr)=denmat2(ixa,ixr)+imagi*array(ixr)
+    enddo
+    denmat2(ixa,-Nxr)=denmat2(ixa,-Nxr)-imagi*array(ixr) !minus for conjugation
+
+!Now do the same thing for the other 3 terms.
+
+    array=0d0
+    do ika=1,Nka-1
+     array(ika)=0.5d0*(DBLE(denmat(ixa,ika))-DBLE(denmat(ixa,-ika)))
+    enddo !ika
+    array(0)=DIMAG(denmat(ixa,0))
+    array(Nka)=DIMAG(denmat(ixa,-Nka))
+
+    call ft_ro_1d(array,array,Nka+1)
+
+    do ixr=0,Nxr-1
+     denmat2(ixa,ixr)=denmat2(ixa,ixr)+array(ixr) &
+                                      -DIMAG(denmat(ixa,-Nka))*(-1)**ixr &
+                                      -DIMAG(denmat(ixa,0))
+    enddo
+    denmat2(ixa,-Nxr)=denmat2(ixa,-Nxr)+array(Nxr) &
+                                       -DIMAG(denmat(ixa,-Nka)) &
+                                       -DIMAG(denmat(ixa,0))
+ 
+
+   enddo !ixa
+
+  end subroutine transform_w_to_x_norepeat_fft_bad
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine transform_wigner_to_x_trig
    ! most straightforward way to compute inverse transform
@@ -621,6 +767,8 @@ MODULE mesh
 
   end subroutine transform_k_to_wigner_fft_exp
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   subroutine transform_x_to_k_norepeat
    !! transform_x_to_k_nozeroes - transforms from coordinate to momentum space, with no redundancy from periodic extensions. See paper notes BWB 2011-03-11.
    use phys_cons
@@ -629,6 +777,7 @@ MODULE mesh
    integer    :: ikr,ikr2,ika,ika2,ixa,ixr
    real*8     :: delka2,delkr2, exparg
    complex*16 :: val
+!   complex*16,dimension(Nxa,Nxr) :: vals
 
    real :: elapsed(2)
 
@@ -641,6 +790,7 @@ MODULE mesh
    write(*,*)'time at starting even k ft:',etime(elapsed)
 
    !first transform even ka and kr
+   !first calculate rho'(ja,ka')
    do ikr2=-Nkr2/2,Nkr2/2-1
     ikr=ikr2*2
 
@@ -653,7 +803,7 @@ MODULE mesh
 
        exparg=delxa*delkr2*ixa*ikr2 &
              +delxr*delka2*ixr*ika2
-       val=val+getDenX(ixa,ixr)*exp(-imagi*exparg)
+       val=val+denmat(ixa,ixr)*exp(-imagi*exparg)
 
       enddo !ixr
      enddo !ixa
@@ -705,7 +855,236 @@ MODULE mesh
    denState=MOMENTUM
 
   end subroutine transform_x_to_k_norepeat
- 
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+  subroutine transform_x_to_w_norepeat
+   !! transform_x_to_w_norepeat - transforms without repeating, as notes BWB 2011-03-11p2
+   use phys_cons
+   implicit none
+
+   integer :: ixa,ika2,ika,ixr,sgnfac
+   real*8  :: delka2
+
+   complex*16, dimension(-Nxr2:Nxr2-1) :: array
+
+   delka2=delka*2d0
+
+!   denmat2=cmplx(1d0,0d0,8)
+
+   !do even ika first
+   do ixa=0,Nxa2-1
+    !construct array to transform
+    array=cmplx(0d0,0d0,8)
+    do ixr=-Nxr2,Nxr2-1
+     array(ixr)=denmat(ixa,ixr)+denmat(ixa-Nxa2,ixr)
+    enddo !ika2
+
+    !transform!
+    do ika2=-Nka2,Nka2-1
+     ika=ika2*2
+     denmat2(ixa,ika)=cmplx(0d0,0d0,8)
+!     val=cmplx(0d0,0d0,8)
+     do ixr=-Nxr2,Nxr2-1
+      denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr) &
+                                        *exp(-imagi*delxr*delka2*ixr*ika2)
+     enddo !ixr
+    enddo !ika2
+   enddo !ixa
+
+   !do odd ika now
+   do ixa=0,Nxa2-1
+    !construct array to transform
+    array=cmplx(0d0,0d0,8)
+    do ixr=-Nxr2,Nxr2-1
+     array(ixr)=(denmat(ixa,ixr)-denmat(ixa-Nxa2,ixr)) &
+                *exp(-imagi*delxr*delka2*0.5d0*ixr)
+    enddo !ika2
+
+    !transform!
+    do ika2=-Nka2,Nka2-1
+     ika=ika2*2+1
+     denmat2(ixa,ika)=cmplx(0d0,0d0,8)
+     do ixr=-Nxr2,Nxr2-1
+      denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr) &
+                                        *exp(-imagi*delxr*delka2*ixr*ika2)
+     enddo !ixr
+    enddo !ika2
+   enddo !ixa
+
+   !copy to ixa<0 half of matrix, with (-1)**ika factor
+   do ixa=-Nxa2,-1
+    sgnfac=1
+    do ika=-Nka,Nka-1
+     denmat2(ixa,ika)=sgnfac*denmat2(ixa+Nxa2,ika)
+     sgnfac=-sgnfac
+    enddo !ika
+   enddo !ixa
+
+   denmat=denmat2*delxr*invsqrt2pi
+
+!   do ixa=-Nxa2,Nxa2-1
+!    do ika=-Nka,Nka-1
+!     if(abs(dble(denmat(ixa,ika)))<1d-40) then
+!      write(*,*)'bad:',ixa,ika,denmat(ixa,ika)
+!     endif
+!    enddo
+!   enddo
+
+   denState=WIGNER
+
+  end subroutine transform_x_to_w_norepeat
+ 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_x_to_w_norepeat_fft
+   !! transform_x_to_w_norepeat - transforms without repeating, as notes BWB 2011-03-11p2
+   use lib_fftw
+   use phys_cons
+   implicit none
+
+   integer :: ixa,ika2,ika,ixr,sgnfac
+   real*8  :: delka2
+
+   complex*16, dimension(-Nxr2:Nxr2-1) :: array
+
+   delka2=delka*2d0
+
+!   denmat2=cmplx(1d0,0d0,8)
+
+   !do even ika first
+   do ixa=0,Nxa2-1
+    !construct array to transform
+    array=cmplx(0d0,0d0,8)
+    sgnfac=1
+    do ixr=-Nxr2,Nxr2-1
+     array(ixr)=(denmat(ixa,ixr)+denmat(ixa-Nxa2,ixr))*sgnfac
+     sgnfac=-sgnfac
+    enddo !ika2
+
+    !transform!
+    call ft_z2z_1d(array,array,Nxr)
+
+    sgnfac=1
+    do ika2=-Nka2,Nka2-1
+     ika=ika2*2
+     array(ika2)=array(ika2)*sgnfac
+     denmat2(ixa,ika)=array(ika2)
+     sgnfac=-sgnfac
+    enddo
+
+   enddo !ixa
+
+   !do odd ika now
+   do ixa=0,Nxa2-1
+    !construct array to transform
+    array=cmplx(0d0,0d0,8)
+    sgnfac=1
+    do ixr=-Nxr2,Nxr2-1
+     array(ixr)=(denmat(ixa,ixr)-denmat(ixa-Nxa2,ixr)) &
+                *exp(-imagi*delxr*delka2*0.5d0*ixr) &
+                *sgnfac
+     sgnfac=-sgnfac
+    enddo !ika2
+
+    !transform!
+    call ft_z2z_1d(array,array,Nxr)
+
+    sgnfac=1
+    do ika2=-Nka2,Nka2-1
+     ika=ika2*2+1
+     array(ika2)=array(ika2)*sgnfac
+     denmat2(ixa,ika)=array(ika2)
+     sgnfac=-sgnfac
+    enddo
+   enddo !ixa
+
+   !copy to ixa<0 half of matrix, with (-1)**ika factor
+   do ixa=-Nxa2,-1
+    sgnfac=1
+    do ika=-Nka,Nka-1
+     denmat2(ixa,ika)=sgnfac*denmat2(ixa+Nxa2,ika)
+     sgnfac=-sgnfac
+    enddo !ika
+   enddo !ixa
+
+   denmat=denmat2*delxr*invsqrt2pi
+
+!   do ixa=-Nxa2,Nxa2-1
+!    do ika=-Nka,Nka-1
+!     if(abs(dble(denmat(ixa,ika)))<1d-40) then
+!      write(*,*)'bad:',ixa,ika,denmat(ixa,ika)
+!     endif
+!    enddo
+!   enddo
+
+   denState=WIGNER
+
+  end subroutine transform_x_to_w_norepeat_fft
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_w_to_k_norepeat
+   !! transform_x_to_w_norepeat - transforms without repeating, as notes BWB 2011-03-11p2
+   use phys_cons
+   implicit none
+
+   integer :: ixa,ika2,ika,ikr,ikr2
+   real*8  :: delkr2
+
+   complex*16, dimension(-Nxa2:Nxa2-1) :: array
+
+   delkr2=delkr*2d0
+
+!   denmat2=cmplx(1d0,0d0,8)
+
+   !do even ikr first
+   do ika2=-Nka2,Nka2-1
+    ika=ika2*2
+    !construct array to transform
+    array=cmplx(0d0,0d0,8)
+    do ixa=-Nxa2,Nxa2-1
+     array(ixa)=denmat(ixa,ika)
+    enddo !ixa
+
+    !transform!
+    do ikr2=-Nkr2/2,Nkr2/2-1
+     ikr=ikr2*2
+     denmat2(ikr,ika)=cmplx(0d0,0d0,8)
+!     val=cmplx(0d0,0d0,8)
+     do ixa=-Nxa2,Nxa2-1
+      denmat2(ikr,ika)=denmat2(ikr,ika)+array(ixa) &
+                                        *exp(-imagi*delxa*delkr2*ixa*ikr2)
+     enddo !ixa
+    enddo !ikr2
+   enddo !ika2
+
+   !do odd ikr,ika now
+   do ika2=-Nka2,Nka2-1
+    ika=ika2*2+1
+    !construct array to transform
+    array=cmplx(0d0,0d0,8)
+    do ixa=-Nxa2,Nxa2-1
+     array(ixa)=denmat(ixa,ika)*exp(-imagi*delxa*delkr2*0.5d0*ixa)
+    enddo !ixa
+
+    !transform!
+    do ikr2=-Nkr2/2,Nkr2/2-1
+     ikr=ikr2*2+1
+     denmat2(ikr,ika)=cmplx(0d0,0d0,8)
+!     val=cmplx(0d0,0d0,8)
+     do ixa=-Nxa2,Nxa2-1
+      denmat2(ikr,ika)=denmat2(ikr,ika)+array(ixa) &
+                                        *exp(-imagi*delxa*delkr2*ixa*ikr2)
+     enddo !ixa
+    enddo !ikr2
+   enddo !ika2
+
+   denmat=denmat2*delxa*invsqrt2pi
+
+   denState=MOMENTUM
+
+  end subroutine transform_w_to_k_norepeat
+ 
 END MODULE mesh
 
