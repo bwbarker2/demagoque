@@ -58,7 +58,7 @@ MODULE mesh
 
    ! allocate arrays
    allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
-   allocate(denmat(-Nxa2:Nxa2,-Nxr:Nxr)) !2x size in xr for naive FT - BWB 2011-01-10
+   allocate(denmat(-Nxa2:Nxa2,-Nxr:Nxr-1)) !2x size in xr for naive FT - BWB 2011-01-10
    allocate(denmat2(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
    allocate(potDiag(-Nxa2:Nxa2))
 
@@ -245,34 +245,42 @@ MODULE mesh
       select case (state)
        case (WIGNER)
         call transform_x_to_w_norepeat_fft
-        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
+!        call transform_x_to_wigner_dumb
+!        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_x_to_k_norepeat
         call transform_x_to_w_norepeat_fft
+!        call transform_x_to_wigner_dumb
         call transform_wigner_to_k_fft_exp
-        write(*,*)'transform_x_to_k:',etime(elapsed)-totalelapsed,'seconds'
+!        call transform_wigner_to_k_dumb
+!        write(*,*)'transform_x_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
   
      case (WIGNER)
       select case (state)
        case (SPACE)
         call transform_w_to_x_norepeat_fft
-        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
+!        call transform_wigner_to_x_dumb
+!        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
+!        call transform_wigner_to_k_dumb
         call transform_wigner_to_k_fft_exp
-        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
+!        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
   
      case (MOMENTUM)
       select case (state)
        case (WIGNER)
         call transform_k_to_wigner_fft_exp
-        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
+!        call transform_k_to_wigner_dumb
+!        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (SPACE)
         call transform_k_to_wigner_fft_exp
-        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
+!        call transform_k_to_wigner_dumb
+!        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
         call transform_w_to_x_norepeat_fft
-        write(*,*)'transform_k_to_x:',etime(elapsed)-totalelapsed,'seconds'
+!        call transform_wigner_to_x_dumb
+!        write(*,*)'transform_k_to_x:',etime(elapsed)-totalelapsed,'seconds'
       end select
     end select
    endif

@@ -435,6 +435,12 @@ e               = 11.07            +/- 0.0823       (0.7435%)
 <p>question: what do the imaginary off-diagonals of the spatial density matrix mean?</p>
 <p>maybe a better question: what do imaginary amplitudes mean in general?</p>
 
+<h3>Thu Apr 21 18:00:23 EDT 2011</h3>
+
+<p>Summary of past few months. I found a nonzero imaginary part of the spatial density matrix, which suggested that this was not the ground state. We attempted several ways of imaginary time evolution to remove this "numerical excited state", to no avail. We finally figured that it was tied to the split-operator method, given that when evolving the exact HO solution, there was no imaginary part, and when we lowered the timestep, the imaginary part decreased monotonically.</p>
+
+<p>Right now I'm comparing Arnau's rotated code to my rotated code. The only difference between the design of the two codes is that mine replicates the original periodicity and his does not.</p>
+
 </body>
 </html>
 

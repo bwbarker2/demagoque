@@ -8,7 +8,7 @@ SUBROUTINE output
 !  INTEGER :: iixa,iixr,ixr,ii
 
   ! write output only if we are at beginning, end, or multiple of ntime
-  IF(MOD(it,ntime).EQ.0.OR.it.EQ.Nt.OR.it.EQ.1)THEN
+  IF(MOD(it,ntime).EQ.0.OR.it.EQ.Nt)THEN
      CONTINUE
   ELSE
      RETURN
@@ -113,7 +113,7 @@ SUBROUTINE outDenMat(fileim_u, filere_u)
   WRITE(filere_u,*)
 
 
-919 FORMAT(1000e16.5)
+919 FORMAT(1000es23.14)
 
 END SUBROUTINE outDenMat
 

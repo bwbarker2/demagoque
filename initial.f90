@@ -170,6 +170,53 @@ end subroutine boost
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+subroutine displace(nx)
+ !! displace - shifts density matrix by 'nx' spatial indices in -xa direction
+ use mesh
+ implicit none
+
+ integer, intent(in) :: nx
+
+ complex*16, dimension(0:nx-1,-Nxr:Nxr-1) :: wmat  !working matrix
+
+ integer :: i
+
+ !copy cells that are shifted 'off' the left (negative) side of the matrix
+ do i=0,nx-1
+  wmat(i,:)=denmat(-Nxa2+i,:)
+ enddo !i
+
+ !shift cells within denmat
+ do i=-Nxa2,Nxa2-1-nx
+  denmat(i,:)=denmat(i+nx,:)
+ enddo !i
+
+ !copy periodically shifted cells to other (positive) side of matrix
+ do i=Nxa2-nx,Nxa2-1
+  denmat(i,:)=wmat(i-Nxa2+nx,:)
+ enddo
+
+end subroutine displace
+
+subroutine flipclone
+ !! flipclone - adds the density matrix to its clone, flipped across 
+ use mesh
+
+ complex*16, dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1) :: den2
+
+ integer :: ixa
+
+ den2=denmat(:,-Nxr2:Nxr2-1)
+
+ denmat(-Nxa2,-Nxr2:Nxr2-1)=denmat(-Nxa2,-Nxr2:Nxr2-1)*2d0
+ do ixa=-Nxa2+1,Nxa2-1
+  denmat(ixa,-Nxr2:Nxr2-1)=denmat(ixa,-Nxr2:Nxr2-1)+conjg(den2(-ixa,-Nxr2:Nxr2-1))
+ enddo
+
+ call copyExtra
+
+end subroutine flipclone
+
 !subroutine displace(xc)
 ! !! displace - shifts density matrix by 'xc' fm in xa direction
 ! use mesh

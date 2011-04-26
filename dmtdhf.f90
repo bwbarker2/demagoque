@@ -32,7 +32,14 @@ PROGRAM dmtdhf
   USE time
   IMPLICIT NONE
 
+!  integer :: fftw_init_out
   real :: timeElapsed(2)
+
+!  fftw_init_out=dfftw_init_threads()
+!  call dfftw_init_threads(fftw_init_out)
+!  if(fftw_init_out==0)write(*,*)'ERROR: dfftw_init_threads error:',fftw_init_out
+
+!  call dfftw_plan_with_nthreads(2)
 
   CALL getStdIn
 
@@ -170,6 +177,10 @@ PROGRAM dmtdhf
 !  enddo
 
   call boost
+
+  call displace(10)
+
+  call flipclone
 
   maxxim=0.d0
 

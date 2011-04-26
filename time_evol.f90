@@ -13,10 +13,10 @@ SUBROUTINE time_evolution
 
   call calcPotDiag
   call output
-  call output
-  call output
-  call output
-  call output
+!  call output
+!  call output
+!  call output
+!  call output
 
  dt2=delt*0.5d0
 
@@ -26,26 +26,21 @@ SUBROUTINE time_evolution
 
      ! update current time
      t=it*delt
+   if(denState==SPACE)then
+    CALL evol_x(dt2)
+    CALL evol_k(delt)
+    CALL evol_x(dt2)
+   else
+    call setState(MOMENTUM)
+    CALL evol_k(dt2)
+    CALL evol_x(delt)
+    CALL evol_k(dt2)
+   endif
 
-     ! evolve in k-space
-     CALL evol_x(dt2)
-!     write(*,*)'finished first evol_x'
-!     call enforceHermiticityK
-!     call output
-
-     ! evolve in x-space
-     CALL evol_k(delt)
-!     write(*,*)'finished first evol_k'
-!     call enforceHermiticityX
-!     CALL output
-
-     CALL evol_x(dt2)
-!     write(*,*)'finished second evol_x'
-!  call howHermitian
-!     call enforceHermiticityK
      call output
 
-   call renormalizeDM
+! NOTE: calling this subroutine causes divergences if ntime.ne.1
+!   call renormalizeDM
 
   ENDDO
 
@@ -228,6 +223,7 @@ subroutine calcPotDiag()
 
 ! write(*,*)'debug: starting calcPotDiag'
  if (useAdiabatic) weight=getWeight()
+
 
 ! write(*,*)'time,weight:',t,weight,1.0-weight
 
