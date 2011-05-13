@@ -21,6 +21,8 @@ module lib_fftw
 
    call dfftw_execute(plan)
 
+   call dfftw_destroy_plan(plan)
+
   end subroutine ft_z2z_1d
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -39,6 +41,7 @@ module lib_fftw
 
    call dfftw_execute(plan)
 
+   call dfftw_destroy_plan(plan)
   end subroutine ift_z2z_1d
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

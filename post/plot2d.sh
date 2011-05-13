@@ -28,7 +28,7 @@ let "nin0 = nindex - 1"
 maxlen=${#times[nin0]}
     
 # pad times with zeroes for correct filename scheme
-for ((index=0; index < nindex; index++))
+for ((index=1; index <= nindex; index++))
   do
   while [ ${#times[index]} -lt $maxlen ]
     do
@@ -38,7 +38,7 @@ for ((index=0; index < nindex; index++))
   echo index = $index, time = ${times[index]}
 done
 
-for ((index=0; index < nindex; index++)) ; do
+for ((index=1; index <= nindex; index++)) ; do
 
     echo time = ${times[index]}
   
@@ -53,7 +53,8 @@ for ((index=0; index < nindex; index++)) ; do
 
       i=${i}
 
-    sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$index/" \
+    let "ind0 = index - 1"
+    sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$ind0/" \
 	${path_from_results}/2dx.plt | gnuplot
   done
 
@@ -65,8 +66,8 @@ for ((index=0; index < nindex; index++)) ; do
       echo $i
       
       i=${i}
-
-      sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$index/" \
+      let "ind0 = index - 1"
+      sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$ind0/" \
 	${path_from_results}/2dk.plt | gnuplot
   done
 

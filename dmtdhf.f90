@@ -28,6 +28,11 @@ PROGRAM dmtdhf
 ! 2    Skyrme-like contact potential (local density dependent)
 ! 3    same as pot=0, but with exact evolution from Chin, Krotsheck, Phys Rev E72, 036705 (2005)
 !
+! Options are given at the end of the code. Eventually the potentials will be options as well. Each line consists of a space-separated list of parameters. The first is an integer that defines with option to set, followed by a list of parameters for that option. Options can be safely commented out with a starting '!'
+!
+! option  definition
+!      1  imaginary off-diagonal cutoff. Parameters are cutoff_w0, cutoff_x0, cutoff_d0 
+!
   USE mesh
   USE time
   IMPLICIT NONE
@@ -178,7 +183,7 @@ PROGRAM dmtdhf
 
   call boost
 
-  call displace(10)
+  call displace(16)
 
   call flipclone
 
@@ -218,13 +223,19 @@ END PROGRAM dmtdhf
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! reads data from standard input
 SUBROUTINE getStdIn
+ use bstring
   USE mesh
   USE osc_pars
   USE out
+ use params_cutoff
   USE phys_cons
+  use potential_params
   USE prec_def
   USE time
   IMPLICIT NONE
+
+ character(len=80) :: inline !input line for optional line processing
+ integer :: idummy
 
   ! ... READ DATA FOR READING AND WRITING
   READ(*,*)
@@ -295,4 +306,36 @@ SUBROUTINE getStdIn
   read(*,*) Nimev
   write(*,*) 'timesteps for imaginary evolution, Nimev=',Nimev
 
+ !set default options
+ useImCutoff=.false.
+
+ !read optional lines
+ do while(.true.)
+
+  read(*,'(A)') inline
+
+  if(isComment(inline))cycle
+
+  read(inline,*)idummy
+!  write(*,*)idummy
+
+  !if it's the sentinel, then exit loop
+  if(idummy==999) then
+!   write(*,*)'input sentinel reached, exiting input loop'
+   exit
+  endif
+
+  select case(idummy)
+
+   case(1)
+    useImCutoff=.true.
+    read(inline,*)idummy,cutoff_w0,cutoff_x0,cutoff_d0
+    write(*,*)'Using imaginary off-diagonal cutoff, w0,x0,d0=' &
+              ,cutoff_w0,cutoff_x0,cutoff_d0
+
+   case default
+    write(*,*)'Option does not exist:',idummy,'. Skipping input line.'
+  end select
+
+ enddo
 END SUBROUTINE getStdIn

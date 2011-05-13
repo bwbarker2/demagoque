@@ -9,7 +9,7 @@ set pm3d map
 set xrange [0:100]
 set yrange [0:200]
 #set zrange [-0.3:0.3]
-set cbrange [-0.2:0.2]
+set cbrange [-0.3:0.3]
 
 #set nokey
 #unset colorbox

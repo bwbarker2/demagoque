@@ -19,6 +19,7 @@ MODULE mesh
  integer :: potInitial    ! potential  with initial state
  integer :: potFinal      ! potential for time evolution
  logical :: useAdiabatic  ! if true, use adiabatic switching
+ logical :: useImCutoff   ! use imaginary off-diagonal cutoff?
   ! factor to change units to 3D density matrix (calculated in initial.f90)
  REAL*8 :: facd
   REAL*8, DIMENSION(:), ALLOCATABLE :: xa,ka,xr,kr   ! coord of grid point  

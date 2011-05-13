@@ -12,6 +12,7 @@ program compareAB
  real*8 :: summ,summ2   !to get average difference
  integer :: numm  !to get number to divide by for average
  real*8 :: xava,xavb   ! <|x|> ( expectation of abs(x) )
+ real*8 :: xxava, xxavb  ! <x> (expectation of x)
 
 
  integer :: ixa,ixr,it
@@ -20,8 +21,8 @@ program compareAB
  fu_arnau=2
  fu_densub=3
 
- open(unit=fu_brent,file='results.free/2dxre.dat',status='old')
- open(unit=fu_arnau,file='results.arnau/free/2dxre.dat',status='old')
+ open(unit=fu_brent,file='results.extHO50/2dxre.dat',status='old')
+ open(unit=fu_arnau,file='results.arnau/ho/2dxre.dat',status='old')
  open(unit=fu_densub,file='results/densub.dat')
 
 !loop through timesteps
@@ -64,7 +65,16 @@ do it=0,4
   xavb=xavb+abs(ixa)*denbrent(ixa,0)*0.5d0
  enddo
 
+ xxava=0d0
+ xxavb=0d0
+ do ixa=-Nxr2,Nxr2-1
+  xxava=xxava+ixa*denarnau(ixa,0)*0.5d0
+  xxavb=xxavb+ixa*denbrent(ixa,0)*0.5d0
+ enddo
+
+
  write(*,*)'xava,xavb=',xava,xavb,(xava-xavb)/(xava+xavb)*2
+ write(*,*)'xxava,xxavb=',xxava,xxavb,(xxava-xxavb)/(xxava+xxavb)*2
 
  !calculate densub
  do ixa=-Nxa2,Nxa2-1

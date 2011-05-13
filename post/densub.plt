@@ -1,11 +1,11 @@
-#set terminal postscript enhanced color eps
-#set output 'densub_0NUMBER.eps'
+set terminal postscript enhanced color eps
+set output 'densub_0NUMBER.eps'
 
 set pm3d map
 set palette rgbformulae 30,31,32
 set hidden3d
 
-set size square
+#set size square
 
 set xlabel 'x_{average}'
 set ylabel 'x_{relative}'

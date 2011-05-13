@@ -39,7 +39,7 @@ SUBROUTINE time_evolution
 
      call output
 
-! NOTE: calling this subroutine causes divergences if ntime.ne.1
+! NOTE: calling this subroutine during normal evolution causes divergences if ntime.ne.1
 !   call renormalizeDM
 
   ENDDO
@@ -129,6 +129,7 @@ SUBROUTINE evol_x(dtim)
  real*8 :: cos2k, sin2k, udt !cos,sin part of exp, exponent itself
  real*8 :: xim,xre,xre2,xim2 !x density matrix, imaginary, real
  real*8 :: x1,x2,ux1,ux2 !position in x,x' basis, potential at x,x'
+ real*8 :: cutfac   !factor for imaginary off-diagonal cutoff
 
  integer :: ki !used by LIN_INT
 
@@ -153,10 +154,17 @@ SUBROUTINE evol_x(dtim)
 ! write(*,*)'finished calcing pot diag'
 
  !loop over all grid points
- DO ixa=-Nxa2,Nxa2-1
 
-  DO ixr=-Nxr2,Nxr2-1
+ DO ixr=-Nxr2,Nxr2-1
 
+  !get imaginary cutoff factor if needed
+  if(useImCutoff)then
+   call getImCutoff(cutfac, ixr,dtim)
+  else
+   cutfac=1d0
+  endif
+
+  DO ixa=-Nxa2,Nxa2-1
 
    call getX12(ixa,ixr,x1,x2)
 
@@ -171,7 +179,7 @@ SUBROUTINE evol_x(dtim)
 
    if(useImEvol) then
     udt=-(ux1+ux2)*dtim/hbc
-    call setDenX(ixa,ixr,exp(udt)*getDenX(ixa,ixr))
+    call setDenX(ixa,ixr,cutfac*exp(udt)*getDenX(ixa,ixr))
    else
      !time evolution operator = exp(-i(U(x)-U(x'))t/h)
     udt=-(ux1-ux2)*dtim/hbc
@@ -189,7 +197,7 @@ SUBROUTINE evol_x(dtim)
     xim2=xre*sin2k + xim*cos2k
  !   if(ixr==0)write(*,*)'ixa,ixr,den_im-post=',ixa,ixr,den_im(iixa,iixr)
  
-    call setDenX(ixa,ixr,cmplx(xre2,xim2,8))
+    call setDenX(ixa,ixr,cutfac*cmplx(xre2,xim2,8))
 
    endif !not useImEvol
 
@@ -245,6 +253,38 @@ subroutine calcPotDiag()
 end subroutine calcPotDiag
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+
+subroutine getImCutoff(cutfac, ixr,dtim)
+ use mesh
+ use params_cutoff
+ use phys_cons
+ implicit none
+
+ integer, intent(in) :: ixr
+ real*8, intent(out) :: cutfac
+ real*8, intent(in) :: dtim !timestep
+
+ real*8 :: xxr
+
+ xxr=abs(xr(ixr))
+
+ if(xxr<=cutoff_x0) then
+  cutfac=0d0
+ elseif(xxr<=cutoff_x0+cutoff_d0/2d0) then
+  cutfac=2d0*(xxr-cutoff_x0)**2/cutoff_d0**2
+ elseif(xxr<=cutoff_x0+cutoff_d0) then
+  cutfac=1d0-2d0*(xxr-(cutoff_x0+cutoff_d0))**2/cutoff_d0**2
+ else
+  cutfac=1d0
+ endif
+! write(*,*)cutfac
+ cutfac=exp(-2d0*cutoff_w0*cutfac*dtim/hbc)
+! write(*,*)ixr,xxr,cutfac
+
+end subroutine getImCutoff
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
 
 real*8 function getWeight()
  use time
@@ -302,6 +342,7 @@ subroutine potHO(potX,ix)
 !  write(*,*)'debug: m0,w,ix,delxa',m0,w,ix,delxa
 
   potX=0.5d0*m0*(w*xa(ix))**2
+!  write(*,*)potX
 
 end subroutine potHO
 

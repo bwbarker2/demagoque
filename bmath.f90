@@ -1,3 +1,7 @@
+module bmath
+
+contains
+
 complex*16 function zdet2d(cmat,n)
  !! zdet2d - nonoptimized calculation of determinant of 2D complex double matrix - order N^2
  implicit none
@@ -7,13 +11,16 @@ complex*16 function zdet2d(cmat,n)
 
  integer, dimension(n) :: l  !row ordering after Gaussian elimination
  integer, dimension(n) :: lo !work array for ordering
+ complex*16, dimension(n,n) :: wmat  !writable matrix for using in zGauss
 
  integer :: i !loop variables
  integer :: j !dummy variable for exchange
  real*8 :: rsign  !row interchange sign factor for determinant
 
+ wmat=cmat
+
  !diagonalize matrix
- call zGauss(n,cmat,l)
+ call zGauss(n,wmat,l)
 
  lo=l
 
@@ -36,7 +43,7 @@ complex*16 function zdet2d(cmat,n)
  !multiply diagonal terms together to get determinant
  zdet2d=dsign(1.d0,rsign)
  do i=1,n
-  zdet2d=zdet2d*cmat(l(i),i)
+  zdet2d=zdet2d*wmat(l(i),i)
  enddo
 
 end function zdet2d
@@ -115,3 +122,57 @@ subroutine zGauss(n,a,l)
  enddo
 
 end subroutine zGauss
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine zlin_int(xa,ya,n,x,y,ki)
+ !! zlin_int - linear interpolation for complex double arrays
+ implicit none
+
+ integer,                  intent(in) :: n  !size of xa,ya arrays
+ real*8,     dimension(n), intent(in) :: xa !independent values
+ complex*16, dimension(n), intent(in) :: ya !dependent values
+ real*8,                   intent(in) :: x  !x value desired
+ 
+ complex*16, intent(out)   :: y  !function value at x
+ integer,    intent(inout) :: ki !index to interpolate around, or index of lower value used for interpolation (good for incremented calls)
+
+ integer :: k,khi,klo
+ real*8  :: h
+
+ klo=1
+ khi=n
+
+ if(ki.ne.1.and.xa(ki).lt.x.and.xa(ki+1).gt.x) then
+  klo=ki
+  khi=klo+1
+ elseif(ki.ne.1.and.xa(ki+1).lt.x .and. xa(ki+2).gt.x) then
+  klo=ki+1
+  khi=klo+1
+
+ else
+  do while (khi-klo.gt.1)
+   k=(khi+klo)/2
+   if(xa(k).gt.x) then
+    khi=k
+   else
+    klo=k
+   endif !xa.gt.x
+  enddo !while khi-klo.gt.1
+ endif !entire if
+
+ !store lower index for future calls to this subroutine
+ ki=klo
+
+ h=xa(khi)-xa(klo)
+ if(h.eq.0.d0) then
+  write(*,*) 'bad xa input'
+  read(*,*)
+ endif
+
+ y=ya(klo)+(ya(khi)-ya(klo))/(xa(khi)-xa(klo))*(x-xa(klo))
+
+end subroutine zlin_int
+
+
+end module bmath

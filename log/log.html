@@ -441,6 +441,19 @@ e               = 11.07            +/- 0.0823       (0.7435%)
 
 <p>Right now I'm comparing Arnau's rotated code to my rotated code. The only difference between the design of the two codes is that mine replicates the original periodicity and his does not.</p>
 
+<h3>Thu Apr 28 14:45:48 EDT 2011</h3>
+
+<p>I'm about to add the off-diagonal absorbing potential to the code, and I now want to revamp how potentials are inputted and calculated. Right now, I select 1 potential. I would like to be able to easily and modularly "turn on and off" potentials, similar to how Pawel's BUU works. But, rather than a true/false switch for every potential, I want it to be open-ended. This is how I think it will work. In the input file, after the parameters that exist irrespective of potentials used, I have this, as example:</p>
+
+<code>
+2 ! numpot, number of potentials
+1 3  ! pots, array of integers, size numpot, list of potentials used
+1 2344.45 52399.33 ! first potential, list of parameters for that potential
+3 33.45  ! second potential used, list of parameters for that potential
+</code>
+
+<p>I should be able to code this input with a do-loop. Then, in the potential-finding module, I'll loop through pots, adding to the local potential.</p>
+
 </body>
 </html>
 

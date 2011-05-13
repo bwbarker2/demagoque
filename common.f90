@@ -1,3 +1,23 @@
+module params_cutoff
+ !! params_cutoff - parameters for imaginary off-diagonal cutoff. For explanation of formula, etc, see A. Rios et al., Annals of Physics 326 (2011) 1274, specifically page 1298.
+ implicit none
+
+ real*8 :: cutoff_w0 !strength of cutoff
+ real*8 :: cutoff_x0 !size of cutoff
+ real*8 :: cutoff_d0 !steepness of cutoff
+
+end module params_cutoff
+
+module potential_params
+ implicit none
+
+ integer :: numpots !number of potentials used
+ real*8, allocatable, dimension(:) :: potlist !list of potentials
+
+end module potential_params
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 ! defines precision of types
 MODULE prec_def
   IMPLICIT NONE

@@ -1,10 +1,10 @@
 ! ........... READ AND WRITE PARAMETERS
-5 ! ntime
+20 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
-200 ! Nevt
+80 ! Nevt
 0   ! Nmax
-0d0 ! EA [MeV]
+50d0 ! EA [MeV]
 25d0  ! xLa [fm]
 25d0 ! xLr [fm]
 100 ! Nxa
@@ -18,7 +18,7 @@
 .false.     ! useImEvol - use imaginary evolution?
 100   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
-!1 1000d0 5d0 2d0  !useImCutoff, cutoff w0,x0,d0
+!1 1000d0 15d0 2d0  !useImCutoff, cutoff w0,x0,d0
 999 !sentinel for end of optional parameters
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
