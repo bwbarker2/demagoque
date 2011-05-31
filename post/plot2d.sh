@@ -2,7 +2,7 @@
 #
 # plots 2d density matrices
 
-path_to_results="../results/"
+path_to_results="./"
 path_from_results="../post/"
 
 # test file to get timestep information

@@ -2,16 +2,16 @@
 20 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
-80 ! Nevt
-0   ! Nmax
-50d0 ! EA [MeV]
+200 ! Nevt
+1   ! Nmax
+25d0 ! EA [MeV]
 25d0  ! xLa [fm]
 25d0 ! xLr [fm]
 100 ! Nxa
 100 ! Nxr
 ! ............. POTENTIAL PARAMETERS
 0  ! potInitial
-0 ! potFinal
+2 ! potFinal
 300 70 1200  ! tad,wtad,Nad
 1  ! iadib
 ! ............. IMAGINARY EVOLUTION PARAMETERS

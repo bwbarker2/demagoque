@@ -167,16 +167,18 @@ c ... LINEAR INTERPOLATION
       klo=1
       khi=n
 
-      if(ki.eq.1) go to 1
+      if(ki.eq.1.or.ki+1.gt.n) go to 1
 
       if(xa(ki).lt.x.and.xa(ki+1).gt.x) then
          klo=ki
          khi=klo+1
          go to 2
-      else if(xa(ki+1).lt.x .and. xa(ki+2).gt.x) then
+      else if(ki+2.le.n) then
+       if(xa(ki+1).lt.x .and. xa(ki+2).gt.x) then
          klo=ki+1
          khi=klo+1
          go to 2
+       endif
       endif
 
  1    if (khi-klo.gt.1) then

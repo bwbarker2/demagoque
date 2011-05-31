@@ -21,8 +21,8 @@ program compareAB
  fu_arnau=2
  fu_densub=3
 
- open(unit=fu_brent,file='results.extHO50/2dxre.dat',status='old')
- open(unit=fu_arnau,file='results.arnau/ho/2dxre.dat',status='old')
+ open(unit=fu_brent,file='results.25x25/2dxre.dat',status='old')
+ open(unit=fu_arnau,file='results.arnau/mfevol/2dxre.dat',status='old')
  open(unit=fu_densub,file='results/densub.dat')
 
 !loop through timesteps
@@ -56,6 +56,7 @@ do it=0,4
 ! !divide denarnau by the 1D->3D factor he used
 ! denarnau=denarnau/0.48680747073350783d0
 ! denarnau=denarnau/0.5069
+! denarnau=denarnau*0.25d0
 
  !calculate xav for each system
  xava=0d0

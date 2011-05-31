@@ -6,6 +6,6 @@ gfortran bmath.f90 bstring.f90 common.f90 dmtdhf.f90 \
          outAnalHarmonic.f90 output.f90 renormalizeDM.f90 \
          time_evol.f90 wfnho.f90 \
          -lfftw3_threads -lpthread -lfftw3 -llapack -lm \
-         -Wall -ggdb \
+         -fbounds-check -Wall -ggdb \
          -O3 \
          -o time.x

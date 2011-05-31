@@ -7,14 +7,17 @@ set output "OUTPUTFILE.eps"
 set pm3d map
 
 set xrange [0:100]
-set yrange [0:200]
+#set yrange [50:150]
 #set zrange [-0.3:0.3]
 set cbrange [-0.3:0.3]
 
 #set nokey
 #unset colorbox
 
-set size ratio -1
+set xlabel 'x_{average}'
+set ylabel 'x_{relative}'
+
+#set size ratio -1
 
 #set palette defined (-0.3 "black", 0 "blue", 0.3 "white")
 

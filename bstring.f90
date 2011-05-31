@@ -106,7 +106,6 @@ subroutine test_findFirstWord
  character(len=1) :: onelen
  character(len=10) :: tenlen
 
- character(len=80) :: inline
  integer :: ibegin,istop
 
  write(*,*)'> Testing subroutine findFirstWord'

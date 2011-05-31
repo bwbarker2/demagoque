@@ -9,10 +9,7 @@ SUBROUTINE calcInitial
   use time
   implicit none
 
-
- 
   call initializeMesh
-
 
   ! oscillator data
   w=hbc/m0*6.d0*(rho0/facd)**2/(Nmax+1.d0)!   *0.1
@@ -198,22 +195,32 @@ subroutine displace(nx)
 
 end subroutine displace
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 subroutine flipclone
  !! flipclone - adds the density matrix to its clone, flipped across 
  use mesh
+ implicit none
 
- complex*16, dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1) :: den2
+ complex*16, dimension(-Nxa2:Nxa2,-Nxr2:Nxr2-1) :: den2
 
  integer :: ixa
 
+ write(*,*)'flipclone started'
+
  den2=denmat(:,-Nxr2:Nxr2-1)
 
+ write(*,*)'den2 assigned'
+
  denmat(-Nxa2,-Nxr2:Nxr2-1)=denmat(-Nxa2,-Nxr2:Nxr2-1)*2d0
+ write(*,*)'first denmat column multiply'
  do ixa=-Nxa2+1,Nxa2-1
   denmat(ixa,-Nxr2:Nxr2-1)=denmat(ixa,-Nxr2:Nxr2-1)+conjg(den2(-ixa,-Nxr2:Nxr2-1))
  enddo
+ write(*,*)'do-loop finished'
 
  call copyExtra
+ write(*,*)'copyExtra finished'
 
 end subroutine flipclone
 

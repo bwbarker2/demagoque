@@ -157,7 +157,8 @@ SUBROUTINE evol_x(dtim)
 
  DO ixr=-Nxr2,Nxr2-1
 
-  !get imaginary cutoff factor if needed
+  !get imaginary cutoff factor if needed (not for adiabatic evolution)
+!  if(useImCutoff.and..not.useAdiabatic)then
   if(useImCutoff)then
    call getImCutoff(cutfac, ixr,dtim)
   else

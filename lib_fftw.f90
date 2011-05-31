@@ -17,7 +17,11 @@ module lib_fftw
 
    integer*8 :: plan
 
+!$OMP MASTER
+
    call dfftw_plan_dft_1d(plan,num,arrayin,arrayout, FFTW_FORWARD, FFTW_ESTIMATE)
+
+!$OMP END MASTER
 
    call dfftw_execute(plan)
 

@@ -454,6 +454,16 @@ e               = 11.07            +/- 0.0823       (0.7435%)
 
 <p>I should be able to code this input with a do-loop. Then, in the potential-finding module, I'll loop through pots, adding to the local potential.</p>
 
+<h3>Wed May 18 17:11:41 EDT 2011</h3>
+
+<p>NOTE on parallel FFTW: It's not working yet, and this is because FFTW plans cannot be created or destroyed in parallel (in shared-memory parallel in particular). Instead, I need to create all the plans I need outside of parallel, and use the planner flag FFTW_THREADSAFE.</p>
+
+<h3>Wed May 25 13:36:55 EDT 2011</h3>
+
+<p>My task right now is to simulate a 1D BEC using a simple solution of the Gross-Pitaeskii equations. First I need to find out what observable/system I'm looking for. In Gorlitz,PRL87(2001)13402, I found a 1D BEC (talking about cross-over from 3D to 1D). They acheive the quasi-1D by making the transverse trap frequency 100 times greater than the longitudinal trap frequency. In Fig 3 of this paper, they describe the release energy vs. the half-length of the condensate, as well as vs. the radius. Since my radius will be zero (right?), I'll just be looking to compare my release energy (which is the total energy given off after it's released, which should be the kinetic+potential energy at any given time).</p>
+
+<p>So this is one observable. I'm unsure how the transverse trapping frequency will affect my results, since I have no transverse direction.</p>
+
 </body>
 </html>
 

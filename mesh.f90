@@ -60,7 +60,7 @@ MODULE mesh
    ! allocate arrays
    allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
    allocate(denmat(-Nxa2:Nxa2,-Nxr:Nxr-1)) !2x size in xr for naive FT - BWB 2011-01-10
-   allocate(denmat2(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
+   allocate(denmat2(-Nxa2:Nxa2,-Nxr:Nxr-1))
    allocate(potDiag(-Nxa2:Nxa2))
 
    !facd calc'd here because can't initialize with non-integer exponents
@@ -955,13 +955,20 @@ MODULE mesh
    integer :: ixa,ika2,ika,ixr,sgnfac
    real*8  :: delka2
 
+!   integer*8 :: plan
+
    complex*16, dimension(-Nxr2:Nxr2-1) :: array
 
    delka2=delka*2d0
 
 !   denmat2=cmplx(1d0,0d0,8)
 
+!   call dfftw_plan_dft_1d(plan,Nxr,array,array, FFTW_FORWARD, FFTW_MEASURE)
+
+!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(ARRAY,IKA,IKA2,IXR,SGNFAC)
+
    !do even ika first
+!$OMP DO
    do ixa=0,Nxa2-1
     !construct array to transform
     array=cmplx(0d0,0d0,8)
@@ -972,7 +979,10 @@ MODULE mesh
     enddo !ika2
 
     !transform!
-    call ft_z2z_1d(array,array,Nxr)
+!   call dfftw_execute_dft(plan,array,array)
+
+
+   call ft_z2z_1d(array,array,Nxr)
 
     sgnfac=1
     do ika2=-Nka2,Nka2-1
@@ -983,6 +993,12 @@ MODULE mesh
     enddo
 
    enddo !ixa
+!$OMP END DO
+
+!$OMP END PARALLEL
+
+
+!   call dfftw_destroy_plan(plan)
 
    !do odd ika now
    do ixa=0,Nxa2-1

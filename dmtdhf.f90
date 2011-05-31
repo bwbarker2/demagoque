@@ -37,10 +37,9 @@ PROGRAM dmtdhf
   USE time
   IMPLICIT NONE
 
-!  integer :: fftw_init_out
+  integer :: fftw_init_out
   real :: timeElapsed(2)
 
-!  fftw_init_out=dfftw_init_threads()
 !  call dfftw_init_threads(fftw_init_out)
 !  if(fftw_init_out==0)write(*,*)'ERROR: dfftw_init_threads error:',fftw_init_out
 
@@ -182,10 +181,11 @@ PROGRAM dmtdhf
 !  enddo
 
   call boost
+ 
+!  call displace(15)
 
-  call displace(16)
-
-  call flipclone
+!  call flipclone
+!  write(*,*)'flipclone finished'
 
   maxxim=0.d0
 
@@ -235,7 +235,7 @@ SUBROUTINE getStdIn
   IMPLICIT NONE
 
  character(len=80) :: inline !input line for optional line processing
- integer :: idummy
+ integer :: ibeg,iend
 
   ! ... READ DATA FOR READING AND WRITING
   READ(*,*)
@@ -316,25 +316,28 @@ SUBROUTINE getStdIn
 
   if(isComment(inline))cycle
 
-  read(inline,*)idummy
+  call findFirstWord(inline,' ',ibeg,iend)
+!  read(inline,*)idummy
 !  write(*,*)idummy
 
   !if it's the sentinel, then exit loop
-  if(idummy==999) then
+  if(inline(ibeg:iend)=="END_OF_OPTIONS") then
 !   write(*,*)'input sentinel reached, exiting input loop'
    exit
   endif
 
-  select case(idummy)
+  select case(inline(ibeg:iend))
 
-   case(1)
+   case("useImCutoff")
     useImCutoff=.true.
-    read(inline,*)idummy,cutoff_w0,cutoff_x0,cutoff_d0
+    read(inline(iend+1:len(inline)),*)cutoff_w0,cutoff_x0,cutoff_d0
     write(*,*)'Using imaginary off-diagonal cutoff, w0,x0,d0=' &
               ,cutoff_w0,cutoff_x0,cutoff_d0
 
    case default
-    write(*,*)'Option does not exist:',idummy,'. Skipping input line.'
+    write(*,*)'***'
+    write(*,*)'Option does not exist: ' // inline(ibeg:iend) // '. Skipping input line.'
+    write(*,*)'***'
   end select
 
  enddo
