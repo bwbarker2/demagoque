@@ -62,11 +62,11 @@ MODULE mesh
    allocate(denmat(-Nxa2:Nxa2,-Nxr:Nxr-1)) !2x size in xr for naive FT - BWB 2011-01-10
    allocate(denmat2(-Nxa2:Nxa2,-Nxr:Nxr-1))
    allocate(potDiag(-Nxa2:Nxa2))
+   allocate(den_re(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
 
    !facd calc'd here because can't initialize with non-integer exponents
    facd=dsqrt(5.d0/3.d0)*(deg*pi*(rho0**2)/6.d0)**(1.d0/3.d0) 
 
-   write(*,*) '1D to 3D factor:',facd
 
    ! mesh in x and k
    delxa=(2.d0*xLa)/dble(Nxa)
@@ -99,6 +99,7 @@ MODULE mesh
 
   complex*16 function getDen(i1,i2)
    !! getDen - returns value of density matrix, given the current denState
+   use prec_def
    implicit none
 
    integer, intent(in) :: i1,i2
@@ -110,6 +111,14 @@ MODULE mesh
      getDen=getDenW(i1,i2)
     case (MOMENTUM)
      getDen=getDenK(i1,i2)
+    case default
+     write(stderr,*)
+     write(stderr,*)'*****'
+     write(stderr,*)'getDen: mesh is not in a valid state, denState=',denState
+     write(stderr,*)'getDen: setting result equal to 999'
+     write(stderr,*)'*****'
+     write(stderr,*)
+     getDen=999
    end select
 
    end function getDen
@@ -158,13 +167,13 @@ MODULE mesh
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine setDenW(ixa,ika, value)
+  subroutine setDenW(ixa,ika, this_value)
    implicit none
 
    integer, intent(in) :: ixa,ika
-   complex*16, intent(in) :: value
+   complex*16, intent(in) :: this_value
 
-   denmat(ixa,ika)=value
+   denmat(ixa,ika)=this_value
 
   end subroutine setDenW
 
@@ -245,42 +254,44 @@ MODULE mesh
      case (SPACE)
       select case (state)
        case (WIGNER)
-        call transform_x_to_w_norepeat_fft
-!        call transform_x_to_wigner_dumb
+!        call transform_x_to_w_norepeat_fft
+        call transform_x_to_wigner_dumb
 !        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_x_to_k_norepeat
-        call transform_x_to_w_norepeat_fft
-!        call transform_x_to_wigner_dumb
-        call transform_wigner_to_k_fft_exp
-!        call transform_wigner_to_k_dumb
+!        call transform_x_to_w_norepeat_fft
+        call transform_x_to_wigner_dumb
+!        call transform_wigner_to_k_fft_exp
+        call transform_wigner_to_k_dumb
+!        call transform_w_to_k_norepeat
 !        write(*,*)'transform_x_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
   
      case (WIGNER)
       select case (state)
        case (SPACE)
-        call transform_w_to_x_norepeat_fft
-!        call transform_wigner_to_x_dumb
+!        call transform_w_to_x_norepeat_fft
+        call transform_wigner_to_x_dumb
 !        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
-!        call transform_wigner_to_k_dumb
-        call transform_wigner_to_k_fft_exp
+        call transform_wigner_to_k_dumb
+!        call transform_w_to_k_norepeat
+!        call transform_wigner_to_k_fft_exp
 !        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
   
      case (MOMENTUM)
       select case (state)
        case (WIGNER)
-        call transform_k_to_wigner_fft_exp
-!        call transform_k_to_wigner_dumb
+!        call transform_k_to_wigner_fft_exp
+        call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (SPACE)
-        call transform_k_to_wigner_fft_exp
-!        call transform_k_to_wigner_dumb
+!        call transform_k_to_wigner_fft_exp
+        call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
-        call transform_w_to_x_norepeat_fft
-!        call transform_wigner_to_x_dumb
+!        call transform_w_to_x_norepeat_fft
+        call transform_wigner_to_x_dumb
 !        write(*,*)'transform_k_to_x:',etime(elapsed)-totalelapsed,'seconds'
       end select
     end select
@@ -351,9 +362,12 @@ MODULE mesh
    integer :: ixa,ixr,ika
    real*8 :: exparg
    complex*16 :: array(-Nxr:Nxr-1)
+
+!write(*,*)'x to w dumb go'
   
    do ixa=-Nxa2,Nxa2-1
   
+!    array=cmplx(0d0,0d0,8)
     array=0.d0
   
     ! fill arrays to be transformed
@@ -362,11 +376,27 @@ MODULE mesh
     enddo
   
     do ika=-Nka,Nka-1
+!     denmat2(ixa,ika)=cmplx(0d0,0d0,8)
      denmat2(ixa,ika)=0d0
-     do ixr=-Nxr,Nxr-1
+     do ixr=1,Nxr-1
+
+!      !debug up-down symmetry
+!      if(ixr.ne.-Nxr)then
+!       if(array(ixr).ne.array(-ixr)) then
+!        write(*,*)'ixa,ixr,diff',ixa,ixr,array(ixr)-array(-ixr)
+!       endif
+!      endif
+
       exparg=delxr*delka*ika*ixr
-      denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
+!      exparg=mod(exparg,2*pi)  !this doesn't seem to have any effect
+!      denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
+      denmat2(ixa,ika)=denmat2(ixa,ika) &
+                       +array(ixr)*(cos(exparg)-imagi*sin(exparg)) &
+                       +array(-ixr)*(cos(exparg)+imagi*sin(exparg))
      enddo
+     denmat2(ixa,ika)=denmat2(ixa,ika) &
+                      +array(-Nxr)*cos(delxr*delka*ika*Nxr) &
+                      +array(0)
      denmat2(ixa,ika)=delxr*denmat2(ixa,ika)*invsqrt2pi
   
      ! if the cell is unreasonably large, write out
@@ -551,15 +581,27 @@ MODULE mesh
    use phys_cons
    implicit none
 
+   real*8 :: exparg
    integer :: ixa,ixr,ika
 
    denmat2=CMPLX(0d0,0d0,8)
 
    do ixa=-Nxa2,Nxa2-1
     do ixr=-Nxr,Nxr-1
-     do ika=-Nka,Nka-1
-      denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
+!     do ika=-Nka,Nka-1
+!      denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
+!     enddo
+     do ika=1,Nka-1
+
+      exparg=delxr*delka*ika*ixr
+      denmat2(ixa,ixr)=denmat2(ixa,ixr) &
+                       +denmat(ixa,ika)*(cos(exparg)+imagi*sin(exparg)) &
+                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
      enddo
+     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
+                      +denmat(ixa,-Nka)*cos(delxr*delka*Nka*ixr) &
+                      +denmat(ixa,0)
+
      denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka*invsqrt2pi
     enddo
    enddo
@@ -656,10 +698,27 @@ MODULE mesh
    do ika=-Nka,Nka-1
     do ikr=-Nkr2,Nkr2-1
      denmat2(ikr,ika)=0.d0
-     do ixa=-Nxa2,Nxa2-1
-      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
-     enddo
+!     do ixa=-Nxa2,Nxa2-1
+     do ixa=1,Nxa2-1
+!      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
+      denmat2(ikr,ika)=denmat2(ikr,ika) &
+                       +denmat(ixa,ika)*(cos(delxa*delkr*ixa*ikr) &
+                                         -imagi*sin(delxa*delkr*ixa*ikr)) &
+                       +denmat(-ixa,ika)*(cos(delxa*delkr*ixa*ikr) &
+                                         +imagi*sin(delxa*delkr*ixa*ikr))
+     enddo !ixa
+     denmat2(ikr,ika)=denmat2(ikr,ika) &
+                      +denmat(-Nxa2,ika)*cos(delxa*delkr*Nxa2*ikr) &
+                      +denmat(0,ika)
+
      denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
+
+     !Analytically (see notes BWB 2011-01-25p2), for ika+ikr odd, denmat should
+     ! be exactly zero. Make it so. This subroutine is not built for speed,
+     ! so leave the above computation alone, but add the following:
+!     if(mod(ika+ikr,2)==1)denmat2(ikr,ika)=0d0
+     !This doesn't seem to help, and it breaks lr symmetry, so don't do it.
+
     enddo
    enddo
   
@@ -722,9 +781,22 @@ MODULE mesh
    do ika=-Nka,Nka-1
     do ixa=-Nxa2,Nxa2-1
      denmat2(ixa,ika)=0.d0
-     do ikr=-Nkr2,Nkr2-1
-      denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
-     enddo
+!     do ikr=-Nkr2,Nkr2-1
+      do ikr=1,Nkr2-1
+!      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
+      denmat2(ixa,ika)=denmat2(ixa,ika) &
+                       +denmat(ikr,ika)*(cos(delxa*delkr*ixa*ikr) &
+                                         +imagi*sin(delxa*delkr*ixa*ikr)) &
+                       +denmat(-ikr,ika)*(cos(delxa*delkr*ixa*ikr) &
+                                         -imagi*sin(delxa*delkr*ixa*ikr))
+     enddo !ixa
+     denmat2(ixa,ika)=denmat2(ixa,ika) &
+                      +denmat(-Nkr2,ika)*cos(delxa*delkr*Nkr2*ixa) &
+                      +denmat(0,ika)
+
+!     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
+!     enddo
+!      denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*
      denmat2(ixa,ika)=denmat2(ixa,ika)*delkr*invsqrt2pi
     enddo
    enddo
@@ -1061,7 +1133,7 @@ MODULE mesh
 
    delkr2=delkr*2d0
 
-!   denmat2=cmplx(1d0,0d0,8)
+   denmat2=cmplx(0d0,0d0,8)
 
    !do even ikr first
    do ika2=-Nka2,Nka2-1

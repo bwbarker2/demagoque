@@ -11,6 +11,8 @@ SUBROUTINE calcInitial
 
   call initializeMesh
 
+  write(*,*) '1D to 3D factor:',facd
+
   ! oscillator data
   w=hbc/m0*6.d0*(rho0/facd)**2/(Nmax+1.d0)!   *0.1
   whm=m0*w/hbc
@@ -59,9 +61,16 @@ subroutine initialState
 
         enddo !in
 
-        if(abs(den0).lt.1e-30) den0=0.0d0
-        
+!        if(abs(den0).lt.1e-40) den0=0.0d0
+
         call setDenX(ixa,ixr,cmplx(den0,0.d0,8))
+
+        if(ixa==2) then
+         if(ixr==1.or.ixr==-1)then
+          write(*,'(I3,I3,O24,O24)')ixa,ixr,den0,dble(denmat(ixa,ixr))
+         endif
+        endif
+        
 
      enddo !ixr
   enddo !ixa
@@ -77,6 +86,7 @@ end subroutine initialState
 
 subroutine copyExtra
  !! copyExtra - copies matrix to extra part (>Nxr2 and <-Nxr2)
+ ! 2011-06-30 - now copy directly denmat(:,Nxr2)=denmat(:,-Nxr2) to satisfy numerical hermiticity for xLr.lt.xLa
  use mesh
  implicit none
 
@@ -86,7 +96,7 @@ subroutine copyExtra
  do ixa=-Nxa2,-1
 
   !upper left corner
-  do ixr=Nxr2,Nxr-1
+  do ixr=Nxr2+1,Nxr-1
    denmat(ixa,ixr)=denmat(ixa+Nxa2,ixr-Nxr)
   enddo
 
@@ -101,7 +111,7 @@ subroutine copyExtra
  do ixa=0,Nxa2-1
 
   !upper right corner
-  do ixr=Nxr2,Nxr-1
+  do ixr=Nxr2+1,Nxr-1
    denmat(ixa,ixr)=denmat(ixa-Nxa2,ixr-Nxr)
   enddo
 
@@ -111,6 +121,8 @@ subroutine copyExtra
   enddo
 
  enddo
+
+ denmat(:,Nxr2)=conjg(denmat(:,-Nxr2))
 
 end subroutine copyExtra
 
@@ -131,7 +143,7 @@ subroutine boost
   call setState(SPACE)
 
   ! non-relativistic conversion
-  kea=sqrt(2.d0*m0*ea)/hbc
+  kea=sign(1d0,ea)*sqrt(2.d0*m0*abs(ea))/hbc
 
   !loop over all grid points
   DO ixa=-Nxa2,Nxa2-1
@@ -167,7 +179,7 @@ end subroutine boost
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine displace(nx)
+subroutine displaceLeft(nx)
  !! displace - shifts density matrix by 'nx' spatial indices in -xa direction
  use mesh
  implicit none
@@ -193,12 +205,44 @@ subroutine displace(nx)
   denmat(i,:)=wmat(i-Nxa2+nx,:)
  enddo
 
-end subroutine displace
+end subroutine displaceLeft
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+subroutine displaceRight(nx)
+ !! displace - shifts density matrix by 'nx' spatial indices in +xa direction
+ use mesh
+ implicit none
+
+ integer, intent(in) :: nx
+
+ complex*16, dimension(0:nx-1,-Nxr:Nxr-1) :: wmat  !working matrix
+
+ integer :: i
+
+ !copy cells that are shifted 'off' the right (positive) side of the matrix
+ do i=0,nx-1
+  wmat(i,:)=denmat(Nxa2-nx+i,:)
+ enddo !i
+
+ !shift cells within denmat
+ do i=Nxa2-1,-Nxa2+nx,-1
+  denmat(i,:)=denmat(i-nx,:)
+ enddo !i
+
+ !copy periodically shifted cells to other (negative) side of matrix
+ do i=-Nxa2,-Nxa2+nx-1
+  denmat(i,:)=wmat(i+Nxa2,:)
+ enddo
+
+end subroutine displaceRight
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 subroutine flipclone
- !! flipclone - adds the density matrix to its clone, flipped across 
+ !! flipclone - adds the density matrix to its clone, flipped across and conjugated (to reverse momentum) 
  use mesh
  implicit none
 
@@ -212,7 +256,8 @@ subroutine flipclone
 
  write(*,*)'den2 assigned'
 
- denmat(-Nxa2,-Nxr2:Nxr2-1)=denmat(-Nxa2,-Nxr2:Nxr2-1)*2d0
+ denmat(-Nxa2,-Nxr2:Nxr2-1)=denmat(-Nxa2,-Nxr2:Nxr2-1) &
+                            +conjg(denmat(-Nxa2,-Nxr2:Nxr2-1))
  write(*,*)'first denmat column multiply'
  do ixa=-Nxa2+1,Nxa2-1
   denmat(ixa,-Nxr2:Nxr2-1)=denmat(ixa,-Nxr2:Nxr2-1)+conjg(den2(-ixa,-Nxr2:Nxr2-1))
@@ -314,10 +359,10 @@ subroutine getrX12(xa1,xr1,x1,x2)
  x2=xa1-0.5d0*xr1
 
 ! if xx is outside the box, move it in periodically
- if(x1.gt.xLa)x1=x1-xLa-xLa
- if(x1.lt.-xLa)x1=x1+xLa+xLa
- if(x2.gt.xLa)x2=x2-xLa-xLa
- if(x2.lt.-xLa)x2=x2+xLa+xLa
+ if(x1.ge.xLa)x1=x1-xLa-xLa
+ if(x1.le.-xLa)x1=x1+xLa+xLa
+ if(x2.ge.xLa)x2=x2-xLa-xLa
+ if(x2.le.-xLa)x2=x2+xLa+xLa
 
 end subroutine getrX12
 

@@ -5,6 +5,9 @@ SUBROUTINE time_evolution
   IMPLICIT NONE
   
   REAL (Long) :: dt2  ! half delt
+  real (Long) :: soms5  !split operator method s_5
+
+  integer :: ii
 
  firstOutput=.true.
 
@@ -12,13 +15,15 @@ SUBROUTINE time_evolution
   t=0d0
 
   call calcPotDiag
-  call output
-!  call output
-!  call output
-!  call output
-!  call output
+  do ii=1,4
+   call output
+  enddo
+
+!return
 
  dt2=delt*0.5d0
+
+ soms5=1d0/3d0*(2d0+2d0**(-1d0/3d0)+2d0**(1d0/3d0))
 
   DO it=1,Nt  !Nt  changed for debugging
 
@@ -26,21 +31,35 @@ SUBROUTINE time_evolution
 
      ! update current time
      t=it*delt
-   if(denState==SPACE)then
-    CALL evol_x(dt2)
-    CALL evol_k(delt)
-    CALL evol_x(dt2)
-   else
-    call setState(MOMENTUM)
-    CALL evol_k(dt2)
-    CALL evol_x(delt)
-    CALL evol_k(dt2)
+   if(splitOperatorMethod==3)then
+!    if(denState==SPACE)then
+!     CALL evol_x(dt2)
+!     call output
+!     CALL evol_k(delt)
+!     call output
+!     CALL evol_x(dt2)
+!    else
+!     call setState(MOMENTUM)
+     CALL evol_k(dt2)
+!     call output
+     CALL evol_x(delt)
+!     call output
+     CALL evol_k(dt2)
+!    endif
+   elseif(splitOperatorMethod==5)then
+    call evol_x(soms5*dt2)
+    call evol_k(soms5*delt)
+    call evol_x((1d0-soms5)*dt2)
+    call evol_k((1d0-2d0*soms5)*delt)
+    call evol_x((1d0-soms5)*dt2)
+    call evol_k(soms5*delt)
+    call evol_x(soms5*dt2)
    endif
 
      call output
 
 ! NOTE: calling this subroutine during normal evolution causes divergences if ntime.ne.1
-!   call renormalizeDM
+   if(useImEvol)call renormalizeDM
 
   ENDDO
 
@@ -65,13 +84,18 @@ SUBROUTINE evol_k(dtim)
 
   call setState(MOMENTUM)
 
+!  call makeMomentumHermitian()
+
 !  write(*,*)'dtim=',dtim
 
 !  write(*,*)'starting evol_k loop'
   !loop over all grid points
+
   DO ikr=-Nkr2,Nkr2-1
+!  DO ikr=Nkr2-1,-Nkr2,-1  !reverse direction of indices
      
      DO ika=-Nka,Nka-1
+!     DO ika=Nka-1,-Nka,-1  !reverse direction of indices
 !        call getDenPtsK(ikr,ika,iikr,iika)
         
         call getK12(ika,ikr,k1,k2)
@@ -113,6 +137,27 @@ END SUBROUTINE evol_k
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+subroutine makeMomentumHermitian()
+ !! makeSpaceHermitian  - enforce Hermiticity by setting cells equal to the average of top and bottom.
+ use mesh
+ use phys_cons
+ implicit none
+
+ integer :: ikr
+
+ do ikr=1,Nkr2-1
+  denmat(ikr,:)=(denmat(ikr,:)+conjg(denmat(-ikr,:)))*0.5d0
+ enddo
+
+ do ikr=-Nkr2+1,-1
+  denmat(ikr,:)=conjg(denmat(-ikr,:))
+ enddo
+
+end subroutine makeMomentumHermitian
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 SUBROUTINE evol_x(dtim)
   !! evol_x - evolves density matrix in position space
  use cons_laws
@@ -133,6 +178,9 @@ SUBROUTINE evol_x(dtim)
 
  integer :: ki !used by LIN_INT
 
+ logical :: debugxall
+ real*8 :: debugudt
+
 ! real*8, dimension(-Nxr2:Nxr2):: tpots !debugging vars
 
  ! initialize potential (esp. if no potential)
@@ -142,6 +190,8 @@ SUBROUTINE evol_x(dtim)
 ! tpots=0.d0
 
  call setState(SPACE)
+
+ !call makeSpaceHermitian()
 
 !  write(*,*)'debug: dtim2=',dtim
 ! write(101,*)'# time=',t
@@ -165,7 +215,18 @@ SUBROUTINE evol_x(dtim)
    cutfac=1d0
   endif
 
+!  DO ixa=Nxa2-1,-Nxa2,-1  !reverse index direction
   DO ixa=-Nxa2,Nxa2-1
+
+!  if(ixa.eq.-24.and.ixr.eq.-49)then
+!   debugxall=.true.
+!  else
+   debugxall=.false.
+!  endif
+
+  if(debugxall)then
+   write(*,*)denmat(ixa,ixr)-denmat(-ixa,ixr)
+  endif
 
    call getX12(ixa,ixr,x1,x2)
 
@@ -184,6 +245,7 @@ SUBROUTINE evol_x(dtim)
    else
      !time evolution operator = exp(-i(U(x)-U(x'))t/h)
     udt=-(ux1-ux2)*dtim/hbc
+   if(debugxall)debugudt=udt
  !   tpots(ixr)=udt  !debugging
     cos2k=dcos(udt)
     sin2k=dsin(udt)
@@ -192,6 +254,12 @@ SUBROUTINE evol_x(dtim)
  !     if(ixr==0)write(*,*)'ixa,ixr,den_im-pree=',ixa,ixr,den_im(iixa,iixr)     
     xre=DBLE(getDenX(ixa,ixr))
     xim=DIMAG(getDenX(ixa,ixr))
+
+!    if(ixa==2)then
+!     if(ixr==1.or.ixr==-1)then
+!      write(*,'(A,O24)')'denmat=',dble(denmat(ixa,ixr))
+!     endif
+!    endif
  
     ! exp(i*edt) = cos2k + i*sin2k
     xre2=xre*cos2k - xim*sin2k
@@ -199,6 +267,29 @@ SUBROUTINE evol_x(dtim)
  !   if(ixr==0)write(*,*)'ixa,ixr,den_im-post=',ixa,ixr,den_im(iixa,iixr)
  
     call setDenX(ixa,ixr,cutfac*cmplx(xre2,xim2,8))
+
+   if(debugxall.and.ixa==24.and.ixr==-49)then
+    write(*,*)'debugudt,udt',debugudt,udt
+   endif
+
+   if(debugxall.and.ixa>0)then
+    if(dble(denmat(ixa,ixr)).ne.dble(denmat(-ixa,ixr)))then
+     write(*,*)'den ne!',ixa,ixr,denmat(ixa,ixr)-denmat(-ixa,ixr)
+    endif
+   endif
+!    if(ixa>0)then
+!     if(cutfac*xre2-dble(denmat(-ixa,ixr))>1e-16)then
+!      write(*,*)ixa,ixr,x1,x2,cutfac*xre2-dble(denmat(-ixa,ixr))
+!     endif !>1e-16
+!    endif !ixa>0
+
+!    if(ixa==2)then
+!     if(ixr==1.or.ixr==-1)then
+!      write(*,*)ixa,ixr,x1,x2,ux1,ux2,xre2
+!      write(*,'(A,O30)')'udt=',udt
+!      write(*,'(A,O24,O24)')'cos2k,sin2k=',cos2k,sin2k
+!     endif
+!    endif
 
    endif !not useImEvol
 
@@ -219,6 +310,30 @@ SUBROUTINE evol_x(dtim)
 
 END SUBROUTINE evol_x
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine makeSpaceHermitian()
+ !! makeSpaceHermitian  - enforce Hermiticity by setting cells equal to the average of top and bottom.
+ use mesh
+ use phys_cons
+ implicit none
+
+ integer :: ixr
+
+ do ixr=1,Nxr2-1
+  denmat(:,ixr)=(denmat(:,ixr)+conjg(denmat(:,-ixr)))*0.5d0
+ enddo
+
+ do ixr=-Nxr2+1,-1
+  denmat(:,ixr)=conjg(denmat(:,-ixr))
+ enddo
+
+ call copyExtra
+
+end subroutine makeSpaceHermitian
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 subroutine calcPotDiag()
  use mesh
  use prec_def
@@ -231,12 +346,16 @@ subroutine calcPotDiag()
  real (Long) :: getWeight !functions
 
 ! write(*,*)'debug: starting calcPotDiag'
- if (useAdiabatic) weight=getWeight()
+ if (useAdiabatic)then
+  weight=getWeight()
+ else
+  weight=1d0
+ endif
 
 
 ! write(*,*)'time,weight:',t,weight,1.0-weight
 
- do ixa=-Nxa2,Nxa2
+ do ixa=-Nxa2,Nxa2-1
 !  write(*,*)'debug: ixa=',ixa
   if (useAdiabatic) then
    call getPotX(potI,potInitial,ixa)
@@ -250,7 +369,7 @@ subroutine calcPotDiag()
 !   write(*,*)'debug: ixa,potDiag:',ixa,potDiag(ixa)
   endif
  enddo
-! potDiag(Nxa2)=potDiag(-Nxa2)
+ potDiag(Nxa2)=potDiag(-Nxa2)
 end subroutine calcPotDiag
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11

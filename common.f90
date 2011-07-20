@@ -24,6 +24,8 @@ MODULE prec_def
   
   INTEGER,PARAMETER :: long=8  !just use double precision for now
 !  integer,parameter :: long=selected_real_kind(15,307)
+
+  integer,parameter :: stderr=102  !file unit of standard error
   
 END MODULE prec_def
 
@@ -172,6 +174,11 @@ MODULE time
 
   logical     :: useImEvol   ! use imaginary evolution?
   integer     :: Nimev  ! number of timesteps for imaginary evolution
+
+  integer     :: splitOperatorMethod !0 if not used, otherwise order of method
+
+  logical     :: useFlipClone  ! symmetric collision method
+  real*8      :: initialSeparation ! 0 if not used, initial distance in fm between slabs
 
   real*8      :: ea     ! energy per particle [MeV]
 

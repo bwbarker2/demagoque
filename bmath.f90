@@ -2,6 +2,55 @@ module bmath
 
 contains
 
+logical function isPrime(num)
+ implicit none
+
+ integer, intent(in) :: num
+
+ integer, parameter isPrime_u=1
+ logical :: datexists
+ integer :: numPrimes
+ integer, dimension(:), allocatable :: primes
+
+ integer :: i
+
+ inquire(file='isPrime.dat', exist=datexists)
+
+ if(datexists) then
+  open(unit=isPrime_u, file='isPrime.dat',status='old')
+  read(isPrime.dat,*)numPrimes
+  allocate(primes(numPrimes))
+  do i=1,numPrimes
+   read(
+
+ isPrime=.true.
+
+ do i=2,num/2
+
+end function isPrime
+
+
+integer function findLargestPrimeFactor(num)
+ implicit none
+
+ integer, intent(in) :: num
+
+ integer :: i,factor,remainder
+
+ do i=2,num
+  remainder=mod(num,i)
+  if(remainder==0) then
+   factor=num/i
+   if(isPrime(factor))exit
+  endif
+ enddo
+
+ findLargestPrimeFactor=factor
+
+end function findLargestPrimeFactor
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 complex*16 function zdet2d(cmat,n)
  !! zdet2d - nonoptimized calculation of determinant of 2D complex double matrix - order N^2
  implicit none
@@ -102,6 +151,7 @@ subroutine zGauss(n,a,l)
 
  do k=1,n-1
    rmax=0.d0
+   j=k
    do i=k,n
      r=a(l(i),k)/s(l(i))
      if(abs(r)>abs(rmax)) then

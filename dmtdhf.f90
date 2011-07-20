@@ -28,16 +28,42 @@ PROGRAM dmtdhf
 ! 2    Skyrme-like contact potential (local density dependent)
 ! 3    same as pot=0, but with exact evolution from Chin, Krotsheck, Phys Rev E72, 036705 (2005)
 !
-! Options are given at the end of the code. Eventually the potentials will be options as well. Each line consists of a space-separated list of parameters. The first is an integer that defines with option to set, followed by a list of parameters for that option. Options can be safely commented out with a starting '!'
+!!!!!!!!!!!
+! Options !
+!!!!!!!!!!!
 !
-! option  definition
-!      1  imaginary off-diagonal cutoff. Parameters are cutoff_w0, cutoff_x0, cutoff_d0 
+! Options are given at the end of the code. Eventually the potentials will be options as well. Each line consists of a space-separated list of parameters. The first is a string that defines the option to set, followed by a list of parameters for that option. Options can be safely commented out with a starting '!'
+!
+! option                definition
+! ======                ==========
+! initialSeparation     initial separation between center-of-masses of fragments
+!                       in fm. Currently rounds displacement to nearest grid
+!                       point, rather than interpolating.
+!
+!                       Arguments: real*8 initialSeparation
+!
+! splitOperatorMethod   time evolve using SOM. Parameter is order of method.
+!                       Available orders are 3 and 5. Formulae from
+!                       A.D.Bandrauk, H. Shen, J. Chem. Phys. 99, 1185 (1993).
+!
+!                       Arguments: integer splitOperatorMethod
+!
+! useFlipClone          create symmetric system by adding to the system its
+!                       conjugate, reflected about the xa axis. Option
+!                       'initialSeparation' must be set.
+!
+!                       Arguments: None
+!
+! useImCutoff           imaginary off-diagonal cutoff.
+!
+!                       Arguments: real*8 cutoff_w0, real*8 cutoff_x0, real*8
+!                       cutoff_d0
 !
   USE mesh
   USE time
   IMPLICIT NONE
 
-  integer :: fftw_init_out
+!  integer :: fftw_init_out
   real :: timeElapsed(2)
 
 !  call dfftw_init_threads(fftw_init_out)
@@ -180,11 +206,17 @@ PROGRAM dmtdhf
 !   call outW
 !  enddo
 
-  call boost
+  if(ea.gt.0d0)call boost
  
-!  call displace(15)
+  if(abs(initialSeparation)>delxa*0.5d0) then
+   if(initialSeparation>0d0) then
+    call displaceLeft(NINT(initialSeparation*0.5d0/delxa))
+   else
+    call displaceRight(NINT(initialSeparation*0.5d0/delxa))
+   endif
+  endif
 
-!  call flipclone
+  if(useFlipClone) call flipclone
 !  write(*,*)'flipclone finished'
 
   maxxim=0.d0
@@ -227,7 +259,7 @@ SUBROUTINE getStdIn
   USE mesh
   USE osc_pars
   USE out
- use params_cutoff
+  use params_cutoff
   USE phys_cons
   use potential_params
   USE prec_def
@@ -307,7 +339,10 @@ SUBROUTINE getStdIn
   write(*,*) 'timesteps for imaginary evolution, Nimev=',Nimev
 
  !set default options
+ initialSeparation=0d0  !don't use initial separation
  useImCutoff=.false.
+ useFlipClone=.false.
+ splitOperatorMethod=0  !don't use Split Operator Method
 
  !read optional lines
  do while(.true.)
@@ -328,11 +363,24 @@ SUBROUTINE getStdIn
 
   select case(inline(ibeg:iend))
 
+   case("initialSeparation")
+    read(inline(iend+1:len(inline)),*)initialSeparation
+    write(*,*)'Initial Separation, initialSeparation=' &
+              ,initialSeparation,'fm'
+
+   case("splitOperatorMethod")
+    read(inline(iend+1:len(inline)),*)splitOperatorMethod
+    write(*,*)'Using Split Operator Method, order=',splitOperatorMethod
+
    case("useImCutoff")
     useImCutoff=.true.
     read(inline(iend+1:len(inline)),*)cutoff_w0,cutoff_x0,cutoff_d0
     write(*,*)'Using imaginary off-diagonal cutoff, w0,x0,d0=' &
               ,cutoff_w0,cutoff_x0,cutoff_d0
+
+   case("useFlipClone")
+    useFlipClone=.true.
+    write(*,*)'Making symmetric collision with flipClone'
 
    case default
     write(*,*)'***'
@@ -341,4 +389,18 @@ SUBROUTINE getStdIn
   end select
 
  enddo
+
+ !verify option dependencies
+
+ if(useFlipClone.and.abs(initialSeparation)<xLa/Nxa)then
+  write(stderr,*)
+  write(stderr,*)'*****'
+  write(stderr,*)'getStdIn: useFlipClone is set, but not initialSeparation!'
+  write(stderr,*)'getStdIn: Setting initialSeparation to half xLa'
+  write(stderr,*)'*****'
+  write(stderr,*)
+
+  initialSeparation=xLa/2d0
+ endif
+
 END SUBROUTINE getStdIn

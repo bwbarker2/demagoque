@@ -201,6 +201,10 @@ c ... LINEAR INTERPOLATION
        endif
 
        y=ya(klo)+(ya(khi)-ya(klo))/(xa(khi)-xa(klo))*(x-xa(klo))
+!      try doing more symmetrically. BWB 2011-07-08
+!       y=0.5d0*(ya(klo)+ya(khi))+ (ya(khi)-ya(klo))
+!     &                           /(xa(khi)-xa(klo))
+!     &                           *(x-0.5d0*(xa(khi)+xa(klo)))
 
        RETURN
        END

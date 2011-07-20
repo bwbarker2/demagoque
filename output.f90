@@ -113,7 +113,7 @@ SUBROUTINE outDenMat(fileim_u, filere_u)
   WRITE(filere_u,*)
 
 
-919 FORMAT(1000es23.14)
+919 FORMAT(1000es23.14e3)
 
 END SUBROUTINE outDenMat
 
@@ -134,7 +134,7 @@ SUBROUTINE outDiagK
   DO ika=-Nka2,Nka2-1
      ddre=DBLE(getDenK(0,ika))
      dddim=DIMAG(getDenK(0,ika))
-     WRITE(42,93) ka(ika),ddre,dddim
+     WRITE(42,*) ka(ika),ddre,dddim
   ENDDO
 
   WRITE(42,*)
@@ -160,7 +160,7 @@ SUBROUTINE outDiagX
      ddre=DBLE(getDen(ixa,0))
      dddim=DIMAG(getDen(ixa,0))
 !     write(*,*)'den_im,dddim:',den_im(iNxa2(ixa),iixr0),dddim
-     WRITE(41,93) xa(ixa),ddre,dddim
+     WRITE(41,*) xa(ixa),ddre,dddim
   ENDDO
 
   WRITE(41,*)

@@ -464,6 +464,61 @@ e               = 11.07            +/- 0.0823       (0.7435%)
 
 <p>So this is one observable. I'm unsure how the transverse trapping frequency will affect my results, since I have no transverse direction.</p>
 
+<h3>Mon Jul  4 19:22:30 EDT 2011</h3>
+
+<p>Hunting the asymmetry bug. If I run adiabatic switched potential with xLa=25, xLr=9, Nxr=26, x0=6, I see a forward/back asymmetry, for example, at time = 80 fm/c. It seems that the Fourier transforms are causing it. Just to be sure, I made a subroutine <code>makeSpaceHermitian</code> that sets the matrix to the average of the positive and negative ixr, enforcing hermiticity at the beginning of the evol_x routine.</p>
+
+<p>This has absolutely no effect on the system as I see it at 80 fm/c, looking at denmat_x_t.dat, the real part. I'll see if there is an effect if I do this with the evol_k routine.</p>
+
+<h3>Wed Jul  6 11:16:27 EDT 2011</h3>
+
+<p>There is no effect if I enforce hermiticity with before running evol_k.</p>
+
+<p>Looking at time-dependence, I set the delt to 0.1 fm/c and ran for 5 times as many timesteps. There is some effect, but still there is asymmetry. Note that there is that oscillation in the imaginary spatial density, attributed to the use of the split operator method. That oscillation's amplitude is linearly proportional to the timestep. Storing this run, comparison of different runs <a href='2011-07-06-denmat-timestep-1.eps'>here</a>.</p>
+
+<h3>Fri Jul  8 11:37:51 EDT 2011</h3>
+
+<p>I coded the 5th order Split Operator Method from A.D. Brandrauk, H. Shen, J. Chem. Phys. 99, 1185 (1993). I had to reduce the timestep from 0.5 to 0.25 fm/c so that the exponential would stay small enough for convergence, as the SOM5 basically evolves forward by 1.35*dt, back by 1.7*dt, then forward by 1.35*dt. 1.7 was too high a multiplier.</p>
+
+<p>Comparing SOM3 to SOM5 with dt=0.25 fm/c, I see no difference at 80 fm/c for mean-field evolution of colliding slabs.</p>
+
+<h3>Tue Jul 12 13:39:21 EDT 2011</h3>
+
+<p>When xLr=xLa=25, then there is ud and lr symmetry in 2dxre immediately after the first time evolution, but not in 2dxim, which has the SOM-caused lr asymmetry.</p>
+
+<p>Just to see the trend, let's see how the first nonzero 2dxreudsym varies with xLr:</p>
+
+<table>
+<tr>
+<td>xLr</td><td>ave(abs(u-d))</td><td>ave(u-d)</td>
+</tr><tr>
+<td>25</td><td>5.05e-10</td><td>3.01e-19</td>
+</tr><tr>
+<td>20</td><td>6.33e-10</td><td>-3.61e-19</td>
+</tr><tr>
+<td>15</td><td>8.46e-10</td><td>-1.07e-20</td>
+</tr><tr>
+<td>10</td><td>12.7e-10</td><td>-7.44e-20</td>
+</tr>
+</table>
+
+<p>Now looking at the 2dxrelrsym immediately after evolution in x:</p>
+
+<table>
+<tr>
+<td>xLr</td><td>ave(abs(u-d))</td><td>ave(u-d)</td>
+</tr><tr>
+<td>25</td><td>5.05e-10</td><td>3.01e-19</td>
+</tr><tr>
+<td>20</td><td>6.33e-10</td><td>-3.61e-19</td>
+</tr><tr>
+<td>15</td><td>8.46e-10</td><td>-1.07e-20</td>
+</tr><tr>
+<td>10</td><td>12.7e-10</td><td>-7.44e-20</td>
+</tr>
+</table>
+
+
 </body>
 </html>
 

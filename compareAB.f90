@@ -14,6 +14,8 @@ program compareAB
  real*8 :: xava,xavb   ! <|x|> ( expectation of abs(x) )
  real*8 :: xxava, xxavb  ! <x> (expectation of x)
 
+ complex*16, dimension(1:Nxa2-1,-Nxr2:Nxr2-1) :: denlrsym
+ real*8 :: lrsymmetry
 
  integer :: ixa,ixr,it
 
@@ -57,6 +59,16 @@ do it=0,4
 ! denarnau=denarnau/0.48680747073350783d0
 ! denarnau=denarnau/0.5069
 ! denarnau=denarnau*0.25d0
+
+ !calculate left-right symmetry, useful for initially symmetry system. lrsymmetry should be 0 for perfect symmetry. denlrsym is the matrix containing the subtraction of right side minus the left side
+! lrsymmetry=0d0
+ do ixa=1,Nxa2-1
+  denlrsym(ixa,:)=denbrent(ixa,-Nxr2:Nxr2-1)-denbrent(-ixa,-Nxr2:Nxr2-1)
+ enddo
+
+ lrsymmetry=SUM(denlrsym**2)
+
+ write(*,*)'lrsymmetry:',lrsymmetry
 
  !calculate xav for each system
  xava=0d0

@@ -1,25 +1,27 @@
 ! ........... READ AND WRITE PARAMETERS
-1 ! ntime
+10 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
-50 ! Nevt
-0   ! Nmax
-0d0 ! EA [MeV]
+200 ! Nevt
+1   ! Nmax
+25d0 ! EA [MeV]
 25d0  ! xLa [fm]
-25d0 ! xLr [fm]
+9d0 ! xLr [fm]
 100 ! Nxa
-100 ! Nxr
+36 ! Nxr
 ! ............. POTENTIAL PARAMETERS
 0  ! potInitial
-0 ! potFinal
+2 ! potFinal
 30 70 1200  ! tad,wtad,Nad
 1  ! iadib
 ! ............. IMAGINARY EVOLUTION PARAMETERS
 .false.     ! useImEvol - use imaginary evolution?
-10   ! nimev - number of timesteps for this evolution
+100   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
-splitOperatorMethod 3  !use this, setting order of accuracy in time
-!useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
+initialSeparation 15d0
+splitOperatorMethod 3
+useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
+useFlipClone
 END_OF_OPTIONS !sentinel for end of optional parameters
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
