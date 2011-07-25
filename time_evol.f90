@@ -1,3 +1,25 @@
+! Copyright (C) 2011  Brent W. Barker
+!
+!    This program is free software: you can redistribute it and/or modify
+!    it under the terms of the GNU General Public License as published by
+!    the Free Software Foundation, either version 3 of the License, or
+!    (at your option) any later version.
+!
+!    This program is distributed in the hope that it will be useful,
+!    but WITHOUT ANY WARRANTY; without even the implied warranty of
+!    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+!    GNU General Public License for more details.
+!
+!    You should have received a copy of the GNU General Public License
+!    along with this program (gpl-3.0.txt).  If not, see
+!    <http://www.gnu.org/licenses/>.
+!
+!    Author: Brent W. Barker
+!            barker at nscl dot msu dot edu
+!            National Superconducting Cyclotron Laboratory
+!            Michigan State University
+!            1 Cyclotron, East Lansing, MI 48824-1321
+
 SUBROUTINE time_evolution
   !! time_evolution - evolves the density matrix forward in time
   use mesh
@@ -33,18 +55,18 @@ SUBROUTINE time_evolution
      t=it*delt
    if(splitOperatorMethod==3)then
 !    if(denState==SPACE)then
-!     CALL evol_x(dt2)
+     CALL evol_x(dt2)
 !     call output
-!     CALL evol_k(delt)
+     CALL evol_k(delt)
 !     call output
-!     CALL evol_x(dt2)
+     CALL evol_x(dt2)
 !    else
 !     call setState(MOMENTUM)
-     CALL evol_k(dt2)
+!     CALL evol_k(dt2)
 !     call output
-     CALL evol_x(delt)
+!     CALL evol_x(delt)
 !     call output
-     CALL evol_k(dt2)
+!     CALL evol_k(dt2)
 !    endif
    elseif(splitOperatorMethod==5)then
     call evol_x(soms5*dt2)
