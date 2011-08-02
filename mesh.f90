@@ -54,6 +54,9 @@ MODULE mesh
  integer, parameter :: SPACE = 0
  integer, parameter :: WIGNER = 1
  integer, parameter :: MOMENTUM = 2
+
+ logical :: isReflectedLR !is the matrix LR reflected?
+
   ! iNka2 = iNxr2, iNkr2 = iNka2, set here for clarity
  INTEGER , ALLOCATABLE :: iNkr2(:),iNka2(:)
   ! meanfield potential at each (xa,xr=0) point
@@ -61,7 +64,7 @@ MODULE mesh
 
  real*8 :: maxxim  !maximum imaginary value
 
- contains
+contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -81,8 +84,8 @@ MODULE mesh
 
    ! allocate arrays
    allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
-   allocate(denmat(-Nxa2:Nxa2,-Nxr:Nxr-1)) !2x size in xr for naive FT - BWB 2011-01-10
-   allocate(denmat2(-Nxa2:Nxa2,-Nxr:Nxr-1))
+   allocate(denmat(-Nxa2:Nxa2-1,-Nxr:Nxr-1)) !2x size in xr for naive FT - BWB 2011-01-10
+   allocate(denmat2(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
    allocate(potDiag(-Nxa2:Nxa2))
    allocate(den_re(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
 
@@ -114,6 +117,8 @@ MODULE mesh
    enddo
  
    kLa=ka(Nka2)
+
+   isReflectedLR=.false.
 
   end subroutine initializeMesh
 
@@ -158,6 +163,55 @@ MODULE mesh
   end function getDenX
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine mesh_reflectLR()
+  !! mesh_reflectLR - reflects the matrix about the xa=0 axis, exchanging the
+  !                   left and right sides
+  use prec_def
+  implicit none
+
+  complex*16 :: wnum
+
+  integer :: ixa,ixr
+
+   do ixa=0,Nxa2-1
+    do ixr=0,Nxr-1
+     wnum=denmat(ixa,ixr)
+     denmat(ixa,ixr)=denmat(-ixa,-ixr)
+     denmat(-ixa,-ixr)=wnum
+    enddo
+   enddo
+
+   do ixa=1,Nxa2-1
+    wnum=denmat(ixa,-Nxr)
+    denmat(ixa,-Nxr)=denmat(-ixa,-Nxr)
+    denmat(-ixa,-Nxr)=wnum
+   enddo
+
+   do ixr=1,Nxr-1
+    wnum=denmat(-Nxa2,ixr)
+    denmat(-Nxa2,ixr)=denmat(-Nxa2,-ixr)
+    denmat(-Nxa2,-ixr)=wnum
+   enddo
+
+   isReflectedLR=.not.isReflectedLR
+
+ end subroutine mesh_reflectLR
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine mesh_setReflectedLR(reflect)
+  implicit none
+
+  logical, intent(in) :: reflect
+
+  if(reflect.neqv.isReflectedLR) then
+   call mesh_reflectLR
+  endif
+
+ end subroutine mesh_setReflectedLR
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine setDenX(ixa,ixr,value)
    !! setDenX - sets the value of the spatial density matrix at index (ixa,ixr)
@@ -213,15 +267,15 @@ MODULE mesh
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine setDenK(ikr,ika,value)
+  subroutine setDenK(ikr,ika,val)
    !! setDenK - sets value of the spectral density matrix at index (ikr,ika)
    !! NOTE: Only valid for ikr>=0 and ika<Nka2 (maybe)
    implicit none
 
-   complex*16, intent(in) :: value
+   complex*16, intent(in) :: val
    integer, intent(in)    :: ikr, ika
 
-   denmat(ikr,ika)=value
+   denmat(ikr,ika)=val
 
   end subroutine setDenK
 
@@ -271,20 +325,28 @@ MODULE mesh
 
    totalelapsed=etime(elapsed)
 
+!call mesh_setReflectedLR(.true.)
+
     select case (denState)
   
      case (SPACE)
       select case (state)
        case (WIGNER)
-!        call transform_x_to_w_norepeat_fft
-        call transform_x_to_wigner_dumb
+!call mesh_setReflectedLR(.true.)
+        call transform_x_to_w_norepeat_fft
+!call mesh_setReflectedLR(.false.)
+!        call transform_x_to_wigner_dumb
 !        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_x_to_k_norepeat
-!        call transform_x_to_w_norepeat_fft
-        call transform_x_to_wigner_dumb
-!        call transform_wigner_to_k_fft_exp
-        call transform_wigner_to_k_dumb
+!call mesh_setReflectedLR(.true.)
+        call transform_x_to_w_norepeat_fft
+!call mesh_setReflectedLR(.false.)
+!        call transform_x_to_wigner_dumb
+!call mesh_setReflectedLR(.true.)
+        call transform_wigner_to_k_fft_exp
+!call mesh_setReflectedLR(.false.)
+!        call transform_wigner_to_k_dumb
 !        call transform_w_to_k_norepeat
 !        write(*,*)'transform_x_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
@@ -292,31 +354,34 @@ MODULE mesh
      case (WIGNER)
       select case (state)
        case (SPACE)
-!        call transform_w_to_x_norepeat_fft
-        call transform_wigner_to_x_dumb
+        call transform_w_to_x_norepeat_fft
+!        call transform_wigner_to_x_dumb
 !        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
-        call transform_wigner_to_k_dumb
+!        call transform_wigner_to_k_dumb
 !        call transform_w_to_k_norepeat
-!        call transform_wigner_to_k_fft_exp
+!call mesh_setReflectedLR(.true.)
+        call transform_wigner_to_k_fft_exp
+!call mesh_setReflectedLR(.false.)
 !        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
   
      case (MOMENTUM)
       select case (state)
        case (WIGNER)
-!        call transform_k_to_wigner_fft_exp
-        call transform_k_to_wigner_dumb
+        call transform_k_to_wigner_fft_exp
+!        call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (SPACE)
-!        call transform_k_to_wigner_fft_exp
-        call transform_k_to_wigner_dumb
+        call transform_k_to_wigner_fft_exp
+!        call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
-!        call transform_w_to_x_norepeat_fft
-        call transform_wigner_to_x_dumb
+        call transform_w_to_x_norepeat_fft
+!        call transform_wigner_to_x_dumb
 !        write(*,*)'transform_k_to_x:',etime(elapsed)-totalelapsed,'seconds'
       end select
     end select
+!call mesh_setReflectedLR(.false.)
    endif
   
   end subroutine setState

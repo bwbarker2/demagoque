@@ -518,7 +518,11 @@ e               = 11.07            +/- 0.0823       (0.7435%)
 </tr>
 </table>
 
-<h3>Fri Jul 22 11:35:07 EDT 2011</h3>
+<h3>Fri Jul 29 17:28:22 EDT 2011</h3>
+
+<p>I wrote a subroutine, mesh_reflectLR, that performs a spatial reflection, exchanging denmat(ixa,:) and denmat(-ixa,:). It also performs complex conjugation, so that the original slabs will be traveling in the correct direction.</p>
+
+<p>Using this subroutine, I've verified that the initial boost, displacement, flipcloning, as well as evol_x are not the problem. They are all LR symmetric. evol_k seems to be a problem, though it doesn't given exactly the opposite of the original asymmetry. More to come after I eat :)</p>
 
 
 </body>

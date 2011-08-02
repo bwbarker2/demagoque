@@ -100,6 +100,8 @@ PROGRAM dmtdhf
 
   CALL initialState
 
+!  call mesh_setReflectedLR(.true.) !debug, reflect it
+
   !write(*,*)'finished initialState'
   if (useImEvol) then
 
@@ -162,7 +164,9 @@ PROGRAM dmtdhf
    !set number of timesteps for adiabatic switching
    Nt=Nad
 
+!  call mesh_setReflectedLR(.true.) !debug, reflect it
    call time_evolution
+!  call mesh_setReflectedLR(.false.) !debug, reflect it back
 
    call outDenUnf
 
@@ -227,20 +231,29 @@ PROGRAM dmtdhf
 !   call outW
 !  enddo
 
-  if(ea.gt.0d0)call boost
+!call mesh_setReflectedLR(.true.)
+!call mesh_setReflectedLR(.false.)
+
+  if(ea>0d0.or.ea<0d0)call boost
  
-  if(abs(initialSeparation)>delxa*0.5d0) then
+!call mesh_setReflectedLR(.false.)
+
+  if(abs(initialSeparation)>(delxa*0.5d0)) then
    if(initialSeparation>0d0) then
     call displaceLeft(NINT(initialSeparation*0.5d0/delxa))
    else
-    call displaceRight(NINT(initialSeparation*0.5d0/delxa))
+    call displaceRight(NINT(abs(initialSeparation)*0.5d0/delxa))
    endif
   endif
+
+!  call mesh_setReflectedLR(.false.)
 
   if(useFlipClone) call flipclone
 !  write(*,*)'flipclone finished'
 
+!  call mesh_setReflectedLR(.false.)
   maxxim=0.d0
+
 
   CALL time_evolution
 

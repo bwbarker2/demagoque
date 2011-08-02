@@ -47,19 +47,31 @@ SUBROUTINE time_evolution
 
  soms5=1d0/3d0*(2d0+2d0**(-1d0/3d0)+2d0**(1d0/3d0))
 
+!call mesh_setReflectedLR(.true.)
+
   DO it=1,Nt  !Nt  changed for debugging
 
 !     write(*,*)'running step',it    ! moved to output.f90
 
      ! update current time
      t=it*delt
+
+!   call mesh_setReflectedLR(.true.)
+
+
+!call mesh_setReflectedLR(.true.)
+
    if(splitOperatorMethod==3)then
 !    if(denState==SPACE)then
+!call mesh_setReflectedLR(.true.)
      CALL evol_x(dt2)
+!call mesh_setReflectedLR(.true.)
 !     call output
      CALL evol_k(delt)
+!call mesh_setReflectedLR(.true.)
 !     call output
      CALL evol_x(dt2)
+!call mesh_setReflectedLR(.false.)
 !    else
 !     call setState(MOMENTUM)
 !     CALL evol_k(dt2)
@@ -78,12 +90,18 @@ SUBROUTINE time_evolution
     call evol_x(soms5*dt2)
    endif
 
+!   call mesh_setReflectedLR(.false.)
+
      call output
+!   call mesh_setReflectedLR(.false.)
 
 ! NOTE: calling this subroutine during normal evolution causes divergences if ntime.ne.1
    if(useImEvol)call renormalizeDM
 
   ENDDO
+
+
+!call mesh_setReflectedLR(.false.)
 
 END SUBROUTINE time_evolution
 
@@ -104,8 +122,12 @@ SUBROUTINE evol_k(dtim)
 !  real*8 :: cos2k, sin2k, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
   real*8 :: edt,k1,k2
 
+!call mesh_setReflectedLR(.true.)
+
   call setState(MOMENTUM)
 
+!call mesh_setReflectedLR(.true.)
+!call mesh_setReflectedLR(.false.)
 !  call makeMomentumHermitian()
 
 !  write(*,*)'dtim=',dtim
@@ -120,6 +142,8 @@ SUBROUTINE evol_k(dtim)
 !     DO ika=Nka-1,-Nka,-1  !reverse direction of indices
 !        call getDenPtsK(ikr,ika,iikr,iika)
         
+!call mesh_setReflectedLR(.true.)
+
         call getK12(ika,ikr,k1,k2)
 
        if(potFinal==3)then
@@ -135,6 +159,7 @@ SUBROUTINE evol_k(dtim)
         !time evolution operator = exp(-i(E-E')t/h)
         !                        = exp(-ih/2m(k^2-k'^2))
         edt=edt*(-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim)
+!        edt=edt*(-hbc/m0*ka(ika)*kr(ikr)*dtim)
         call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
 !        cos2k=cos(edt)
 !        sin2k=sin(edt)
@@ -149,11 +174,14 @@ SUBROUTINE evol_k(dtim)
 !        call setDenK(ikr,ika,cmplx(xre2,xim2,8))
        endif
 
+!call mesh_setReflectedLR(.false.)
      ENDDO
      
   ENDDO
 
 !  write(*,*)'ending evol_k loop'
+
+!call mesh_setReflectedLR(.false.)
 
 END SUBROUTINE evol_k
 
@@ -203,6 +231,8 @@ SUBROUTINE evol_x(dtim)
  logical :: debugxall
  real*8 :: debugudt
 
+!call mesh_setReflectedLR(.true.)
+
 ! real*8, dimension(-Nxr2:Nxr2):: tpots !debugging vars
 
  ! initialize potential (esp. if no potential)
@@ -213,6 +243,7 @@ SUBROUTINE evol_x(dtim)
 
  call setState(SPACE)
 
+!call mesh_setReflectedLR(.true.)
  !call makeSpaceHermitian()
 
 !  write(*,*)'debug: dtim2=',dtim
@@ -223,6 +254,7 @@ SUBROUTINE evol_x(dtim)
  ! calculates and stores the potential at each grid point in x
  call calcPotDiag()
 
+!call mesh_setReflectedLR(.true.)
 ! write(*,*)'finished calcing pot diag'
 
  !loop over all grid points
@@ -321,6 +353,8 @@ SUBROUTINE evol_x(dtim)
 !    write(*,*)'ixr,tpots-diff:',ixr,tpots(ixr)+tpots(-ixr)
 !   endif
 
+!call mesh_setReflectedLR(.false.)
+
    ENDDO
  ENDDO
 
@@ -367,6 +401,8 @@ subroutine calcPotDiag()
  real (Long) :: potI, potF !potentials
  real (Long) :: getWeight !functions
 
+!call mesh_setReflectedLR(.true.)
+
 ! write(*,*)'debug: starting calcPotDiag'
  if (useAdiabatic)then
   weight=getWeight()
@@ -380,11 +416,13 @@ subroutine calcPotDiag()
  do ixa=-Nxa2,Nxa2-1
 !  write(*,*)'debug: ixa=',ixa
   if (useAdiabatic) then
+!call mesh_setReflectedLR(.true.)
    call getPotX(potI,potInitial,ixa)
    call getPotX(potF,potFinal,ixa)
    potDiag(ixa)=weight*potI + (1.d0-weight)*potF
 !  write(*,*)'sofar:',ixa,potDiag(ixa)
 !   write(*,*)potDiag(ixa),getPotX(potInitial,ixa)
+!call mesh_setReflectedLR(.false.)
   else
 !  write(*,*)'debug: ixa,potDiag initial=',ixa,potDiag(ixa)
    call getPotX(potDiag(ixa),potFinal,ixa)
@@ -392,6 +430,9 @@ subroutine calcPotDiag()
   endif
  enddo
  potDiag(Nxa2)=potDiag(-Nxa2)
+
+!call mesh_setReflectedLR(.false.)
+
 end subroutine calcPotDiag
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11

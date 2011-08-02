@@ -38,6 +38,7 @@ SUBROUTINE output
 
   write(*,*)'running step',it
 
+!  call mesh_setReflectedLR(.false.)
 
 !  write(*,*)'starting IF(isDenK)'
 
@@ -61,6 +62,8 @@ SUBROUTINE output
   !write(*,*)'timestep,kinetic_correction_factor:',it,(epot-ep0)/(ek0-ekin)
 
  if(firstOutput)firstOutput=.false.
+
+! call mesh_setReflectedLR(.true.)
 
 END SUBROUTINE output
 
@@ -188,7 +191,7 @@ SUBROUTINE outDiagX
   WRITE(41,*)
   WRITE(41,*)
 
-93 format(3e16.8)
+!93 format(3e16.8)
 
 END SUBROUTINE outDiagX
 
@@ -244,7 +247,7 @@ subroutine outDenUnf
 
  write(54) Nxa,Nxr,Nmax
 
- do ixa=-Nxa2,Nxa2
+ do ixa=-Nxa2,Nxa2-1
   do ixr=-Nxr,Nxr-1
    write(54)denmat(ixa,ixr)
   enddo
@@ -282,7 +285,7 @@ subroutine inDenUnf
   stop
  endif
 
- do ixa=-Nxa2,Nxa2
+ do ixa=-Nxa2,Nxa2-1
   do ixr=-Nxr,Nxr-1
    read(54)denmat(ixa,ixr)
   enddo

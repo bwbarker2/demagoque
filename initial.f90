@@ -118,7 +118,7 @@ subroutine copyExtra
  do ixa=-Nxa2,-1
 
   !upper left corner
-  do ixr=Nxr2+1,Nxr-1
+  do ixr=Nxr2,Nxr-1
    denmat(ixa,ixr)=denmat(ixa+Nxa2,ixr-Nxr)
   enddo
 
@@ -133,7 +133,7 @@ subroutine copyExtra
  do ixa=0,Nxa2-1
 
   !upper right corner
-  do ixr=Nxr2+1,Nxr-1
+  do ixr=Nxr2,Nxr-1
    denmat(ixa,ixr)=denmat(ixa-Nxa2,ixr-Nxr)
   enddo
 
@@ -144,7 +144,8 @@ subroutine copyExtra
 
  enddo
 
- denmat(:,Nxr2)=conjg(denmat(:,-Nxr2))
+ denmat(:,Nxr2)=0.5d0*(conjg(denmat(:,-Nxr2))+denmat(:,Nxr2))
+ denmat(:,-Nxr2)=conjg(denmat(:,Nxr2))
 
 end subroutine copyExtra
 
@@ -158,9 +159,11 @@ subroutine boost
 
   INTEGER ixr, ixa !loop variables
   real*8 :: kea !momentum, given ea
-  real*8 :: cos2k, sin2k, epx !cos,sin part of exp, exponent itself
+  real*8 :: cos2k, sin2k !cos,sin part of exp, exponent itself
   real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real
   real*8 :: x1,x2   !position in x,x' basis
+
+  complex*16 :: epx
 
   call setState(SPACE)
 
@@ -168,34 +171,49 @@ subroutine boost
   kea=sign(1d0,ea)*sqrt(2.d0*m0*abs(ea))/hbc
 
   !loop over all grid points
-  DO ixa=-Nxa2,Nxa2-1
+  DO ixr=-Nxr2,Nxr2-1
+
+     epx=exp(imagi*kea*xr(ixr))
+
+!call mesh_setReflectedLR(.true.)
+
+     denmat(:,ixr)=denmat(:,ixr)*epx
+
+!call mesh_setReflectedLR(.false.)
+
+!     DO ixa=-Nxa2,Nxa2-1
      
-     DO ixr=-Nxr2,Nxr2-1
         
+!  call mesh_setReflectedLR(.true.)
         !convert into x,x' coordinates
-        call getX12(ixa,ixr,x1,x2)
+!        call getX12(ixa,ixr,x1,x2)
 
         !dispacement operator = exp(-iK(X'-X))
-        epx=kea*(x1-x2)
+!        epx=kea*(x1-x2)
+!        epx=kea*xr(ixr)
+!        denmat(ixa,ixr)=denmat(ixa,ixr)*exp(imagi*epx)
+!  call mesh_setReflectedLR(.false.)
 !        udt=m0*w**2*2*xa(ixa)*xr(ixr)*dtim/hbc/2.0_Long
 !        udt=0
-        cos2k=cos(epx)
-        sin2k=sin(epx)
+!        cos2k=cos(epx)
+!        sin2k=sin(epx)
 
-        xre=DBLE(getDenX(ixa,ixr))
-        xim=DIMAG(getDenX(ixa,ixr))
+!        xre=DBLE(getDenX(ixa,ixr))
+!        xim=DIMAG(getDenX(ixa,ixr))
         
         ! exp(i*edt) = cos2k + i*sin2k
-        xre2=xre*cos2k - xim*sin2k
-        xim2=xre*sin2k + xim*cos2k
+!        xre2=xre*cos2k - xim*sin2k
+!        xim2=xre*sin2k + xim*cos2k
 
-        call setDenX(ixa,ixr,cmplx(xre2,xim2,8))
+!        call setDenX(ixa,ixr,cmplx(xre2,xim2,8))
 
-     ENDDO
+!     ENDDO
      
   ENDDO
 
+
   call copyExtra 
+
 
 end subroutine boost
 
@@ -268,7 +286,7 @@ subroutine flipclone
  use mesh
  implicit none
 
- complex*16, dimension(-Nxa2:Nxa2,-Nxr2:Nxr2-1) :: den2
+ complex*16, dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1) :: den2
 
  integer :: ixa
 
