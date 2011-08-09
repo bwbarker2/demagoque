@@ -174,7 +174,7 @@ contains
 
   integer :: ixa,ixr
 
-   do ixa=0,Nxa2-1
+   do ixa=-Nxa2,Nxa2-1
     do ixr=0,Nxr-1
      wnum=denmat(ixa,ixr)
      denmat(ixa,ixr)=denmat(-ixa,-ixr)

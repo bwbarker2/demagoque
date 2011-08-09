@@ -5,7 +5,9 @@ program procdenextra
  integer :: fu_2dxre=1
  integer :: fu_denlrsym=2
  integer :: fu_denudsym=3
- integer :: timesteps=19
+ integer :: fu_diagudsym=50
+ integer :: fu_diaglrsym=51
+ integer :: timesteps=62
 
  complex*16, allocatable,dimension(:,:) :: denlrsym, denudsym
  real*8 :: lrsymmetry, udsymmetry
@@ -32,6 +34,8 @@ program procdenextra
  open(unit=fu_2dxre,file='results/2d'//state(istate)//reim(ireim)//'.dat', status='old')
  open(unit=fu_denlrsym,file='results/2d'//state(istate)//reim(ireim)//'lrsym.dat')
  open(unit=fu_denudsym,file='results/2d'//state(istate)//reim(ireim)//'udsym.dat')
+ open(unit=fu_diagudsym,file='results/diag'//state(istate)//reim(ireim)//'udsym.dat')
+ open(unit=fu_diaglrsym,file='results/diag'//state(istate)//reim(ireim)//'lrsym.dat')
 
  write(*,*)'processing 2d'//state(istate)//reim(ireim)
 
@@ -79,6 +83,7 @@ program procdenextra
   lrsymdiff=SUM(denlrsym)/(Nxa2-1)/(2*Nxr)
 
   write(*,*)'lrsymmetry,lrsymdiff:',lrsymmetry,lrsymdiff
+  write(fu_diaglrsym,*)it,lrsymmetry,lrsymdiff
 
   do ixr=-Nxr,Nxr-1
    write(fu_denlrsym,*)(DBLE(denlrsym(ixa,ixr)),ixa=1,Nxa2-1)
@@ -99,6 +104,7 @@ program procdenextra
   udsymdiff=SUM(denudsym)/(Nxr-1)/Nxa
 
   write(*,*)'udsymmetry, udsymdiff:',udsymmetry,udsymdiff
+  write(fu_diagudsym,*)it,udsymmetry,udsymdiff
 
   do ixr=1,Nxr-1
    write(fu_denudsym,*)(DBLE(denudsym(ixa,ixr)),ixa=-Nxa2,Nxa2-1)
@@ -118,6 +124,10 @@ program procdenextra
  enddo !it
 
  close(fu_2dxre)
+ close(fu_denudsym)
+ close(fu_denlrsym)
+ close(fu_diagudsym)
+ close(fu_diaglrsym)
 
  enddo !istate
  enddo !ireim

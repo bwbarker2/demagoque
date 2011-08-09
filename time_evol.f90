@@ -64,21 +64,21 @@ SUBROUTINE time_evolution
    if(splitOperatorMethod==3)then
 !    if(denState==SPACE)then
 !call mesh_setReflectedLR(.true.)
-     CALL evol_x(dt2)
+!     CALL evol_x(dt2)
 !call mesh_setReflectedLR(.true.)
 !     call output
-     CALL evol_k(delt)
+!     CALL evol_k(delt)
 !call mesh_setReflectedLR(.true.)
 !     call output
-     CALL evol_x(dt2)
+!     CALL evol_x(dt2)
 !call mesh_setReflectedLR(.false.)
 !    else
 !     call setState(MOMENTUM)
-!     CALL evol_k(dt2)
-!     call output
-!     CALL evol_x(delt)
-!     call output
-!     CALL evol_k(dt2)
+     CALL evol_k(dt2)
+     call output
+     CALL evol_x(delt)
+     call output
+     CALL evol_k(dt2)
 !    endif
    elseif(splitOperatorMethod==5)then
     call evol_x(soms5*dt2)
