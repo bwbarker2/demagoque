@@ -1,6 +1,6 @@
 subroutine outAnalHarmonic
  !! outAnalHarmonic - outputs analytic time evolution of gaussian wavepacket
-  ! to match the harmonic oscillator potential
+  ! in free space using same frequency as initialState_gaussianNuclear
  use mesh
  use time
  implicit none
@@ -13,7 +13,13 @@ subroutine outAnalHarmonic
   WRITE(45,*)'# x [fm], real, imaginary amplitudes'
 
   DO ixa=-Nxa2,Nxa2-1
-     ddre=calcHarmonicEv(ixa*delxa,t)
+     !add wave packets from surrounding cells, important for long times
+     ddre=calcHarmonicEv(xa(ixa),t) &
+          +calcHarmonicEv(2d0*xLa+xa(ixa),t) &
+          +calcHarmonicEv(2d0*xLa-xa(ixa),t) &
+          +calcHarmonicEv(4d0*xLa+xa(ixa),t) &
+          +calcHarmonicEv(4d0*xLa-xa(ixa),t)
+         
      WRITE(45,93) ixa*delxa,ddre,0.d0
   ENDDO
 
@@ -47,6 +53,7 @@ real*8 function calcHarmonicEv(xx,tt)
 
  calcHarmonicEv=sqrt(1/(pi*sigma2))*exp(-xx**2/sigma2)
 
- if(calcHarmonicEv<1.d-30)calcHarmonicEv=0.d0
+!do we need this check anymore?
+! if(calcHarmonicEv<1.d-30)calcHarmonicEv=0.d0
 
 end function calcHarmonicEv
