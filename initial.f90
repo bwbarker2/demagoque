@@ -53,13 +53,16 @@ SUBROUTINE calcInitial
 end SUBROUTINE calcInitial
 
 subroutine initialState
+  use input_parameters
   use mesh
   use osc_pars
+  use phys_cons
   use prec_def
   use time
   implicit none
 
-  real (Long) :: wfnho,y1,y2,xx1,xx2,den0
+  real (Long) :: wfnho,xx1,xx2
+  complex*16  :: y1,y2,den0
   integer :: ixa, ixr, iin
 
   do ixa=-Nxa2,Nxa2-1
@@ -70,28 +73,41 @@ subroutine initialState
 !        xx2=(xa(ixa)-xr(ixr)/2.d0)
 
         den0=0.0d0
+        y1=0d0
+        y2=0d0
         do iin=0,Nmax
+          if(initState_gaussianNuclear) then
            y1=wfnho(xx1,iin,whm)
            y2=wfnho(xx2,iin,whm)
+           den0=den0+y1*y2
+          endif
+
+          if(initState_cosine) then
+           y1=sqrt(initState_cosine_norm/xLa) &
+              *cos(initState_cosine_number*pi*xx1/xLa + initState_cosine_shift)
+           y2=sqrt(initState_cosine_norm/xLa) &
+              *cos(initState_cosine_number*pi*xx2/xLa + initState_cosine_shift)
+           den0=den0+y1*y2
+          endif
 
 !           if(useImEvol) then
 !            ! multiply by e^(2 E t / hbc) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.
 !            den0=den0+y1*y2*exp(2d0*w*(iin+0.5d0)*delt*Nimev)
 !           else
-            den0=den0+y1*y2
+!            den0=den0+y1*y2
 !           endif
 
         enddo !in
 
 !        if(abs(den0).lt.1e-40) den0=0.0d0
 
-        call setDenX(ixa,ixr,cmplx(den0,0.d0,8))
+        call setDenX(ixa,ixr,den0)
 
-        if(ixa==2) then
-         if(ixr==1.or.ixr==-1)then
-          write(*,'(I3,I3,O24,O24)')ixa,ixr,den0,dble(denmat(ixa,ixr))
-         endif
-        endif
+!        if(ixa==2) then
+!         if(ixr==1.or.ixr==-1)then
+!          write(*,'(I3,I3,O24,O24)')ixa,ixr,den0,dble(denmat(ixa,ixr))
+!         endif
+!        endif
         
 
      enddo !ixr
@@ -157,11 +173,11 @@ subroutine boost
   use time
   implicit none
 
-  INTEGER ixr, ixa !loop variables
+  INTEGER ixr !loop variables
   real*8 :: kea !momentum, given ea
-  real*8 :: cos2k, sin2k !cos,sin part of exp, exponent itself
-  real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real
-  real*8 :: x1,x2   !position in x,x' basis
+!  real*8 :: cos2k, sin2k !cos,sin part of exp, exponent itself
+!  real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real
+!  real*8 :: x1,x2   !position in x,x' basis
 
   complex*16 :: epx
 

@@ -289,6 +289,7 @@ END PROGRAM dmtdhf
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! reads data from standard input
 SUBROUTINE getStdIn
+ use input_parameters
  use bstring
   USE mesh
   USE osc_pars
@@ -321,9 +322,6 @@ SUBROUTINE getStdIn
   READ(*,*) Nevt
   WRITE(*,*) 'Number of time increments Nevt=',Nevt
 
-  ! oscillator maximum shell
-  READ(*,*) Nmax
-  WRITE(*,*) 'Maximum oscillator shell, Nmax=',Nmax
 
   ! energy per particle in MeV
   READ(*,*) ea
@@ -374,6 +372,9 @@ SUBROUTINE getStdIn
 
  !set default options
  initialSeparation=0d0  !don't use initial separation
+ initState_gaussianNuclear=.false.
+ initState_cosine=.false.
+ Nmax=0
  useImCutoff=.false.
  useFlipClone=.false.
  splitOperatorMethod=0  !don't use Split Operator Method
@@ -401,6 +402,21 @@ SUBROUTINE getStdIn
     read(inline(iend+1:len(inline)),*)initialSeparation
     write(*,*)'Initial Separation, initialSeparation=' &
               ,initialSeparation,'fm'
+
+   case("initState_gaussianNuclear")
+    read(inline(iend+1:len(inline)),*)Nmax
+    initState_gaussianNuclear=.true.
+    write(*,*)'Initial state added: initState_gaussianNuclear'
+    WRITE(*,*)'  Maximum oscillator shell, Nmax=',Nmax
+
+   case("initState_cosine")
+    read(inline(iend+1:len(inline)),*)initState_cosine_number, &
+                     initState_cosine_norm, initState_cosine_shift
+    initState_cosine=.true.
+    write(*,*)'Initial state added: initState_cosine'
+    write(*,*)'                     initState_cosine_number=',initState_cosine_number
+    write(*,*)'                     initState_cosine_norm  =',initState_cosine_norm
+    write(*,*)'                     initState_cosine_shift =',initState_cosine_shift
 
    case("splitOperatorMethod")
     read(inline(iend+1:len(inline)),*)splitOperatorMethod

@@ -3,7 +3,6 @@
 ! ........... PHYSICAL PARAMETERS
 0.5 ! delt [fm/c]
 200 ! Nevt
-1   ! Nmax
 25d0 ! EA [MeV]
 25d0  ! xLa [fm]
 9d0 ! xLr [fm]
@@ -19,6 +18,7 @@
 100   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
 initialSeparation 15d0
+initState_gaussianNuclear 1
 splitOperatorMethod 3
 useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
 useFlipClone

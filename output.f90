@@ -81,7 +81,7 @@ SUBROUTINE outX
   call ener_x
 
   ! output analytic oscillator to compare with numeric
-  if(potFinal==0.AND.Nmax==0.AND.EA<1d-5) call outAnalHarmonic
+  if(potFinal==-1.AND.Nmax==0.AND.EA<1d-5) call outAnalHarmonic
 !  call howHermitian
 
 END SUBROUTINE outX

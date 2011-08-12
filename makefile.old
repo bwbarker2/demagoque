@@ -1,0 +1,10 @@
+FC = gfortran
+
+FCFLAGS = -lfftw3_threads -lpthread -lfftw3 -llapack -lm \
+         -fbounds-check -Wall -ggdb \
+         -O3
+
+%.mod : %.o
+
+%.o : %.f90
+	$(FC) -c -o $@ $<

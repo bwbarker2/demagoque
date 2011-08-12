@@ -75,9 +75,9 @@ SUBROUTINE time_evolution
 !    else
 !     call setState(MOMENTUM)
      CALL evol_k(dt2)
-     call output
+!     call output
      CALL evol_x(delt)
-     call output
+!     call output
      CALL evol_k(dt2)
 !    endif
    elseif(splitOperatorMethod==5)then
