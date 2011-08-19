@@ -90,6 +90,22 @@ subroutine initialState
            den0=den0+y1*y2
           endif
 
+          if(initState_kdelta) then
+           if(ixr==0.AND.(abs(xx1-initState_kdelta_x0)<(0.5d0*delxa))) then
+            den0=den0+initState_kdelta_norm*2d0*pi/kLa
+           endif
+          endif
+
+          if(initState_plane) then
+           y1=sqrt(initState_plane_norm*0.5d0/xLa) &
+              *exp(-imagi*initState_plane_number*pi*xx1/xLa &
+                   +initState_plane_shift)
+           y2=sqrt(initState_plane_norm*0.5d0/xLa) &
+              *exp(-imagi*initState_plane_number*pi*xx2/xLa &
+                   +initState_plane_shift)
+           den0=den0+conjg(y1)*y2
+          endif
+
 !           if(useImEvol) then
 !            ! multiply by e^(2 E t / hbc) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.
 !            den0=den0+y1*y2*exp(2d0*w*(iin+0.5d0)*delt*Nimev)
@@ -160,8 +176,8 @@ subroutine copyExtra
 
  enddo
 
- denmat(:,Nxr2)=0.5d0*(conjg(denmat(:,-Nxr2))+denmat(:,Nxr2))
- denmat(:,-Nxr2)=conjg(denmat(:,Nxr2))
+ denmat(:,Nxr2)=0.5d0*(denmat(:,-Nxr2)+denmat(:,Nxr2))
+ denmat(:,-Nxr2)=denmat(:,Nxr2)
 
 end subroutine copyExtra
 

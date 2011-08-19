@@ -78,6 +78,7 @@ SUBROUTINE outX
 
   CALL outDiagX
   CALL outDenMat(61,62)
+  call outDenMatXPhys
   call ener_x
 
   ! output analytic oscillator to compare with numeric
@@ -106,6 +107,7 @@ SUBROUTINE outK
 
   call setState(MOMENTUM)
   CALL outDenMat(66,67)
+  call outDenMatKPhys
   CALL outDiagK
   CALL ener_k
   CALL outEner
@@ -141,6 +143,63 @@ SUBROUTINE outDenMat(fileim_u, filere_u)
 919 FORMAT(1000es23.14e3)
 
 END SUBROUTINE outDenMat
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine outDenMatKPhys()
+ use mesh
+ use prec_def
+ use time
+ implicit none
+
+ integer, parameter :: funit = 74 ! file unit to write to
+
+ integer :: ikr,ika
+
+ call setState(MOMENTUM)
+
+ write(funit,*)'# time=',t,'fm/c'
+
+ do ikr=-Nkr2,Nkr2-1
+  do ika=-Nka2,Nka2-1
+   if(abs(mod(ika+ikr,2))==1) cycle
+   write(funit,*)kr(ikr),ka(ika),0.5d0*DBLE(getDenK(ikr,ika)),0.5d0*DIMAG(getDenK(ikr,ika))
+  enddo
+  write(funit,*)
+ enddo
+
+ write(funit,*)
+ write(funit,*)
+
+end subroutine outDenMatKPhys
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine outDenMatXPhys()
+ use mesh
+ use prec_def
+ use time
+ implicit none
+
+ integer, parameter :: funit = 72 ! file unit to write to
+
+ integer :: ixa,ixr
+
+ call setState(SPACE)
+
+ write(funit,*)'# time=',t,'fm/c'
+
+ do ixa=-Nxa2,Nxa2-1
+  do ixr=-Nxr2,Nxr2-1
+   write(funit,*)xa(ixa),xr(ixr),DBLE(getDenX(ixa,ixr)),DIMAG(getDenX(ixa,ixr))
+  enddo
+  write(funit,*)
+ enddo
+
+ write(funit,*)
+ write(funit,*)
+
+end subroutine outDenMatXPhys
 
 
 SUBROUTINE outDiagK

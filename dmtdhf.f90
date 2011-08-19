@@ -215,6 +215,9 @@ PROGRAM dmtdhf
   OPEN(unit=70,file='results/pk2.dat')
   OPEN(unit=71,file='results/sumsquarediff.dat')
   open(unit=45,file='results/denmatan_x_t.dat') 
+  open(unit=72,file='results/2dx.dat')
+  open(unit=73,file='results/2dw.dat')
+  open(unit=74,file='results/2dk.dat')
 !  open(unit=101,file='results/pot_diag.dat')
 
   Nt=Nevt
@@ -278,6 +281,9 @@ PROGRAM dmtdhf
   close(69)
   close(70)
   close(71)
+  close(72)
+  close(73)
+  close(74)
 !  close(101)
 
   write(*,*)'total time:',etime(timeElapsed)
@@ -374,6 +380,8 @@ SUBROUTINE getStdIn
  initialSeparation=0d0  !don't use initial separation
  initState_gaussianNuclear=.false.
  initState_cosine=.false.
+ initState_kdelta=.false.
+ initState_plane=.false.
  Nmax=0
  useImCutoff=.false.
  useFlipClone=.false.
@@ -418,6 +426,22 @@ SUBROUTINE getStdIn
     write(*,*)'                     initState_cosine_norm  =',initState_cosine_norm
     write(*,*)'                     initState_cosine_shift =',initState_cosine_shift
 
+   case("initState_kdelta")
+    read(inline(iend+1:len(inline)),*)initState_kdelta_norm, initState_kdelta_x0
+    initState_kdelta=.true.
+    write(*,*)'Initial state added: initState_kdelta'
+    write(*,*)'                     initState_kdelta_norm=',initState_kdelta_norm
+    write(*,*)'                     initState_kdelta_x0=',initState_kdelta_x0
+
+   case("initState_plane")
+    read(inline(iend+1:len(inline)),*)initState_plane_number, &
+                   initState_plane_norm, initState_plane_shift 
+    initState_plane=.true.
+    write(*,*)'Initial state added: initState_plane'
+    write(*,*)'                     initState_plane_number=',initState_plane_number
+    write(*,*)'                     initState_cosine_norm  =',initState_plane_norm
+    write(*,*)'                     initState_cosine_shift =',initState_plane_shift
+  
    case("splitOperatorMethod")
     read(inline(iend+1:len(inline)),*)splitOperatorMethod
     write(*,*)'Using Split Operator Method, order=',splitOperatorMethod

@@ -64,21 +64,23 @@ SUBROUTINE time_evolution
    if(splitOperatorMethod==3)then
 !    if(denState==SPACE)then
 !call mesh_setReflectedLR(.true.)
-!     CALL evol_x(dt2)
+     CALL evol_x(dt2)
 !call mesh_setReflectedLR(.true.)
-!     call output
-!     CALL evol_k(delt)
+     call output
+     call output
+     call output
+     CALL evol_k(delt)
 !call mesh_setReflectedLR(.true.)
-!     call output
-!     CALL evol_x(dt2)
+     call output
+     CALL evol_x(dt2)
 !call mesh_setReflectedLR(.false.)
 !    else
 !     call setState(MOMENTUM)
-     CALL evol_k(dt2)
+!     CALL evol_k(dt2)
 !     call output
-     CALL evol_x(delt)
+!     CALL evol_x(delt)
 !     call output
-     CALL evol_k(dt2)
+!     CALL evol_k(dt2)
 !    endif
    elseif(splitOperatorMethod==5)then
     call evol_x(soms5*dt2)
@@ -119,7 +121,7 @@ SUBROUTINE evol_k(dtim)
   real*8, intent(in) :: dtim
 
   INTEGER ika, ikr !loop variables
-!  real*8 :: cos2k, sin2k, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
+  real*8 :: cos2k, sin2k, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
   real*8 :: edt,k1,k2
 
 !call mesh_setReflectedLR(.true.)
@@ -160,18 +162,27 @@ SUBROUTINE evol_k(dtim)
         !                        = exp(-ih/2m(k^2-k'^2))
         edt=edt*(-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim)
 !        edt=edt*(-hbc/m0*ka(ika)*kr(ikr)*dtim)
-        call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
-!        cos2k=cos(edt)
-!        sin2k=sin(edt)
+!        call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
+        cos2k=cos(edt)
+        sin2k=sin(edt)
 
-!        xre=DBLE(getDenK(ikr,ika))
-!        xim=DIMAG(getDenK(ikr,ika))
+!if(abs(sin2k)>0.001)then
+! write(*,*)'**** sin2k too big. it,ikr,ika,sin2k:',it,ikr,ika,sin2k
+!endif
+
+        xre=DBLE(getDenK(ikr,ika))
+        xim=DIMAG(getDenK(ikr,ika))
         
         ! exp(i*edt) = cos2k + i*sin2k
-!        xre2=xre*cos2k - xim*sin2k
-!        xim2=xre*sin2k + xim*cos2k
+        xre2=xre*cos2k - xim*sin2k
+        xim2=xre*sin2k + xim*cos2k
+
+if(xim2>0.0001)then
+ write(*,*)'*** xim2 > 0.0001. it,ikr,ika,xim2',it,ikr,ika,xim2
+endif
 
 !        call setDenK(ikr,ika,cmplx(xre2,xim2,8))
+        denmat(ikr,ika)=cmplx(xre2,xim2,8)
        endif
 
 !call mesh_setReflectedLR(.false.)
@@ -269,6 +280,8 @@ SUBROUTINE evol_x(dtim)
    cutfac=1d0
   endif
 
+!  write(*,*)'timestep,ixr,cutfac=',it,ixr,cutfac
+
 !  DO ixa=Nxa2-1,-Nxa2,-1  !reverse index direction
   DO ixa=-Nxa2,Nxa2-1
 
@@ -319,6 +332,8 @@ SUBROUTINE evol_x(dtim)
     xre2=xre*cos2k - xim*sin2k
     xim2=xre*sin2k + xim*cos2k
  !   if(ixr==0)write(*,*)'ixa,ixr,den_im-post=',ixa,ixr,den_im(iixa,iixr)
+
+
  
     call setDenX(ixa,ixr,cutfac*cmplx(xre2,xim2,8))
 

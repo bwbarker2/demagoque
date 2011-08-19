@@ -1,12 +1,19 @@
-#plot 'diagxreudsym.dat' u 1:($2/5e-9) w li, \
-#     'diagxrelrsym.dat' u 1:($2/2.5e-10) w li, \
-#     'diagximudsym.dat' u 1:($2/1.4e-16) w li, \
-#     'diagximlrsym.dat' u 1:($2/0.008) w li, \
-#     'diagwreudsym.dat' u 1:($2/0.0035) w li, \
-#     'diagwrelrsym.dat' u 1:($2/0.0035) w li
-plot 'diagwimudsym.dat' u 1:($2/9e-10) w li, \
-     'diagwimlrsym.dat' u 1:($2/7e-17) w li, \
-     'diagkreudsym.dat' u 1:($2/1e-16) w li, \
-     'diagkrelrsym.dat' u 1:($2/9e-17) w li, \
-     'diagkimudsym.dat' u 1:($2/0.006) w li, \
-     'diagkimlrsym.dat' u 1:($2/0.006) w li
+set terminal postscript enhanced eps color
+set output 'results/1dsymw.eps'
+
+set xlabel 'time [2*fm/c]'
+set ylabel 'sum_i |d_i - d_{ave}| / N
+
+plot \
+     'results/diagwreudsym.dat' u 1:($2) w li tit 'wre ud', \
+     'results/diagwrelrsym.dat' u 1:($2) w li tit 'wre lr', \
+     'results/diagwimudsym.dat' u 1:2 w li tit 'wim ud', \
+     'results/diagwimlrsym.dat' u 1:2 w li tit 'wim lr'
+#     'results/diagkreudsym.dat' u 1:2 w li tit 'kre ud', \
+#     'results/diagkrelrsym.dat' u 1:2 w li tit 'kre lr', \
+#     'results/diagkimudsym.dat' u 1:2 w li tit 'kim ud', \
+#     'results/diagkimlrsym.dat' u 1:2 w li tit 'kim lr'
+#     'results/diagxreudsym.dat' u 1:2 w li tit 'xre ud', \
+#     'results/diagxrelrsym.dat' u 1:($2) w li tit 'xre lr', \
+#     'results/diagximudsym.dat' u 1:($2) w li tit 'xim ud', \
+#     'results/diagximlrsym.dat' u 1:($2) w li tit 'xim lr'

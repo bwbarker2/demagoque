@@ -7,7 +7,7 @@ program procdenextra
  integer :: fu_denudsym=3
  integer :: fu_diagudsym=50
  integer :: fu_diaglrsym=51
- integer :: timesteps=62
+ integer :: timesteps=103
 
  complex*16, allocatable,dimension(:,:) :: denlrsym, denudsym
  real*8 :: lrsymmetry, udsymmetry
@@ -17,8 +17,8 @@ program procdenextra
 
  integer :: it,ixa,ixr,istate,ireim
 
- Nxa=100
- Nxr=100
+ Nxa=16
+ Nxr=16
 
  call initializeMesh
 
@@ -75,9 +75,16 @@ program procdenextra
 !
 !!!!!!!!! end reading arnau's file !!!!!!!!!!!!!!
 
+ if(reim(ireim).eq.'im')then
+  do ixa=1,Nxa2-1
+   denlrsym(ixa,:)=den_re(ixa,-Nxr:Nxr-1)+den_re(-ixa,-Nxr:Nxr-1)
+  enddo
+ else
   do ixa=1,Nxa2-1
    denlrsym(ixa,:)=den_re(ixa,-Nxr:Nxr-1)-den_re(-ixa,-Nxr:Nxr-1)
   enddo
+ endif
+  
 
   lrsymmetry=SUM(abs(denlrsym))/(Nxa2-1)/(2*Nxr)
   lrsymdiff=SUM(denlrsym)/(Nxa2-1)/(2*Nxr)
@@ -90,7 +97,7 @@ program procdenextra
   enddo
 
   ! begin up-down symmetry calculation
-  if(state(istate).eq.'x'.AND.reim(ireim).eq.'im')then
+  if(reim(ireim).eq.'im')then
    do ixr=1,Nxr-1
     denudsym(:,ixr)=den_re(:,ixr)+den_re(:,-ixr)
    enddo

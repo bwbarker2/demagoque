@@ -524,6 +524,19 @@ e               = 11.07            +/- 0.0823       (0.7435%)
 
 <p>Using this subroutine, I've verified that the initial boost, displacement, flipcloning, as well as evol_x are not the problem. They are all LR symmetric. evol_k seems to be a problem, though it doesn't given exactly the opposite of the original asymmetry. More to come after I eat :)</p>
 
+<h3>Tue Aug 16 11:44:18 EDT 2011</h3>
+
+<p>Problem starts in kim ud. In index 5, evol_x has run, but evol_k has not. kim is ud symmetric, and kre is ud symmetric. evol_k runs, kre is still ud symmetric, kim is not.</p>
+
+<p>First verify that FT is not contributing by putting one more output between evol_x and evol_k - first output goes x-w-k, next goes k-w-x, third goes x-w-k, which makes that output exactly the matrix that evol_k sees.</p>
+
+<p>I realize that I'm looking for reflection symmetry, which means that for xim to be lr reflection symmetric, I should add them together instead of subtract, since they should be opposite.</p>
+
+<p>I still know that the first time there is a finite imaginary part is in kim. It is still reflection symmetric through evol_k, but not through the second evol_x.</p>
+
+<p>This makes sense if the ... no, it doesn't. If everything is reflection symmetric, it should continue to be so. I was thinking that the finite kim could represent a momentum boost, but if it is reflection symmetric, then it would be a boost toward the middle or toward the edges, not in one direction preferentially.</p>
+
+<p>Is the imaginary part of k being treated incorrectly? Let's test with a complex initial state.</p>
 
 </body>
 </html>

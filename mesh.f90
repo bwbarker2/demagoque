@@ -369,12 +369,12 @@ contains
      case (MOMENTUM)
       select case (state)
        case (WIGNER)
-        call transform_k_to_wigner_fft_exp
-!        call transform_k_to_wigner_dumb
+!        call transform_k_to_wigner_fft_exp
+        call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (SPACE)
-        call transform_k_to_wigner_fft_exp
-!        call transform_k_to_wigner_dumb
+!        call transform_k_to_wigner_fft_exp
+        call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
         call transform_w_to_x_norepeat_fft
 !        call transform_wigner_to_x_dumb
