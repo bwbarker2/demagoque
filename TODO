@@ -1,0 +1,9 @@
+Todo list:
+
+Make mesh into an object (do this before going to 2D)
+
+Unify file opens for different modes to not duplicate code (ad_, im_, etc)
+-implement getNextUnit to never worry about file unit numbers
+--can use INQUIRE intrinsic function
+
+Implement subroutine in module 'mesh' that takes a function of ixa and ixr and multiplies matrix elements by that function - less things outside of mesh need to know about how we store matrix.

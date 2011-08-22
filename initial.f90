@@ -52,6 +52,8 @@ SUBROUTINE calcInitial
   
 end SUBROUTINE calcInitial
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 subroutine initialState
   use input_parameters
   use mesh
@@ -64,6 +66,13 @@ subroutine initialState
   real (Long) :: wfnho,xx1,xx2
   complex*16  :: y1,y2,den0
   integer :: ixa, ixr, iin
+  integer :: initState_kdelta_index
+
+  if(initState_kdelta) then
+   initState_kdelta_index=getNearestIndexX(initState_kdelta_x0)
+  else
+   initState_kdelta_index=99
+  endif
 
   do ixa=-Nxa2,Nxa2-1
      do ixr=-Nxr2,Nxr2-1
@@ -91,7 +100,7 @@ subroutine initialState
           endif
 
           if(initState_kdelta) then
-           if(ixr==0.AND.(abs(xx1-initState_kdelta_x0)<(0.5d0*delxa))) then
+           if(ixr==0.AND.ixa==initState_kdelta_index) then
             den0=den0+initState_kdelta_norm*2d0*pi/kLa
            endif
           endif

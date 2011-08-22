@@ -117,6 +117,9 @@ PROGRAM dmtdhf
    open(unit=68,file='results/imev_2dwim.dat')
    open(unit=69,file='results/imev_2dwre.dat')
    OPEN(unit=70,file='results/imev_pk2.dat')
+   open(unit=72,file='results/imev_2dx.dat')
+   open(unit=73,file='results/imev_2dw.dat')
+   open(unit=74,file='results/imev_2dk.dat')
 
    Nt=Nimev
 
@@ -138,6 +141,9 @@ PROGRAM dmtdhf
    close(68)
    close(69)
    close(70)
+   close(72)
+   close(73)
+   close(74)
 
   endif !useImEvol
 
@@ -160,6 +166,9 @@ PROGRAM dmtdhf
    open(unit=68,file='results/ad_2dwim.dat')
    open(unit=69,file='results/ad_2dwre.dat')
    OPEN(unit=70,file='results/ad_pk2.dat')
+   open(unit=72,file='results/ad_2dx.dat')
+   open(unit=73,file='results/ad_2dw.dat')
+  open(unit=74,file='results/2dk.dat')
 
    !set number of timesteps for adiabatic switching
    Nt=Nad
@@ -184,6 +193,9 @@ PROGRAM dmtdhf
    close(68)
    close(69)
    close(70)
+   close(72)
+   close(73)
+   close(74)
 
    useAdiabatic=.false.
 

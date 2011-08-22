@@ -20,7 +20,7 @@ subroutine outAnalHarmonic
           +calcHarmonicEv(4d0*xLa+xa(ixa),t) &
           +calcHarmonicEv(4d0*xLa-xa(ixa),t)
          
-     WRITE(45,93) ixa*delxa,ddre,0.d0
+     WRITE(45,93) xa(ixa),ddre,0.d0
   ENDDO
 
   WRITE(45,*)

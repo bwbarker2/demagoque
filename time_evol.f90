@@ -66,12 +66,12 @@ SUBROUTINE time_evolution
 !call mesh_setReflectedLR(.true.)
      CALL evol_x(dt2)
 !call mesh_setReflectedLR(.true.)
-     call output
-     call output
-     call output
+!     call output
+!     call output
+!     call output
      CALL evol_k(delt)
 !call mesh_setReflectedLR(.true.)
-     call output
+!     call output
      CALL evol_x(dt2)
 !call mesh_setReflectedLR(.false.)
 !    else
@@ -177,9 +177,9 @@ SUBROUTINE evol_k(dtim)
         xre2=xre*cos2k - xim*sin2k
         xim2=xre*sin2k + xim*cos2k
 
-if(xim2>0.0001)then
- write(*,*)'*** xim2 > 0.0001. it,ikr,ika,xim2',it,ikr,ika,xim2
-endif
+!if(xim2>0.0001)then
+! write(*,*)'*** xim2 > 0.0001. it,ikr,ika,xim2',it,ikr,ika,xim2
+!endif
 
 !        call setDenK(ikr,ika,cmplx(xre2,xim2,8))
         denmat(ikr,ika)=cmplx(xre2,xim2,8)
@@ -598,7 +598,7 @@ subroutine potHOmf(potX,ixa1)
     !write(*,*)ixa1,id,ixa2
 !      potMF(ixa1)=potMF(ixa1)+den_re(iixa1,iixr0)*den_re(iixa2,iixr0) &
    potX=potX+DBLE(getDenX(ixa2,0)) &
-                           *(id*delxa)**2
+                           *(xa(id))**2
 !      testtot=testtot+den_re(iixa1,iixr0)*den_re(iixa2,iixr0) &
 !                      *2*xa(ixa1)*xa(ixa2)
   enddo !id

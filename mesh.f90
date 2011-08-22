@@ -34,6 +34,16 @@ MODULE mesh
  integer :: Nkr
  INTEGER :: Nkr2    ! Nkr/2 = Nxa/2
  INTEGER :: Nka2    ! Nka/2 = Nxr/2
+
+ integer :: Nxam    ! minimum logical index of cell in xa
+ integer :: Nxax    ! maximum logical index of cell in xa
+ integer :: Nxrm    ! minimum logical index of cell in xr
+ integer :: Nxrx    ! maximum logical index of cell in xr
+ integer :: Nkam    ! minimum logical index of cell in ka
+ integer :: Nkax    ! maximum logical index of cell in ka
+ integer :: Nkrm    ! minimum logical index of cell in kr
+ integer :: Nkrx    ! maximum logical index of cell in kr
+
  REAL*8    :: delxa   ! interval in x_average
  REAL*8    :: delxr   ! interval in x_relative
  REAL*8    :: delka   ! in momentum
@@ -68,9 +78,34 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+ integer function getNearestIndexX(xx) result(ixx)
+  use prec_def
+  implicit none
+
+  real (Long), intent(in) :: xx
+
+  real (Long) :: aixx  ! interpolated index for result
+  integer, dimension(Nxam:Nxax) :: ixen  !array of indices
+ 
+  integer :: ixa,ki
+ 
+  do ixa=Nxam,Nxax
+   ixen(ixa)=ixa
+  enddo
+
+  ki=1
+  call lin_int(xa(Nxam:Nxax),ixen,Nxax-Nxam+1,xx,aixx,ki)
+
+  ixx=nint(aixx)
+
+ end function getNearestIndexX
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   subroutine initializeMesh
    use osc_pars
    use phys_cons
+   use prec_def
    implicit none
 
    integer :: ixa,ixr,ikr,ika
@@ -100,6 +135,16 @@ contains
    delkr=pi/xLa
 
    potDiag=0.0d0
+
+   Nxam=-Nxa2
+   Nxax=Nxa2-1
+   Nxrm=-Nxr2
+   Nxrx=Nxr2-1
+   Nkrm=-Nkr2
+   Nkrx=Nkr2-1
+   Nkam=-Nka2
+   Nkax=Nka2-1
+
    do ixa=-Nxa2,Nxa2
     xa(ixa)=ixa*delxa
    enddo
@@ -110,10 +155,12 @@ contains
 
    do ikr=-Nkr2,Nkr2
     kr(ikr)=ikr*delkr
+!    kr(ikr)=(ikr+0.5_Long)*delkr
    enddo
 
    do ika=-Nka,Nka
     ka(ika)=ika*delka
+!    ka(ika)=(ika+0.5_Long)*delka
    enddo
  
    kLa=ka(Nka2)
@@ -149,6 +196,18 @@ contains
    end select
 
    end function getDen
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  complex*16 function getDenDiagK(ika) result(den)
+   use prec_def
+   implicit none
+
+   integer, intent(in) :: ika
+
+   den=0.5_Long*(getDenK(-1,ika)+getDenK(0,ika))
+
+  end function getDenDiagK
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -333,20 +392,20 @@ contains
       select case (state)
        case (WIGNER)
 !call mesh_setReflectedLR(.true.)
-        call transform_x_to_w_norepeat_fft
+!        call transform_x_to_w_norepeat_fft
 !call mesh_setReflectedLR(.false.)
-!        call transform_x_to_wigner_dumb
+        call transform_x_to_wigner_dumb
 !        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_x_to_k_norepeat
 !call mesh_setReflectedLR(.true.)
-        call transform_x_to_w_norepeat_fft
+!        call transform_x_to_w_norepeat_fft
 !call mesh_setReflectedLR(.false.)
-!        call transform_x_to_wigner_dumb
+        call transform_x_to_wigner_dumb
 !call mesh_setReflectedLR(.true.)
-        call transform_wigner_to_k_fft_exp
+!        call transform_wigner_to_k_fft_exp
 !call mesh_setReflectedLR(.false.)
-!        call transform_wigner_to_k_dumb
+        call transform_wigner_to_k_dumb
 !        call transform_w_to_k_norepeat
 !        write(*,*)'transform_x_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
@@ -354,14 +413,14 @@ contains
      case (WIGNER)
       select case (state)
        case (SPACE)
-        call transform_w_to_x_norepeat_fft
-!        call transform_wigner_to_x_dumb
+!        call transform_w_to_x_norepeat_fft
+        call transform_wigner_to_x_dumb
 !        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
-!        call transform_wigner_to_k_dumb
+        call transform_wigner_to_k_dumb
 !        call transform_w_to_k_norepeat
 !call mesh_setReflectedLR(.true.)
-        call transform_wigner_to_k_fft_exp
+!        call transform_wigner_to_k_fft_exp
 !call mesh_setReflectedLR(.false.)
 !        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
@@ -376,8 +435,8 @@ contains
 !        call transform_k_to_wigner_fft_exp
         call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
-        call transform_w_to_x_norepeat_fft
-!        call transform_wigner_to_x_dumb
+!        call transform_w_to_x_norepeat_fft
+        call transform_wigner_to_x_dumb
 !        write(*,*)'transform_k_to_x:',etime(elapsed)-totalelapsed,'seconds'
       end select
     end select
@@ -413,7 +472,7 @@ contains
     do ika=-Nka,Nka-1
      wigden(ixa,ika)=0d0
      do ixr=1,Nxr-1
-      trigarg=delxr*delka*ika*ixr
+      trigarg=ka(ika)*xr(ixr)
       wigden(ixa,ika)=wigden(ixa,ika)+DBLE(array(ixr))*cos(trigarg) &
                                     +DIMAG(array(ixr))*sin(trigarg)
      enddo
@@ -474,7 +533,7 @@ contains
 !       endif
 !      endif
 
-      exparg=delxr*delka*ika*ixr
+      exparg=xr(ixr)*ka(ika)
 !      exparg=mod(exparg,2*pi)  !this doesn't seem to have any effect
 !      denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
@@ -482,7 +541,7 @@ contains
                        +array(-ixr)*(cos(exparg)+imagi*sin(exparg))
      enddo
      denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +array(-Nxr)*cos(delxr*delka*ika*Nxr) &
+                      +array(-Nxr)*cos(xr(-Nxr)*ka(ika)) &
                       +array(0)
      denmat2(ixa,ika)=delxr*denmat2(ixa,ika)*invsqrt2pi
   
@@ -649,7 +708,7 @@ contains
    do ixa=-Nxa2,Nxa2-1
     do ixr=-Nxr,Nxr-1
      do ika=-Nka,Nka-1
-      denmat2(ixa,ixr)=denmat2(ixa,ixr)+dble(getDenW(ixa,ika))*exp(imagi*delxr*delka*ixr*ika)
+      denmat2(ixa,ixr)=denmat2(ixa,ixr)+dble(getDenW(ixa,ika))*exp(imagi*xr(ixr)*ka(ika))
      enddo
      denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka*invsqrt2pi
     enddo
@@ -678,16 +737,16 @@ contains
 !     do ika=-Nka,Nka-1
 !      denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
 !     enddo
-     do ika=1,Nka-1
+     do ika=-Nka,Nka-1
 
-      exparg=delxr*delka*ika*ixr
+      exparg=xr(ixr)*ka(ika)
       denmat2(ixa,ixr)=denmat2(ixa,ixr) &
-                       +denmat(ixa,ika)*(cos(exparg)+imagi*sin(exparg)) &
-                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
+                       +denmat(ixa,ika)*(cos(exparg)+imagi*sin(exparg))
+!                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
      enddo
-     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
-                      +denmat(ixa,-Nka)*cos(delxr*delka*Nka*ixr) &
-                      +denmat(ixa,0)
+!     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
+!                      +denmat(ixa,-Nka)*cos(xr(ixr)*ka(-Nka)) &
+!                      +denmat(ixa,0)
 
      denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka*invsqrt2pi
     enddo
@@ -726,7 +785,7 @@ contains
     do ixa=-Nxa2,Nxa2-1
      wigden(ixa,ika)=0d0
      do ikr=1,Nkr2-1
-      trigarg=delxa*delkr*ikr*ixa
+      trigarg=xa(ixa)*kr(ikr)
       wigden(ixa,ika)=wigden(ixa,ika)+DBLE(array(ikr))*dcos(trigarg) &
                                     -DIMAG(array(ikr))*dsin(trigarg)
      enddo
@@ -762,7 +821,7 @@ contains
     do ikr=-Nkr2,Nkr2-1
      denmat2(ikr,ika)=0.d0
      do ixa=-Nxa2,Nxa2-1
-      denmat2(ikr,ika)=denmat2(ikr,ika)+dble(getDenW(ixa,ika))*exp(-imagi*delxa*delkr*ixa*ikr)
+      denmat2(ikr,ika)=denmat2(ikr,ika)+dble(getDenW(ixa,ika))*exp(-imagi*xa(ixa)*kr(ikr))
      enddo
      denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
     enddo
@@ -778,25 +837,28 @@ contains
 
   subroutine transform_wigner_to_k_dumb
    use phys_cons
+   use prec_def
    implicit none
 
    integer :: ixa,ika,ikr
+   real(Long) :: trigarg
 
    do ika=-Nka,Nka-1
     do ikr=-Nkr2,Nkr2-1
      denmat2(ikr,ika)=0.d0
 !     do ixa=-Nxa2,Nxa2-1
-     do ixa=1,Nxa2-1
+     do ixa=-Nxa2,Nxa2-1
+      trigarg=xa(ixa)*kr(ikr)
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ikr,ika)=denmat2(ikr,ika) &
-                       +denmat(ixa,ika)*(cos(delxa*delkr*ixa*ikr) &
-                                         -imagi*sin(delxa*delkr*ixa*ikr)) &
-                       +denmat(-ixa,ika)*(cos(delxa*delkr*ixa*ikr) &
-                                         +imagi*sin(delxa*delkr*ixa*ikr))
+                       +denmat(ixa,ika)*(cos(trigarg) &
+                                         -imagi*sin(trigarg))
+!                       +denmat(-ixa,ika)*(cos(trigarg) &
+!                                         +imagi*sin(trigarg))
      enddo !ixa
-     denmat2(ikr,ika)=denmat2(ikr,ika) &
-                      +denmat(-Nxa2,ika)*cos(delxa*delkr*Nxa2*ikr) &
-                      +denmat(0,ika)
+!     denmat2(ikr,ika)=denmat2(ikr,ika) &
+!                      +denmat(-Nxa2,ika)*cos(xa(Nxa2)*kr(ikr)) &
+!                      +denmat(0,ika)
 
      denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
 
@@ -861,25 +923,28 @@ contains
   
   subroutine transform_k_to_wigner_dumb
    use phys_cons
+   use prec_def
    implicit none
   
    integer :: ixa,ika,ikr
+   real(Long) :: trigarg
   
    do ika=-Nka,Nka-1
     do ixa=-Nxa2,Nxa2-1
      denmat2(ixa,ika)=0.d0
 !     do ikr=-Nkr2,Nkr2-1
-      do ikr=1,Nkr2-1
+      do ikr=-Nkr2,Nkr2-1
+       trigarg=xa(ixa)*kr(ikr)
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
-                       +denmat(ikr,ika)*(cos(delxa*delkr*ixa*ikr) &
-                                         +imagi*sin(delxa*delkr*ixa*ikr)) &
-                       +denmat(-ikr,ika)*(cos(delxa*delkr*ixa*ikr) &
-                                         -imagi*sin(delxa*delkr*ixa*ikr))
+                       +denmat(ikr,ika)*(cos(trigarg) &
+                                         +imagi*sin(trigarg))
+!                       +denmat(-ikr,ika)*(cos(trigarg) &
+!                                         -imagi*sin(trigarg))
      enddo !ixa
-     denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +denmat(-Nkr2,ika)*cos(delxa*delkr*Nkr2*ixa) &
-                      +denmat(0,ika)
+!     denmat2(ixa,ika)=denmat2(ixa,ika) &
+!                      +denmat(-Nkr2,ika)*cos(xa(ixa)*kr(Nkr2)) &
+!                      +denmat(0,ika)
 
 !     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
 !     enddo
@@ -969,8 +1034,8 @@ contains
      do ixa=-Nxa2,Nxa2-1
       do ixr=-Nxr2,Nxr2-1
 
-       exparg=delxa*delkr2*ixa*ikr2 &
-             +delxr*delka2*ixr*ika2
+       exparg=xa(ixa)*delkr2*ikr2 &
+             +xr(ixr)*delka2*ika2
        val=val+denmat(ixa,ixr)*exp(-imagi*exparg)
 
       enddo !ixr
@@ -996,10 +1061,10 @@ contains
      do ixa=-Nxa2,Nxa2-1
       do ixr=-Nxr2,Nxr2-1
 
-       exparg=delxa*delkr2*5d-1*ixa &
-             +delxr*delka2*5d-1*ixr &
-             +delxa*delkr2*ixa*ikr2 &
-             +delxr*delka2*ixr*ika2
+       exparg=xa(ixa)*delkr2*5d-1 &
+             +xr(ixr)*delka2*5d-1 &
+             +xa(ixa)*delkr2*ikr2 &
+             +xr(ixr)*delka2*ika2
 
        val=val+getDenX(ixa,ixr)*exp(-imagi*exparg)
 
@@ -1055,7 +1120,7 @@ contains
 !     val=cmplx(0d0,0d0,8)
      do ixr=-Nxr2,Nxr2-1
       denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr) &
-                                        *exp(-imagi*delxr*delka2*ixr*ika2)
+                                        *exp(-imagi*xr(ixr)*delka2*ika2)
      enddo !ixr
     enddo !ika2
    enddo !ixa
@@ -1075,7 +1140,7 @@ contains
      denmat2(ixa,ika)=cmplx(0d0,0d0,8)
      do ixr=-Nxr2,Nxr2-1
       denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr) &
-                                        *exp(-imagi*delxr*delka2*ixr*ika2)
+                                        *exp(-imagi*xr(ixr)*delka2*ika2)
      enddo !ixr
     enddo !ika2
    enddo !ixa
@@ -1166,7 +1231,7 @@ contains
     sgnfac=1
     do ixr=-Nxr2,Nxr2-1
      array(ixr)=(denmat(ixa,ixr)-denmat(ixa-Nxa2,ixr)) &
-                *exp(-imagi*delxr*delka2*0.5d0*ixr) &
+                *exp(-imagi*xr(ixr)*delka2*0.5d0) &
                 *sgnfac
      sgnfac=-sgnfac
     enddo !ika2
@@ -1238,7 +1303,7 @@ contains
 !     val=cmplx(0d0,0d0,8)
      do ixa=-Nxa2,Nxa2-1
       denmat2(ikr,ika)=denmat2(ikr,ika)+array(ixa) &
-                                        *exp(-imagi*delxa*delkr2*ixa*ikr2)
+                                        *exp(-imagi*xa(ixa)*delkr2*ikr2)
      enddo !ixa
     enddo !ikr2
    enddo !ika2
@@ -1249,7 +1314,7 @@ contains
     !construct array to transform
     array=cmplx(0d0,0d0,8)
     do ixa=-Nxa2,Nxa2-1
-     array(ixa)=denmat(ixa,ika)*exp(-imagi*delxa*delkr2*0.5d0*ixa)
+     array(ixa)=denmat(ixa,ika)*exp(-imagi*xa(ixa)*delkr2*0.5d0)
     enddo !ixa
 
     !transform!
@@ -1259,7 +1324,7 @@ contains
 !     val=cmplx(0d0,0d0,8)
      do ixa=-Nxa2,Nxa2-1
       denmat2(ikr,ika)=denmat2(ikr,ika)+array(ixa) &
-                                        *exp(-imagi*delxa*delkr2*ixa*ikr2)
+                                        *exp(-imagi*xa(ixa)*delkr2*ikr2)
      enddo !ixa
     enddo !ikr2
    enddo !ika2

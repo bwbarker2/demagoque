@@ -7,7 +7,7 @@ program procdenextra
  integer :: fu_denudsym=3
  integer :: fu_diagudsym=50
  integer :: fu_diaglrsym=51
- integer :: timesteps=103
+ integer :: timesteps=23
 
  complex*16, allocatable,dimension(:,:) :: denlrsym, denudsym
  real*8 :: lrsymmetry, udsymmetry
@@ -17,8 +17,8 @@ program procdenextra
 
  integer :: it,ixa,ixr,istate,ireim
 
- Nxa=16
- Nxr=16
+ Nxa=100
+ Nxr=36
 
  call initializeMesh
 
@@ -76,7 +76,7 @@ program procdenextra
 !!!!!!!!! end reading arnau's file !!!!!!!!!!!!!!
 
  if(reim(ireim).eq.'im')then
-  do ixa=1,Nxa2-1
+  do ixa=0,Nxa2-1
    denlrsym(ixa,:)=den_re(ixa,-Nxr:Nxr-1)+den_re(-ixa,-Nxr:Nxr-1)
   enddo
  else
