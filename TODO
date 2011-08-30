@@ -7,3 +7,12 @@ Unify file opens for different modes to not duplicate code (ad_, im_, etc)
 --can use INQUIRE intrinsic function
 
 Implement subroutine in module 'mesh' that takes a function of ixa and ixr and multiplies matrix elements by that function - less things outside of mesh need to know about how we store matrix.
+
+Create makefile to use instead
+-with support for procdenextra as well
+-intermediate step to automake?
+
+Copy library files to local directory for more portability
+-maybe... what about HPCC apps where HPCC libs are more optimized for arch?
+
+Start using documentation - doxygen or robodoc (does any format, cross-refs)

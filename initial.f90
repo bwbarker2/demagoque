@@ -185,7 +185,7 @@ subroutine copyExtra
 
  enddo
 
- denmat(:,Nxr2)=0.5d0*(denmat(:,-Nxr2)+denmat(:,Nxr2))
+ denmat(:,Nxr2)=0.5d0*DBLE((denmat(:,-Nxr2)+denmat(:,Nxr2)))
  denmat(:,-Nxr2)=denmat(:,Nxr2)
 
 end subroutine copyExtra

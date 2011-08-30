@@ -15,21 +15,21 @@ program procdenextra
  character, dimension(3) :: state=(/'x','w','k'/)        ! x, w, or k
  character(len=2), dimension(2) :: reim=(/'re','im'/)  !real or imaginary part
 
- integer :: it,ixa,ixr,istate,ireim
+ integer :: it,ixa,ixr,istate,ireim, indshift, isgn
 
  Nxa=100
  Nxr=36
 
  call initializeMesh
 
- allocate(denlrsym(1:Nxa2-1,-Nxr:Nxr-1))
- allocate(denudsym(-Nxa2:Nxa2-1,1:Nxr-1))
+! allocate(denlrsym(1:Nxa2,-Nxr:Nxr-1))
+! allocate(denudsym(-Nxa2:Nxa2-1,1:Nxr))
  
  do istate=1,3
  do ireim=1,2
 
- denlrsym=cmplx(0d0,0d0,8)
- denudsym=cmplx(0d0,0d0,8)
+! denlrsym=cmplx(0d0,0d0,8)
+! denudsym=cmplx(0d0,0d0,8)
 
  open(unit=fu_2dxre,file='results/2d'//state(istate)//reim(ireim)//'.dat', status='old')
  open(unit=fu_denlrsym,file='results/2d'//state(istate)//reim(ireim)//'lrsym.dat')
@@ -75,45 +75,58 @@ program procdenextra
 !
 !!!!!!!!! end reading arnau's file !!!!!!!!!!!!!!
 
- if(reim(ireim).eq.'im')then
-  do ixa=0,Nxa2-1
-   denlrsym(ixa,:)=den_re(ixa,-Nxr:Nxr-1)+den_re(-ixa,-Nxr:Nxr-1)
-  enddo
+ if(reim(ireim).eq.'re') then
+  isgn=-1d0
  else
-  do ixa=1,Nxa2-1
-   denlrsym(ixa,:)=den_re(ixa,-Nxr:Nxr-1)-den_re(-ixa,-Nxr:Nxr-1)
-  enddo
+  isgn=1d0
  endif
-  
 
-  lrsymmetry=SUM(abs(denlrsym))/(Nxa2-1)/(2*Nxr)
-  lrsymdiff=SUM(denlrsym)/(Nxa2-1)/(2*Nxr)
+! if(state(iState).ne.'k') then
+  indshift=0
+  Nxax=Nxa2-1
+  Nxrx=Nxr-1
+! else
+!  indshift=1
+!  Nxax=Nxa2
+!  Nxrx=Nxr
+! endif
+
+ allocate(denlrsym(1:Nxax,-Nxr:Nxr-1))
+
+  do ixa=1,Nxax
+   denlrsym(ixa,:)=den_re(ixa-indshift,-Nxr:Nxr-1)+isgn*den_re(-ixa,-Nxr:Nxr-1)
+  enddo
+ 
+  lrsymmetry=SUM(abs(denlrsym))/(Nxax*2*Nxr)
+  lrsymdiff=SUM(denlrsym)/(Nxax*2*Nxr)
 
   write(*,*)'lrsymmetry,lrsymdiff:',lrsymmetry,lrsymdiff
   write(fu_diaglrsym,*)it,lrsymmetry,lrsymdiff
 
   do ixr=-Nxr,Nxr-1
-   write(fu_denlrsym,*)(DBLE(denlrsym(ixa,ixr)),ixa=1,Nxa2-1)
+   write(fu_denlrsym,*)(DBLE(denlrsym(ixa,ixr)),ixa=1,Nxax)
   enddo
 
-  ! begin up-down symmetry calculation
-  if(reim(ireim).eq.'im')then
-   do ixr=1,Nxr-1
-    denudsym(:,ixr)=den_re(:,ixr)+den_re(:,-ixr)
-   enddo
-  else
-   do ixr=1,Nxr-1
-    denudsym(:,ixr)=den_re(:,ixr)-den_re(:,-ixr)
-   enddo
-  endif
+ ! begin up-down symmetry calculation
+! if(state(iState).eq.'w') then
+!  indshift=1
+!  Nxax=Nxa2
+!  Nxrx=Nxr
+! endif
 
-  udsymmetry=SUM(abs(denudsym))/(Nxr-1)/Nxa
-  udsymdiff=SUM(denudsym)/(Nxr-1)/Nxa
+ allocate(denudsym(-Nxa2:Nxa2-1,1:Nxrx))
+
+   do ixr=1,Nxrx
+    denudsym(:,ixr)=den_re(:,ixr-indshift)+isgn*den_re(:,-ixr)
+   enddo
+
+  udsymmetry=SUM(abs(denudsym))/(Nxrx*Nxa)
+  udsymdiff=SUM(denudsym)/(Nxrx*Nxa)
 
   write(*,*)'udsymmetry, udsymdiff:',udsymmetry,udsymdiff
   write(fu_diagudsym,*)it,udsymmetry,udsymdiff
 
-  do ixr=1,Nxr-1
+  do ixr=1,Nxrx
    write(fu_denudsym,*)(DBLE(denudsym(ixa,ixr)),ixa=-Nxa2,Nxa2-1)
   enddo
 
@@ -128,7 +141,11 @@ program procdenextra
 ! read(fu_2dxre,*)
 !!!!! end arnau's file reading
 
+ deallocate(denlrsym)
+ deallocate(denudsym)
+
  enddo !it
+
 
  close(fu_2dxre)
  close(fu_denudsym)

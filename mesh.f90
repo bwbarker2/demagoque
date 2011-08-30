@@ -146,10 +146,12 @@ contains
    Nkax=Nka2-1
 
    do ixa=-Nxa2,Nxa2
+!    xa(ixa)=(ixa+0.5_Long)*delxa
     xa(ixa)=ixa*delxa
    enddo
 
    do ixr=-Nxr,Nxr
+!    xr(ixr)=(ixr+0.5_Long)*delxr
     xr(ixr)=ixr*delxr
    enddo
 
@@ -395,6 +397,7 @@ contains
 !        call transform_x_to_w_norepeat_fft
 !call mesh_setReflectedLR(.false.)
         call transform_x_to_wigner_dumb
+!        call transform_x_to_w_dumb_kshift
 !        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_x_to_k_norepeat
@@ -497,7 +500,6 @@ contains
   end subroutine transform_x_to_wigner_trig
  
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
   
   subroutine transform_x_to_wigner_dumb
    !! brute force method to test the theory
@@ -543,6 +545,7 @@ contains
      denmat2(ixa,ika)=denmat2(ixa,ika) &
                       +array(-Nxr)*cos(xr(-Nxr)*ka(ika)) &
                       +array(0)
+
      denmat2(ixa,ika)=delxr*denmat2(ixa,ika)*invsqrt2pi
   
      ! if the cell is unreasonably large, write out
@@ -561,6 +564,42 @@ contains
   
   end subroutine transform_x_to_wigner_dumb
  
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_x_to_w_dumb_kshift
+   ! transform x to w using explicitly real result, as per notes BWB 2011-08-29
+   use phys_cons
+   use prec_def
+   implicit none
+
+   integer ixa,ixr,ika
+
+   denmat2=0d0
+
+   do ixa=-Nxa2,Nxa2-1
+    do ika=-Nka,Nka-1
+
+     denmat2(ixa,ika)=denmat2(ixa,ika) &
+                      +DBLE(getDen(ixa,-Nxr))*cos(xr(-Nxr)*ka(ika)) &
+                      +getDen(ixa,0)
+
+     do ixr=1,Nxr-1
+
+      denmat2(ixa,ika)=denmat2(ixa,ika) &
+                       +2_Long*(DBLE(getDen(ixa,ixr))*cos(xr(ixr)*ka(ika)) &
+                                +DIMAG(getDen(ixa,ixr))*sin(xr(ixr)*ka(ika)))
+
+     enddo !ixr
+
+    enddo !ika
+   enddo !ixa
+
+   denmat=denmat2*delxr*invsqrt2pi
+
+   denState=WIGNER
+
+  end subroutine transform_x_to_w_dumb_kshift
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine transform_w_to_x_norepeat_fft
@@ -847,18 +886,19 @@ contains
     do ikr=-Nkr2,Nkr2-1
      denmat2(ikr,ika)=0.d0
 !     do ixa=-Nxa2,Nxa2-1
-     do ixa=-Nxa2,Nxa2-1
+     do ixa=1,Nxa2-1
       trigarg=xa(ixa)*kr(ikr)
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ikr,ika)=denmat2(ikr,ika) &
                        +denmat(ixa,ika)*(cos(trigarg) &
-                                         -imagi*sin(trigarg))
-!                       +denmat(-ixa,ika)*(cos(trigarg) &
-!                                         +imagi*sin(trigarg))
+                                         -imagi*sin(trigarg)) &
+                       +denmat(-ixa,ika)*(cos(trigarg) &
+                                         +imagi*sin(trigarg))
      enddo !ixa
-!     denmat2(ikr,ika)=denmat2(ikr,ika) &
-!                      +denmat(-Nxa2,ika)*cos(xa(Nxa2)*kr(ikr)) &
-!                      +denmat(0,ika)
+     denmat2(ikr,ika)=denmat2(ikr,ika) &
+                      +denmat(-Nxa2,ika)*(cos(xa(-Nxa2)*kr(ikr)) &
+                                          -imagi*sin(xa(-Nxa2)*kr(ikr))) &
+                      +denmat(0,ika)
 
      denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
 
@@ -932,19 +972,19 @@ contains
    do ika=-Nka,Nka-1
     do ixa=-Nxa2,Nxa2-1
      denmat2(ixa,ika)=0.d0
-!     do ikr=-Nkr2,Nkr2-1
-      do ikr=-Nkr2,Nkr2-1
+      do ikr=1,Nkr2-1
        trigarg=xa(ixa)*kr(ikr)
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
-                       +denmat(ikr,ika)*(cos(trigarg) &
-                                         +imagi*sin(trigarg))
-!                       +denmat(-ikr,ika)*(cos(trigarg) &
-!                                         -imagi*sin(trigarg))
+                       +denmat(ikr,ika)*(cos(trigarg)+imagi*sin(trigarg)) &
+!                       +DBLE(denmat(ikr,ika))*cos(trigarg) &
+!                       -Dimag(denmat(ikr,ika))*sin(trigarg)
+                       +denmat(-ikr,ika)*(cos(trigarg) &
+                                         -imagi*sin(trigarg))
      enddo !ixa
-!     denmat2(ixa,ika)=denmat2(ixa,ika) &
-!                      +denmat(-Nkr2,ika)*cos(xa(ixa)*kr(Nkr2)) &
-!                      +denmat(0,ika)
+     denmat2(ixa,ika)=denmat2(ixa,ika) &
+                      +dble(denmat(-Nkr2,ika))*cos(xa(ixa)*kr(-Nkr2)) &
+                      +denmat(0,ika)
 
 !     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
 !     enddo
