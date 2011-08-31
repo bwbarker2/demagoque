@@ -22,6 +22,7 @@
 
 SUBROUTINE time_evolution
   !! time_evolution - evolves the density matrix forward in time
+  use input_parameters
   use mesh
   use time
   IMPLICIT NONE
@@ -111,11 +112,10 @@ END SUBROUTINE time_evolution
 
 SUBROUTINE evol_k(dtim)
   !! evol_k - evolves density matrix according to the semiclassical kinetic energy
+  use input_parameters
   use mesh
-  use osc_pars
   use phys_cons
   use prec_def
-  use time
   IMPLICIT NONE
 
   real*8, intent(in) :: dtim
@@ -226,11 +226,10 @@ end subroutine makeMomentumHermitian
 SUBROUTINE evol_x(dtim)
   !! evol_x - evolves density matrix in position space
  use cons_laws
+ use input_parameters
  use mesh
- use osc_pars
  use phys_cons
  use prec_def
- use time
  IMPLICIT NONE
 
  real*8, intent(in) :: dtim !timestep
@@ -410,9 +409,9 @@ end subroutine makeSpaceHermitian
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine calcPotDiag()
+ use input_parameters
  use mesh
  use prec_def
- use time
  implicit none
 
  integer :: ixa
@@ -457,8 +456,8 @@ end subroutine calcPotDiag
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
 
 subroutine getImCutoff(cutfac, ixr,dtim)
+ use input_parameters
  use mesh
- use params_cutoff
  use phys_cons
  implicit none
 
@@ -489,6 +488,7 @@ end subroutine getImCutoff
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
 
 real*8 function getWeight()
+ use input_parameters
  use time
  implicit none
 
@@ -532,7 +532,7 @@ end subroutine getPotX
 
 subroutine potHO(potX,ix)
 !! pot_ho - Harmonic oscillator potential in x,x' basis, centered at x=0
-  use osc_pars
+  use input_parameters
   use phys_cons
   use prec_def
   use mesh
@@ -552,10 +552,9 @@ end subroutine potHO
 
 subroutine potHOexact(potX,ix)
  !! potHOexact - computes exact evolution of external HO, from Chin, Krotsheck, Phys. Rev. E 72 (2005) 036705.
+ use input_parameters
  use mesh
- use osc_pars
  use phys_cons
- use time
  implicit none
 
  real*8,  intent(out) :: potX
@@ -570,8 +569,8 @@ end subroutine potHOexact
 subroutine potHOmf(potX,ixa1)
   !! calcPotMF - calculates meanfield potential at all diagonal points, stores
   ! in potMF
+  use input_parameters
   use mesh
-  use osc_pars
   use phys_cons
   use prec_def
   implicit none
@@ -620,7 +619,6 @@ end subroutine potHOmf
 subroutine potSkyrme(potX,ix)
  use mesh
  use prec_def
- use time
  use skyrme_params
  implicit none
 

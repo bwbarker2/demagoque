@@ -21,6 +21,7 @@
 !            1 Cyclotron, East Lansing, MI 48824-1321
 
 MODULE mesh
+ use prec_def
  implicit none
 
  REAL*8  :: xLa     ! length of box in xa/2 [fm]
@@ -48,15 +49,15 @@ MODULE mesh
  REAL*8    :: delxr   ! interval in x_relative
  REAL*8    :: delka   ! in momentum
  REAL*8    :: delkr
- integer :: potInitial    ! potential  with initial state
- integer :: potFinal      ! potential for time evolution
- logical :: useAdiabatic  ! if true, use adiabatic switching
- logical :: useImCutoff   ! use imaginary off-diagonal cutoff?
-  ! factor to change units to 3D density matrix (calculated in initial.f90)
+
+ real (Long) :: norm_thy  ! theoretical norm (what it 'should' be)
+
+ ! factor to change units to 3D density matrix (calculated in initial.f90)
  REAL*8 :: facd
-  REAL*8, DIMENSION(:), ALLOCATABLE :: xa,ka,xr,kr   ! coord of grid point  
-  ! density matrix, real and imaginary
-  REAL*8 , DIMENSION(:,:) , ALLOCATABLE :: den_re, den_im
+ REAL*8, DIMENSION(:), ALLOCATABLE :: xa,ka,xr,kr   ! coord of grid point  
+
+ ! density matrix, real and imaginary
+ REAL*8 , DIMENSION(:,:) , ALLOCATABLE :: den_re, den_im
  complex*16, dimension(:,:), allocatable :: denmat !when I need complex, I store here
  complex*16, dimension(:,:), allocatable :: denmat2 !when I need complex, I store here
  integer denState  ! gives current coordinate space of density matrix,
@@ -103,7 +104,6 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine initializeMesh
-   use osc_pars
    use phys_cons
    use prec_def
    implicit none

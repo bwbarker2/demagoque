@@ -22,8 +22,8 @@
 
 SUBROUTINE output
   use cons_laws
+  use input_parameters
   USE mesh
-  USE out
   USE time
   IMPLICIT NONE
 
@@ -69,9 +69,8 @@ END SUBROUTINE output
 
 
 SUBROUTINE outX
+  use input_parameters
   use mesh
-  use osc_pars
-  use time
   IMPLICIT NONE
 
   call setState(SPACE)
@@ -298,8 +297,8 @@ END SUBROUTINE outEner
 
 subroutine outDenUnf
  !! outDenUnf - writes the density matrix to the unformatted file obdm.dat
+ use input_parameters
  use mesh
- use osc_pars
  implicit none
 
  integer :: ixa,ixr
@@ -318,8 +317,8 @@ end subroutine outDenUnf
 
 subroutine inDenUnf
  !! inDenUnf - reads the density matrix that is written in previous subroutine
+ use input_parameters
  use mesh
- use osc_pars
  implicit none
 
  integer :: ixa,ixr,Nxa1,Nxr1,Nmax1

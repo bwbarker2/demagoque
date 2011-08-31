@@ -1,6 +1,7 @@
 subroutine outAnalHarmonic
  !! outAnalHarmonic - outputs analytic time evolution of gaussian wavepacket
   ! in free space using same frequency as initialState_gaussianNuclear
+ use input_parameters
  use mesh
  use time
  implicit none
@@ -39,7 +40,7 @@ real*8 function calcHarmonicEv(xx,tt)
   ! rho(x,t) = sqrt(1/(pi*sigma^2))*exp(-x^2/sigma^2)
   ! , where
   ! sigma(t)^2 = sigma0^2 (1 + (hbar*t/(msigma0^2)^2))
- use osc_pars
+ use input_parameters
  use phys_cons
  implicit none
 

@@ -80,8 +80,9 @@ PROGRAM dmtdhf
 !                       Arguments: real*8 cutoff_w0, real*8 cutoff_x0, real*8
 !                       cutoff_d0
 !
+  use input_parameters
   USE mesh
-  USE time
+  use time
   IMPLICIT NONE
 
 !  integer :: fftw_init_out
@@ -310,13 +311,8 @@ SUBROUTINE getStdIn
  use input_parameters
  use bstring
   USE mesh
-  USE osc_pars
-  USE out
-  use params_cutoff
   USE phys_cons
-  use potential_params
   USE prec_def
-  USE time
   IMPLICIT NONE
 
  character(len=80) :: inline !input line for optional line processing
@@ -395,6 +391,7 @@ SUBROUTINE getStdIn
  initState_kdelta=.false.
  initState_plane=.false.
  Nmax=0
+ norm_thy=0d0
  useImCutoff=.false.
  useFlipClone=.false.
  splitOperatorMethod=0  !don't use Split Operator Method
@@ -426,6 +423,7 @@ SUBROUTINE getStdIn
    case("initState_gaussianNuclear")
     read(inline(iend+1:len(inline)),*)Nmax
     initState_gaussianNuclear=.true.
+    norm_thy=norm_thy+Nmax+1
     write(*,*)'Initial state added: initState_gaussianNuclear'
     WRITE(*,*)'  Maximum oscillator shell, Nmax=',Nmax
 
@@ -433,6 +431,7 @@ SUBROUTINE getStdIn
     read(inline(iend+1:len(inline)),*)initState_cosine_number, &
                      initState_cosine_norm, initState_cosine_shift
     initState_cosine=.true.
+    norm_thy=norm_thy+initState_cosine_norm
     write(*,*)'Initial state added: initState_cosine'
     write(*,*)'                     initState_cosine_number=',initState_cosine_number
     write(*,*)'                     initState_cosine_norm  =',initState_cosine_norm
@@ -441,6 +440,7 @@ SUBROUTINE getStdIn
    case("initState_kdelta")
     read(inline(iend+1:len(inline)),*)initState_kdelta_norm, initState_kdelta_x0
     initState_kdelta=.true.
+    norm_thy=norm_thy+initState_kdelta_norm
     write(*,*)'Initial state added: initState_kdelta'
     write(*,*)'                     initState_kdelta_norm=',initState_kdelta_norm
     write(*,*)'                     initState_kdelta_x0=',initState_kdelta_x0
@@ -449,6 +449,7 @@ SUBROUTINE getStdIn
     read(inline(iend+1:len(inline)),*)initState_plane_number, &
                    initState_plane_norm, initState_plane_shift 
     initState_plane=.true.
+    norm_thy=norm_thy+initState_plane_norm
     write(*,*)'Initial state added: initState_plane'
     write(*,*)'                     initState_plane_number=',initState_plane_number
     write(*,*)'                     initState_cosine_norm  =',initState_plane_norm

@@ -24,9 +24,7 @@ subroutine ener_k
   !! ener_k - calculates kinetic energy, total momentum from k-space den. mat.
   use cons_laws
   use mesh
-  use osc_pars
   use phys_cons
-  use time
   IMPLICIT NONE
 
 !  real (Long) :: pk2(-Nka2:Nka2)  !den.mat. times k^2
@@ -45,8 +43,8 @@ subroutine ener_k
 !     write(70,*)'ika,pk2',it,ika,pk2(ika)
   enddo
 
-  ekin=ekin*hbc*hbc/(2d0*m0)/(Nmax+1)*delka
-  knum=knum*delka/(Nmax+1)
+  ekin=ekin*hbc*hbc/(2d0*m0)/norm_thy*delka
+  knum=knum*delka/norm_thy
 
 !  call dint_simp1(Nxr+1, pk2, delka, ekin, ekerr)
 !  call dint_simp1(Nxr+1, knn, delka, knum, eknum)
@@ -69,7 +67,6 @@ end subroutine ener_k
 
 subroutine ener_x
   !! ener_x - calculates total potential energy
-  use osc_pars
   use cons_laws
   use mesh
   implicit none
@@ -94,8 +91,8 @@ subroutine ener_x
 !    uoth(ixa)=potMF(ixa)*den_re(iNxa2(ixa),iNxr2(0))/(Nmax+1)/(Nmax+1)/2
 !    uoth(ixa)=potMF(ixa)*0.5/(Nmax+1)/(Nmax+1)/2
   enddo
-  epot=epot*delxa/(Nmax+1)
-  nnum=nnum*delxa/(Nmax+1)
+  epot=epot*delxa/norm_thy
+  nnum=nnum*delxa/norm_thy
 
 !  call dint_simp1(Nxa+1, uoth, delxa, epotOth, epotOtherr)
 !  call dint_simp1(Nxa, uu, delxa, epot, eperr)

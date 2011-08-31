@@ -24,11 +24,9 @@
 ! calculates initial quantities derived from input
 SUBROUTINE calcInitial
   use cons_laws
-  use fftw_constants
+  use input_parameters
   use mesh
-  use osc_pars
   use phys_cons
-  use time
   implicit none
 
   call initializeMesh
@@ -43,12 +41,7 @@ SUBROUTINE calcInitial
   write(*,*) 'dxr=',delxr,'dxa=',delxa,'dkr=',delkr,'dka=',delka,'whm=',whm
   
   
-!  allocate(tempdenmat(Nxa,Nxr))
   allocate(potx(-Nxa2:Nxa2))
-!  allocate(iNxa(Nxa), iNxr(Nxr), iNxa2(-Nxa2:Nxa2), iNxr2(-Nxr2:Nxr2))
- allocate(arraycos(0:Nxr), arraysin(0:Nxr-1), arraycnum(0:Nxr2))
-
-
   
 end SUBROUTINE calcInitial
 
@@ -57,10 +50,8 @@ end SUBROUTINE calcInitial
 subroutine initialState
   use input_parameters
   use mesh
-  use osc_pars
   use phys_cons
   use prec_def
-  use time
   implicit none
 
   real (Long) :: wfnho,xx1,xx2
@@ -193,9 +184,9 @@ end subroutine copyExtra
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine boost
+  use input_parameters
   use mesh
   use phys_cons
-  use time
   implicit none
 
   INTEGER ixr !loop variables

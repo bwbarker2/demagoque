@@ -137,9 +137,8 @@ END PROGRAM testdm
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! reads data from standard input
 SUBROUTINE getStdIn
+  use input_parameters
   USE mesh
-  USE osc_pars
-  USE out
   USE phys_cons
   USE prec_def
   USE time

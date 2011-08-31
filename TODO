@@ -15,4 +15,7 @@ Create makefile to use instead
 Copy library files to local directory for more portability
 -maybe... what about HPCC apps where HPCC libs are more optimized for arch?
 
-Start using documentation - doxygen or robodoc (does any format, cross-refs)
+Start using documentation - doxygen
+
+Reorganize file structure - use GNU standard?
+

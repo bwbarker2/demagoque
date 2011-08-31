@@ -20,6 +20,26 @@
 !            Michigan State University
 !            1 Cyclotron, East Lansing, MI 48824-1321
 
+module lib_fftpack
+ use prec_def
+ implicit none
+
+ ! lensav(1) is for L, lensav(2) is for M
+  INTEGER :: lensav(2), lenwrk(2)
+
+
+  ! for the following, the first index: 1 - L, 2 - M
+
+  REAL (Long), ALLOCATABLE :: work(:,:)
+
+  !arrays for cosine transforms
+  REAL (Long), ALLOCATABLE :: wsavec(:,:)
+
+  !arrays for sine transforms
+  REAL (Long), ALLOCATABLE :: wsaves(:,:)
+
+contains
+
 !! transforms density matrix from physical to spectral space using the
 !! FFTPACK5 subroutines
 subroutine FT(L,M,xre,xim)
@@ -237,3 +257,5 @@ subroutine fft_initial(N)
   enddo
      
 end subroutine fft_initial
+
+end module lib_fftpack

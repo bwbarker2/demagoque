@@ -1,0 +1,181 @@
+2011-08-30  Brent W. Barker  <barker@nscl.msu.edu>
+
+	Fixed asymmetry bug!
+	
+	time_evol.f90:evok_k: for edge of box that is not repeated on other side of ka axis, use only real part of exponential for evolution.
+	
+	initial.f90:copyExtra: enforce realness and equality of Nxr2 and -Nxr2 rows
+	
+	mesh.f90:
+	transform_x_to_w_dumb_kshift: added this subroutine for shifted sample (ika+1/2). Not used.
+	transform_k_to_wigner_dumb: Using only real part of -Nkr2 column for cosine transform (gives 0 imaginary part in wigner)
+	
+	post/symdiff.plt: changed to log scale
+	
+	procdenextra.f90: Changed to acommodate shifted sample files, but then commented those lines
+
+2011-08-22  Brent W. Barker  <barker@nscl.msu.edu>
+
+	Getting ready for shift of indices in k-space.
+	
+	* As few things as possible should need to know about how ka(ika) (etc) are constructed. So converted many ika*delka to ka(ika) (etc).
+	* Added TODO list
+	* Added file open/closes for 2dx/w/k to imev and ad evolutions
+	* Removed fft_fftw.f90 - I don't use it, instead all routines are in mesh.f90 or lib_fftw.f90
+	* Added getNearestIndexX so that less things need to know about how xr / xa are made
+	* Added logical minimum and maximum indices to mesh.f90, better for more hiding of matrix storage
+	* Added subroutine getDenDiagK, because with the new symmetric k storage, this is no longer ixr=0. It's not ready yet.
+
+2011-08-19  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Added more human-readable output files, 2dx.dat, 2dw.dat, and 2dk.dat
+	* Added initial states kdelta and plane
+	* changed copyExtra to not enforce real edges in ixr = +/-Nxr/2  (might change back in future to enforce hermiticity)
+	* Corrected procdenextra.f90 to understand that everything should be f(x)=f*(x) in x and k space.
+	* Changed to sin and cos evolution in evol_k, will probably change back.
+
+2011-08-12  Brent W. Barker  <barker@nscl.msu.edu>
+
+	outAnalHarmonic.f90: added effects of surrounding periodic boxes to facilitate comparison at long times
+
+2011-08-12  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Experimented with automake, so many new files for that.
+	* Added code for different initial states
+	* Added cosine as initial state
+	* Fixed call to outAnalHarmonic in output.f90 so it will produce the file when required
+
+2011-08-09  Brent W. Barker  <barker@nscl.msu.edu>
+
+	Added some notes, additional code to output procdenextra info to files, and a file to process them (post/symdiff.plt)
+
+2011-08-02  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Added mesh_setReflectedLR, a subroutine that reflects the coordinates, for use in debugging asymmetry and maybe in flipclone
+	* Revised size of denmat to be just (-Nxa2,Nxa2-1,-Nxr,Nxr-1) instead of including (Nxa2,:)
+
+2011-07-25  Brent W. Barker  <barker@nscl.msu.edu>
+
+	Added GPL notices to all personal *.f90 files.
+
+2011-07-20  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Created input.frag, an input file for the "multi-fragmentation" reaction.
+	* Created data directory, so added that to .bzrignore file.
+	* Added isPrime function - very incomplete
+	* fixed several bugs where compile warned of uninitialized variables being used.
+	* Added several runtime options to avoid necessary compilation
+	* Started outputting some things to standard error instead of standard out.
+	* Added procden.f90 and procdenextra.f90 to perform some analysis on output
+	* copyExtra: changed to preserve hermiticity even in xLr.NE.xLa case
+	* boost: now can boost to negative kinetic energies
+	* Added displaceRight, so I can displace the matrix in either direction
+	* changed all dumb fourier transform routines to equivalent sine and cosine transforms
+	* Added support for Split Operator Method of order 5
+	* Added makeMomentumHermitian and makeSpaceHermitian routines for debugging
+
+2011-05-31  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Input file now uses option words instead of numbers.
+
+2011-05-13  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Fixed a bug in zdet2d, in bmath.f90, where intent(in) variables were being written to
+	* added zlin_int, a linear interpolation routine for complex numbers, ported from lin_int in interp.f
+	* Added bstring.f90, a string manipulation library.
+	* Added imaginary off-diagonal cutoff capability.
+	* Implemented new optional input system
+	* Fixed memory leak - now we destroy FFTW plans after using them. TODO: store generic plans, reuse them.
+	* Added testprog.f90, a program that will test various subroutines that have test suites built in.
+
+2011-04-25  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Added compareAB.f90, to compare Arnau's and Brent's density matrices.
+	* Added subroutines displace and flipclone, to implement identical collisions.
+
+2011-03-28  Brent W. Barker  <barker@nscl.msu.edu>
+
+	All transforms now use FFTs. k-to-w and w-to-k still work over the redundant areas, but this will be fixed later, when Hermitian symmetry is invoked as well.
+
+2011-03-21  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* added first FFT subroutines
+	* added maxxim variable to find maximum imaginary value of coordinate space density matrix
+	* removed division from FTs by using new physical constants invsqrt2pi, etc.
+	* added new potential, which is actually split operator method exact solution for harmonic oscillator potential
+
+2011-03-10  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Added transform_foo_to_bar_trig subroutines
+	* added lib_fftw.f90, wrappers for FFTW subroutines
+
+2011-02-25  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* moved FT routines to mesh.f90, where they should be. fft_fftw.f90 is no longer used. I plan to make a lib_fftw when I get that far.
+
+2011-02-25  Brent W. Barker  <barker@nscl.msu.edu>
+
+	* Added firstOutput code, so that headers in output files aren't printed twice.
+	* Added renormalizeDM, it renormalizes the trace of the density matrix to Nmax+1
+	* Added imaginary evolution code (see useImEvol variable). It works.
+	* Added lib_lapack, wrappers to lapack routines to find eigenvalues and inverses of matrices
+	* removed some extraneous indentation lines from mesh.f90
+	* Removed howHermitian code. It was already commented out and taking up space.
+
+2011-02-14  Brent W. Barker  <barker@nscl.msu.edu>
+
+	Added imaginary time evolution. It's not finished, but it is debugged.
+
+2011-01-31  Brent W. Barker  <barker@nscl.msu.edu>
+
+	imported all log files. log is now versioned, stored in log/log.html
+
+2011-01-27  Brent W. Barker  <barker@nscl.msu.edu>
+
+	fixed hermaticity, a few other bugs.
+	* getDenW was REAL instead of COMPLEX
+	* bounds were incorrect in a FT routine
+
+2011-01-21  Brent W. Barker  <barker@nscl.msu.edu>
+
+	changed a few things, updated the boost subroutine
+
+2011-01-20  Brent W. Barker  <barker@nscl.msu.edu>
+
+	Activated evol_x - it works for both the external HO and MF HO for a stationary state.
+
+2011-01-18  Brent W. Barker  <barker@nscl.msu.edu>
+
+	We now evolve properly the gaussian in free space. Biggest changes:
+	
+	* fixed FFT (removed DBLE() from transform_x_to_wigner_dumb )
+	* removed 'facd' from output.f90 - this is a 1D code, period. Amplitudes represent probability densities.
+
+2011-01-12  Brent W. Barker  <barker@nscl.msu.edu>
+
+	copyExtra is added to copy redundant parts of density matrix.
+
+2011-01-12  Brent W. Barker  <barker@nscl.msu.edu>
+
+	fourier transforms are now working in the most naive way possible.
+
+2011-01-12  Brent W. Barker  <barker@nscl.msu.edu>
+
+	moved mesh initialization from initial.f90 to mesh.f90 module.
+
+2011-01-10  Brent W. Barker  <barker@nscl.msu.edu>
+
+	moved plotting commands to ./post/ and edited them to fix path issues. Added ignore file.
+
+2011-01-10  Brent W. Barker  <barker@nscl.msu.edu>
+
+	added comparison to analytic Gaussian. Valid only for harmonic oscillator maximum level Nmax=0
+
+2011-01-10  Brent W. Barker  <barker@nscl.msu.edu>
+
+	added results folder with plotting scripts
+
+2010-12-09  Brent W. Barker  <barker@nscl.msu.edu>
+
+	First commit
+
