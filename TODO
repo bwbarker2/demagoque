@@ -17,5 +17,6 @@ Copy library files to local directory for more portability
 
 Start using documentation - doxygen
 
-Reorganize file structure - use GNU standard?
+Add error handling module - for example, see http://sourceware.org/autobook/autobook/autobook_54.html#SEC54
 
+Add unit conversion module

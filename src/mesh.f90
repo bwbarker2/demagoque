@@ -452,7 +452,6 @@ contains
 
   subroutine transform_x_to_wigner_trig
    !! brute force method to test the theory, using cos/sin transforms. Theory in notes, BWB 2011-02-25p2
-   use fftw_constants
    use phys_cons
    implicit none
   
@@ -503,7 +502,6 @@ contains
   
   subroutine transform_x_to_wigner_dumb
    !! brute force method to test the theory
-   use fftw_constants
    use phys_cons
    implicit none
   
@@ -801,7 +799,6 @@ contains
 
   subroutine transform_k_to_wigner_trig
    !! brute force method to test the theory, using cos/sin transforms. Theory in notes, BWB 2011-02-28p1
-   use fftw_constants
    use phys_cons
    implicit none
   
