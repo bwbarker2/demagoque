@@ -45,16 +45,18 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_demagoque_OBJECTS = demagoque-bmath.$(OBJEXT) \
-	demagoque-bstring.$(OBJEXT) demagoque-cons_laws.$(OBJEXT) \
-	demagoque-dmtdhf.$(OBJEXT) demagoque-ener.$(OBJEXT) \
-	demagoque-initial.$(OBJEXT) \
+	demagoque-bstring.$(OBJEXT) demagoque-prec_def.$(OBJEXT) \
+	demagoque-cons_laws.$(OBJEXT) \
 	demagoque-input_parameters.$(OBJEXT) \
+	demagoque-phys_cons.$(OBJEXT) demagoque-lib_lapack.$(OBJEXT) \
+	demagoque-lib_fftw.$(OBJEXT) demagoque-mesh.$(OBJEXT) \
+	demagoque-time.$(OBJEXT) demagoque-dmtdhf.$(OBJEXT) \
+	demagoque-ener.$(OBJEXT) demagoque-initial.$(OBJEXT) \
 	demagoque-integra.$(OBJEXT) interp.$(OBJEXT) \
-	demagoque-lib_fftw.$(OBJEXT) demagoque-lib_lapack.$(OBJEXT) \
-	demagoque-mesh.$(OBJEXT) demagoque-outAnalHarmonic.$(OBJEXT) \
-	demagoque-output.$(OBJEXT) demagoque-phys_cons.$(OBJEXT) \
-	demagoque-prec_def.$(OBJEXT) demagoque-renormalizeDM.$(OBJEXT) \
-	demagoque-skyrme_params.$(OBJEXT) demagoque-time.$(OBJEXT) \
+	demagoque-outAnalHarmonic.$(OBJEXT) \
+	demagoque-formatting.$(OBJEXT) demagoque-output.$(OBJEXT) \
+	demagoque-renormalizeDM.$(OBJEXT) \
+	demagoque-skyrme_params.$(OBJEXT) \
 	demagoque-time_evol.$(OBJEXT) demagoque-wfnho.$(OBJEXT)
 demagoque_OBJECTS = $(am_demagoque_OBJECTS)
 demagoque_LDADD = $(LDADD)
@@ -79,14 +81,14 @@ AUTOHEADER = autoheader
 AUTOMAKE = automake-1.11
 AWK = gawk
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"demagoque\" -DPACKAGE_TARNAME=\"demagoque\" -DPACKAGE_VERSION=\"0.01r31\" -DPACKAGE_STRING=\"demagoque\ 0.01r31\" -DPACKAGE_BUGREPORT=\"barker@nscl.msu.edu\" -DPACKAGE_URL=\"https://launchpad.net/demagoque\" -DPACKAGE=\"demagoque\" -DVERSION=\"0.01r31\" -DHAVE_LIBFFTW3=1 -DHAVE_LIBLAPACK=1
+DEFS = -DPACKAGE_NAME=\"demagoque\" -DPACKAGE_TARNAME=\"demagoque\" -DPACKAGE_VERSION=\"0.01r32\" -DPACKAGE_STRING=\"demagoque\ 0.01r32\" -DPACKAGE_BUGREPORT=\"barker@nscl.msu.edu\" -DPACKAGE_URL=\"https://launchpad.net/demagoque\" -DPACKAGE=\"demagoque\" -DVERSION=\"0.01r32\" -DHAVE_LIBFFTW3=1 -DHAVE_LIBLAPACK=1
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
 EXEEXT = 
 F77 = gfortran
 FC = gfortran
-FCFLAGS = -g -O2
+FCFLAGS = -g
 FCFLAGS_f90 = 
 FFLAGS = -g -O2
 INSTALL = /usr/bin/install -c
@@ -104,15 +106,15 @@ OBJEXT = o
 PACKAGE = demagoque
 PACKAGE_BUGREPORT = barker@nscl.msu.edu
 PACKAGE_NAME = demagoque
-PACKAGE_STRING = demagoque 0.01r31
+PACKAGE_STRING = demagoque 0.01r32
 PACKAGE_TARNAME = demagoque
 PACKAGE_URL = https://launchpad.net/demagoque
-PACKAGE_VERSION = 0.01r31
+PACKAGE_VERSION = 0.01r32
 PATH_SEPARATOR = :
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 0.01r31
+VERSION = 0.01r32
 abs_builddir = /home/bob/proj/DEMAGOQUE/work2/trunk/src
 abs_srcdir = /home/bob/proj/DEMAGOQUE/work2/trunk/src
 abs_top_builddir = /home/bob/proj/DEMAGOQUE/work2/trunk
@@ -154,15 +156,17 @@ target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
-AM_CPPFLAGS = -fbounds-check -Wall -ggdb -O3
-demagoque_SOURCES = bmath.f90 bstring.f90 cons_laws.f90 dmtdhf.f90 ener.f90 \
-          initial.f90 input_parameters.f90 integra.f90 \
-          interp.f lib_fftw.f90 lib_lapack.f90 mesh.f90 \
-          outAnalHarmonic.f90 output.f90 phys_cons.f90 \
-          prec_def.f90 renormalizeDM.f90 skyrme_params.f90 \
-          time.f90 time_evol.f90 wfnho.f90
+AM_FCFLAGS = -fbounds-check -Wall -ggdb -O3
+AM_FCFLAGS_f90 = -g -O3
+demagoque_SOURCES = bmath.f90 bstring.f90 prec_def.f90 cons_laws.f90 input_parameters.f90 phys_cons.f90 lib_lapack.f90 lib_fftw.f90 mesh.f90 time.f90 dmtdhf.f90 ener.f90 \
+          initial.f90 integra.f90 \
+          interp.f \
+          outAnalHarmonic.f90 formatting.f90 output.f90 \
+          renormalizeDM.f90 skyrme_params.f90 \
+          time_evol.f90 wfnho.f90
 
-demagoque_CPPFLAGS = -fbounds-check -Wall -ggdb -O3
+
+#demagoque_CPPFLAGS = -fbounds-check -Wall -ggdb -O3
 demagoque_FCFLAGS = -fbounds-check -Wall -ggdb -O3
 all: all-am
 
@@ -269,11 +273,53 @@ demagoque-bstring.o: bstring.f90
 demagoque-bstring.obj: bstring.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-bstring.obj $(FCFLAGS_f90) `if test -f 'bstring.f90'; then $(CYGPATH_W) 'bstring.f90'; else $(CYGPATH_W) '$(srcdir)/bstring.f90'; fi`
 
+demagoque-prec_def.o: prec_def.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-prec_def.o $(FCFLAGS_f90) `test -f 'prec_def.f90' || echo '$(srcdir)/'`prec_def.f90
+
+demagoque-prec_def.obj: prec_def.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-prec_def.obj $(FCFLAGS_f90) `if test -f 'prec_def.f90'; then $(CYGPATH_W) 'prec_def.f90'; else $(CYGPATH_W) '$(srcdir)/prec_def.f90'; fi`
+
 demagoque-cons_laws.o: cons_laws.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-cons_laws.o $(FCFLAGS_f90) `test -f 'cons_laws.f90' || echo '$(srcdir)/'`cons_laws.f90
 
 demagoque-cons_laws.obj: cons_laws.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-cons_laws.obj $(FCFLAGS_f90) `if test -f 'cons_laws.f90'; then $(CYGPATH_W) 'cons_laws.f90'; else $(CYGPATH_W) '$(srcdir)/cons_laws.f90'; fi`
+
+demagoque-input_parameters.o: input_parameters.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-input_parameters.o $(FCFLAGS_f90) `test -f 'input_parameters.f90' || echo '$(srcdir)/'`input_parameters.f90
+
+demagoque-input_parameters.obj: input_parameters.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-input_parameters.obj $(FCFLAGS_f90) `if test -f 'input_parameters.f90'; then $(CYGPATH_W) 'input_parameters.f90'; else $(CYGPATH_W) '$(srcdir)/input_parameters.f90'; fi`
+
+demagoque-phys_cons.o: phys_cons.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-phys_cons.o $(FCFLAGS_f90) `test -f 'phys_cons.f90' || echo '$(srcdir)/'`phys_cons.f90
+
+demagoque-phys_cons.obj: phys_cons.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-phys_cons.obj $(FCFLAGS_f90) `if test -f 'phys_cons.f90'; then $(CYGPATH_W) 'phys_cons.f90'; else $(CYGPATH_W) '$(srcdir)/phys_cons.f90'; fi`
+
+demagoque-lib_lapack.o: lib_lapack.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-lib_lapack.o $(FCFLAGS_f90) `test -f 'lib_lapack.f90' || echo '$(srcdir)/'`lib_lapack.f90
+
+demagoque-lib_lapack.obj: lib_lapack.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-lib_lapack.obj $(FCFLAGS_f90) `if test -f 'lib_lapack.f90'; then $(CYGPATH_W) 'lib_lapack.f90'; else $(CYGPATH_W) '$(srcdir)/lib_lapack.f90'; fi`
+
+demagoque-lib_fftw.o: lib_fftw.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-lib_fftw.o $(FCFLAGS_f90) `test -f 'lib_fftw.f90' || echo '$(srcdir)/'`lib_fftw.f90
+
+demagoque-lib_fftw.obj: lib_fftw.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-lib_fftw.obj $(FCFLAGS_f90) `if test -f 'lib_fftw.f90'; then $(CYGPATH_W) 'lib_fftw.f90'; else $(CYGPATH_W) '$(srcdir)/lib_fftw.f90'; fi`
+
+demagoque-mesh.o: mesh.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-mesh.o $(FCFLAGS_f90) `test -f 'mesh.f90' || echo '$(srcdir)/'`mesh.f90
+
+demagoque-mesh.obj: mesh.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-mesh.obj $(FCFLAGS_f90) `if test -f 'mesh.f90'; then $(CYGPATH_W) 'mesh.f90'; else $(CYGPATH_W) '$(srcdir)/mesh.f90'; fi`
+
+demagoque-time.o: time.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-time.o $(FCFLAGS_f90) `test -f 'time.f90' || echo '$(srcdir)/'`time.f90
+
+demagoque-time.obj: time.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-time.obj $(FCFLAGS_f90) `if test -f 'time.f90'; then $(CYGPATH_W) 'time.f90'; else $(CYGPATH_W) '$(srcdir)/time.f90'; fi`
 
 demagoque-dmtdhf.o: dmtdhf.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-dmtdhf.o $(FCFLAGS_f90) `test -f 'dmtdhf.f90' || echo '$(srcdir)/'`dmtdhf.f90
@@ -293,35 +339,11 @@ demagoque-initial.o: initial.f90
 demagoque-initial.obj: initial.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-initial.obj $(FCFLAGS_f90) `if test -f 'initial.f90'; then $(CYGPATH_W) 'initial.f90'; else $(CYGPATH_W) '$(srcdir)/initial.f90'; fi`
 
-demagoque-input_parameters.o: input_parameters.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-input_parameters.o $(FCFLAGS_f90) `test -f 'input_parameters.f90' || echo '$(srcdir)/'`input_parameters.f90
-
-demagoque-input_parameters.obj: input_parameters.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-input_parameters.obj $(FCFLAGS_f90) `if test -f 'input_parameters.f90'; then $(CYGPATH_W) 'input_parameters.f90'; else $(CYGPATH_W) '$(srcdir)/input_parameters.f90'; fi`
-
 demagoque-integra.o: integra.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-integra.o $(FCFLAGS_f90) `test -f 'integra.f90' || echo '$(srcdir)/'`integra.f90
 
 demagoque-integra.obj: integra.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-integra.obj $(FCFLAGS_f90) `if test -f 'integra.f90'; then $(CYGPATH_W) 'integra.f90'; else $(CYGPATH_W) '$(srcdir)/integra.f90'; fi`
-
-demagoque-lib_fftw.o: lib_fftw.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-lib_fftw.o $(FCFLAGS_f90) `test -f 'lib_fftw.f90' || echo '$(srcdir)/'`lib_fftw.f90
-
-demagoque-lib_fftw.obj: lib_fftw.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-lib_fftw.obj $(FCFLAGS_f90) `if test -f 'lib_fftw.f90'; then $(CYGPATH_W) 'lib_fftw.f90'; else $(CYGPATH_W) '$(srcdir)/lib_fftw.f90'; fi`
-
-demagoque-lib_lapack.o: lib_lapack.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-lib_lapack.o $(FCFLAGS_f90) `test -f 'lib_lapack.f90' || echo '$(srcdir)/'`lib_lapack.f90
-
-demagoque-lib_lapack.obj: lib_lapack.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-lib_lapack.obj $(FCFLAGS_f90) `if test -f 'lib_lapack.f90'; then $(CYGPATH_W) 'lib_lapack.f90'; else $(CYGPATH_W) '$(srcdir)/lib_lapack.f90'; fi`
-
-demagoque-mesh.o: mesh.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-mesh.o $(FCFLAGS_f90) `test -f 'mesh.f90' || echo '$(srcdir)/'`mesh.f90
-
-demagoque-mesh.obj: mesh.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-mesh.obj $(FCFLAGS_f90) `if test -f 'mesh.f90'; then $(CYGPATH_W) 'mesh.f90'; else $(CYGPATH_W) '$(srcdir)/mesh.f90'; fi`
 
 demagoque-outAnalHarmonic.o: outAnalHarmonic.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-outAnalHarmonic.o $(FCFLAGS_f90) `test -f 'outAnalHarmonic.f90' || echo '$(srcdir)/'`outAnalHarmonic.f90
@@ -329,23 +351,17 @@ demagoque-outAnalHarmonic.o: outAnalHarmonic.f90
 demagoque-outAnalHarmonic.obj: outAnalHarmonic.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-outAnalHarmonic.obj $(FCFLAGS_f90) `if test -f 'outAnalHarmonic.f90'; then $(CYGPATH_W) 'outAnalHarmonic.f90'; else $(CYGPATH_W) '$(srcdir)/outAnalHarmonic.f90'; fi`
 
+demagoque-formatting.o: formatting.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-formatting.o $(FCFLAGS_f90) `test -f 'formatting.f90' || echo '$(srcdir)/'`formatting.f90
+
+demagoque-formatting.obj: formatting.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-formatting.obj $(FCFLAGS_f90) `if test -f 'formatting.f90'; then $(CYGPATH_W) 'formatting.f90'; else $(CYGPATH_W) '$(srcdir)/formatting.f90'; fi`
+
 demagoque-output.o: output.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-output.o $(FCFLAGS_f90) `test -f 'output.f90' || echo '$(srcdir)/'`output.f90
 
 demagoque-output.obj: output.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-output.obj $(FCFLAGS_f90) `if test -f 'output.f90'; then $(CYGPATH_W) 'output.f90'; else $(CYGPATH_W) '$(srcdir)/output.f90'; fi`
-
-demagoque-phys_cons.o: phys_cons.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-phys_cons.o $(FCFLAGS_f90) `test -f 'phys_cons.f90' || echo '$(srcdir)/'`phys_cons.f90
-
-demagoque-phys_cons.obj: phys_cons.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-phys_cons.obj $(FCFLAGS_f90) `if test -f 'phys_cons.f90'; then $(CYGPATH_W) 'phys_cons.f90'; else $(CYGPATH_W) '$(srcdir)/phys_cons.f90'; fi`
-
-demagoque-prec_def.o: prec_def.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-prec_def.o $(FCFLAGS_f90) `test -f 'prec_def.f90' || echo '$(srcdir)/'`prec_def.f90
-
-demagoque-prec_def.obj: prec_def.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-prec_def.obj $(FCFLAGS_f90) `if test -f 'prec_def.f90'; then $(CYGPATH_W) 'prec_def.f90'; else $(CYGPATH_W) '$(srcdir)/prec_def.f90'; fi`
 
 demagoque-renormalizeDM.o: renormalizeDM.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-renormalizeDM.o $(FCFLAGS_f90) `test -f 'renormalizeDM.f90' || echo '$(srcdir)/'`renormalizeDM.f90
@@ -358,12 +374,6 @@ demagoque-skyrme_params.o: skyrme_params.f90
 
 demagoque-skyrme_params.obj: skyrme_params.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-skyrme_params.obj $(FCFLAGS_f90) `if test -f 'skyrme_params.f90'; then $(CYGPATH_W) 'skyrme_params.f90'; else $(CYGPATH_W) '$(srcdir)/skyrme_params.f90'; fi`
-
-demagoque-time.o: time.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-time.o $(FCFLAGS_f90) `test -f 'time.f90' || echo '$(srcdir)/'`time.f90
-
-demagoque-time.obj: time.f90
-	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-time.obj $(FCFLAGS_f90) `if test -f 'time.f90'; then $(CYGPATH_W) 'time.f90'; else $(CYGPATH_W) '$(srcdir)/time.f90'; fi`
 
 demagoque-time_evol.o: time_evol.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-time_evol.o $(FCFLAGS_f90) `test -f 'time_evol.f90' || echo '$(srcdir)/'`time_evol.f90
@@ -546,7 +556,8 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-local
 
 pdf: pdf-am
 
@@ -570,9 +581,12 @@ uninstall-am: uninstall-binPROGRAMS
 	install-pdf-am install-ps install-ps-am install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-binPROGRAMS
+	mostlyclean-generic mostlyclean-local pdf pdf-am ps ps-am tags \
+	uninstall uninstall-am uninstall-binPROGRAMS
 
+
+mostlyclean-local:
+	rm -f *.mod
 
 #SUFFIXES = .mod
 #
