@@ -20,8 +20,8 @@
 !            Michigan State University
 !            1 Cyclotron, East Lansing, MI 48824-1321
 
+!> \brief Evolves the density matrix forward in time
 SUBROUTINE time_evolution
-  !! time_evolution - evolves the density matrix forward in time
   use input_parameters
   use mesh
   use time
@@ -110,15 +110,15 @@ END SUBROUTINE time_evolution
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+!> evolves density matrix according to the semiclassical kinetic energy
 SUBROUTINE evol_k(dtim)
-  !! evol_k - evolves density matrix according to the semiclassical kinetic energy
   use input_parameters
   use mesh
   use phys_cons
   use prec_def
   IMPLICIT NONE
 
-  real*8, intent(in) :: dtim
+  real (Long), intent(in) :: dtim  !< timestep to use
 
   INTEGER ika, ikr !loop variables
 !  real*8 :: cos2k, sin2k, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
@@ -202,8 +202,8 @@ END SUBROUTINE evol_k
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+!> Enforces Hermiticity by setting cells equal to the average of left and right.
 subroutine makeMomentumHermitian()
- !! makeSpaceHermitian  - enforce Hermiticity by setting cells equal to the average of top and bottom.
  use mesh
  use phys_cons
  implicit none
@@ -223,8 +223,8 @@ end subroutine makeMomentumHermitian
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
+!> Evolves density matrix in position space
 SUBROUTINE evol_x(dtim)
-  !! evol_x - evolves density matrix in position space
  use cons_laws
  use input_parameters
  use mesh
@@ -232,7 +232,7 @@ SUBROUTINE evol_x(dtim)
  use prec_def
  IMPLICIT NONE
 
- real*8, intent(in) :: dtim !timestep
+ real*8, intent(in) :: dtim !< timestep
 
  INTEGER :: ixr, ixa !loop variables
  real*8 :: cos2k, sin2k, udt !cos,sin part of exp, exponent itself
@@ -386,8 +386,8 @@ END SUBROUTINE evol_x
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+!> Enforces Hermiticity by setting cells equal to the average of top and bottom.
 subroutine makeSpaceHermitian()
- !! makeSpaceHermitian  - enforce Hermiticity by setting cells equal to the average of top and bottom.
  use mesh
  use phys_cons
  implicit none
@@ -408,6 +408,7 @@ end subroutine makeSpaceHermitian
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+!> Calculates and stores the potential at each grid point in x
 subroutine calcPotDiag()
  use input_parameters
  use mesh
@@ -415,9 +416,9 @@ subroutine calcPotDiag()
  implicit none
 
  integer :: ixa
- real (Long) :: weight ! weighting for adiabatic switching
- real (Long) :: potI, potF !potentials
- real (Long) :: getWeight !functions
+ real (Long) :: weight !< weighting for adiabatic switching
+ real (Long) :: potI, potF !< potentials
+ real (Long) :: getWeight !< functions
 
 !call mesh_setReflectedLR(.true.)
 

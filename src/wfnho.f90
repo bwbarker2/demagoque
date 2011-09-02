@@ -1,14 +1,24 @@
-!ccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-!c ... HARMONIC OSCILLATOR EIGENVECTORS
-!ccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-real*8 FUNCTION wfnho(x,n,whm)
+!> \brief   Produces amplitudes of harmonic oscillator wave functions
+!! \details Wavefunction is defined as sum of N=0 to N=n hamonic oscillator
+!!          eigenvectors.
+!!
+!! \author  Arnau Rios
+!!
+!! \returns amplitude of sum of harmonic oscillator wavefunctions at position x
+!!
+real (Long) FUNCTION wfnho(x,n,whm)
   use phys_cons
   use prec_def
   implicit none
 
+  real (Long), intent(in) :: x   !< position at which to calculate wavefunction
+  integer,     intent(in) :: n   !< order of maximum harmonic oscillator used
+  real (Long), intent(in) :: whm !< angular wavenumber squared
+
   integer :: nfac
-  integer :: n,ifac
-  real (long) :: x,whm,xnorm,xx,Hn
+  integer :: ifac
+  real (long) :: xnorm &  !< normalization of wavefunction
+                 ,xx,Hn
 
   nfac=1
 
@@ -30,15 +40,16 @@ real*8 FUNCTION wfnho(x,n,whm)
 end FUNCTION wfnho
 
 
-!ccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-!c ... HERMITE POLYNOMIAL OF ORDER N
-!ccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-real*8 FUNCTION Hn(x,n)
+!> \brief Computes Hermite polynomial of order n at position x
+!!
+!! \author Arnau Rios
+!!
+real (Long) FUNCTION Hn(x,n)
   use prec_def
   implicit none
 
-  real (long), intent(in) :: x
-  integer, intent(in) :: n
+  real (long), intent(in) :: x  !< position at which to compute polynomial
+  integer,     intent(in) :: n  !< order of polynomial
 
   real (long) :: hm,hm1,hm2
   integer :: m

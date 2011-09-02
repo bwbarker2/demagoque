@@ -1,0 +1,470 @@
+\hypertarget{time__evol_8f90}{
+\section{/home/bob/proj/DEMAGOQUE/work2/trunk/src/time\_\-evol.f90 File Reference}
+\label{time__evol_8f90}\index{/home/bob/proj/DEMAGOQUE/work2/trunk/src/time\_\-evol.f90@{/home/bob/proj/DEMAGOQUE/work2/trunk/src/time\_\-evol.f90}}
+}
+\subsection*{Functions/Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{time__evol_8f90_a10534c39878a0b190f230860a356df23}{time\_\-evolution}
+\begin{DoxyCompactList}\small\item\em Evolves the density matrix forward in time. \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{time__evol_8f90_af0e783dddfdffb3dd9ed939b2e22cfeb}{evol\_\-k} (dtim)
+\begin{DoxyCompactList}\small\item\em evolves density matrix according to the semiclassical kinetic energy \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{time__evol_8f90_aae7967c421ef278652e75095f5c0473d}{makeMomentumHermitian} ()
+\begin{DoxyCompactList}\small\item\em Enforces Hermiticity by setting cells equal to the average of left and right. \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{time__evol_8f90_a3b0f1dd129befe0c02108523072801e3}{evol\_\-x} (dtim)
+\begin{DoxyCompactList}\small\item\em Evolves density matrix in position space. \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{time__evol_8f90_a514c7ebdcf00ccbc5b02c9de9c20968c}{makeSpaceHermitian} ()
+\begin{DoxyCompactList}\small\item\em Enforces Hermiticity by setting cells equal to the average of top and bottom. \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{time__evol_8f90_acb2e7591d9be67610ed55e3780e90d3b}{calcPotDiag} ()
+\begin{DoxyCompactList}\small\item\em Calculates and stores the potential at each grid point in x. \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{time__evol_8f90_ad5323ad74cf4d93ae58208945db02445}{getImCutoff} (cutfac, ixr, dtim)
+\item 
+real $\ast$8 \hyperlink{time__evol_8f90_a51a8e57d35c50a639ad09fdbf9704e4e}{getWeight} ()
+\item 
+subroutine \hyperlink{time__evol_8f90_abe9f8f18341ac3f9035e10d5ac5bb719}{getPotX} (potX, potType, ix)
+\item 
+subroutine \hyperlink{time__evol_8f90_a1dfdd71630e46cd5d6e47b628c62b617}{potHO} (potX, ix)
+\item 
+subroutine \hyperlink{time__evol_8f90_a813b9b02c79ff5d8dfcb2fe410996aa7}{potHOexact} (potX, ix)
+\item 
+subroutine \hyperlink{time__evol_8f90_ae2541c404b9b3d3d1b86dd39d5695ff9}{potHOmf} (potX, ixa1)
+\item 
+subroutine \hyperlink{time__evol_8f90_a499a2756da445d863a4efaa25213ac95}{potSkyrme} (potX, ix)
+\item 
+real $\ast$8 \hyperlink{time__evol_8f90_a373d9e9d641a81c9bdfdbd47f636b6b5}{skyContact} (rho)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{time__evol_8f90_acb2e7591d9be67610ed55e3780e90d3b}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!calcPotDiag@{calcPotDiag}}
+\index{calcPotDiag@{calcPotDiag}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{calcPotDiag}]{\setlength{\rightskip}{0pt plus 5cm}subroutine calcPotDiag (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_acb2e7591d9be67610ed55e3780e90d3b}
+
+
+Calculates and stores the potential at each grid point in x. 
+
+
+
+Definition at line 412 of file time\_\-evol.f90.
+
+
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_acb2e7591d9be67610ed55e3780e90d3b_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_acb2e7591d9be67610ed55e3780e90d3b_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_af0e783dddfdffb3dd9ed939b2e22cfeb}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!evol\_\-k@{evol\_\-k}}
+\index{evol\_\-k@{evol\_\-k}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{evol\_\-k}]{\setlength{\rightskip}{0pt plus 5cm}subroutine evol\_\-k (
+\begin{DoxyParamCaption}
+\item[{real (Long),intent(in)}]{dtim}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_af0e783dddfdffb3dd9ed939b2e22cfeb}
+
+
+evolves density matrix according to the semiclassical kinetic energy 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dtim} & timestep to use \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 114 of file time\_\-evol.f90.
+
+
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_af0e783dddfdffb3dd9ed939b2e22cfeb_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{time__evol_8f90_af0e783dddfdffb3dd9ed939b2e22cfeb_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_a3b0f1dd129befe0c02108523072801e3}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!evol\_\-x@{evol\_\-x}}
+\index{evol\_\-x@{evol\_\-x}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{evol\_\-x}]{\setlength{\rightskip}{0pt plus 5cm}subroutine evol\_\-x (
+\begin{DoxyParamCaption}
+\item[{real$\ast$8,intent(in)}]{dtim}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_a3b0f1dd129befe0c02108523072801e3}
+
+
+Evolves density matrix in position space. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dtim} & timestep \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 227 of file time\_\-evol.f90.
+
+
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_a3b0f1dd129befe0c02108523072801e3_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{time__evol_8f90_a3b0f1dd129befe0c02108523072801e3_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_ad5323ad74cf4d93ae58208945db02445}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!getImCutoff@{getImCutoff}}
+\index{getImCutoff@{getImCutoff}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{getImCutoff}]{\setlength{\rightskip}{0pt plus 5cm}subroutine getImCutoff (
+\begin{DoxyParamCaption}
+\item[{real$\ast$8,intent(out)}]{cutfac, }
+\item[{integer,intent(in)}]{ixr, }
+\item[{real$\ast$8,intent(in)}]{dtim}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_ad5323ad74cf4d93ae58208945db02445}
+
+
+Definition at line 459 of file time\_\-evol.f90.
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_ad5323ad74cf4d93ae58208945db02445_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_abe9f8f18341ac3f9035e10d5ac5bb719}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!getPotX@{getPotX}}
+\index{getPotX@{getPotX}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{getPotX}]{\setlength{\rightskip}{0pt plus 5cm}subroutine getPotX (
+\begin{DoxyParamCaption}
+\item[{real (Long),intent(out)}]{potX, }
+\item[{integer,intent(in)}]{potType, }
+\item[{integer,intent(in)}]{ix}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_abe9f8f18341ac3f9035e10d5ac5bb719}
+
+
+Definition at line 504 of file time\_\-evol.f90.
+
+
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_abe9f8f18341ac3f9035e10d5ac5bb719_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_abe9f8f18341ac3f9035e10d5ac5bb719_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_a51a8e57d35c50a639ad09fdbf9704e4e}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!getWeight@{getWeight}}
+\index{getWeight@{getWeight}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{getWeight}]{\setlength{\rightskip}{0pt plus 5cm}real$\ast$8 getWeight (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_a51a8e57d35c50a639ad09fdbf9704e4e}
+
+
+Definition at line 491 of file time\_\-evol.f90.
+
+\hypertarget{time__evol_8f90_aae7967c421ef278652e75095f5c0473d}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!makeMomentumHermitian@{makeMomentumHermitian}}
+\index{makeMomentumHermitian@{makeMomentumHermitian}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{makeMomentumHermitian}]{\setlength{\rightskip}{0pt plus 5cm}subroutine makeMomentumHermitian (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_aae7967c421ef278652e75095f5c0473d}
+
+
+Enforces Hermiticity by setting cells equal to the average of left and right. 
+
+
+
+Definition at line 206 of file time\_\-evol.f90.
+
+\hypertarget{time__evol_8f90_a514c7ebdcf00ccbc5b02c9de9c20968c}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!makeSpaceHermitian@{makeSpaceHermitian}}
+\index{makeSpaceHermitian@{makeSpaceHermitian}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{makeSpaceHermitian}]{\setlength{\rightskip}{0pt plus 5cm}subroutine makeSpaceHermitian (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_a514c7ebdcf00ccbc5b02c9de9c20968c}
+
+
+Enforces Hermiticity by setting cells equal to the average of top and bottom. 
+
+
+
+Definition at line 390 of file time\_\-evol.f90.
+
+
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=288pt]{time__evol_8f90_a514c7ebdcf00ccbc5b02c9de9c20968c_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_a1dfdd71630e46cd5d6e47b628c62b617}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!potHO@{potHO}}
+\index{potHO@{potHO}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{potHO}]{\setlength{\rightskip}{0pt plus 5cm}subroutine potHO (
+\begin{DoxyParamCaption}
+\item[{real$\ast$8,intent(out)}]{potX, }
+\item[{integer,intent(in)}]{ix}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_a1dfdd71630e46cd5d6e47b628c62b617}
+
+
+Definition at line 534 of file time\_\-evol.f90.
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_a1dfdd71630e46cd5d6e47b628c62b617_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_a813b9b02c79ff5d8dfcb2fe410996aa7}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!potHOexact@{potHOexact}}
+\index{potHOexact@{potHOexact}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{potHOexact}]{\setlength{\rightskip}{0pt plus 5cm}subroutine potHOexact (
+\begin{DoxyParamCaption}
+\item[{real$\ast$8,intent(out)}]{potX, }
+\item[{integer,intent(in)}]{ix}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_a813b9b02c79ff5d8dfcb2fe410996aa7}
+
+
+Definition at line 554 of file time\_\-evol.f90.
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_a813b9b02c79ff5d8dfcb2fe410996aa7_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_ae2541c404b9b3d3d1b86dd39d5695ff9}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!potHOmf@{potHOmf}}
+\index{potHOmf@{potHOmf}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{potHOmf}]{\setlength{\rightskip}{0pt plus 5cm}subroutine potHOmf (
+\begin{DoxyParamCaption}
+\item[{real (Long),intent(out)}]{potX, }
+\item[{integer,intent(in)}]{ixa1}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_ae2541c404b9b3d3d1b86dd39d5695ff9}
+
+
+Definition at line 570 of file time\_\-evol.f90.
+
+
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{time__evol_8f90_ae2541c404b9b3d3d1b86dd39d5695ff9_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_ae2541c404b9b3d3d1b86dd39d5695ff9_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_a499a2756da445d863a4efaa25213ac95}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!potSkyrme@{potSkyrme}}
+\index{potSkyrme@{potSkyrme}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{potSkyrme}]{\setlength{\rightskip}{0pt plus 5cm}subroutine potSkyrme (
+\begin{DoxyParamCaption}
+\item[{real$\ast$8,intent(out)}]{potX, }
+\item[{integer,intent(in)}]{ix}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_a499a2756da445d863a4efaa25213ac95}
+
+
+Definition at line 620 of file time\_\-evol.f90.
+
+
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=382pt]{time__evol_8f90_a499a2756da445d863a4efaa25213ac95_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_a499a2756da445d863a4efaa25213ac95_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{time__evol_8f90_a373d9e9d641a81c9bdfdbd47f636b6b5}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!skyContact@{skyContact}}
+\index{skyContact@{skyContact}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{skyContact}]{\setlength{\rightskip}{0pt plus 5cm}real$\ast$8 skyContact (
+\begin{DoxyParamCaption}
+\item[{real$\ast$8,intent(in)}]{rho}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_a373d9e9d641a81c9bdfdbd47f636b6b5}
+
+
+Definition at line 666 of file time\_\-evol.f90.
+
+\hypertarget{time__evol_8f90_a10534c39878a0b190f230860a356df23}{
+\index{time\_\-evol.f90@{time\_\-evol.f90}!time\_\-evolution@{time\_\-evolution}}
+\index{time\_\-evolution@{time\_\-evolution}!time_evol.f90@{time\_\-evol.f90}}
+\subsubsection[{time\_\-evolution}]{\setlength{\rightskip}{0pt plus 5cm}subroutine time\_\-evolution (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{time__evol_8f90_a10534c39878a0b190f230860a356df23}
+
+
+Evolves the density matrix forward in time. 
+
+
+
+Definition at line 24 of file time\_\-evol.f90.
+
+
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{time__evol_8f90_a10534c39878a0b190f230860a356df23_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{time__evol_8f90_a10534c39878a0b190f230860a356df23_icgraph}
+\end{center}
+\end{figure}
+
+

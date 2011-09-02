@@ -8,9 +8,9 @@ Unify file opens for different modes to not duplicate code (ad_, im_, etc)
 
 Implement subroutine in module 'mesh' that takes a function of ixa and ixr and multiplies matrix elements by that function - less things outside of mesh need to know about how we store matrix.
 
-Create makefile to use instead
--with support for procdenextra as well
--intermediate step to automake?
+autotools:
+-Include support for procdenextra in automake
+-check for gnuplot - make optional or warn or something, since it is not needed for running? AC_CHECK_PROG
 
 Copy library files to local directory for more portability
 -maybe... what about HPCC apps where HPCC libs are more optimized for arch?
@@ -20,3 +20,9 @@ Start using documentation - doxygen
 Add error handling module - for example, see http://sourceware.org/autobook/autobook/autobook_54.html#SEC54
 
 Add unit conversion module
+ -see how GNU Scientific Library or ROOT does it?
+
+Change sh scripts to use the ${SED} and ${AWK} variables that are set by configure.ac
+ -maybe have a script that is called inside every analysis script that sets global things? Then configure.ac will only have to modify and know about one script.
+
+

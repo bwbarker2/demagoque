@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61" title="copyExtra" alt="" coords="125,32,205,61"/>
+<area shape="rect" id="node5" href="$namespacemesh.html#aef51df23ee69f610420b25672a2da3ef" title="mesh::setState" alt="" coords="111,85,220,115"/>
+<area shape="rect" id="node7" href="$namespacemesh.html#a10655d39a753ec023b2c6b9d36db4663" title="mesh::transform_k_to_wigner_dumb" alt="" coords="271,5,503,35"/>
+<area shape="rect" id="node9" href="$namespacemesh.html#ad10642a5ceb6239ab5dbf2124a221b45" title="mesh::transform_wigner_to_k_dumb" alt="" coords="271,59,503,88"/>
+<area shape="rect" id="node11" href="$namespacemesh.html#aee41613b43ab6e2f5a715e21c4227f4c" title="mesh::transform_wigner_to_x_dumb" alt="" coords="271,112,503,141"/>
+<area shape="rect" id="node13" href="$namespacemesh.html#ab0c4d2eefb660f80c8bd5a26cfea90bb" title="mesh::transform_x_to_wigner_dumb" alt="" coords="271,165,503,195"/>
+<area shape="rect" id="node15" href="$namespacemesh.html#a87ae177a6a4383943393f8efa7da0018" title="mesh::getDenX" alt="" coords="555,139,667,168"/>
+<area shape="rect" id="node17" href="$namespacemesh.html#a7e79531a47425f91c6ac0921fc2203ed" title="mesh::setDenW" alt="" coords="552,192,669,221"/>
+</map>

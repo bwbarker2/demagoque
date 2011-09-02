@@ -1,85 +1,93 @@
+!> \mainpage demagoque - The Documentation
+!!
+!!   \section license License
+!!    Copyright (C) 2011  Brent W. Barker
+!!
+!!    This program is free software: you can redistribute it and/or modify
+!!    it under the terms of the GNU General Public License as published by
+!!    the Free Software Foundation, either version 3 of the License, or
+!!    (at your option) any later version.
+!!
+!!    This program is distributed in the hope that it will be useful,
+!!    but WITHOUT ANY WARRANTY; without even the implied warranty of
+!!    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+!!    GNU General Public License for more details.
+!!
+!!    You should have received a copy of the GNU General Public License
+!!    along with this program (gpl-3.0.txt).  If not, see
+!!    <http://www.gnu.org/licenses/>.
+!!
+!! \section author Author
+!!            Brent W. Barker<br />
+!!            barker at nscl dot msu dot edu<br />
+!!            National Superconducting Cyclotron Laboratory<br />
+!!            Michigan State University<br />
+!!            1 Cyclotron, East Lansing, MI 48824-1321
+!!
+!! \section coords Coordinate system
+!! <p>In the rotated coordinate system, from the original x,x' system, the
+!! following coordinate system is used:</p>
+!!
+!! <code>
+!! xa = (x+x')/2 <br />
+!! xr = (x-x')   <br />
+!! ka = (k+k')/2 <br />
+!! kr = (k-k')   <br />
+!! </code>
+!!
+!! <p>In the spatial coordinates, the density matrix is of the form <code>denmat(xa,xr)</code>.
+!! In the spectral coordinates, it is of the form <code>denmat(kr,ka)</code>. Note that the
+!! order of relative and absolute is switched. This is because the Fourier
+!! transform in these coordinates associates the xr coordinate with ka, and xa
+!! with kr.
+!!
+!! \section potentials Potentials
+!! <p>These are selected with the potInitial and potFinal variables. The
+!! initial state should probably be an eigenstate of <code>potInitial</code>. The <code>potFinal</code> potential is
+!! that which is used for the time evolution. If potInitial and potFinal are
+!! different, then the system is switched adiabatically from the initial to the
+!! final potential. Here is the definition of the different potInitial/Final
+!! integers:</p>
+!!
+!! <table>
+!! <tr><td> code </td><td> definition </td></tr>
+!! <tr><td> -1 </td><td> no potential at all, free space </td></tr>
+!! <tr><td>  0 </td><td>  external harmonic oscillator centered at x=0</td></tr>
+!! <tr><td> 1 </td><td>  nonlocal meanfield harmonic oscillator</td></tr>
+!! <tr><td> 2 </td><td>  Skyrme-like contact potential (local density dependent) </td></tr>
+!! <tr><td> 3 </td><td> same as pot=0, but with exact evolution from Chin, Krotsheck, Phys Rev E72, 036705 (2005) </td></tr>
+!! </table>
+!!
+!! \section options Options
+!!
+!! <p>Options are given at the end of the code. Eventually the potentials will be options as well. Each line consists of a space-separated list of parameters. The first is a string that defines the option to set, followed by a list of parameters for that option. Options can be safely commented out with a starting '!'</p>
+!! <table>
+!! <tr><td>option </td><td>  definition </td></tr>
+!!
+!! <tr><td>initialSeparation </td><td> initial separation between center-of-masses of fragments
+!!                       in fm. Currently rounds displacement to nearest grid
+!!                       point, rather than interpolating.<br />
+!!
+!!                       Arguments: real*8 initialSeparation</td></tr>
+!!
+!! <tr><td> splitOperatorMethod </td><td>  time evolve using SOM. Parameter is order of method.
+!!                       Available orders are 3 and 5. Formulae from
+!!                       A.D.Bandrauk, H. Shen, J. Chem. Phys. 99, 1185 (1993).<br />
+!!
+!!                       Arguments: integer splitOperatorMethod</td></tr>
+!!
+!! <tr><td> useFlipClone </td><td> create symmetric system by adding to the system its
+!!                       conjugate, reflected about the xa axis. Option
+!!                       'initialSeparation' must be set.<br />
+!!
+!!                       Arguments: None</td></tr>
+!!
+!! <tr><td> useImCutoff </td><td> imaginary off-diagonal cutoff. <br />
+!!
+!!                       Arguments: real*8 cutoff_w0, real*8 cutoff_x0, real*8
+!!                       cutoff_d0 </td></tr>
+!! </table>
 PROGRAM dmtdhf
-  ! dmtdhf - time evolution in 1D of a 1-body density matrix.
-! Copyright (C) 2011  Brent W. Barker
-!
-!    This program is free software: you can redistribute it and/or modify
-!    it under the terms of the GNU General Public License as published by
-!    the Free Software Foundation, either version 3 of the License, or
-!    (at your option) any later version.
-!
-!    This program is distributed in the hope that it will be useful,
-!    but WITHOUT ANY WARRANTY; without even the implied warranty of
-!    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-!    GNU General Public License for more details.
-!
-!    You should have received a copy of the GNU General Public License
-!    along with this program (gpl-3.0.txt).  If not, see
-!    <http://www.gnu.org/licenses/>.
-!
-!    Author: Brent W. Barker
-!            barker at nscl dot msu dot edu
-!            National Superconducting Cyclotron Laboratory
-!            Michigan State University
-!            1 Cyclotron, East Lansing, MI 48824-1321
-!
-! In the rotated coordinate system, from the original x,x' system, the
-! following coordinate system is used:
-! xa = (x+x')/2
-! xr = (x-x')
-! ka = (k+k')/2
-! kr = (k-k')
-!
-! in the spatial coordinates, the density matrix is of the form denmat(xa,xr).
-! In the spectral coordinates, it is of the form denmat(kr,ka). Note that the
-! order of relative and absolute is switched. This is because the Fourier
-! transform in these coordinates associates the xr coordinate with ka, and xa
-! with kr.
-!
-! Potentials: These are selected with the potInitial and potFinal variables. The
-! initial state must be an eigenstate of potInitial. The potFinal potential is
-! that which is used for the time evolution. If potInitial and potFinal are
-! different, then the system is switched adiabatically from the initial to the
-! final potential. Here is the definition of the different potInitial/Final
-! integers:
-!
-! pot  definition
-! -1   no potential at all, free space
-! 0    external harmonic oscillator centered at x=0
-! 1    nonlocal meanfield harmonic oscillator
-! 2    Skyrme-like contact potential (local density dependent)
-! 3    same as pot=0, but with exact evolution from Chin, Krotsheck, Phys Rev E72, 036705 (2005)
-!
-!!!!!!!!!!!
-! Options !
-!!!!!!!!!!!
-!
-! Options are given at the end of the code. Eventually the potentials will be options as well. Each line consists of a space-separated list of parameters. The first is a string that defines the option to set, followed by a list of parameters for that option. Options can be safely commented out with a starting '!'
-!
-! option                definition
-! ======                ==========
-! initialSeparation     initial separation between center-of-masses of fragments
-!                       in fm. Currently rounds displacement to nearest grid
-!                       point, rather than interpolating.
-!
-!                       Arguments: real*8 initialSeparation
-!
-! splitOperatorMethod   time evolve using SOM. Parameter is order of method.
-!                       Available orders are 3 and 5. Formulae from
-!                       A.D.Bandrauk, H. Shen, J. Chem. Phys. 99, 1185 (1993).
-!
-!                       Arguments: integer splitOperatorMethod
-!
-! useFlipClone          create symmetric system by adding to the system its
-!                       conjugate, reflected about the xa axis. Option
-!                       'initialSeparation' must be set.
-!
-!                       Arguments: None
-!
-! useImCutoff           imaginary off-diagonal cutoff.
-!
-!                       Arguments: real*8 cutoff_w0, real*8 cutoff_x0, real*8
-!                       cutoff_d0
-!
   use input_parameters
   USE mesh
   use time
