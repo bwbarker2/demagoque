@@ -1,0 +1,72 @@
+\hypertarget{namespaceclass__PhysicalQuantity}{
+\section{class\_\-PhysicalQuantity Module Reference}
+\label{namespaceclass__PhysicalQuantity}\index{class\_\-PhysicalQuantity@{class\_\-PhysicalQuantity}}
+}
+\subsection*{Data Types}
+\begin{DoxyCompactItemize}
+\item 
+type \hyperlink{typeclass__PhysicalQuantity_1_1PhysicalQuantity}{PhysicalQuantity}
+\begin{DoxyCompactList}\small\item\em Stores a quantity with a value, uncertainty, and units. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions/Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+type(physicalQuantity) \hyperlink{namespaceclass__PhysicalQuantity_ac1a3d1ca8ee8896007badfdcd7e3333b}{new\_\-PhysicalQuantity} (newSymbol, newUnits, newVal, newUnc)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+integer, parameter, private \hyperlink{namespaceclass__PhysicalQuantity_a9a49f0ad012c6d03a17e68cc71867a2d}{MAX\_\-SYMBOL\_\-LENGTH} = 5
+\item 
+integer, parameter, private \hyperlink{namespaceclass__PhysicalQuantity_a2e10d9a38cddedc3b7705d597476550f}{NUM\_\-BASE\_\-UNITS} = 7
+\end{DoxyCompactItemize}
+
+
+\subsection{Function/Subroutine Documentation}
+\hypertarget{namespaceclass__PhysicalQuantity_ac1a3d1ca8ee8896007badfdcd7e3333b}{
+\index{class\_\-PhysicalQuantity@{class\_\-PhysicalQuantity}!new\_\-PhysicalQuantity@{new\_\-PhysicalQuantity}}
+\index{new\_\-PhysicalQuantity@{new\_\-PhysicalQuantity}!class_PhysicalQuantity@{class\_\-PhysicalQuantity}}
+\subsubsection[{new\_\-PhysicalQuantity}]{\setlength{\rightskip}{0pt plus 5cm}type (physicalQuantity) class\_\-PhysicalQuantity::new\_\-PhysicalQuantity (
+\begin{DoxyParamCaption}
+\item[{character($\ast$),intent(in)}]{newSymbol, }
+\item[{real (Long),dimension(:),intent(in)}]{newUnits, }
+\item[{real (Long),intent(in),optional}]{newVal, }
+\item[{real (Long),intent(in),optional}]{newUnc}
+\end{DoxyParamCaption}
+)}}
+\label{namespaceclass__PhysicalQuantity_ac1a3d1ca8ee8896007badfdcd7e3333b}
+
+\begin{DoxyParams}{Parameters}
+{\em newSymbol} & symbol of quantity\\
+\hline
+{\em newUnits} & SI units of quantity\\
+\hline
+{\em newVal} & value of quantity\\
+\hline
+{\em newUnc} & uncertainty of quantity \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 30 of file class\_\-PhysicalQuantity.f90.
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{namespaceclass__PhysicalQuantity_a9a49f0ad012c6d03a17e68cc71867a2d}{
+\index{class\_\-PhysicalQuantity@{class\_\-PhysicalQuantity}!MAX\_\-SYMBOL\_\-LENGTH@{MAX\_\-SYMBOL\_\-LENGTH}}
+\index{MAX\_\-SYMBOL\_\-LENGTH@{MAX\_\-SYMBOL\_\-LENGTH}!class_PhysicalQuantity@{class\_\-PhysicalQuantity}}
+\subsubsection[{MAX\_\-SYMBOL\_\-LENGTH}]{\setlength{\rightskip}{0pt plus 5cm}integer,parameter,private {\bf class\_\-PhysicalQuantity::MAX\_\-SYMBOL\_\-LENGTH} = 5}}
+\label{namespaceclass__PhysicalQuantity_a9a49f0ad012c6d03a17e68cc71867a2d}
+
+
+Definition at line 7 of file class\_\-PhysicalQuantity.f90.
+
+\hypertarget{namespaceclass__PhysicalQuantity_a2e10d9a38cddedc3b7705d597476550f}{
+\index{class\_\-PhysicalQuantity@{class\_\-PhysicalQuantity}!NUM\_\-BASE\_\-UNITS@{NUM\_\-BASE\_\-UNITS}}
+\index{NUM\_\-BASE\_\-UNITS@{NUM\_\-BASE\_\-UNITS}!class_PhysicalQuantity@{class\_\-PhysicalQuantity}}
+\subsubsection[{NUM\_\-BASE\_\-UNITS}]{\setlength{\rightskip}{0pt plus 5cm}integer,parameter,private {\bf class\_\-PhysicalQuantity::NUM\_\-BASE\_\-UNITS} = 7}}
+\label{namespaceclass__PhysicalQuantity_a2e10d9a38cddedc3b7705d597476550f}
+
+
+Definition at line 8 of file class\_\-PhysicalQuantity.f90.
+

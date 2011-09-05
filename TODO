@@ -25,4 +25,8 @@ Add unit conversion module
 Change sh scripts to use the ${SED} and ${AWK} variables that are set by configure.ac
  -maybe have a script that is called inside every analysis script that sets global things? Then configure.ac will only have to modify and know about one script.
 
+Convert complex*16 to complex (cLong), defining cLong in prec_def
+
+Use a variable-length string class to define unit names and symbols in phys_cons.f90
+-Write bstring class type
 

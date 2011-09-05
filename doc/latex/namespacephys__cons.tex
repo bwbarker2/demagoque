@@ -2,6 +2,16 @@
 \section{phys\_\-cons Module Reference}
 \label{namespacephys__cons}\index{phys\_\-cons@{phys\_\-cons}}
 }
+
+
+Stores mathematical and physical constants, both in SI units and user-\/defined units.  
+
+
+\subsection*{Functions/Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{namespacephys__cons_a8ef21bd0854146018406be9f1aee9921}{physCons\_\-initialize} ()
+\begin{DoxyCompactList}\small\item\em Initializes module, assumes current system of units is SI. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -13,6 +23,52 @@ real(long), parameter \hyperlink{namespacephys__cons_aa8683f00f4216acc1822dfcb85
 \item 
 real(long), parameter \hyperlink{namespacephys__cons_a369d33713444a99a71f80a74c0652d4e}{invsqrt2pi} = 1d0/sqrt(2d0$\ast$pi)
 \item 
+real(Long), private \hyperlink{namespacephys__cons_a6fe1cfa01be156ac1f0e51e3ab875f21}{convertLength}
+\item 
+real(Long), private \hyperlink{namespacephys__cons_a48484815d32b74a1735ec19ba407ec5b}{convertMass}
+\item 
+real(Long), private \hyperlink{namespacephys__cons_af758eccc104b85bbbc1974e3a9095849}{convertTime}
+\item 
+real(Long), private \hyperlink{namespacephys__cons_a653404efc4f25713af588bb6cad2b39e}{convertElectricCurrent}
+\item 
+real(Long), private \hyperlink{namespacephys__cons_ae5f9a067db27ea13f6e4028d29900df0}{convertThermodynamicTemperature}
+\item 
+real(Long), private \hyperlink{namespacephys__cons_a1be0a1da47431668bd2e77c0486f831f}{convertAmountOfSubstance}
+\item 
+real(Long), private \hyperlink{namespacephys__cons_a64a60f517bd29fbe4a14a5097df961f4}{convertLuminousIntensity}
+\item 
+character(10) \hyperlink{namespacephys__cons_a54d8616222c422eac2f4ae16a5c3bcba}{unitLengthName}
+\item 
+character(10) \hyperlink{namespacephys__cons_a424a8036980301898dba6635e916fbf3}{unitMassName}
+\item 
+character(10) \hyperlink{namespacephys__cons_ab67dd4bef4aa3213b5b9b35ff02d01d9}{unitTimeName}
+\item 
+character(10) \hyperlink{namespacephys__cons_a90b38082ef08e473377594f1485a86ad}{unitElectricCurrentName}
+\item 
+real(Long), parameter \hyperlink{namespacephys__cons_ae265fad966cfc841f9a073a52955d742}{SI\_\-SPEED\_\-OF\_\-LIGHT} = 299792458d0
+\begin{DoxyCompactList}\small\item\em speed of light in vacuum, c, in m s$^{\mbox{-\/1}}$ , from 2010 CODATA recommended values \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a5547546b06eb8853e52e304b25cc7596}{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D} = 0d0
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespacephys__cons_ac31faa4bb5e82aecbdffa3b3d43a1736}{SPEED\_\-OF\_\-LIGHT}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_ab49e79c21c913c5857dedf2c555d2c21}{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR} = 1.054571726e-\/34\_\-Long
+\begin{DoxyCompactList}\small\item\em Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_af8ab82739d58ac3a1e1d9c97d3cfb4da}{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D} = 0.000000047e-\/34\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespacephys__cons_af0b754235993060b14fc81b7d1f702a5}{PLANCKS\_\-CONSTANT\_\-HBAR}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_ab117ad83bb79e4ed199d17f3c63ec4b3}{SI\_\-MASS\_\-NEUTRON} = 1.674927351e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em mass of the neutron, m$_{\mbox{n}}$ , in kg, from 2010 CODATA \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_af635c94d544c5bc6dcb05186a9f81d84}{SI\_\-MASS\_\-NEUTRON\_\-D} = 0.000000074e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespacephys__cons_abeff422917cc48601644e90ab12fb7c0}{MASS\_\-NEUTRON}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a6a740864089f117512dc89ea53f3dc5f}{SI\_\-MASS\_\-PROTON} = 1.672621777e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em mass of the proton, m$_{\mbox{p}}$ , in kg. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a3c37a18a918519962cfc26597082d53d}{SI\_\-MASS\_\-PROTON\_\-D} = 0.000000074e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespacephys__cons_a20e8ed3d7ff389588ce024048c5ccf85}{MASS\_\-PROTON}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
 REAL(long), parameter \hyperlink{namespacephys__cons_a4b10513970a98ad78b85723c60d9a8b6}{rho0} = 0.16d0
 \item 
 REAL(long), parameter \hyperlink{namespacephys__cons_a3f47589553abc71257ab3e88ef7bbb39}{hbc} = 197.326963d0
@@ -33,6 +89,33 @@ REAL(long), parameter \hyperlink{namespacephys__cons_a553e3e17652770308e6bffcb8f
 \end{DoxyCompactItemize}
 
 
+\subsection{Detailed Description}
+Stores mathematical and physical constants, both in SI units and user-\/defined units. \begin{Desc}
+\item[\hyperlink{todo__todo000001}{Todo}]give citations for all units 
+
+code them in SI, provide conversion routines \end{Desc}
+
+
+\subsection{Function/Subroutine Documentation}
+\hypertarget{namespacephys__cons_a8ef21bd0854146018406be9f1aee9921}{
+\index{phys\_\-cons@{phys\_\-cons}!physCons\_\-initialize@{physCons\_\-initialize}}
+\index{physCons\_\-initialize@{physCons\_\-initialize}!phys_cons@{phys\_\-cons}}
+\subsubsection[{physCons\_\-initialize}]{\setlength{\rightskip}{0pt plus 5cm}subroutine phys\_\-cons::physCons\_\-initialize (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{namespacephys__cons_a8ef21bd0854146018406be9f1aee9921}
+
+
+Initializes module, assumes current system of units is SI. 
+
+
+
+Definition at line 76 of file phys\_\-cons.f90.
+
+
+
 \subsection{Variable Documentation}
 \hypertarget{namespacephys__cons_a02e8bb2c808e0085a317bf36ff79ae2a}{
 \index{phys\_\-cons@{phys\_\-cons}!a0@{a0}}
@@ -41,7 +124,70 @@ REAL(long), parameter \hyperlink{namespacephys__cons_a553e3e17652770308e6bffcb8f
 \label{namespacephys__cons_a02e8bb2c808e0085a317bf36ff79ae2a}
 
 
-Definition at line 19 of file phys\_\-cons.f90.
+Definition at line 68 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a1be0a1da47431668bd2e77c0486f831f}{
+\index{phys\_\-cons@{phys\_\-cons}!convertAmountOfSubstance@{convertAmountOfSubstance}}
+\index{convertAmountOfSubstance@{convertAmountOfSubstance}!phys_cons@{phys\_\-cons}}
+\subsubsection[{convertAmountOfSubstance}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),private {\bf phys\_\-cons::convertAmountOfSubstance}}}
+\label{namespacephys__cons_a1be0a1da47431668bd2e77c0486f831f}
+
+
+Definition at line 25 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a653404efc4f25713af588bb6cad2b39e}{
+\index{phys\_\-cons@{phys\_\-cons}!convertElectricCurrent@{convertElectricCurrent}}
+\index{convertElectricCurrent@{convertElectricCurrent}!phys_cons@{phys\_\-cons}}
+\subsubsection[{convertElectricCurrent}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),private {\bf phys\_\-cons::convertElectricCurrent}}}
+\label{namespacephys__cons_a653404efc4f25713af588bb6cad2b39e}
+
+
+Definition at line 23 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a6fe1cfa01be156ac1f0e51e3ab875f21}{
+\index{phys\_\-cons@{phys\_\-cons}!convertLength@{convertLength}}
+\index{convertLength@{convertLength}!phys_cons@{phys\_\-cons}}
+\subsubsection[{convertLength}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),private {\bf phys\_\-cons::convertLength}}}
+\label{namespacephys__cons_a6fe1cfa01be156ac1f0e51e3ab875f21}
+
+
+Definition at line 20 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a64a60f517bd29fbe4a14a5097df961f4}{
+\index{phys\_\-cons@{phys\_\-cons}!convertLuminousIntensity@{convertLuminousIntensity}}
+\index{convertLuminousIntensity@{convertLuminousIntensity}!phys_cons@{phys\_\-cons}}
+\subsubsection[{convertLuminousIntensity}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),private {\bf phys\_\-cons::convertLuminousIntensity}}}
+\label{namespacephys__cons_a64a60f517bd29fbe4a14a5097df961f4}
+
+
+Definition at line 26 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a48484815d32b74a1735ec19ba407ec5b}{
+\index{phys\_\-cons@{phys\_\-cons}!convertMass@{convertMass}}
+\index{convertMass@{convertMass}!phys_cons@{phys\_\-cons}}
+\subsubsection[{convertMass}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),private {\bf phys\_\-cons::convertMass}}}
+\label{namespacephys__cons_a48484815d32b74a1735ec19ba407ec5b}
+
+
+Definition at line 21 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_ae5f9a067db27ea13f6e4028d29900df0}{
+\index{phys\_\-cons@{phys\_\-cons}!convertThermodynamicTemperature@{convertThermodynamicTemperature}}
+\index{convertThermodynamicTemperature@{convertThermodynamicTemperature}!phys_cons@{phys\_\-cons}}
+\subsubsection[{convertThermodynamicTemperature}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),private {\bf phys\_\-cons::convertThermodynamicTemperature}}}
+\label{namespacephys__cons_ae5f9a067db27ea13f6e4028d29900df0}
+
+
+Definition at line 24 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_af758eccc104b85bbbc1974e3a9095849}{
+\index{phys\_\-cons@{phys\_\-cons}!convertTime@{convertTime}}
+\index{convertTime@{convertTime}!phys_cons@{phys\_\-cons}}
+\subsubsection[{convertTime}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),private {\bf phys\_\-cons::convertTime}}}
+\label{namespacephys__cons_af758eccc104b85bbbc1974e3a9095849}
+
+
+Definition at line 22 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a553e3e17652770308e6bffcb8fcb5a95}{
 \index{phys\_\-cons@{phys\_\-cons}!deg@{deg}}
@@ -50,7 +196,7 @@ Definition at line 19 of file phys\_\-cons.f90.
 \label{namespacephys__cons_a553e3e17652770308e6bffcb8fcb5a95}
 
 
-Definition at line 22 of file phys\_\-cons.f90.
+Definition at line 71 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a3f47589553abc71257ab3e88ef7bbb39}{
 \index{phys\_\-cons@{phys\_\-cons}!hbc@{hbc}}
@@ -59,7 +205,7 @@ Definition at line 22 of file phys\_\-cons.f90.
 \label{namespacephys__cons_a3f47589553abc71257ab3e88ef7bbb39}
 
 
-Definition at line 14 of file phys\_\-cons.f90.
+Definition at line 63 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_af78d210174277076bb64ff4403f8c9fd}{
 \index{phys\_\-cons@{phys\_\-cons}!hbc2@{hbc2}}
@@ -68,7 +214,7 @@ Definition at line 14 of file phys\_\-cons.f90.
 \label{namespacephys__cons_af78d210174277076bb64ff4403f8c9fd}
 
 
-Definition at line 15 of file phys\_\-cons.f90.
+Definition at line 64 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ad97ad749ef4f8f66c56a0facb7394cb5}{
 \index{phys\_\-cons@{phys\_\-cons}!hm@{hm}}
@@ -77,7 +223,7 @@ Definition at line 15 of file phys\_\-cons.f90.
 \label{namespacephys__cons_ad97ad749ef4f8f66c56a0facb7394cb5}
 
 
-Definition at line 20 of file phys\_\-cons.f90.
+Definition at line 69 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a0dbb22856790b16e206de451e9cdd74a}{
 \index{phys\_\-cons@{phys\_\-cons}!imagi@{imagi}}
@@ -86,7 +232,7 @@ Definition at line 20 of file phys\_\-cons.f90.
 \label{namespacephys__cons_a0dbb22856790b16e206de451e9cdd74a}
 
 
-Definition at line 6 of file phys\_\-cons.f90.
+Definition at line 11 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_aa8683f00f4216acc1822dfcb85b1ee00}{
 \index{phys\_\-cons@{phys\_\-cons}!invpi@{invpi}}
@@ -95,7 +241,7 @@ Definition at line 6 of file phys\_\-cons.f90.
 \label{namespacephys__cons_aa8683f00f4216acc1822dfcb85b1ee00}
 
 
-Definition at line 10 of file phys\_\-cons.f90.
+Definition at line 13 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a369d33713444a99a71f80a74c0652d4e}{
 \index{phys\_\-cons@{phys\_\-cons}!invsqrt2pi@{invsqrt2pi}}
@@ -104,7 +250,7 @@ Definition at line 10 of file phys\_\-cons.f90.
 \label{namespacephys__cons_a369d33713444a99a71f80a74c0652d4e}
 
 
-Definition at line 11 of file phys\_\-cons.f90.
+Definition at line 14 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a2e392d52d36b5c1db0d17928aa40f35b}{
 \index{phys\_\-cons@{phys\_\-cons}!m0@{m0}}
@@ -113,7 +259,33 @@ Definition at line 11 of file phys\_\-cons.f90.
 \label{namespacephys__cons_a2e392d52d36b5c1db0d17928aa40f35b}
 
 
-Definition at line 18 of file phys\_\-cons.f90.
+Definition at line 67 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_abeff422917cc48601644e90ab12fb7c0}{
+\index{phys\_\-cons@{phys\_\-cons}!MASS\_\-NEUTRON@{MASS\_\-NEUTRON}}
+\index{MASS\_\-NEUTRON@{MASS\_\-NEUTRON}!phys_cons@{phys\_\-cons}}
+\subsubsection[{MASS\_\-NEUTRON}]{\setlength{\rightskip}{0pt plus 5cm}real (Long) {\bf phys\_\-cons::MASS\_\-NEUTRON}}}
+\label{namespacephys__cons_abeff422917cc48601644e90ab12fb7c0}
+
+
+in current units 
+
+
+
+Definition at line 53 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a20e8ed3d7ff389588ce024048c5ccf85}{
+\index{phys\_\-cons@{phys\_\-cons}!MASS\_\-PROTON@{MASS\_\-PROTON}}
+\index{MASS\_\-PROTON@{MASS\_\-PROTON}!phys_cons@{phys\_\-cons}}
+\subsubsection[{MASS\_\-PROTON}]{\setlength{\rightskip}{0pt plus 5cm}real (Long) {\bf phys\_\-cons::MASS\_\-PROTON}}}
+\label{namespacephys__cons_a20e8ed3d7ff389588ce024048c5ccf85}
+
+
+in current units 
+
+
+
+Definition at line 60 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ad68aaba74b75e1e13f1367c1eb0904c1}{
 \index{phys\_\-cons@{phys\_\-cons}!mn@{mn}}
@@ -122,7 +294,7 @@ Definition at line 18 of file phys\_\-cons.f90.
 \label{namespacephys__cons_ad68aaba74b75e1e13f1367c1eb0904c1}
 
 
-Definition at line 17 of file phys\_\-cons.f90.
+Definition at line 66 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ae2a4cb4e421fe399f19d0729b5617fed}{
 \index{phys\_\-cons@{phys\_\-cons}!mp@{mp}}
@@ -131,7 +303,7 @@ Definition at line 17 of file phys\_\-cons.f90.
 \label{namespacephys__cons_ae2a4cb4e421fe399f19d0729b5617fed}
 
 
-Definition at line 16 of file phys\_\-cons.f90.
+Definition at line 65 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_aae3c6cb8ae765b0262bb110ff739ba9d}{
 \index{phys\_\-cons@{phys\_\-cons}!pi@{pi}}
@@ -140,7 +312,20 @@ Definition at line 16 of file phys\_\-cons.f90.
 \label{namespacephys__cons_aae3c6cb8ae765b0262bb110ff739ba9d}
 
 
-Definition at line 9 of file phys\_\-cons.f90.
+Definition at line 12 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_af0b754235993060b14fc81b7d1f702a5}{
+\index{phys\_\-cons@{phys\_\-cons}!PLANCKS\_\-CONSTANT\_\-HBAR@{PLANCKS\_\-CONSTANT\_\-HBAR}}
+\index{PLANCKS\_\-CONSTANT\_\-HBAR@{PLANCKS\_\-CONSTANT\_\-HBAR}!phys_cons@{phys\_\-cons}}
+\subsubsection[{PLANCKS\_\-CONSTANT\_\-HBAR}]{\setlength{\rightskip}{0pt plus 5cm}real (Long) {\bf phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR}}}
+\label{namespacephys__cons_af0b754235993060b14fc81b7d1f702a5}
+
+
+in current units 
+
+
+
+Definition at line 46 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a4b10513970a98ad78b85723c60d9a8b6}{
 \index{phys\_\-cons@{phys\_\-cons}!rho0@{rho0}}
@@ -149,5 +334,160 @@ Definition at line 9 of file phys\_\-cons.f90.
 \label{namespacephys__cons_a4b10513970a98ad78b85723c60d9a8b6}
 
 
-Definition at line 13 of file phys\_\-cons.f90.
+Definition at line 62 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_ab117ad83bb79e4ed199d17f3c63ec4b3}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-MASS\_\-NEUTRON@{SI\_\-MASS\_\-NEUTRON}}
+\index{SI\_\-MASS\_\-NEUTRON@{SI\_\-MASS\_\-NEUTRON}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-MASS\_\-NEUTRON}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-MASS\_\-NEUTRON} = 1.674927351e-\/27\_\-Long}}
+\label{namespacephys__cons_ab117ad83bb79e4ed199d17f3c63ec4b3}
+
+
+mass of the neutron, m$_{\mbox{n}}$ , in kg, from 2010 CODATA 
+
+
+
+Definition at line 49 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_af635c94d544c5bc6dcb05186a9f81d84}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-MASS\_\-NEUTRON\_\-D@{SI\_\-MASS\_\-NEUTRON\_\-D}}
+\index{SI\_\-MASS\_\-NEUTRON\_\-D@{SI\_\-MASS\_\-NEUTRON\_\-D}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-MASS\_\-NEUTRON\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-MASS\_\-NEUTRON\_\-D} = 0.000000074e-\/27\_\-Long}}
+\label{namespacephys__cons_af635c94d544c5bc6dcb05186a9f81d84}
+
+
+uncertainty 
+
+
+
+Definition at line 51 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a6a740864089f117512dc89ea53f3dc5f}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-MASS\_\-PROTON@{SI\_\-MASS\_\-PROTON}}
+\index{SI\_\-MASS\_\-PROTON@{SI\_\-MASS\_\-PROTON}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-MASS\_\-PROTON}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-MASS\_\-PROTON} = 1.672621777e-\/27\_\-Long}}
+\label{namespacephys__cons_a6a740864089f117512dc89ea53f3dc5f}
+
+
+mass of the proton, m$_{\mbox{p}}$ , in kg. 
+
+
+
+Definition at line 56 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a3c37a18a918519962cfc26597082d53d}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-MASS\_\-PROTON\_\-D@{SI\_\-MASS\_\-PROTON\_\-D}}
+\index{SI\_\-MASS\_\-PROTON\_\-D@{SI\_\-MASS\_\-PROTON\_\-D}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-MASS\_\-PROTON\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-MASS\_\-PROTON\_\-D} = 0.000000074e-\/27\_\-Long}}
+\label{namespacephys__cons_a3c37a18a918519962cfc26597082d53d}
+
+
+uncertainty 
+
+
+
+Definition at line 58 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_ab49e79c21c913c5857dedf2c555d2c21}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR}}
+\index{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR} = 1.054571726e-\/34\_\-Long}}
+\label{namespacephys__cons_ab49e79c21c913c5857dedf2c555d2c21}
+
+
+Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA. 
+
+
+
+Definition at line 42 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_af8ab82739d58ac3a1e1d9c97d3cfb4da}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D}}
+\index{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D} = 0.000000047e-\/34\_\-Long}}
+\label{namespacephys__cons_af8ab82739d58ac3a1e1d9c97d3cfb4da}
+
+
+uncertainty 
+
+
+
+Definition at line 44 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_ae265fad966cfc841f9a073a52955d742}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-SPEED\_\-OF\_\-LIGHT@{SI\_\-SPEED\_\-OF\_\-LIGHT}}
+\index{SI\_\-SPEED\_\-OF\_\-LIGHT@{SI\_\-SPEED\_\-OF\_\-LIGHT}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-SPEED\_\-OF\_\-LIGHT}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-SPEED\_\-OF\_\-LIGHT} = 299792458d0}}
+\label{namespacephys__cons_ae265fad966cfc841f9a073a52955d742}
+
+
+speed of light in vacuum, c, in m s$^{\mbox{-\/1}}$ , from 2010 CODATA recommended values 
+
+
+
+Definition at line 37 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a5547546b06eb8853e52e304b25cc7596}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D@{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D}}
+\index{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D@{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D} = 0d0}}
+\label{namespacephys__cons_a5547546b06eb8853e52e304b25cc7596}
+
+
+uncertainty 
+
+
+
+Definition at line 38 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_ac31faa4bb5e82aecbdffa3b3d43a1736}{
+\index{phys\_\-cons@{phys\_\-cons}!SPEED\_\-OF\_\-LIGHT@{SPEED\_\-OF\_\-LIGHT}}
+\index{SPEED\_\-OF\_\-LIGHT@{SPEED\_\-OF\_\-LIGHT}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SPEED\_\-OF\_\-LIGHT}]{\setlength{\rightskip}{0pt plus 5cm}real (Long) {\bf phys\_\-cons::SPEED\_\-OF\_\-LIGHT}}}
+\label{namespacephys__cons_ac31faa4bb5e82aecbdffa3b3d43a1736}
+
+
+in current units 
+
+
+
+Definition at line 39 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a90b38082ef08e473377594f1485a86ad}{
+\index{phys\_\-cons@{phys\_\-cons}!unitElectricCurrentName@{unitElectricCurrentName}}
+\index{unitElectricCurrentName@{unitElectricCurrentName}!phys_cons@{phys\_\-cons}}
+\subsubsection[{unitElectricCurrentName}]{\setlength{\rightskip}{0pt plus 5cm}character(10) {\bf phys\_\-cons::unitElectricCurrentName}}}
+\label{namespacephys__cons_a90b38082ef08e473377594f1485a86ad}
+
+
+Definition at line 33 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a54d8616222c422eac2f4ae16a5c3bcba}{
+\index{phys\_\-cons@{phys\_\-cons}!unitLengthName@{unitLengthName}}
+\index{unitLengthName@{unitLengthName}!phys_cons@{phys\_\-cons}}
+\subsubsection[{unitLengthName}]{\setlength{\rightskip}{0pt plus 5cm}character(10) {\bf phys\_\-cons::unitLengthName}}}
+\label{namespacephys__cons_a54d8616222c422eac2f4ae16a5c3bcba}
+\begin{Desc}
+\item[\hyperlink{todo__todo000002}{Todo}]change to using a string class that has variable length \end{Desc}
+
+
+Definition at line 30 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a424a8036980301898dba6635e916fbf3}{
+\index{phys\_\-cons@{phys\_\-cons}!unitMassName@{unitMassName}}
+\index{unitMassName@{unitMassName}!phys_cons@{phys\_\-cons}}
+\subsubsection[{unitMassName}]{\setlength{\rightskip}{0pt plus 5cm}character(10) {\bf phys\_\-cons::unitMassName}}}
+\label{namespacephys__cons_a424a8036980301898dba6635e916fbf3}
+
+
+Definition at line 31 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_ab67dd4bef4aa3213b5b9b35ff02d01d9}{
+\index{phys\_\-cons@{phys\_\-cons}!unitTimeName@{unitTimeName}}
+\index{unitTimeName@{unitTimeName}!phys_cons@{phys\_\-cons}}
+\subsubsection[{unitTimeName}]{\setlength{\rightskip}{0pt plus 5cm}character(10) {\bf phys\_\-cons::unitTimeName}}}
+\label{namespacephys__cons_ab67dd4bef4aa3213b5b9b35ff02d01d9}
+
+
+Definition at line 32 of file phys\_\-cons.f90.
 

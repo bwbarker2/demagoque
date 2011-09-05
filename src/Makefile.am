@@ -2,7 +2,7 @@ AM_FCFLAGS = -fbounds-check -Wall -ggdb -O3
 AM_FCFLAGS_f90 = -g -O3
 
 bin_PROGRAMS = demagoque
-demagoque_SOURCES = bmath.f90 bstring.f90 prec_def.f90 cons_laws.f90 input_parameters.f90 phys_cons.f90 lib_lapack.f90 lib_fftw.f90 mesh.f90 time.f90 dmtdhf.f90 ener.f90 \
+demagoque_SOURCES = bmath.f90 bstring.f90 prec_def.f90 class_PhysicalQuantity.f90 cons_laws.f90 input_parameters.f90 phys_cons.f90 lib_lapack.f90 lib_fftw.f90 mesh.f90 time.f90 dmtdhf.f90 ener.f90 \
           initial.f90 integra.f90 \
           interp.f \
           outAnalHarmonic.f90 formatting.f90 output.f90 \
