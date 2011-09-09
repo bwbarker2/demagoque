@@ -1,0 +1,73 @@
+\hypertarget{class__PhysicalConstants_8f90}{
+\section{/home/bob/proj/DEMAGOQUE/work2/trunk/src/class\_\-PhysicalConstants.f90 File Reference}
+\label{class__PhysicalConstants_8f90}\index{/home/bob/proj/DEMAGOQUE/work2/trunk/src/class\_\-PhysicalConstants.f90@{/home/bob/proj/DEMAGOQUE/work2/trunk/src/class\_\-PhysicalConstants.f90}}
+}
+\subsection*{Modules}
+\begin{DoxyCompactItemize}
+\item 
+module \hyperlink{namespacephys__cons}{phys\_\-cons}
+
+
+\begin{DoxyCompactList}\small\item\em Stores mathematical and physical constants, both in SI units and user-\/defined units. \item\end{DoxyCompactList}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions/Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{namespacephys__cons_a2197fe7eff35572113dcf41a6493794c}{phys\_\-cons::phys\_\-cons\_\-initialize} ()
+\begin{DoxyCompactList}\small\item\em Initializes module, assumes current system of units is SI. \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{namespacephys__cons_abfc9a7567c3e76fdbbad91b88b46426e}{phys\_\-cons::phys\_\-cons\_\-initialize\_\-SI}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+complex $\ast$16, parameter \hyperlink{namespacephys__cons_af15f96806bfb6b9c6b1a279971d5d34b}{phys\_\-cons::imagi} = cmplx(0.d0, 1.d0, 8)
+\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_aae3c6cb8ae765b0262bb110ff739ba9d}{phys\_\-cons::pi} = 4d0$\ast$atan(1d0)
+\item 
+real(long), parameter \hyperlink{namespacephys__cons_aa8683f00f4216acc1822dfcb85b1ee00}{phys\_\-cons::invpi} = 1d0/pi
+\item 
+real(long), parameter \hyperlink{namespacephys__cons_a369d33713444a99a71f80a74c0652d4e}{phys\_\-cons::invsqrt2pi} = 1d0/sqrt(2d0$\ast$pi)
+\item 
+real(Long), parameter \hyperlink{namespacephys__cons_ae265fad966cfc841f9a073a52955d742}{phys\_\-cons::SI\_\-SPEED\_\-OF\_\-LIGHT} = 299792458d0
+\begin{DoxyCompactList}\small\item\em speed of light in vacuum, c, in m s$^{\mbox{-\/1}}$ , from 2010 CODATA recommended values \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a5547546b06eb8853e52e304b25cc7596}{phys\_\-cons::SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D} = 0d0
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespacephys__cons_ac31faa4bb5e82aecbdffa3b3d43a1736}{phys\_\-cons::SPEED\_\-OF\_\-LIGHT}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_ab49e79c21c913c5857dedf2c555d2c21}{phys\_\-cons::SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR} = 1.054571726e-\/34\_\-Long
+\begin{DoxyCompactList}\small\item\em Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_af8ab82739d58ac3a1e1d9c97d3cfb4da}{phys\_\-cons::SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D} = 0.000000047e-\/34\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespacephys__cons_af0b754235993060b14fc81b7d1f702a5}{phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_ab117ad83bb79e4ed199d17f3c63ec4b3}{phys\_\-cons::SI\_\-MASS\_\-NEUTRON} = 1.674927351e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em mass of the neutron, m$_{\mbox{n}}$ , in kg, from 2010 CODATA \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_af635c94d544c5bc6dcb05186a9f81d84}{phys\_\-cons::SI\_\-MASS\_\-NEUTRON\_\-D} = 0.000000074e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespacephys__cons_abeff422917cc48601644e90ab12fb7c0}{phys\_\-cons::MASS\_\-NEUTRON}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a6a740864089f117512dc89ea53f3dc5f}{phys\_\-cons::SI\_\-MASS\_\-PROTON} = 1.672621777e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em mass of the proton, m$_{\mbox{p}}$ , in kg. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a3c37a18a918519962cfc26597082d53d}{phys\_\-cons::SI\_\-MASS\_\-PROTON\_\-D} = 0.000000074e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespacephys__cons_a20e8ed3d7ff389588ce024048c5ccf85}{phys\_\-cons::MASS\_\-PROTON}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_a4b10513970a98ad78b85723c60d9a8b6}{phys\_\-cons::rho0} = 0.16d0
+\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_a2d3539e3579b581a4e69eff7347b4fa2}{phys\_\-cons::hbc} = 197.326963d0
+\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_a030a10874bc73b7d042adb32fad75614}{phys\_\-cons::hbc2} = hbc$\ast$hbc
+\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_ae2a4cb4e421fe399f19d0729b5617fed}{phys\_\-cons::mp} = 938.272013d0
+\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_ad68aaba74b75e1e13f1367c1eb0904c1}{phys\_\-cons::mn} = 939.565560d0
+\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_afa35c20a6e2a70b58142d10071eeef10}{phys\_\-cons::m0} = (mp+mn)$\ast$0.5d0
+\begin{DoxyCompactList}\small\item\em mass of particle being evolved in time \item\end{DoxyCompactList}\item 
+REAL(Long), parameter \hyperlink{namespacephys__cons_a02e8bb2c808e0085a317bf36ff79ae2a}{phys\_\-cons::a0} = 931.494028d0
+\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_ad97ad749ef4f8f66c56a0facb7394cb5}{phys\_\-cons::hm} = hbc$\ast$hbc/(2.d0$\ast$m0)
+\item 
+REAL(long), parameter \hyperlink{namespacephys__cons_a553e3e17652770308e6bffcb8fcb5a95}{phys\_\-cons::deg} = 4.d0
+\end{DoxyCompactItemize}

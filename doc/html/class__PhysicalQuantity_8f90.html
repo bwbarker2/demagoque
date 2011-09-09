@@ -80,11 +80,20 @@ Modules</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">module &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html">class_PhysicalQuantity</a></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">type(physicalQuantity)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#ac1a3d1ca8ee8896007badfdcd7e3333b">class_PhysicalQuantity::new_PhysicalQuantity</a> (newSymbol, newUnits, newVal, newUnc)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(physicalQuantity)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a31d0e7291e89fca5b49f9484556cf0cb">class_PhysicalQuantity::new_PhysicalQuantity</a> (newSymbol, newDimensions, newVal, newUnc)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs new <a class="el" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html" title="Stores a quantity with a value, uncertainty, and units.">PhysicalQuantity</a>. Assumes the value and uncertainty are given in the current unit system.  <a href="#a31d0e7291e89fca5b49f9484556cf0cb"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">integer, parameter, private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a9a49f0ad012c6d03a17e68cc71867a2d">class_PhysicalQuantity::MAX_SYMBOL_LENGTH</a> = 5</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">integer, parameter, private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a2e10d9a38cddedc3b7705d597476550f">class_PhysicalQuantity::NUM_BASE_UNITS</a> = 7</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">integer, parameter, private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a2870256032bca15f690a32ce1d1b6c52">class_PhysicalQuantity::MAX_SYMBOL_SIZE</a> = 5</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(UnitSystem)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a61173098b2362361938556f5fb35431e">class_PhysicalQuantity::theUnitSystem</a> = UNIT_SYSTEM_SI</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the unit system that all quantities are defined in. By default, we use SI units.  <a href="#a61173098b2362361938556f5fb35431e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(PhysicalQuantity), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a0633cd9b4645d04d7d47dbd151837757">class_PhysicalQuantity::METER</a> = PhysicalQuantity(&quot;m&quot;, (/1,0,0,0,0,0,0/), 1, 0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(PhysicalQuantity), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a902db03da895ab4c528d71d99e8549b0">class_PhysicalQuantity::KILOGRAM</a> = PhysicalQuantity(&quot;kg&quot;, (/0,1,0,0,0,0,0/), 1, 0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(PhysicalQuantity), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a7fdf486aace5a1e99af5a634719bb9ce">class_PhysicalQuantity::SECOND</a> = PhysicalQuantity(&quot;s&quot;, (/0,0,1,0,0,0,0/), 1, 0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(PhysicalQuantity), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a9672ba1ed56d49205a831ba235421de8">class_PhysicalQuantity::AMPERE</a> = PhysicalQuantity(&quot;A&quot;, (/0,0,0,1,0,0,0/), 1, 0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(PhysicalQuantity), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a2fd77862111da187e89aaf75383baa00">class_PhysicalQuantity::KELVIN</a> = PhysicalQuantity(&quot;K&quot;, (/0,0,0,0,1,0,0/), 1, 0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(PhysicalQuantity), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#a22a20ab491923015030051550a34c977">class_PhysicalQuantity::MOLE</a> = PhysicalQuantity(&quot;mol&quot;, (/0,0,0,0,0,1,0/), 1, 0)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">type(PhysicalQuantity), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclass__PhysicalQuantity.html#ad332548c0150950850a5fece3ef0e8d2">class_PhysicalQuantity::CANDELA</a> = PhysicalQuantity(&quot;cd&quot;, (/0,0,0,0,0,0,1/), 1, 0)</td></tr>
 </table>
 </div>
 <!--- window showing the filter options -->
@@ -101,7 +110,7 @@ Variables</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Mon Sep 5 2011 18:01:41 for demagoque by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Sep 8 2011 13:32:37 for demagoque by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

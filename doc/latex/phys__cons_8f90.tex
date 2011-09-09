@@ -14,80 +14,20 @@ module \hyperlink{namespacephys__cons}{phys\_\-cons}
 \subsection*{Functions/Subroutines}
 \begin{DoxyCompactItemize}
 \item 
-subroutine \hyperlink{namespacephys__cons_a8ef21bd0854146018406be9f1aee9921}{phys\_\-cons::physCons\_\-initialize} ()
-\begin{DoxyCompactList}\small\item\em Initializes module, assumes current system of units is SI. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+subroutine \hyperlink{namespacephys__cons_ab13f84d8b6f574eb73870a2964a82b8b}{phys\_\-cons::phys\_\-cons\_\-initializeNuclear}
+\begin{DoxyCompactList}\small\item\em Initializes physical constants, using nuclear system: \item\end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-complex $\ast$16, parameter \hyperlink{namespacephys__cons_a0dbb22856790b16e206de451e9cdd74a}{phys\_\-cons::imagi} = cmplx(0.d0, 1.d0, 8)
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_aae3c6cb8ae765b0262bb110ff739ba9d}{phys\_\-cons::pi} = 4d0$\ast$atan(1d0)
-\item 
-real(long), parameter \hyperlink{namespacephys__cons_aa8683f00f4216acc1822dfcb85b1ee00}{phys\_\-cons::invpi} = 1d0/pi
-\item 
-real(long), parameter \hyperlink{namespacephys__cons_a369d33713444a99a71f80a74c0652d4e}{phys\_\-cons::invsqrt2pi} = 1d0/sqrt(2d0$\ast$pi)
-\item 
-real(Long), private \hyperlink{namespacephys__cons_a6fe1cfa01be156ac1f0e51e3ab875f21}{phys\_\-cons::convertLength}
-\item 
-real(Long), private \hyperlink{namespacephys__cons_a48484815d32b74a1735ec19ba407ec5b}{phys\_\-cons::convertMass}
-\item 
-real(Long), private \hyperlink{namespacephys__cons_af758eccc104b85bbbc1974e3a9095849}{phys\_\-cons::convertTime}
-\item 
-real(Long), private \hyperlink{namespacephys__cons_a653404efc4f25713af588bb6cad2b39e}{phys\_\-cons::convertElectricCurrent}
-\item 
-real(Long), private \hyperlink{namespacephys__cons_ae5f9a067db27ea13f6e4028d29900df0}{phys\_\-cons::convertThermodynamicTemperature}
-\item 
-real(Long), private \hyperlink{namespacephys__cons_a1be0a1da47431668bd2e77c0486f831f}{phys\_\-cons::convertAmountOfSubstance}
-\item 
-real(Long), private \hyperlink{namespacephys__cons_a64a60f517bd29fbe4a14a5097df961f4}{phys\_\-cons::convertLuminousIntensity}
-\item 
-character(10) \hyperlink{namespacephys__cons_a54d8616222c422eac2f4ae16a5c3bcba}{phys\_\-cons::unitLengthName}
-\item 
-character(10) \hyperlink{namespacephys__cons_a424a8036980301898dba6635e916fbf3}{phys\_\-cons::unitMassName}
-\item 
-character(10) \hyperlink{namespacephys__cons_ab67dd4bef4aa3213b5b9b35ff02d01d9}{phys\_\-cons::unitTimeName}
-\item 
-character(10) \hyperlink{namespacephys__cons_a90b38082ef08e473377594f1485a86ad}{phys\_\-cons::unitElectricCurrentName}
-\item 
-real(Long), parameter \hyperlink{namespacephys__cons_ae265fad966cfc841f9a073a52955d742}{phys\_\-cons::SI\_\-SPEED\_\-OF\_\-LIGHT} = 299792458d0
-\begin{DoxyCompactList}\small\item\em speed of light in vacuum, c, in m s$^{\mbox{-\/1}}$ , from 2010 CODATA recommended values \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_a5547546b06eb8853e52e304b25cc7596}{phys\_\-cons::SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D} = 0d0
+real(Long), parameter \hyperlink{namespacephys__cons_a9e80f5448f5f42cf9983890809e55d88}{phys\_\-cons::MASS\_\-NEUTRON\_\-MEV\_\-C2} = 939.565379\_\-Long
+\begin{DoxyCompactList}\small\item\em Mass of the neutron, in MeV/c$^{\mbox{$^\wedge$2}}$ , from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_ab5fb46dc243eb307a344a134a593edd0}{phys\_\-cons::MASS\_\-NEUTRON\_\-MEV\_\-C2\_\-D} = 0.000021\_\-Long
 \begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
-real(Long) \hyperlink{namespacephys__cons_ac31faa4bb5e82aecbdffa3b3d43a1736}{phys\_\-cons::SPEED\_\-OF\_\-LIGHT}
-\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_ab49e79c21c913c5857dedf2c555d2c21}{phys\_\-cons::SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR} = 1.054571726e-\/34\_\-Long
-\begin{DoxyCompactList}\small\item\em Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA. \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_af8ab82739d58ac3a1e1d9c97d3cfb4da}{phys\_\-cons::SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D} = 0.000000047e-\/34\_\-Long
+real(Long), parameter \hyperlink{namespacephys__cons_a3460d18828c87b266ab35b1cdeb4a0a5}{phys\_\-cons::MASS\_\-PROTON\_\-MEV\_\-C2} = 938.272046\_\-Long
+\begin{DoxyCompactList}\small\item\em Mass of the proton, in MeV/c$^{\mbox{$^\wedge$2}}$ , from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a3299e2ce8c6c720ed740eff7968b27a8}{phys\_\-cons::MASS\_\-PROTON\_\-MEV\_\-C2\_\-D} = 0.000021\_\-Long
 \begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
-real(Long) \hyperlink{namespacephys__cons_af0b754235993060b14fc81b7d1f702a5}{phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR}
-\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_ab117ad83bb79e4ed199d17f3c63ec4b3}{phys\_\-cons::SI\_\-MASS\_\-NEUTRON} = 1.674927351e-\/27\_\-Long
-\begin{DoxyCompactList}\small\item\em mass of the neutron, m$_{\mbox{n}}$ , in kg, from 2010 CODATA \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_af635c94d544c5bc6dcb05186a9f81d84}{phys\_\-cons::SI\_\-MASS\_\-NEUTRON\_\-D} = 0.000000074e-\/27\_\-Long
-\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
-real(Long) \hyperlink{namespacephys__cons_abeff422917cc48601644e90ab12fb7c0}{phys\_\-cons::MASS\_\-NEUTRON}
-\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_a6a740864089f117512dc89ea53f3dc5f}{phys\_\-cons::SI\_\-MASS\_\-PROTON} = 1.672621777e-\/27\_\-Long
-\begin{DoxyCompactList}\small\item\em mass of the proton, m$_{\mbox{p}}$ , in kg. \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_a3c37a18a918519962cfc26597082d53d}{phys\_\-cons::SI\_\-MASS\_\-PROTON\_\-D} = 0.000000074e-\/27\_\-Long
-\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
-real(Long) \hyperlink{namespacephys__cons_a20e8ed3d7ff389588ce024048c5ccf85}{phys\_\-cons::MASS\_\-PROTON}
-\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_a4b10513970a98ad78b85723c60d9a8b6}{phys\_\-cons::rho0} = 0.16d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_a3f47589553abc71257ab3e88ef7bbb39}{phys\_\-cons::hbc} = 197.326963d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_af78d210174277076bb64ff4403f8c9fd}{phys\_\-cons::hbc2} = hbc$\ast$hbc
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_ae2a4cb4e421fe399f19d0729b5617fed}{phys\_\-cons::mp} = 938.272013d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_ad68aaba74b75e1e13f1367c1eb0904c1}{phys\_\-cons::mn} = 939.565560d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_a2e392d52d36b5c1db0d17928aa40f35b}{phys\_\-cons::m0} = (mp+mn)$\ast$0.5d0
-\item 
-REAL(Long), parameter \hyperlink{namespacephys__cons_a02e8bb2c808e0085a317bf36ff79ae2a}{phys\_\-cons::a0} = 931.494028d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_ad97ad749ef4f8f66c56a0facb7394cb5}{phys\_\-cons::hm} = hbc$\ast$hbc/(2.d0$\ast$m0)
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_a553e3e17652770308e6bffcb8fcb5a95}{phys\_\-cons::deg} = 4.d0
+real(Long), parameter \hyperlink{namespacephys__cons_a7efa4134b36e258435906be7fd9ca165}{phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM} = 197.3269718\_\-Long
+\begin{DoxyCompactList}\small\item\em Planck's constant divided by 2π times speed of light, in MeV fm, from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a86cb86e86548ce7318d0143b2f4b2f88}{phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM\_\-D} = 0.0000044\_\-Long
 \end{DoxyCompactItemize}

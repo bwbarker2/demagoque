@@ -15,12 +15,26 @@ module \hyperlink{namespaceclass__PhysicalQuantity}{class\_\-PhysicalQuantity}
 \subsection*{Functions/Subroutines}
 \begin{DoxyCompactItemize}
 \item 
-type(physicalQuantity) \hyperlink{namespaceclass__PhysicalQuantity_ac1a3d1ca8ee8896007badfdcd7e3333b}{class\_\-PhysicalQuantity::new\_\-PhysicalQuantity} (newSymbol, newUnits, newVal, newUnc)
-\end{DoxyCompactItemize}
+type(physicalQuantity) \hyperlink{namespaceclass__PhysicalQuantity_a31d0e7291e89fca5b49f9484556cf0cb}{class\_\-PhysicalQuantity::new\_\-PhysicalQuantity} (newSymbol, newDimensions, newVal, newUnc)
+\begin{DoxyCompactList}\small\item\em Constructs new \hyperlink{typeclass__PhysicalQuantity_1_1PhysicalQuantity}{PhysicalQuantity}. Assumes the value and uncertainty are given in the current unit system. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-integer, parameter, private \hyperlink{namespaceclass__PhysicalQuantity_a9a49f0ad012c6d03a17e68cc71867a2d}{class\_\-PhysicalQuantity::MAX\_\-SYMBOL\_\-LENGTH} = 5
+integer, parameter, private \hyperlink{namespaceclass__PhysicalQuantity_a2870256032bca15f690a32ce1d1b6c52}{class\_\-PhysicalQuantity::MAX\_\-SYMBOL\_\-SIZE} = 5
 \item 
-integer, parameter, private \hyperlink{namespaceclass__PhysicalQuantity_a2e10d9a38cddedc3b7705d597476550f}{class\_\-PhysicalQuantity::NUM\_\-BASE\_\-UNITS} = 7
+type(UnitSystem) \hyperlink{namespaceclass__PhysicalQuantity_a61173098b2362361938556f5fb35431e}{class\_\-PhysicalQuantity::theUnitSystem} = UNIT\_\-SYSTEM\_\-SI
+\begin{DoxyCompactList}\small\item\em This is the unit system that all quantities are defined in. By default, we use SI units. \item\end{DoxyCompactList}\item 
+type(PhysicalQuantity), parameter \hyperlink{namespaceclass__PhysicalQuantity_a0633cd9b4645d04d7d47dbd151837757}{class\_\-PhysicalQuantity::METER} = PhysicalQuantity(\char`\"{}m\char`\"{}, (/1,0,0,0,0,0,0/), 1, 0)
+\item 
+type(PhysicalQuantity), parameter \hyperlink{namespaceclass__PhysicalQuantity_a902db03da895ab4c528d71d99e8549b0}{class\_\-PhysicalQuantity::KILOGRAM} = PhysicalQuantity(\char`\"{}kg\char`\"{}, (/0,1,0,0,0,0,0/), 1, 0)
+\item 
+type(PhysicalQuantity), parameter \hyperlink{namespaceclass__PhysicalQuantity_a7fdf486aace5a1e99af5a634719bb9ce}{class\_\-PhysicalQuantity::SECOND} = PhysicalQuantity(\char`\"{}s\char`\"{}, (/0,0,1,0,0,0,0/), 1, 0)
+\item 
+type(PhysicalQuantity), parameter \hyperlink{namespaceclass__PhysicalQuantity_a9672ba1ed56d49205a831ba235421de8}{class\_\-PhysicalQuantity::AMPERE} = PhysicalQuantity(\char`\"{}A\char`\"{}, (/0,0,0,1,0,0,0/), 1, 0)
+\item 
+type(PhysicalQuantity), parameter \hyperlink{namespaceclass__PhysicalQuantity_a2fd77862111da187e89aaf75383baa00}{class\_\-PhysicalQuantity::KELVIN} = PhysicalQuantity(\char`\"{}K\char`\"{}, (/0,0,0,0,1,0,0/), 1, 0)
+\item 
+type(PhysicalQuantity), parameter \hyperlink{namespaceclass__PhysicalQuantity_a22a20ab491923015030051550a34c977}{class\_\-PhysicalQuantity::MOLE} = PhysicalQuantity(\char`\"{}mol\char`\"{}, (/0,0,0,0,0,1,0/), 1, 0)
+\item 
+type(PhysicalQuantity), parameter \hyperlink{namespaceclass__PhysicalQuantity_ad332548c0150950850a5fece3ef0e8d2}{class\_\-PhysicalQuantity::CANDELA} = PhysicalQuantity(\char`\"{}cd\char`\"{}, (/0,0,0,0,0,0,1/), 1, 0)
 \end{DoxyCompactItemize}

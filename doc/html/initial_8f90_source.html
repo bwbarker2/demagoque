@@ -98,8 +98,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00034"></a>00034   <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;1D to 3D factor:&#39;</span>,<a class="code" href="namespacemesh.html#a43130e9d2b4c80b7862ea7d6226a7a4d">facd</a>
 <a name="l00035"></a>00035 
 <a name="l00036"></a>00036   <span class="comment">! oscillator data</span>
-<a name="l00037"></a>00037   <a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">w</a>=<a class="code" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>/<a class="code" href="namespacephys__cons.html#a2e392d52d36b5c1db0d17928aa40f35b">m0</a>*6.d0*(<a class="code" href="namespacephys__cons.html#a4b10513970a98ad78b85723c60d9a8b6">rho0</a>/<a class="code" href="namespacemesh.html#a43130e9d2b4c80b7862ea7d6226a7a4d">facd</a>)**2/(<a class="code" href="namespaceinput__parameters.html#a29545f09a06c5a3def5df7fdb5f966ab">Nmax</a>+1.d0)<span class="comment">!   *0.1</span>
-<a name="l00038"></a>00038   <a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>=<a class="code" href="namespacephys__cons.html#a2e392d52d36b5c1db0d17928aa40f35b">m0</a>*<a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">w</a>/<a class="code" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>
+<a name="l00037"></a>00037   <a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">w</a>=<a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>/<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*6.d0*(<a class="code" href="namespacephys__cons.html#a4b10513970a98ad78b85723c60d9a8b6">rho0</a>/<a class="code" href="namespacemesh.html#a43130e9d2b4c80b7862ea7d6226a7a4d">facd</a>)**2/(<a class="code" href="namespaceinput__parameters.html#a29545f09a06c5a3def5df7fdb5f966ab">Nmax</a>+1.d0)<span class="comment">!   *0.1</span>
+<a name="l00038"></a>00038   <a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>=<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*<a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">w</a>/<a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>
 <a name="l00039"></a>00039 
 <a name="l00040"></a>00040     <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;Parameters of the calculation:&#39;</span>
 <a name="l00041"></a>00041   <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;dxr=&#39;</span>,<a class="code" href="namespacemesh.html#a8517784a828d82832ad38e911e58cdf1">delxr</a>,<span class="stringliteral">&#39;dxa=&#39;</span>,<a class="code" href="namespacemesh.html#a4bbd964b605a9fedc6fd4b5feaf2d226">delxa</a>,<span class="stringliteral">&#39;dkr=&#39;</span>,<a class="code" href="namespacemesh.html#a30ce8cdfbc09510b555134e5ee1c2472">delkr</a>,<span class="stringliteral">&#39;dka=&#39;</span>,<a class="code" href="namespacemesh.html#a93c5cfe69a9cda5c977adaf99030481d">delka</a>,<span class="stringliteral">&#39;whm=&#39;</span>,<a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>
@@ -162,10 +162,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00098"></a>00098 
 <a name="l00099"></a>00099           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#a727a13be305b5dde7955fd2d02f955e4">initState_plane</a>) <span class="keyword">then</span>
 <a name="l00100"></a>00100            y1=sqrt(<a class="code" href="namespaceinput__parameters.html#a22ba3f1343580a0db34433e32279e365">initState_plane_norm</a>*0.5d0/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
-<a name="l00101"></a>00101               *exp(-<a class="code" href="namespacephys__cons.html#a0dbb22856790b16e206de451e9cdd74a">imagi</a>*<a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">initState_plane_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx1/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> &amp;
+<a name="l00101"></a>00101               *exp(-<a class="code" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">imagi</a>*<a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">initState_plane_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx1/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> &amp;
 <a name="l00102"></a>00102                    +<a class="code" href="namespaceinput__parameters.html#a97253a3c66d919b8a99dd33c633d3bd8">initState_plane_shift</a>)
 <a name="l00103"></a>00103            y2=sqrt(<a class="code" href="namespaceinput__parameters.html#a22ba3f1343580a0db34433e32279e365">initState_plane_norm</a>*0.5d0/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
-<a name="l00104"></a>00104               *exp(-<a class="code" href="namespacephys__cons.html#a0dbb22856790b16e206de451e9cdd74a">imagi</a>*<a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">initState_plane_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx2/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> &amp;
+<a name="l00104"></a>00104               *exp(-<a class="code" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">imagi</a>*<a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">initState_plane_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx2/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> &amp;
 <a name="l00105"></a>00105                    +<a class="code" href="namespaceinput__parameters.html#a97253a3c66d919b8a99dd33c633d3bd8">initState_plane_shift</a>)
 <a name="l00106"></a>00106            den0=den0+conjg(y1)*y2
 <a name="l00107"></a>00107           <span class="keyword">endif</span>
@@ -264,12 +264,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00200"></a>00200   call <a class="code" href="namespacemesh.html#aef51df23ee69f610420b25672a2da3ef">setState</a>(<a class="code" href="namespacemesh.html#a0c6bae5d6531a6b0f0428c0c056f759d">SPACE</a>)
 <a name="l00201"></a>00201 
 <a name="l00202"></a>00202   <span class="comment">! non-relativistic conversion</span>
-<a name="l00203"></a>00203   kea=sign(1d0,<a class="code" href="namespaceinput__parameters.html#ac937498371c0568d2d4ed1e1ef034e1d">ea</a>)*sqrt(2.d0*<a class="code" href="namespacephys__cons.html#a2e392d52d36b5c1db0d17928aa40f35b">m0</a>*abs(<a class="code" href="namespaceinput__parameters.html#ac937498371c0568d2d4ed1e1ef034e1d">ea</a>))/<a class="code" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>
+<a name="l00203"></a>00203   kea=sign(1d0,<a class="code" href="namespaceinput__parameters.html#ac937498371c0568d2d4ed1e1ef034e1d">ea</a>)*sqrt(2.d0*<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*abs(<a class="code" href="namespaceinput__parameters.html#ac937498371c0568d2d4ed1e1ef034e1d">ea</a>))/<a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>
 <a name="l00204"></a>00204 
 <a name="l00205"></a>00205   <span class="comment">!loop over all grid points</span>
 <a name="l00206"></a>00206   <span class="keyword">DO</span> ixr=-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
 <a name="l00207"></a>00207 
-<a name="l00208"></a>00208      epx=exp(<a class="code" href="namespacephys__cons.html#a0dbb22856790b16e206de451e9cdd74a">imagi</a>*kea*<a class="code" href="namespacemesh.html#a0351493d48c86a4a92f34aa94f8cc099">xr</a>(ixr))
+<a name="l00208"></a>00208      epx=exp(<a class="code" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">imagi</a>*kea*<a class="code" href="namespacemesh.html#a0351493d48c86a4a92f34aa94f8cc099">xr</a>(ixr))
 <a name="l00209"></a>00209 
 <a name="l00210"></a>00210 <span class="comment">!call mesh_setReflectedLR(.true.)</span>
 <a name="l00211"></a>00211 
@@ -540,7 +540,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Mon Sep 5 2011 18:01:41 for demagoque by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Sep 8 2011 13:32:37 for demagoque by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

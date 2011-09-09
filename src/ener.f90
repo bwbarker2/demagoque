@@ -43,7 +43,7 @@ subroutine ener_k
 !     write(70,*)'ika,pk2',it,ika,pk2(ika)
   enddo
 
-  ekin=ekin*hbc*hbc/(2d0*m0)/norm_thy*delka
+  ekin=ekin*hbar*hbar/(2d0*m0)/norm_thy*delka
   knum=knum*delka/norm_thy
 
 !  call dint_simp1(Nxr+1, pk2, delka, ekin, ekerr)
@@ -51,13 +51,13 @@ subroutine ener_k
 
   ! Arnau has a reason for the last part of the next lines - BWB 2010-03-26
   ! I have a better reason to not have it - BWB 2010-09-01
-!  ekin=ekin*hbc*hbc/(2.d0*m0)/(Nmax+1.d0)            !/delka*delxa/Nxr*Nxa*Nxr
+!  ekin=ekin*hbar*hbar/(2.d0*m0)/(Nmax+1.d0)            !/delka*delxa/Nxr*Nxa*Nxr
 !  knum=knum/(Nmax+1.d0)                        !/delka*delxa/Nxr*Nxa*Nxr
 !  ekin=ekin/delka
 
 !  write(*,*)'m0=',m0
 
-!  ekerr=ekerr*hbc*hbc/(2.d0*m0)/(Nmax+1.d0)    !/delka*delxa*Nxa
+!  ekerr=ekerr*hbar*hbar/(2.d0*m0)/(Nmax+1.d0)    !/delka*delxa*Nxa
   write(*,*)'ekin,ekerr=',ekin,ekerr
   write(*,*)'knum,eknum=',knum,eknum
 

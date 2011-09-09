@@ -63,53 +63,72 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <a href="class__PhysicalQuantity_8f90.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="namespaceclass__PhysicalQuantity.html">00001</a> <span class="keyword">module</span> class_PhysicalQuantity
-<a name="l00002"></a>00002  use <span class="keywordflow">prec_def</span>
-<a name="l00003"></a>00003  <span class="keyword">implicit none</span>
-<a name="l00004"></a>00004 
-<a name="l00005"></a>00005  <span class="keywordtype">private</span> :: <a class="code" href="namespaceclass__PhysicalQuantity.html#a9a49f0ad012c6d03a17e68cc71867a2d">MAX_SYMBOL_LENGTH</a>, <a class="code" href="namespaceclass__PhysicalQuantity.html#a2e10d9a38cddedc3b7705d597476550f">NUM_BASE_UNITS</a>
-<a name="l00006"></a>00006 
-<a name="l00007"></a><a class="code" href="namespaceclass__PhysicalQuantity.html#a9a49f0ad012c6d03a17e68cc71867a2d">00007</a>  <span class="keywordtype">integer</span>, <span class="keywordtype">parameter</span> :: MAX_SYMBOL_LENGTH = 5
-<a name="l00008"></a><a class="code" href="namespaceclass__PhysicalQuantity.html#a2e10d9a38cddedc3b7705d597476550f">00008</a>  <span class="keywordtype">integer</span>, <span class="keywordtype">parameter</span> :: NUM_BASE_UNITS = 7
+<a name="l00002"></a>00002  use <span class="keywordflow">class_UnitSystem</span>
+<a name="l00003"></a>00003  use <span class="keywordflow">prec_def</span>
+<a name="l00004"></a>00004  <span class="keyword">implicit none</span>
+<a name="l00005"></a>00005 
+<a name="l00006"></a>00006  <span class="keywordtype">private</span> :: <a class="code" href="namespaceclass__PhysicalQuantity.html#a2870256032bca15f690a32ce1d1b6c52">MAX_SYMBOL_SIZE</a> 
+<a name="l00007"></a>00007 
+<a name="l00008"></a><a class="code" href="namespaceclass__PhysicalQuantity.html#a2870256032bca15f690a32ce1d1b6c52">00008</a>  <span class="keywordtype">integer</span>, <span class="keywordtype">parameter</span> :: MAX_SYMBOL_SIZE = 5
 <a name="l00009"></a>00009 
-<a name="l00012"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">00012</a>  <span class="keyword">type</span> <a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">PhysicalQuantity</a>
-<a name="l00013"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html#a2f981d73988825d1960abd97a8abfb8f">00013</a>   <span class="keywordtype">character(MAX_SYMBOL_LENGTH)</span> :: symbol
-<a name="l00014"></a>00014 
-<a name="l00023"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html#a3d431173fc79af5743037ff1f68237d3">00023</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">dimension(NUM_BASE_UNITS)</span> :: units
-<a name="l00024"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html#ae362510ba84f98322e31cd40193a4d26">00024</a>   <span class="keywordtype">real (Long)</span> :: val
-<a name="l00025"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html#abb0c17659fe335d551d4e715b84e9743">00025</a>   <span class="keywordtype">real (Long)</span> :: unc
-<a name="l00026"></a>00026 <span class="keyword"> end type physicalQuantity</span>
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028 <span class="keyword">contains</span>
-<a name="l00029"></a>00029 
-<a name="l00030"></a><a class="code" href="namespaceclass__PhysicalQuantity.html#ac1a3d1ca8ee8896007badfdcd7e3333b">00030</a>  <span class="keyword">function </span><a class="code" href="namespaceclass__PhysicalQuantity.html#ac1a3d1ca8ee8896007badfdcd7e3333b">new_PhysicalQuantity</a>(newSymbol, newUnits, newVal, newUnc) result (this)
-<a name="l00031"></a>00031   use <span class="keywordflow">prec_def</span>
-<a name="l00032"></a>00032   <span class="keyword">implicit none</span>
+<a name="l00012"></a><a class="code" href="namespaceclass__PhysicalQuantity.html#a61173098b2362361938556f5fb35431e">00012</a>  <span class="keywordtype">type(UnitSystem)</span> :: theUnitSystem = UNIT_SYSTEM_SI
+<a name="l00013"></a>00013 
+<a name="l00016"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">00016</a>  <span class="keyword">type</span> <a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">PhysicalQuantity</a>
+<a name="l00017"></a>00017 
+<a name="l00018"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html#aeff76900f557015cca225673641d17e8">00018</a>   <span class="keywordtype">character(MAX_SYMBOL_SIZE)</span> :: symbol
+<a name="l00019"></a>00019 
+<a name="l00032"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html#a00edddafb9d19f2dfa9308fd03a4f46a">00032</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">dimension(UNIT_SYSTEM_NUM_BASE_UNITS)</span> :: dimensions
 <a name="l00033"></a>00033 
-<a name="l00034"></a>00034   <span class="keywordtype">character(*)</span>, <span class="keywordtype">intent(in)</span> :: newSymbol <span class="comment">!&lt; symbol of quantity</span>
-<a name="l00035"></a>00035   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">dimension(:)</span>, <span class="keywordtype">intent(in)</span> :: newUnits  <span class="comment">!&lt; SI units of quantity</span>
-<a name="l00036"></a>00036   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">optional</span>,     <span class="keywordtype">intent(in)</span> :: newVal    <span class="comment">!&lt; value of quantity</span>
-<a name="l00037"></a>00037   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">optional</span>,     <span class="keywordtype">intent(in)</span> :: newUnc    <span class="comment">!&lt; uncertainty of quantity</span>
-<a name="l00038"></a>00038   <span class="keywordtype">type (physicalQuantity)</span> :: this
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040   <span class="keyword">if</span>(<span class="keyword">size</span>(newUnits) /= <a class="code" href="namespaceclass__PhysicalQuantity.html#a2e10d9a38cddedc3b7705d597476550f">NUM_BASE_UNITS</a>) <span class="keyword">then</span>
-<a name="l00041"></a>00041    <span class="keyword">write</span>(<a class="code" href="namespaceprec__def.html#aedf88710c9c5e9e8fd7397771275f711">stderr</a>,*)<span class="stringliteral">&#39;class_PhysicalQuantity.f90:make_physicalQuantity: newUnits array not correct size&#39;</span>
-<a name="l00042"></a>00042    return
-<a name="l00043"></a>00043   <span class="keyword">endif</span>
+<a name="l00035"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html#ae362510ba84f98322e31cd40193a4d26">00035</a>   <span class="keywordtype">real (Long)</span> :: val
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037   <span class="comment">!&lt; uncertainty of quantity. </span>
+<a name="l00038"></a>00038   <span class="comment">!! Assuming this is one standard deviation away from value in either</span>
+<a name="l00039"></a>00039   <span class="comment">!! direction</span>
+<a name="l00040"></a><a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html#abb0c17659fe335d551d4e715b84e9743">00040</a>   <span class="keywordtype">real (Long)</span> :: unc 
+<a name="l00041"></a>00041 <span class="keyword"> end type physicalQuantity</span>
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043  <span class="comment">!base SI units</span>
 <a name="l00044"></a>00044 
-<a name="l00045"></a>00045   <span class="keyword">if</span>(present(newVal)) <span class="keyword">then</span>
-<a name="l00046"></a>00046    <span class="keyword">if</span>(present(newUnc)) <span class="keyword">then</span>
-<a name="l00047"></a>00047     this = <a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">PhysicalQuantity</a>(newSymbol,newUnits,newVal,newUnc)
-<a name="l00048"></a>00048    <span class="keyword">else</span>
-<a name="l00049"></a>00049     this = <a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">PhysicalQuantity</a>(newSymbol,newUnits,newVal,0_Long)
-<a name="l00050"></a>00050    <span class="keyword">endif</span>
-<a name="l00051"></a>00051   <span class="keyword">else</span>
-<a name="l00052"></a>00052    this = <a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">PhysicalQuantity</a>(newSymbol,newUnits,1_Long,0_Long)
-<a name="l00053"></a>00053   <span class="keyword">endif</span>
-<a name="l00054"></a>00054 
-<a name="l00055"></a>00055 <span class="keyword"> end function new_physicalQuantity</span>
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057 <span class="keyword">end module class_PhysicalQuantity</span>
-<a name="l00058"></a>00058 
+<a name="l00045"></a><a class="code" href="namespaceclass__PhysicalQuantity.html#a7fdf486aace5a1e99af5a634719bb9ce">00045</a>  <span class="keywordtype">type (PhysicalQuantity)</span>, <span class="keywordtype">parameter</span> :: 
+<a name="l00046"></a>00046       METER    = PhysicalQuantity(<span class="stringliteral">&quot;m&quot;</span>,  (/1,0,0,0,0,0,0/),1,0), 
+<a name="l00047"></a>00047       KILOGRAM = PhysicalQuantity(<span class="stringliteral">&quot;kg&quot;</span>, (/0,1,0,0,0,0,0/),1,0), 
+<a name="l00048"></a>00048       SECOND   = PhysicalQuantity(<span class="stringliteral">&quot;s&quot;</span>,  (/0,0,1,0,0,0,0/),1,0), 
+<a name="l00049"></a>00049       AMPERE   = PhysicalQuantity(<span class="stringliteral">&quot;A&quot;</span>,  (/0,0,0,1,0,0,0/),1,0), 
+<a name="l00050"></a>00050       KELVIN   = PhysicalQuantity(<span class="stringliteral">&quot;K&quot;</span>,  (/0,0,0,0,1,0,0/),1,0), 
+<a name="l00051"></a>00051       MOLE     = PhysicalQuantity(<span class="stringliteral">&quot;mol&quot;</span>,(/0,0,0,0,0,1,0/),1,0), 
+<a name="l00052"></a>00052       CANDELA  = PhysicalQuantity(<span class="stringliteral">&quot;cd&quot;</span>, (/0,0,0,0,0,0,1/),1,0)
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054 <span class="keyword">contains</span>
+<a name="l00055"></a>00055 
+<a name="l00059"></a><a class="code" href="namespaceclass__PhysicalQuantity.html#a31d0e7291e89fca5b49f9484556cf0cb">00059</a>  <span class="keyword">function </span><a class="code" href="namespaceclass__PhysicalQuantity.html#a31d0e7291e89fca5b49f9484556cf0cb">new_PhysicalQuantity</a>(newSymbol, newDimensions, newVal, newUnc) result (this)
+<a name="l00060"></a>00060   use <span class="keywordflow">prec_def</span>
+<a name="l00061"></a>00061   <span class="keyword">implicit none</span>
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063   <span class="keywordtype">character(*)</span>, <span class="keywordtype">intent(in)</span> :: newSymbol <span class="comment">!&lt; symbol of quantity</span>
+<a name="l00064"></a>00064   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">dimension(:)</span>, <span class="keywordtype">intent(in)</span> :: newDimensions  <span class="comment">!&lt; new dimensions</span>
+<a name="l00065"></a>00065   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">optional</span>,     <span class="keywordtype">intent(in)</span> :: newVal    <span class="comment">!&lt; value of quantity</span>
+<a name="l00066"></a>00066   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">optional</span>,     <span class="keywordtype">intent(in)</span> :: newUnc    <span class="comment">!&lt; uncertainty of quantity</span>
+<a name="l00067"></a>00067   <span class="keywordtype">type (physicalQuantity)</span> :: this
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069   <span class="keyword">if</span>(<span class="keyword">size</span>(newDimensions) /= <a class="code" href="namespaceclass__UnitSystem.html#a246bc92fbae303b4776c58fbf2dde427">UNIT_SYSTEM_NUM_BASE_UNITS</a>) <span class="keyword">then</span>
+<a name="l00070"></a>00070    <span class="keyword">write</span>(<a class="code" href="namespaceprec__def.html#aedf88710c9c5e9e8fd7397771275f711">stderr</a>,*)<span class="stringliteral">&#39;class_PhysicalQuantity.f90:new_physicalQuantity: newDimensions array not correct size&#39;</span>
+<a name="l00071"></a>00071    return
+<a name="l00072"></a>00072   <span class="keyword">endif</span>
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074   <span class="keyword">if</span>(present(newVal)) <span class="keyword">then</span>
+<a name="l00075"></a>00075    <span class="keyword">if</span>(present(newUnc)) <span class="keyword">then</span>
+<a name="l00076"></a>00076     this = <a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">PhysicalQuantity</a>(newSymbol,newDimensions,newVal,newUnc)
+<a name="l00077"></a>00077    <span class="keyword">else</span>
+<a name="l00078"></a>00078     this = <a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">PhysicalQuantity</a>(newSymbol,newDimensions,newVal,0_Long)
+<a name="l00079"></a>00079    <span class="keyword">endif</span>
+<a name="l00080"></a>00080   <span class="keyword">else</span>
+<a name="l00081"></a>00081    this = <a class="code" href="typeclass__PhysicalQuantity_1_1PhysicalQuantity.html">PhysicalQuantity</a>(newSymbol,newDimensions,1_Long,0_Long)
+<a name="l00082"></a>00082   <span class="keyword">endif</span>
+<a name="l00083"></a>00083 
+<a name="l00084"></a>00084 <span class="keyword"> end function new_physicalQuantity</span>
+<a name="l00085"></a>00085 
+<a name="l00086"></a>00086 <span class="keyword">end module class_PhysicalQuantity</span>
+<a name="l00087"></a>00087 
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -126,7 +145,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Mon Sep 5 2011 18:01:41 for demagoque by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Sep 8 2011 13:32:37 for demagoque by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

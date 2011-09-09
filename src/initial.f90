@@ -29,13 +29,15 @@ SUBROUTINE calcInitial
   use phys_cons
   implicit none
 
+  call phys_cons_initializeNuclear
+
   call initializeMesh
 
   write(*,*) '1D to 3D factor:',facd
 
   ! oscillator data
-  w=hbc/m0*6.d0*(rho0/facd)**2/(Nmax+1.d0)!   *0.1
-  whm=m0*w/hbc
+  w=hbar/m0*6.d0*(rho0/facd)**2/(Nmax+1.d0)!   *0.1
+  whm=m0*w/hbar
 
     write(*,*) 'Parameters of the calculation:'
   write(*,*) 'dxr=',delxr,'dxa=',delxa,'dkr=',delkr,'dka=',delka,'whm=',whm
@@ -107,7 +109,7 @@ subroutine initialState
           endif
 
 !           if(useImEvol) then
-!            ! multiply by e^(2 E t / hbc) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.
+!            ! multiply by e^(2 E t / hbar) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.
 !            den0=den0+y1*y2*exp(2d0*w*(iin+0.5d0)*delt*Nimev)
 !           else
 !            den0=den0+y1*y2
@@ -200,7 +202,7 @@ subroutine boost
   call setState(SPACE)
 
   ! non-relativistic conversion
-  kea=sign(1d0,ea)*sqrt(2.d0*m0*abs(ea))/hbc
+  kea=sign(1d0,ea)*sqrt(2.d0*m0*abs(ea))/hbar
 
   !loop over all grid points
   DO ixr=-Nxr2,Nxr2-1
@@ -225,7 +227,7 @@ subroutine boost
 !        epx=kea*xr(ixr)
 !        denmat(ixa,ixr)=denmat(ixa,ixr)*exp(imagi*epx)
 !  call mesh_setReflectedLR(.false.)
-!        udt=m0*w**2*2*xa(ixa)*xr(ixr)*dtim/hbc/2.0_Long
+!        udt=m0*w**2*2*xa(ixa)*xr(ixr)*dtim/hbar/2.0_Long
 !        udt=0
 !        cos2k=cos(epx)
 !        sin2k=sin(epx)

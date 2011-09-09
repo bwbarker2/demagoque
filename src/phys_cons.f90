@@ -1,9 +1,9 @@
 !> \brief Stores mathematical and physical constants, both in SI units and user-defined units.
 !!
 !! \todo give citations for all units
-!! \todo code them in SI, provide conversion routines
+!! \todo code them in SI, provide conversion routines, see
+!!       class_PhysicalConstants for current work
 MODULE phys_cons
-  ! physical constants
   USE prec_def
   IMPLICIT NONE
 
@@ -15,22 +15,20 @@ MODULE phys_cons
 
   !physical constants in SI units, with "current units" as well
 
-  ! conversion factors from base units. Multiply SI unit by this to get
-  ! current unit
-  real (Long), private :: convertLength
-  real (Long), private :: convertMass
-  real (Long), private :: convertTime
-  real (Long), private :: convertElectricCurrent
-  real (Long), private :: convertThermodynamicTemperature
-  real (Long), private :: convertAmountOfSubstance
-  real (Long), private :: convertLuminousIntensity
+  !> Mass of the neutron, in MeV/c<sup>^2</sup>, from 2010 CODATA
+  real (Long), parameter :: MASS_NEUTRON_MEV_C2 = 939.565379_Long
+  !> uncertainty
+  real (Long), parameter :: MASS_NEUTRON_MEV_C2_D = 0.000021_Long
 
-  ! names, symbols of units in current system of units
-  !> \todo change to using a string class that has variable length
-  character(10) :: unitLengthName
-  character(10) :: unitMassName
-  character(10) :: unitTimeName
-  character(10) :: unitElectricCurrentName
+  !> Mass of the proton, in MeV/c<sup>^2</sup>, from 2010 CODATA
+  real (Long), parameter :: MASS_PROTON_MEV_C2 = 938.272046_Long
+  !> uncertainty
+  real (Long), parameter :: MASS_PROTON_MEV_C2_D = 0.000021_Long
+
+  !> Planck's constant divided by 2π, in MeV fm/c, from 2010 CODATA
+  real (Long), parameter :: &
+       PLANCKS_CONSTANT_HBAR_MEV_FM_C = 197.3269718_Long, &
+       PLANCKS_CONSTANT_HBAR_MEV_FM_C_D = 0.0000044_Long
 
   !> speed of light in vacuum, c, in m s<sup>-1</sup>, from 2010 CODATA
   !! recommended values
@@ -60,24 +58,29 @@ MODULE phys_cons
   real (Long)            :: MASS_PROTON
 
   REAL (long) , PARAMETER :: rho0=0.16d0       !nuclear saturation density [fm^-3]
-  REAL (long) , PARAMETER :: hbc=197.326963d0  !h-bar*c [MeV fm]
-  REAL (long) , PARAMETER :: hbc2=hbc*hbc
-  REAL (long) , PARAMETER :: mp=938.272013d0   !proton mass [MeV/c^2]
-  REAL (long) , PARAMETER :: mn=939.565560d0   !neutron mass
-  REAL (long) , PARAMETER :: m0=(mp+mn)*0.5d0
-  REAL (Long) , PARAMETER :: a0=931.494028d0   !atomic mass unit
-  REAL (long) , PARAMETER :: hm=hbc*hbc/(2.d0*m0)   !hbar^2/2m (useful for kinetic 
-                                             ! time evolution)
+  REAL (long) :: hbar  !< Planck's constant in current unit system
+  REAL (long) :: hbar2 !< hbar^2
+  REAL (long) :: m0   !< mass of particle being evolved in time
   REAL (long) , PARAMETER :: deg=4.d0 ! degeneracy
 
 contains
 
- !> \brief Initializes module, assumes current system of units is SI.
- subroutine physCons_initialize()
+ !> \brief Initializes physical constants, using nuclear system:
+ !!
+ !! -# length - femtometer - fm
+ !! -# mass   - mega-electron volt per speed of light squared - MeV/c^2
+ !! -# time   - femtometer / speed of light - fm/c
+ !!
+ subroutine phys_cons_initializeNuclear
   implicit none
 
+  hbar = PLANCKS_CONSTANT_HBAR_MEV_FM_C  !MeV fm
+  hbar2 = hbar*hbar
+  m0 = 0.5_Long*(MASS_NEUTRON_MEV_C2+MASS_PROTON_MEV_C2)
+  
 
- end subroutine physCons_initialize
+ end subroutine phys_cons_initializeNuclear
+
 
 END MODULE phys_cons
 

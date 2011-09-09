@@ -72,25 +72,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a8ef21bd0854146018406be9f1aee9921">physCons_initialize</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes module, assumes current system of units is SI.  <a href="#a8ef21bd0854146018406be9f1aee9921"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a2197fe7eff35572113dcf41a6493794c">phys_cons_initialize</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes module, assumes current system of units is SI.  <a href="#a2197fe7eff35572113dcf41a6493794c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#abfc9a7567c3e76fdbbad91b88b46426e">phys_cons_initialize_SI</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ab13f84d8b6f574eb73870a2964a82b8b">phys_cons_initializeNuclear</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes physical constants, using nuclear system:  <a href="#ab13f84d8b6f574eb73870a2964a82b8b"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">complex *16, parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a0dbb22856790b16e206de451e9cdd74a">imagi</a> = cmplx(0.d0, 1.d0, 8)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">complex *16, parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">imagi</a> = cmplx(0.d0, 1.d0, 8)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a> = 4d0*atan(1d0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">real(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#aa8683f00f4216acc1822dfcb85b1ee00">invpi</a> = 1d0/pi</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">real(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a369d33713444a99a71f80a74c0652d4e">invsqrt2pi</a> = 1d0/sqrt(2d0*pi)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">real(Long), private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a6fe1cfa01be156ac1f0e51e3ab875f21">convertLength</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">real(Long), private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a48484815d32b74a1735ec19ba407ec5b">convertMass</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">real(Long), private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#af758eccc104b85bbbc1974e3a9095849">convertTime</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">real(Long), private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a653404efc4f25713af588bb6cad2b39e">convertElectricCurrent</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">real(Long), private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ae5f9a067db27ea13f6e4028d29900df0">convertThermodynamicTemperature</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">real(Long), private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a1be0a1da47431668bd2e77c0486f831f">convertAmountOfSubstance</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">real(Long), private&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a64a60f517bd29fbe4a14a5097df961f4">convertLuminousIntensity</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">character(10)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a54d8616222c422eac2f4ae16a5c3bcba">unitLengthName</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">character(10)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a424a8036980301898dba6635e916fbf3">unitMassName</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">character(10)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ab67dd4bef4aa3213b5b9b35ff02d01d9">unitTimeName</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">character(10)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a90b38082ef08e473377594f1485a86ad">unitElectricCurrentName</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">real(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ae265fad966cfc841f9a073a52955d742">SI_SPEED_OF_LIGHT</a> = 299792458d0</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">speed of light in vacuum, c, in m s<sup>-1</sup>, from 2010 CODATA recommended values  <a href="#ae265fad966cfc841f9a073a52955d742"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">real(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a5547546b06eb8853e52e304b25cc7596">SI_SPEED_OF_LIGHT_D</a> = 0d0</td></tr>
@@ -116,27 +108,42 @@ Variables</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">real(Long)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a20e8ed3d7ff389588ce024048c5ccf85">MASS_PROTON</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">in current units  <a href="#a20e8ed3d7ff389588ce024048c5ccf85"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a4b10513970a98ad78b85723c60d9a8b6">rho0</a> = 0.16d0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a> = 197.326963d0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#af78d210174277076bb64ff4403f8c9fd">hbc2</a> = <a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>*<a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a> = 197.326963d0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a030a10874bc73b7d042adb32fad75614">hbc2</a> = <a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>*<a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ae2a4cb4e421fe399f19d0729b5617fed">mp</a> = 938.272013d0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ad68aaba74b75e1e13f1367c1eb0904c1">mn</a> = 939.565560d0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a2e392d52d36b5c1db0d17928aa40f35b">m0</a> = (<a class="el" href="namespacephys__cons.html#ae2a4cb4e421fe399f19d0729b5617fed">mp</a>+<a class="el" href="namespacephys__cons.html#ad68aaba74b75e1e13f1367c1eb0904c1">mn</a>)*0.5d0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a> = (<a class="el" href="namespacephys__cons.html#ae2a4cb4e421fe399f19d0729b5617fed">mp</a>+<a class="el" href="namespacephys__cons.html#ad68aaba74b75e1e13f1367c1eb0904c1">mn</a>)*0.5d0</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">mass of particle being evolved in time  <a href="#afa35c20a6e2a70b58142d10071eeef10"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">REAL(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a02e8bb2c808e0085a317bf36ff79ae2a">a0</a> = 931.494028d0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ad97ad749ef4f8f66c56a0facb7394cb5">hm</a> = <a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>*<a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>/(2.d0*<a class="el" href="namespacephys__cons.html#a2e392d52d36b5c1db0d17928aa40f35b">m0</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ad97ad749ef4f8f66c56a0facb7394cb5">hm</a> = <a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>*<a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>/(2.d0*<a class="el" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">REAL(long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a553e3e17652770308e6bffcb8fcb5a95">deg</a> = 4.d0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">real(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a9e80f5448f5f42cf9983890809e55d88">MASS_NEUTRON_MEV_C2</a> = 939.565379_Long</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Mass of the neutron, in MeV/c<sup>^2</sup>, from 2010 CODATA.  <a href="#a9e80f5448f5f42cf9983890809e55d88"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">real(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#ab5fb46dc243eb307a344a134a593edd0">MASS_NEUTRON_MEV_C2_D</a> = 0.000021_Long</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">uncertainty  <a href="#ab5fb46dc243eb307a344a134a593edd0"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">real(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a3460d18828c87b266ab35b1cdeb4a0a5">MASS_PROTON_MEV_C2</a> = 938.272046_Long</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Mass of the proton, in MeV/c<sup>^2</sup>, from 2010 CODATA.  <a href="#a3460d18828c87b266ab35b1cdeb4a0a5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">real(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a3299e2ce8c6c720ed740eff7968b27a8">MASS_PROTON_MEV_C2_D</a> = 0.000021_Long</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">uncertainty  <a href="#a3299e2ce8c6c720ed740eff7968b27a8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">real(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a7efa4134b36e258435906be7fd9ca165">PLANCKS_CONSTANT_HBAR_C_MEV_FM</a> = 197.3269718_Long</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Planck's constant divided by 2π times speed of light, in MeV fm, from 2010 CODATA.  <a href="#a7efa4134b36e258435906be7fd9ca165"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">real(Long), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacephys__cons.html#a86cb86e86548ce7318d0143b2f4b2f88">PLANCKS_CONSTANT_HBAR_C_MEV_FM_D</a> = 0.0000044_Long</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Stores mathematical and physical constants, both in SI units and user-defined units. </p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd><p class="startdd">give citations for all units </p>
 <p class="enddd">code them in SI, provide conversion routines </p>
 </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd><p class="startdd">give citations for all units </p>
+<p class="enddd">code them in SI, provide conversion routines, see class_PhysicalConstants for current work </p>
+</dd></dl>
 </div><hr/><h2>Function/Subroutine Documentation</h2>
-<a class="anchor" id="a8ef21bd0854146018406be9f1aee9921"></a><!-- doxytag: member="phys_cons::physCons_initialize" ref="a8ef21bd0854146018406be9f1aee9921" args="()" -->
+<a class="anchor" id="a2197fe7eff35572113dcf41a6493794c"></a><!-- doxytag: member="phys_cons::phys_cons_initialize" ref="a2197fe7eff35572113dcf41a6493794c" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">subroutine phys_cons::physCons_initialize </td>
+          <td class="memname">subroutine phys_cons::phys_cons_initialize </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -147,7 +154,50 @@ Variables</h2></td></tr>
 
 <p>Initializes module, assumes current system of units is SI. </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00076">76</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00060">60</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abfc9a7567c3e76fdbbad91b88b46426e"></a><!-- doxytag: member="phys_cons::phys_cons_initialize_SI" ref="abfc9a7567c3e76fdbbad91b88b46426e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine phys_cons::phys_cons_initialize_SI </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00065">65</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab13f84d8b6f574eb73870a2964a82b8b"></a><!-- doxytag: member="phys_cons::phys_cons_initializeNuclear" ref="ab13f84d8b6f574eb73870a2964a82b8b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine phys_cons::phys_cons_initializeNuclear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Initializes physical constants, using nuclear system: </p>
+<ol type="1">
+<li>length - femtometer - fm</li>
+<li>mass - mega-electron volt per speed of light squared - MeV/c^2</li>
+<li>time - femtometer / speed of light - fm/c </li>
+</ol>
+
+<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00075">75</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
 
 </div>
 </div>
@@ -163,112 +213,7 @@ Variables</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00068">68</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1be0a1da47431668bd2e77c0486f831f"></a><!-- doxytag: member="phys_cons::convertAmountOfSubstance" ref="a1be0a1da47431668bd2e77c0486f831f" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">real (Long),private <a class="el" href="namespacephys__cons.html#a1be0a1da47431668bd2e77c0486f831f">phys_cons::convertAmountOfSubstance</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00025">25</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a653404efc4f25713af588bb6cad2b39e"></a><!-- doxytag: member="phys_cons::convertElectricCurrent" ref="a653404efc4f25713af588bb6cad2b39e" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">real (Long),private <a class="el" href="namespacephys__cons.html#a653404efc4f25713af588bb6cad2b39e">phys_cons::convertElectricCurrent</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00023">23</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6fe1cfa01be156ac1f0e51e3ab875f21"></a><!-- doxytag: member="phys_cons::convertLength" ref="a6fe1cfa01be156ac1f0e51e3ab875f21" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">real (Long),private <a class="el" href="namespacephys__cons.html#a6fe1cfa01be156ac1f0e51e3ab875f21">phys_cons::convertLength</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00020">20</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a64a60f517bd29fbe4a14a5097df961f4"></a><!-- doxytag: member="phys_cons::convertLuminousIntensity" ref="a64a60f517bd29fbe4a14a5097df961f4" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">real (Long),private <a class="el" href="namespacephys__cons.html#a64a60f517bd29fbe4a14a5097df961f4">phys_cons::convertLuminousIntensity</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00026">26</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a48484815d32b74a1735ec19ba407ec5b"></a><!-- doxytag: member="phys_cons::convertMass" ref="a48484815d32b74a1735ec19ba407ec5b" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">real (Long),private <a class="el" href="namespacephys__cons.html#a48484815d32b74a1735ec19ba407ec5b">phys_cons::convertMass</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00021">21</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae5f9a067db27ea13f6e4028d29900df0"></a><!-- doxytag: member="phys_cons::convertThermodynamicTemperature" ref="ae5f9a067db27ea13f6e4028d29900df0" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">real (Long),private <a class="el" href="namespacephys__cons.html#ae5f9a067db27ea13f6e4028d29900df0">phys_cons::convertThermodynamicTemperature</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00024">24</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af758eccc104b85bbbc1974e3a9095849"></a><!-- doxytag: member="phys_cons::convertTime" ref="af758eccc104b85bbbc1974e3a9095849" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">real (Long),private <a class="el" href="namespacephys__cons.html#af758eccc104b85bbbc1974e3a9095849">phys_cons::convertTime</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00022">22</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00052">52</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -283,37 +228,37 @@ Variables</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00071">71</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00055">55</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a3f47589553abc71257ab3e88ef7bbb39"></a><!-- doxytag: member="phys_cons::hbc" ref="a3f47589553abc71257ab3e88ef7bbb39" args="" -->
+<a class="anchor" id="a2d3539e3579b581a4e69eff7347b4fa2"></a><!-- doxytag: member="phys_cons::hbc" ref="a2d3539e3579b581a4e69eff7347b4fa2" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">REAL (long),parameter <a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">phys_cons::hbc</a> = 197.326963d0</td>
+          <td class="memname">REAL (long) <a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">phys_cons::hbc</a> = 197.326963d0</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00063">63</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00047">47</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="af78d210174277076bb64ff4403f8c9fd"></a><!-- doxytag: member="phys_cons::hbc2" ref="af78d210174277076bb64ff4403f8c9fd" args="" -->
+<a class="anchor" id="a030a10874bc73b7d042adb32fad75614"></a><!-- doxytag: member="phys_cons::hbc2" ref="a030a10874bc73b7d042adb32fad75614" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">REAL (long),parameter <a class="el" href="namespacephys__cons.html#af78d210174277076bb64ff4403f8c9fd">phys_cons::hbc2</a> = <a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>*<a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a></td>
+          <td class="memname">REAL (long) <a class="el" href="namespacephys__cons.html#a030a10874bc73b7d042adb32fad75614">phys_cons::hbc2</a> = <a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>*<a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00064">64</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00048">48</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -322,28 +267,28 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">REAL (long),parameter <a class="el" href="namespacephys__cons.html#ad97ad749ef4f8f66c56a0facb7394cb5">phys_cons::hm</a> = <a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>*<a class="el" href="namespacephys__cons.html#a3f47589553abc71257ab3e88ef7bbb39">hbc</a>/(2.d0*<a class="el" href="namespacephys__cons.html#a2e392d52d36b5c1db0d17928aa40f35b">m0</a>)</td>
+          <td class="memname">REAL (long),parameter <a class="el" href="namespacephys__cons.html#ad97ad749ef4f8f66c56a0facb7394cb5">phys_cons::hm</a> = <a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>*<a class="el" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>/(2.d0*<a class="el" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>)</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00069">69</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00053">53</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a0dbb22856790b16e206de451e9cdd74a"></a><!-- doxytag: member="phys_cons::imagi" ref="a0dbb22856790b16e206de451e9cdd74a" args="" -->
+<a class="anchor" id="af15f96806bfb6b9c6b1a279971d5d34b"></a><!-- doxytag: member="phys_cons::imagi" ref="af15f96806bfb6b9c6b1a279971d5d34b" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">complex*16,parameter <a class="el" href="namespacephys__cons.html#a0dbb22856790b16e206de451e9cdd74a">phys_cons::imagi</a> = cmplx(0.d0, 1.d0, 8)</td>
+          <td class="memname">complex *parameter <a class="el" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">phys_cons::imagi</a> = cmplx(0.d0, 1.d0, 8)</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00011">11</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00011">11</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -358,7 +303,7 @@ Variables</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00013">13</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00013">13</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -373,22 +318,24 @@ Variables</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00014">14</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00014">14</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2e392d52d36b5c1db0d17928aa40f35b"></a><!-- doxytag: member="phys_cons::m0" ref="a2e392d52d36b5c1db0d17928aa40f35b" args="" -->
+<a class="anchor" id="afa35c20a6e2a70b58142d10071eeef10"></a><!-- doxytag: member="phys_cons::m0" ref="afa35c20a6e2a70b58142d10071eeef10" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">REAL (long),parameter <a class="el" href="namespacephys__cons.html#a2e392d52d36b5c1db0d17928aa40f35b">phys_cons::m0</a> = (<a class="el" href="namespacephys__cons.html#ae2a4cb4e421fe399f19d0729b5617fed">mp</a>+<a class="el" href="namespacephys__cons.html#ad68aaba74b75e1e13f1367c1eb0904c1">mn</a>)*0.5d0</td>
+          <td class="memname">REAL (long) <a class="el" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">phys_cons::m0</a> = (<a class="el" href="namespacephys__cons.html#ae2a4cb4e421fe399f19d0729b5617fed">mp</a>+<a class="el" href="namespacephys__cons.html#ad68aaba74b75e1e13f1367c1eb0904c1">mn</a>)*0.5d0</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00067">67</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>mass of particle being evolved in time </p>
+
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00051">51</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -405,7 +352,41 @@ Variables</h2></td></tr>
 
 <p>in current units </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00053">53</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00037">37</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9e80f5448f5f42cf9983890809e55d88"></a><!-- doxytag: member="phys_cons::MASS_NEUTRON_MEV_C2" ref="a9e80f5448f5f42cf9983890809e55d88" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real (Long),parameter <a class="el" href="namespacephys__cons.html#a9e80f5448f5f42cf9983890809e55d88">phys_cons::MASS_NEUTRON_MEV_C2</a> = 939.565379_Long</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Mass of the neutron, in MeV/c<sup>^2</sup>, from 2010 CODATA. </p>
+
+<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00019">19</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab5fb46dc243eb307a344a134a593edd0"></a><!-- doxytag: member="phys_cons::MASS_NEUTRON_MEV_C2_D" ref="ab5fb46dc243eb307a344a134a593edd0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real (Long),parameter <a class="el" href="namespacephys__cons.html#ab5fb46dc243eb307a344a134a593edd0">phys_cons::MASS_NEUTRON_MEV_C2_D</a> = 0.000021_Long</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>uncertainty </p>
+
+<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00021">21</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
 
 </div>
 </div>
@@ -422,7 +403,41 @@ Variables</h2></td></tr>
 
 <p>in current units </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00060">60</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00044">44</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3460d18828c87b266ab35b1cdeb4a0a5"></a><!-- doxytag: member="phys_cons::MASS_PROTON_MEV_C2" ref="a3460d18828c87b266ab35b1cdeb4a0a5" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real (Long),parameter <a class="el" href="namespacephys__cons.html#a3460d18828c87b266ab35b1cdeb4a0a5">phys_cons::MASS_PROTON_MEV_C2</a> = 938.272046_Long</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Mass of the proton, in MeV/c<sup>^2</sup>, from 2010 CODATA. </p>
+
+<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00024">24</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3299e2ce8c6c720ed740eff7968b27a8"></a><!-- doxytag: member="phys_cons::MASS_PROTON_MEV_C2_D" ref="a3299e2ce8c6c720ed740eff7968b27a8" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real (Long),parameter <a class="el" href="namespacephys__cons.html#a3299e2ce8c6c720ed740eff7968b27a8">phys_cons::MASS_PROTON_MEV_C2_D</a> = 0.000021_Long</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>uncertainty </p>
+
+<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00026">26</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
 
 </div>
 </div>
@@ -437,7 +452,7 @@ Variables</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00066">66</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00050">50</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -452,7 +467,7 @@ Variables</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00065">65</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00049">49</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -467,7 +482,7 @@ Variables</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00012">12</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00012">12</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -484,7 +499,39 @@ Variables</h2></td></tr>
 
 <p>in current units </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00046">46</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00030">30</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7efa4134b36e258435906be7fd9ca165"></a><!-- doxytag: member="phys_cons::PLANCKS_CONSTANT_HBAR_C_MEV_FM" ref="a7efa4134b36e258435906be7fd9ca165" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real (Long),parameter <a class="el" href="namespacephys__cons.html#a7efa4134b36e258435906be7fd9ca165">phys_cons::PLANCKS_CONSTANT_HBAR_C_MEV_FM</a> = 197.3269718_Long</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Planck's constant divided by 2π times speed of light, in MeV fm, from 2010 CODATA. </p>
+
+<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00030">30</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a86cb86e86548ce7318d0143b2f4b2f88"></a><!-- doxytag: member="phys_cons::PLANCKS_CONSTANT_HBAR_C_MEV_FM_D" ref="a86cb86e86548ce7318d0143b2f4b2f88" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real (Long),parameter <a class="el" href="namespacephys__cons.html#a86cb86e86548ce7318d0143b2f4b2f88">phys_cons::PLANCKS_CONSTANT_HBAR_C_MEV_FM_D</a> = 0.0000044_Long</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00030">30</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
 
 </div>
 </div>
@@ -499,7 +546,7 @@ Variables</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00062">62</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00046">46</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -516,7 +563,7 @@ Variables</h2></td></tr>
 
 <p>mass of the neutron, m<sub>n</sub>, in kg, from 2010 CODATA </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00049">49</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00033">33</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -533,7 +580,7 @@ Variables</h2></td></tr>
 
 <p>uncertainty </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00051">51</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00035">35</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -550,7 +597,7 @@ Variables</h2></td></tr>
 
 <p>mass of the proton, m<sub>p</sub>, in kg. </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00056">56</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00040">40</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -567,7 +614,7 @@ Variables</h2></td></tr>
 
 <p>uncertainty </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00058">58</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00042">42</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -584,7 +631,7 @@ Variables</h2></td></tr>
 
 <p>Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA. </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00042">42</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00026">26</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -601,7 +648,7 @@ Variables</h2></td></tr>
 
 <p>uncertainty </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00044">44</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00028">28</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -618,7 +665,7 @@ Variables</h2></td></tr>
 
 <p>speed of light in vacuum, c, in m s<sup>-1</sup>, from 2010 CODATA recommended values </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00037">37</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00021">21</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -635,7 +682,7 @@ Variables</h2></td></tr>
 
 <p>uncertainty </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00038">38</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00022">22</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -652,68 +699,7 @@ Variables</h2></td></tr>
 
 <p>in current units </p>
 
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00039">39</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a90b38082ef08e473377594f1485a86ad"></a><!-- doxytag: member="phys_cons::unitElectricCurrentName" ref="a90b38082ef08e473377594f1485a86ad" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">character(10) <a class="el" href="namespacephys__cons.html#a90b38082ef08e473377594f1485a86ad">phys_cons::unitElectricCurrentName</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00033">33</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a54d8616222c422eac2f4ae16a5c3bcba"></a><!-- doxytag: member="phys_cons::unitLengthName" ref="a54d8616222c422eac2f4ae16a5c3bcba" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">character(10) <a class="el" href="namespacephys__cons.html#a54d8616222c422eac2f4ae16a5c3bcba">phys_cons::unitLengthName</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>change to using a string class that has variable length </dd></dl>
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00030">30</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a424a8036980301898dba6635e916fbf3"></a><!-- doxytag: member="phys_cons::unitMassName" ref="a424a8036980301898dba6635e916fbf3" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">character(10) <a class="el" href="namespacephys__cons.html#a424a8036980301898dba6635e916fbf3">phys_cons::unitMassName</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00031">31</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab67dd4bef4aa3213b5b9b35ff02d01d9"></a><!-- doxytag: member="phys_cons::unitTimeName" ref="ab67dd4bef4aa3213b5b9b35ff02d01d9" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">character(10) <a class="el" href="namespacephys__cons.html#ab67dd4bef4aa3213b5b9b35ff02d01d9">phys_cons::unitTimeName</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="phys__cons_8f90_source.html#l00032">32</a> of file <a class="el" href="phys__cons_8f90_source.html">phys_cons.f90</a>.</p>
+<p>Definition at line <a class="el" href="class__PhysicalConstants_8f90_source.html#l00023">23</a> of file <a class="el" href="class__PhysicalConstants_8f90_source.html">class_PhysicalConstants.f90</a>.</p>
 
 </div>
 </div>
@@ -732,7 +718,7 @@ Variables</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Mon Sep 5 2011 18:01:41 for demagoque by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Sep 8 2011 13:32:38 for demagoque by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

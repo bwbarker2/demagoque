@@ -50,7 +50,7 @@ real*8 function calcHarmonicEv(xx,tt)
 
  sigma02=1d0/whm
 
- sigma2=sigma02*(1d0+(hbc*tt/(m0*sigma02))**2)
+ sigma2=sigma02*(1d0+(hbar*tt/(m0*sigma02))**2)
 
  calcHarmonicEv=sqrt(1/(pi*sigma2))*exp(-xx**2/sigma2)
 

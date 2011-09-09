@@ -155,13 +155,13 @@ SUBROUTINE evol_k(dtim)
        endif
 
        if(useImEvol)then
-        edt=edt*(-hbc/m0*0.5d0*(k1*k1+k2*k2)*dtim)
+        edt=edt*(-hbar/m0*0.5d0*(k1*k1+k2*k2)*dtim)
         call setDenK(ikr,ika,exp(edt)*getDenK(ikr,ika))
        else
         !time evolution operator = exp(-i(E-E')t/h)
         !                        = exp(-ih/2m(k^2-k'^2))
-        edt=edt*(-hbc/m0*0.5d0*(k1*k1-k2*k2)*dtim)
-!        edt=edt*(-hbc/m0*ka(ika)*kr(ikr)*dtim)
+        edt=edt*(-hbar/m0*0.5d0*(k1*k1-k2*k2)*dtim)
+!        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
         if(ika==-Nka) then
          call setDenK(ikr,ika,cos(edt)*getDenK(ikr,ika))
         else
@@ -310,11 +310,11 @@ SUBROUTINE evol_x(dtim)
 !     endif
 
    if(useImEvol) then
-    udt=-(ux1+ux2)*dtim/hbc
+    udt=-(ux1+ux2)*dtim/hbar
     call setDenX(ixa,ixr,cutfac*exp(udt)*getDenX(ixa,ixr))
    else
      !time evolution operator = exp(-i(U(x)-U(x'))t/h)
-    udt=-(ux1-ux2)*dtim/hbc
+    udt=-(ux1-ux2)*dtim/hbar
    if(debugxall)debugudt=udt
  !   tpots(ixr)=udt  !debugging
     cos2k=dcos(udt)
@@ -480,7 +480,7 @@ subroutine getImCutoff(cutfac, ixr,dtim)
   cutfac=1d0
  endif
 ! write(*,*)cutfac
- cutfac=exp(-2d0*cutoff_w0*cutfac*dtim/hbc)
+ cutfac=exp(-2d0*cutoff_w0*cutfac*dtim/hbar)
 ! write(*,*)ixr,xxr,cutfac
 
 end subroutine getImCutoff
