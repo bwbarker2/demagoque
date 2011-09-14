@@ -84,45 +84,50 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00020"></a>00020 
 <a name="l00021"></a><a class="code" href="namespaceinput__parameters.html#a1d8bbaa8b473b798cb43170831cc57ac">00021</a>  <span class="keywordtype">real (Long)</span> :: initialSeparation <span class="comment">! 0 if not used, initial distance in fm between slabs</span>
 <a name="l00022"></a>00022 
-<a name="l00023"></a><a class="code" href="namespaceinput__parameters.html#add8bfc502078fcdca67fff41e00114f7">00023</a>  <span class="keywordtype">logical</span>     :: initState_gaussianNuclear
-<a name="l00024"></a><a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">00024</a>  <span class="keywordtype">REAL (long)</span> :: w
-<a name="l00025"></a><a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">00025</a>  <span class="keywordtype">REAL (long)</span> :: whm
-<a name="l00026"></a><a class="code" href="namespaceinput__parameters.html#a29545f09a06c5a3def5df7fdb5f966ab">00026</a>  <span class="keywordtype">INTEGER</span>     :: Nmax   <span class="comment">! maximum oscillator shell</span>
-<a name="l00027"></a>00027 
-<a name="l00028"></a><a class="code" href="namespaceinput__parameters.html#a794b8486b7ecd6258448887bce533681">00028</a>  <span class="keywordtype">logical</span>     :: initState_cosine <span class="comment">!add sine wave to initial state</span>
-<a name="l00029"></a><a class="code" href="namespaceinput__parameters.html#ad5ff3d9c110be99ed08bbe970f1630c8">00029</a>  <span class="keywordtype">integer</span>     :: initState_cosine_number <span class="comment">! wave number n</span>
-<a name="l00030"></a><a class="code" href="namespaceinput__parameters.html#a51d2cc916f531fadef1a6f0729644174">00030</a>  <span class="keywordtype">real (Long)</span> :: initState_cosine_norm <span class="comment">!normalization of sine wave, default 1</span>
-<a name="l00031"></a><a class="code" href="namespaceinput__parameters.html#ac3a5530df841dc82b4819f34f1e44980">00031</a>  <span class="keywordtype">real (Long)</span> :: initState_cosine_shift <span class="comment">!phase shift, default 0</span>
-<a name="l00032"></a>00032 
-<a name="l00033"></a><a class="code" href="namespaceinput__parameters.html#a727a13be305b5dde7955fd2d02f955e4">00033</a>  <span class="keywordtype">logical</span>     :: initState_plane  <span class="comment">!add plane wave to initial state</span>
-<a name="l00034"></a><a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">00034</a>  <span class="keywordtype">integer</span>     :: initState_plane_number
-<a name="l00035"></a><a class="code" href="namespaceinput__parameters.html#a22ba3f1343580a0db34433e32279e365">00035</a>  <span class="keywordtype">real (Long)</span> :: initState_plane_norm
-<a name="l00036"></a><a class="code" href="namespaceinput__parameters.html#a97253a3c66d919b8a99dd33c633d3bd8">00036</a>  <span class="keywordtype">real (Long)</span> :: initState_plane_shift
-<a name="l00037"></a>00037 
-<a name="l00038"></a><a class="code" href="namespaceinput__parameters.html#aae45dd03716b9ad9a0600a9d9a798935">00038</a>  <span class="keywordtype">logical</span>     :: initState_kdelta  <span class="comment">!add kronecker delta function to initial state</span>
-<a name="l00039"></a><a class="code" href="namespaceinput__parameters.html#a1b2e5c088ab1d39d896586d7fb18b142">00039</a>  <span class="keywordtype">real (Long)</span> :: initState_kdelta_norm
-<a name="l00040"></a><a class="code" href="namespaceinput__parameters.html#a65eb9165c6a1fd054daefc2a96e7ae2a">00040</a>  <span class="keywordtype">real (Long)</span> :: initState_kdelta_x0  <span class="comment">!center of delta function</span>
+<a name="l00023"></a>00023 <span class="comment">! logical     :: initState_BEC_q1D  !&lt; use Bose-Einstein Condensate for initial state</span>
+<a name="l00024"></a>00024 <span class="comment">! real (Long) :: initState_BEC_q1D_numpart  !&lt; number of atoms in condensate</span>
+<a name="l00025"></a>00025 <span class="comment">! real (Long) :: initState_BEC_q1D_scatLength  !&lt; s-wave scattering length</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a><a class="code" href="namespaceinput__parameters.html#add8bfc502078fcdca67fff41e00114f7">00027</a>  <span class="keywordtype">logical</span>     :: initState_gaussianNuclear
+<a name="l00028"></a><a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">00028</a>  <span class="keywordtype">REAL (long)</span> :: w
+<a name="l00029"></a><a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">00029</a>  <span class="keywordtype">REAL (long)</span> :: whm
+<a name="l00030"></a><a class="code" href="namespaceinput__parameters.html#a29545f09a06c5a3def5df7fdb5f966ab">00030</a>  <span class="keywordtype">INTEGER</span>     :: Nmax   <span class="comment">! maximum oscillator shell</span>
+<a name="l00031"></a>00031 
+<a name="l00032"></a><a class="code" href="namespaceinput__parameters.html#a794b8486b7ecd6258448887bce533681">00032</a>  <span class="keywordtype">logical</span>     :: initState_cosine <span class="comment">!add sine wave to initial state</span>
+<a name="l00033"></a><a class="code" href="namespaceinput__parameters.html#ad5ff3d9c110be99ed08bbe970f1630c8">00033</a>  <span class="keywordtype">integer</span>     :: initState_cosine_number <span class="comment">! wave number n</span>
+<a name="l00034"></a><a class="code" href="namespaceinput__parameters.html#a51d2cc916f531fadef1a6f0729644174">00034</a>  <span class="keywordtype">real (Long)</span> :: initState_cosine_norm <span class="comment">!normalization of sine wave, default 1</span>
+<a name="l00035"></a><a class="code" href="namespaceinput__parameters.html#ac3a5530df841dc82b4819f34f1e44980">00035</a>  <span class="keywordtype">real (Long)</span> :: initState_cosine_shift <span class="comment">!phase shift, default 0</span>
+<a name="l00036"></a>00036 
+<a name="l00037"></a><a class="code" href="namespaceinput__parameters.html#a727a13be305b5dde7955fd2d02f955e4">00037</a>  <span class="keywordtype">logical</span>     :: initState_plane  <span class="comment">!add plane wave to initial state</span>
+<a name="l00038"></a><a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">00038</a>  <span class="keywordtype">integer</span>     :: initState_plane_number
+<a name="l00039"></a><a class="code" href="namespaceinput__parameters.html#a22ba3f1343580a0db34433e32279e365">00039</a>  <span class="keywordtype">real (Long)</span> :: initState_plane_norm
+<a name="l00040"></a><a class="code" href="namespaceinput__parameters.html#a97253a3c66d919b8a99dd33c633d3bd8">00040</a>  <span class="keywordtype">real (Long)</span> :: initState_plane_shift
 <a name="l00041"></a>00041 
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043 <span class="comment">! logical :: initState_randomG  !add a random number (Gaussian) to initial state</span>
-<a name="l00044"></a>00044 <span class="comment">! real (Long) :: initState_random_norm  !norm</span>
-<a name="l00045"></a>00045 <span class="comment">! real (Long) :: initState_random_fwhm  !full width half max</span>
-<a name="l00046"></a>00046 
-<a name="l00047"></a><a class="code" href="namespaceinput__parameters.html#a127f71f45eade1f05ced1535e88c771d">00047</a>  <span class="keywordtype">integer</span>     :: splitOperatorMethod <span class="comment">!0 if not used, otherwise order of method</span>
-<a name="l00048"></a>00048 
-<a name="l00049"></a><a class="code" href="namespaceinput__parameters.html#a9672a1c90e65a2ecee350dd2dae64e03">00049</a>  <span class="keywordtype">logical</span>     :: useImEvol   <span class="comment">! use imaginary evolution?</span>
-<a name="l00050"></a><a class="code" href="namespaceinput__parameters.html#ac0212885e38ab22a77411b20bec16420">00050</a>  <span class="keywordtype">integer</span>     :: Nimev  <span class="comment">! number of timesteps for imaginary evolution</span>
-<a name="l00051"></a>00051  
-<a name="l00052"></a><a class="code" href="namespaceinput__parameters.html#a504b6e2c93e4a4af47125d83d6e5d75d">00052</a>  <span class="keywordtype">logical</span>     :: useFlipClone  <span class="comment">! symmetric collision method</span>
-<a name="l00053"></a>00053 
-<a name="l00054"></a><a class="code" href="namespaceinput__parameters.html#ac1165234d614ad278effaf2a7910888b">00054</a>  <span class="keywordtype">logical</span>     :: useAdiabatic  <span class="comment">! if true, use adiabatic switching</span>
-<a name="l00055"></a><a class="code" href="namespaceinput__parameters.html#a2b1e4d8baaa62168d989002cf747b30b">00055</a>  <span class="keywordtype">integer</span>     :: iadib         <span class="comment">! 1 = run adiabatic, 0 = read adiabatic from file</span>
-<a name="l00056"></a><a class="code" href="namespaceinput__parameters.html#a6e8306262594749651ff9230cb525363">00056</a>  <span class="keywordtype">integer</span>     :: Nad           <span class="comment">!adiabatic switching parameters</span>
-<a name="l00057"></a><a class="code" href="namespaceinput__parameters.html#a8d452c8a3d45ee77279fc26867c74ed6">00057</a>  <span class="keywordtype">real (Long)</span> :: tad,wtad  
-<a name="l00058"></a>00058 
+<a name="l00042"></a><a class="code" href="namespaceinput__parameters.html#aae45dd03716b9ad9a0600a9d9a798935">00042</a>  <span class="keywordtype">logical</span>     :: initState_kdelta  <span class="comment">!add kronecker delta function to initial state</span>
+<a name="l00043"></a><a class="code" href="namespaceinput__parameters.html#a1b2e5c088ab1d39d896586d7fb18b142">00043</a>  <span class="keywordtype">real (Long)</span> :: initState_kdelta_norm
+<a name="l00044"></a><a class="code" href="namespaceinput__parameters.html#a65eb9165c6a1fd054daefc2a96e7ae2a">00044</a>  <span class="keywordtype">real (Long)</span> :: initState_kdelta_x0  <span class="comment">!center of delta function</span>
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046 <span class="comment">! logical :: initState_randomG  !add a random number (Gaussian) to initial state</span>
+<a name="l00047"></a>00047 <span class="comment">! real (Long) :: initState_random_norm  !norm</span>
+<a name="l00048"></a>00048 <span class="comment">! real (Long) :: initState_random_fwhm  !full width half max</span>
+<a name="l00049"></a>00049 
+<a name="l00050"></a><a class="code" href="namespaceinput__parameters.html#a127f71f45eade1f05ced1535e88c771d">00050</a>  <span class="keywordtype">integer</span>     :: splitOperatorMethod <span class="comment">!0 if not used, otherwise order of method</span>
+<a name="l00051"></a>00051 
+<a name="l00052"></a><a class="code" href="namespaceinput__parameters.html#a716cb07ce1fca722dacc327ddc4011fd">00052</a>  <span class="keywordtype">logical</span>     :: unitSystem_bec      <span class="comment">!&lt; Use unit system for Bose-Einstein Condensate</span>
+<a name="l00053"></a><a class="code" href="namespaceinput__parameters.html#a65ef9c71ef768c5f3b871cae9143108e">00053</a>  <span class="keywordtype">logical</span>     :: unitSystem_nuclear  <span class="comment">!&lt; Use unit system for nuclear collision [default]</span>
+<a name="l00054"></a>00054 
+<a name="l00055"></a><a class="code" href="namespaceinput__parameters.html#a9672a1c90e65a2ecee350dd2dae64e03">00055</a>  <span class="keywordtype">logical</span>     :: useImEvol   <span class="comment">! use imaginary evolution?</span>
+<a name="l00056"></a><a class="code" href="namespaceinput__parameters.html#ac0212885e38ab22a77411b20bec16420">00056</a>  <span class="keywordtype">integer</span>     :: Nimev  <span class="comment">! number of timesteps for imaginary evolution</span>
+<a name="l00057"></a>00057  
+<a name="l00058"></a><a class="code" href="namespaceinput__parameters.html#a504b6e2c93e4a4af47125d83d6e5d75d">00058</a>  <span class="keywordtype">logical</span>     :: useFlipClone  <span class="comment">! symmetric collision method</span>
 <a name="l00059"></a>00059 
-<a name="l00060"></a>00060 <span class="keyword">end module input_parameters</span>
-<a name="l00061"></a>00061 
+<a name="l00060"></a><a class="code" href="namespaceinput__parameters.html#ac1165234d614ad278effaf2a7910888b">00060</a>  <span class="keywordtype">logical</span>     :: useAdiabatic  <span class="comment">! if true, use adiabatic switching</span>
+<a name="l00061"></a><a class="code" href="namespaceinput__parameters.html#a2b1e4d8baaa62168d989002cf747b30b">00061</a>  <span class="keywordtype">integer</span>     :: iadib         <span class="comment">! 1 = run adiabatic, 0 = read adiabatic from file</span>
+<a name="l00062"></a><a class="code" href="namespaceinput__parameters.html#a6e8306262594749651ff9230cb525363">00062</a>  <span class="keywordtype">integer</span>     :: Nad           <span class="comment">!adiabatic switching parameters</span>
+<a name="l00063"></a><a class="code" href="namespaceinput__parameters.html#a8d452c8a3d45ee77279fc26867c74ed6">00063</a>  <span class="keywordtype">real (Long)</span> :: tad,wtad  
+<a name="l00064"></a>00064 
+<a name="l00065"></a>00065 <span class="keyword">end module input_parameters</span>
+<a name="l00066"></a>00066 
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -139,7 +144,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Sep 8 2011 13:32:37 for demagoque by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Sep 12 2011 13:47:05 for demagoque by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

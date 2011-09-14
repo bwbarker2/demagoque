@@ -2,7 +2,7 @@
 !!
 !! \todo give citations for all units
 !! \todo code them in SI, provide conversion routines
-MODULE phys_cons
+MODULE class_PhysicalConstants
   use class_PhysicalQuantity
   USE prec_def
   IMPLICIT NONE
@@ -70,6 +70,6 @@ contains
  end subroutine phys_cons_initialize_SI
 
 
-END MODULE phys_cons
+END MODULE class_PhysicalConstants
 
 

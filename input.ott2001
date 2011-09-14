@@ -1,0 +1,41 @@
+! ........... READ AND WRITE PARAMETERS
+1 ! ntime
+! ........... PHYSICAL PARAMETERS
+0.5d0 ! delt 
+20 ! Nevt
+0d0 ! EA 
+1000d0  ! xLa 
+1000d0 ! xLr 
+100 ! Nxa
+100 ! Nxr
+! ............. POTENTIAL PARAMETERS
+0  ! potInitial
+4 ! potFinal
+30 70 1200  ! tad,wtad,Nad
+1  ! iadib
+! ............. IMAGINARY EVOLUTION PARAMETERS
+.false.     ! useImEvol - use imaginary evolution?
+10   ! nimev - number of timesteps for this evolution
+! ............. START OPTIONAL PARAMETERS
+  !initialSeparation 15d0       !separation between centers in fm
+!!!initState_gaussianNuclear 0  !use this, Nmax
+!initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
+!initState_kdelta 1d0 0d0     !norm, position
+!initState_plane 1 1d0 0d0    !wave number, norm, phase shift
+unitSystem nuclear
+splitOperatorMethod 3  !use this, setting order of accuracy in time
+!useImCutoff 1000d0 2d0 2d0  !useImCutoff, cutoff w0,x0,d0
+END_OF_OPTIONS !sentinel for end of optional parameters
+
+!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+! INPUT FILE FOR THE EVOLUTION PROGRAM
+! ntime ->  Controls how often the data is written
+! delt -> Time interval                                                    c
+! Nt -> Number of time intervals                                           c
+! Nmax -> Maximum oscillator shell
+! EA  -> initial kinetic energy per particle
+! xLa -> Total length of the box in average coordinate xa=(x+x')/2 is 2*xLa
+! xLr -> Total length of the box in relative coordinate xr=x-x' is 2*xLr
+! Nxa -> number of grid points in average coordinate
+! Nxr -> number of grid points in relative coordinate
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

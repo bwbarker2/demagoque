@@ -15,10 +15,15 @@ MODULE phys_cons
 
   !physical constants in SI units, with "current units" as well
 
+  !> relative atomic mass of 87 Rubidium, in u, from Audi 2003
+  real (Long), parameter :: &
+       MASS_REL_RUBIDIUM_87 = 86.909180527_Long, &
+       MASS_REL_RUBIDIUM_87_D = 0.000000013_Long
+
   !> Mass of the neutron, in MeV/c<sup>^2</sup>, from 2010 CODATA
-  real (Long), parameter :: MASS_NEUTRON_MEV_C2 = 939.565379_Long
-  !> uncertainty
-  real (Long), parameter :: MASS_NEUTRON_MEV_C2_D = 0.000021_Long
+  real (Long), parameter :: &
+       MASS_NEUTRON_MEV_C2 = 939.565379_Long, &
+       MASS_NEUTRON_MEV_C2_D = 0.000021_Long  !< uncertainty
 
   !> Mass of the proton, in MeV/c<sup>^2</sup>, from 2010 CODATA
   real (Long), parameter :: MASS_PROTON_MEV_C2 = 938.272046_Long
@@ -28,7 +33,7 @@ MODULE phys_cons
   !> Planck's constant divided by 2π, in MeV fm/c, from 2010 CODATA
   real (Long), parameter :: &
        PLANCKS_CONSTANT_HBAR_MEV_FM_C = 197.3269718_Long, &
-       PLANCKS_CONSTANT_HBAR_MEV_FM_C_D = 0.0000044_Long
+       PLANCKS_CONSTANT_HBAR_MEV_FM_C_D = 0.0000044_Long  !< uncertainty
 
   !> speed of light in vacuum, c, in m s<sup>-1</sup>, from 2010 CODATA
   !! recommended values
@@ -42,6 +47,11 @@ MODULE phys_cons
   real (Long), parameter :: SI_PLANCKS_CONSTANT_HBAR_D = 0.000000047e-34_Long
   !> in current units
   real (Long)            :: PLANCKS_CONSTANT_HBAR
+
+  !> atomic mass constant, u, in kg, from 2010 CODATA
+  real (Long), parameter :: &
+       SI_ATOMIC_MASS_CONSTANT = 1.660538921e-27_Long, &
+       SI_ATOMIC_MASS_CONSTANT_D = 0.000000073e-27_Long  !< uncertainty
 
   !> mass of the neutron, m<sub>n</sub>, in kg, from 2010 CODATA
   real (Long), parameter :: SI_MASS_NEUTRON   = 1.674927351e-27_Long
@@ -59,7 +69,6 @@ MODULE phys_cons
 
   REAL (long) , PARAMETER :: rho0=0.16d0       !nuclear saturation density [fm^-3]
   REAL (long) :: hbar  !< Planck's constant in current unit system
-  REAL (long) :: hbar2 !< hbar^2
   REAL (long) :: m0   !< mass of particle being evolved in time
   REAL (long) , PARAMETER :: deg=4.d0 ! degeneracy
 
@@ -75,12 +84,30 @@ contains
   implicit none
 
   hbar = PLANCKS_CONSTANT_HBAR_MEV_FM_C  !MeV fm
-  hbar2 = hbar*hbar
   m0 = 0.5_Long*(MASS_NEUTRON_MEV_C2+MASS_PROTON_MEV_C2)
   
 
  end subroutine phys_cons_initializeNuclear
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+
+ !> \brief Initializes physical constants for BEC evolution (87-Rb)
+ !!
+ !! -# length = micrometer - um
+ !! -# mass   = atomic mass unit - u
+ !! -# time   = millisecond - ms
+ subroutine phys_cons_initializeBEC
+  implicit none
+
+  hbar = SI_PLANCKS_CONSTANT_HBAR &
+         *1_Long    / SI_ATOMIC_MASS_CONSTANT  &  ! u / kg
+         *(1e6_Long / 1_Long)**2               &  ! um / m twice
+         *1_Long    / 1e3_Long                    ! s / ms
+  
+  m0 = MASS_REL_RUBIDIUM_87
+
+ end subroutine phys_cons_initializeBEC
+ 
 
 END MODULE phys_cons
 

@@ -1,0 +1,385 @@
+\hypertarget{namespaceclass__PhysicalConstants}{
+\section{class\_\-PhysicalConstants Module Reference}
+\label{namespaceclass__PhysicalConstants}\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}}
+}
+
+
+Stores mathematical and physical constants, both in SI units and user-\/defined units.  
+
+
+\subsection*{Functions/Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{namespaceclass__PhysicalConstants_a12646466fa3b6eb776e5be6f53b5eb5b}{phys\_\-cons\_\-initialize} ()
+\begin{DoxyCompactList}\small\item\em Initializes module, assumes current system of units is SI. \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{namespaceclass__PhysicalConstants_a60f39db2f3075d17f5e1b47ed02ad092}{phys\_\-cons\_\-initialize\_\-SI}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+complex $\ast$16, parameter \hyperlink{namespaceclass__PhysicalConstants_ac45be97becb491b16f05e8f0695d03ba}{imagi} = cmplx(0.d0, 1.d0, 8)
+\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_a42d7c56a3a05fa73be90f78ecc833f34}{pi} = 4d0$\ast$atan(1d0)
+\item 
+real(long), parameter \hyperlink{namespaceclass__PhysicalConstants_a3c84b6c8e14a53682461f34fd08584bb}{invpi} = 1d0/pi
+\item 
+real(long), parameter \hyperlink{namespaceclass__PhysicalConstants_a7dee25e7580520ed07ea8ea46cd96706}{invsqrt2pi} = 1d0/sqrt(2d0$\ast$pi)
+\item 
+real(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_a30ec603cc75f0d29a1429faabdce848c}{SI\_\-SPEED\_\-OF\_\-LIGHT} = 299792458d0
+\begin{DoxyCompactList}\small\item\em speed of light in vacuum, c, in m s$^{\mbox{-\/1}}$ , from 2010 CODATA recommended values \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_aa56bb92d92839b2fef368f7be3640777}{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D} = 0d0
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespaceclass__PhysicalConstants_a44b1992769a901faa8885324ef348271}{SPEED\_\-OF\_\-LIGHT}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_a600c7e7a8a69f32b4bcab8d52fc15073}{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR} = 1.054571726e-\/34\_\-Long
+\begin{DoxyCompactList}\small\item\em Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_a3d0c994c98a42bfcf113f5b427c36962}{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D} = 0.000000047e-\/34\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespaceclass__PhysicalConstants_ae4331c74d5e362ec511a71f7a10d7c5b}{PLANCKS\_\-CONSTANT\_\-HBAR}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_ae630d55c57af72ecd1cf1b926512f9e4}{SI\_\-MASS\_\-NEUTRON} = 1.674927351e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em mass of the neutron, m$_{\mbox{n}}$ , in kg, from 2010 CODATA \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_a2a2b96dae5b376e21555324d6f18d7b4}{SI\_\-MASS\_\-NEUTRON\_\-D} = 0.000000074e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespaceclass__PhysicalConstants_af0ecc86a3048c06a15619a67d8a21687}{MASS\_\-NEUTRON}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_a2449bd62711b0a1ee76be095516a13da}{SI\_\-MASS\_\-PROTON} = 1.672621777e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em mass of the proton, m$_{\mbox{p}}$ , in kg. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_a22a22c3caa590bb80989439fea138dca}{SI\_\-MASS\_\-PROTON\_\-D} = 0.000000074e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long) \hyperlink{namespaceclass__PhysicalConstants_a91ea21ef8a0bb29bf99b041c512b6859}{MASS\_\-PROTON}
+\begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_afd1e8c949a1607aa74c06b2cf93718a8}{rho0} = 0.16d0
+\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_a7d9801ae88aee6ffd97a9c8e988c66ec}{hbc} = 197.326963d0
+\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_a122a8419f83dc397e3a760e7b07d672f}{hbc2} = \hyperlink{namespaceclass__PhysicalConstants_a7d9801ae88aee6ffd97a9c8e988c66ec}{hbc}$\ast$\hyperlink{namespaceclass__PhysicalConstants_a7d9801ae88aee6ffd97a9c8e988c66ec}{hbc}
+\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_af900f95fb8cae7b7b7b9b8489734d0e1}{mp} = 938.272013d0
+\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_a666719c036c1ac2a2ad0f78137eb7b99}{mn} = 939.565560d0
+\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_a6a2b98e5cc0028b726afab655255b5c8}{m0} = (\hyperlink{namespaceclass__PhysicalConstants_af900f95fb8cae7b7b7b9b8489734d0e1}{mp}+\hyperlink{namespaceclass__PhysicalConstants_a666719c036c1ac2a2ad0f78137eb7b99}{mn})$\ast$0.5d0
+\item 
+REAL(Long), parameter \hyperlink{namespaceclass__PhysicalConstants_a1e0e8fd471248a1082bc06f8ff7ecd65}{a0} = 931.494028d0
+\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_a5d8b8543af92098fe08729607d72a22a}{hm} = \hyperlink{namespaceclass__PhysicalConstants_a7d9801ae88aee6ffd97a9c8e988c66ec}{hbc}$\ast$\hyperlink{namespaceclass__PhysicalConstants_a7d9801ae88aee6ffd97a9c8e988c66ec}{hbc}/(2.d0$\ast$\hyperlink{namespaceclass__PhysicalConstants_a6a2b98e5cc0028b726afab655255b5c8}{m0})
+\item 
+REAL(long), parameter \hyperlink{namespaceclass__PhysicalConstants_ace0fddb4ccc5b1acf56249fc4ab56379}{deg} = 4.d0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Stores mathematical and physical constants, both in SI units and user-\/defined units. \begin{Desc}
+\item[\hyperlink{todo__todo000001}{Todo}]give citations for all units 
+
+code them in SI, provide conversion routines \end{Desc}
+
+
+\subsection{Function/Subroutine Documentation}
+\hypertarget{namespaceclass__PhysicalConstants_a12646466fa3b6eb776e5be6f53b5eb5b}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!phys\_\-cons\_\-initialize@{phys\_\-cons\_\-initialize}}
+\index{phys\_\-cons\_\-initialize@{phys\_\-cons\_\-initialize}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{phys\_\-cons\_\-initialize}]{\setlength{\rightskip}{0pt plus 5cm}subroutine class\_\-PhysicalConstants::phys\_\-cons\_\-initialize (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{namespaceclass__PhysicalConstants_a12646466fa3b6eb776e5be6f53b5eb5b}
+
+
+Initializes module, assumes current system of units is SI. 
+
+
+
+Definition at line 60 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a60f39db2f3075d17f5e1b47ed02ad092}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!phys\_\-cons\_\-initialize\_\-SI@{phys\_\-cons\_\-initialize\_\-SI}}
+\index{phys\_\-cons\_\-initialize\_\-SI@{phys\_\-cons\_\-initialize\_\-SI}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{phys\_\-cons\_\-initialize\_\-SI}]{\setlength{\rightskip}{0pt plus 5cm}subroutine class\_\-PhysicalConstants::phys\_\-cons\_\-initialize\_\-SI (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{namespaceclass__PhysicalConstants_a60f39db2f3075d17f5e1b47ed02ad092}
+
+
+Definition at line 65 of file class\_\-PhysicalConstants.f90.
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{namespaceclass__PhysicalConstants_a1e0e8fd471248a1082bc06f8ff7ecd65}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!a0@{a0}}
+\index{a0@{a0}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{a0}]{\setlength{\rightskip}{0pt plus 5cm}REAL (Long),parameter {\bf class\_\-PhysicalConstants::a0} = 931.494028d0}}
+\label{namespaceclass__PhysicalConstants_a1e0e8fd471248a1082bc06f8ff7ecd65}
+
+
+Definition at line 52 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_ace0fddb4ccc5b1acf56249fc4ab56379}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!deg@{deg}}
+\index{deg@{deg}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{deg}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::deg} = 4.d0}}
+\label{namespaceclass__PhysicalConstants_ace0fddb4ccc5b1acf56249fc4ab56379}
+
+
+Definition at line 55 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a7d9801ae88aee6ffd97a9c8e988c66ec}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!hbc@{hbc}}
+\index{hbc@{hbc}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{hbc}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::hbc} = 197.326963d0}}
+\label{namespaceclass__PhysicalConstants_a7d9801ae88aee6ffd97a9c8e988c66ec}
+
+
+Definition at line 47 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a122a8419f83dc397e3a760e7b07d672f}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!hbc2@{hbc2}}
+\index{hbc2@{hbc2}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{hbc2}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::hbc2} = {\bf hbc}$\ast${\bf hbc}}}
+\label{namespaceclass__PhysicalConstants_a122a8419f83dc397e3a760e7b07d672f}
+
+
+Definition at line 48 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a5d8b8543af92098fe08729607d72a22a}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!hm@{hm}}
+\index{hm@{hm}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{hm}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::hm} = {\bf hbc}$\ast${\bf hbc}/(2.d0$\ast${\bf m0})}}
+\label{namespaceclass__PhysicalConstants_a5d8b8543af92098fe08729607d72a22a}
+
+
+Definition at line 53 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_ac45be97becb491b16f05e8f0695d03ba}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!imagi@{imagi}}
+\index{imagi@{imagi}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{imagi}]{\setlength{\rightskip}{0pt plus 5cm}complex$\ast$16,parameter {\bf class\_\-PhysicalConstants::imagi} = cmplx(0.d0, 1.d0, 8)}}
+\label{namespaceclass__PhysicalConstants_ac45be97becb491b16f05e8f0695d03ba}
+
+
+Definition at line 11 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a3c84b6c8e14a53682461f34fd08584bb}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!invpi@{invpi}}
+\index{invpi@{invpi}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{invpi}]{\setlength{\rightskip}{0pt plus 5cm}real (long),parameter {\bf class\_\-PhysicalConstants::invpi} = 1d0/pi}}
+\label{namespaceclass__PhysicalConstants_a3c84b6c8e14a53682461f34fd08584bb}
+
+
+Definition at line 13 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a7dee25e7580520ed07ea8ea46cd96706}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!invsqrt2pi@{invsqrt2pi}}
+\index{invsqrt2pi@{invsqrt2pi}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{invsqrt2pi}]{\setlength{\rightskip}{0pt plus 5cm}real (long),parameter {\bf class\_\-PhysicalConstants::invsqrt2pi} = 1d0/sqrt(2d0$\ast$pi)}}
+\label{namespaceclass__PhysicalConstants_a7dee25e7580520ed07ea8ea46cd96706}
+
+
+Definition at line 14 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a6a2b98e5cc0028b726afab655255b5c8}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!m0@{m0}}
+\index{m0@{m0}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{m0}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::m0} = ({\bf mp}+{\bf mn})$\ast$0.5d0}}
+\label{namespaceclass__PhysicalConstants_a6a2b98e5cc0028b726afab655255b5c8}
+
+
+Definition at line 51 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_af0ecc86a3048c06a15619a67d8a21687}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!MASS\_\-NEUTRON@{MASS\_\-NEUTRON}}
+\index{MASS\_\-NEUTRON@{MASS\_\-NEUTRON}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{MASS\_\-NEUTRON}]{\setlength{\rightskip}{0pt plus 5cm}real (Long) {\bf class\_\-PhysicalConstants::MASS\_\-NEUTRON}}}
+\label{namespaceclass__PhysicalConstants_af0ecc86a3048c06a15619a67d8a21687}
+
+
+in current units 
+
+
+
+Definition at line 37 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a91ea21ef8a0bb29bf99b041c512b6859}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!MASS\_\-PROTON@{MASS\_\-PROTON}}
+\index{MASS\_\-PROTON@{MASS\_\-PROTON}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{MASS\_\-PROTON}]{\setlength{\rightskip}{0pt plus 5cm}real (Long) {\bf class\_\-PhysicalConstants::MASS\_\-PROTON}}}
+\label{namespaceclass__PhysicalConstants_a91ea21ef8a0bb29bf99b041c512b6859}
+
+
+in current units 
+
+
+
+Definition at line 44 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a666719c036c1ac2a2ad0f78137eb7b99}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!mn@{mn}}
+\index{mn@{mn}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{mn}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::mn} = 939.565560d0}}
+\label{namespaceclass__PhysicalConstants_a666719c036c1ac2a2ad0f78137eb7b99}
+
+
+Definition at line 50 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_af900f95fb8cae7b7b7b9b8489734d0e1}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!mp@{mp}}
+\index{mp@{mp}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{mp}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::mp} = 938.272013d0}}
+\label{namespaceclass__PhysicalConstants_af900f95fb8cae7b7b7b9b8489734d0e1}
+
+
+Definition at line 49 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a42d7c56a3a05fa73be90f78ecc833f34}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!pi@{pi}}
+\index{pi@{pi}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{pi}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::pi} = 4d0$\ast$atan(1d0)}}
+\label{namespaceclass__PhysicalConstants_a42d7c56a3a05fa73be90f78ecc833f34}
+
+
+Definition at line 12 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_ae4331c74d5e362ec511a71f7a10d7c5b}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!PLANCKS\_\-CONSTANT\_\-HBAR@{PLANCKS\_\-CONSTANT\_\-HBAR}}
+\index{PLANCKS\_\-CONSTANT\_\-HBAR@{PLANCKS\_\-CONSTANT\_\-HBAR}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{PLANCKS\_\-CONSTANT\_\-HBAR}]{\setlength{\rightskip}{0pt plus 5cm}real (Long) {\bf class\_\-PhysicalConstants::PLANCKS\_\-CONSTANT\_\-HBAR}}}
+\label{namespaceclass__PhysicalConstants_ae4331c74d5e362ec511a71f7a10d7c5b}
+
+
+in current units 
+
+
+
+Definition at line 30 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_afd1e8c949a1607aa74c06b2cf93718a8}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!rho0@{rho0}}
+\index{rho0@{rho0}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{rho0}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf class\_\-PhysicalConstants::rho0} = 0.16d0}}
+\label{namespaceclass__PhysicalConstants_afd1e8c949a1607aa74c06b2cf93718a8}
+
+
+Definition at line 46 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_ae630d55c57af72ecd1cf1b926512f9e4}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SI\_\-MASS\_\-NEUTRON@{SI\_\-MASS\_\-NEUTRON}}
+\index{SI\_\-MASS\_\-NEUTRON@{SI\_\-MASS\_\-NEUTRON}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SI\_\-MASS\_\-NEUTRON}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf class\_\-PhysicalConstants::SI\_\-MASS\_\-NEUTRON} = 1.674927351e-\/27\_\-Long}}
+\label{namespaceclass__PhysicalConstants_ae630d55c57af72ecd1cf1b926512f9e4}
+
+
+mass of the neutron, m$_{\mbox{n}}$ , in kg, from 2010 CODATA 
+
+
+
+Definition at line 33 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a2a2b96dae5b376e21555324d6f18d7b4}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SI\_\-MASS\_\-NEUTRON\_\-D@{SI\_\-MASS\_\-NEUTRON\_\-D}}
+\index{SI\_\-MASS\_\-NEUTRON\_\-D@{SI\_\-MASS\_\-NEUTRON\_\-D}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SI\_\-MASS\_\-NEUTRON\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf class\_\-PhysicalConstants::SI\_\-MASS\_\-NEUTRON\_\-D} = 0.000000074e-\/27\_\-Long}}
+\label{namespaceclass__PhysicalConstants_a2a2b96dae5b376e21555324d6f18d7b4}
+
+
+uncertainty 
+
+
+
+Definition at line 35 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a2449bd62711b0a1ee76be095516a13da}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SI\_\-MASS\_\-PROTON@{SI\_\-MASS\_\-PROTON}}
+\index{SI\_\-MASS\_\-PROTON@{SI\_\-MASS\_\-PROTON}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SI\_\-MASS\_\-PROTON}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf class\_\-PhysicalConstants::SI\_\-MASS\_\-PROTON} = 1.672621777e-\/27\_\-Long}}
+\label{namespaceclass__PhysicalConstants_a2449bd62711b0a1ee76be095516a13da}
+
+
+mass of the proton, m$_{\mbox{p}}$ , in kg. 
+
+
+
+Definition at line 40 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a22a22c3caa590bb80989439fea138dca}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SI\_\-MASS\_\-PROTON\_\-D@{SI\_\-MASS\_\-PROTON\_\-D}}
+\index{SI\_\-MASS\_\-PROTON\_\-D@{SI\_\-MASS\_\-PROTON\_\-D}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SI\_\-MASS\_\-PROTON\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf class\_\-PhysicalConstants::SI\_\-MASS\_\-PROTON\_\-D} = 0.000000074e-\/27\_\-Long}}
+\label{namespaceclass__PhysicalConstants_a22a22c3caa590bb80989439fea138dca}
+
+
+uncertainty 
+
+
+
+Definition at line 42 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a600c7e7a8a69f32b4bcab8d52fc15073}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR}}
+\index{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf class\_\-PhysicalConstants::SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR} = 1.054571726e-\/34\_\-Long}}
+\label{namespaceclass__PhysicalConstants_a600c7e7a8a69f32b4bcab8d52fc15073}
+
+
+Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA. 
+
+
+
+Definition at line 26 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a3d0c994c98a42bfcf113f5b427c36962}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D}}
+\index{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf class\_\-PhysicalConstants::SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D} = 0.000000047e-\/34\_\-Long}}
+\label{namespaceclass__PhysicalConstants_a3d0c994c98a42bfcf113f5b427c36962}
+
+
+uncertainty 
+
+
+
+Definition at line 28 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a30ec603cc75f0d29a1429faabdce848c}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SI\_\-SPEED\_\-OF\_\-LIGHT@{SI\_\-SPEED\_\-OF\_\-LIGHT}}
+\index{SI\_\-SPEED\_\-OF\_\-LIGHT@{SI\_\-SPEED\_\-OF\_\-LIGHT}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SI\_\-SPEED\_\-OF\_\-LIGHT}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf class\_\-PhysicalConstants::SI\_\-SPEED\_\-OF\_\-LIGHT} = 299792458d0}}
+\label{namespaceclass__PhysicalConstants_a30ec603cc75f0d29a1429faabdce848c}
+
+
+speed of light in vacuum, c, in m s$^{\mbox{-\/1}}$ , from 2010 CODATA recommended values 
+
+
+
+Definition at line 21 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_aa56bb92d92839b2fef368f7be3640777}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D@{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D}}
+\index{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D@{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf class\_\-PhysicalConstants::SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D} = 0d0}}
+\label{namespaceclass__PhysicalConstants_aa56bb92d92839b2fef368f7be3640777}
+
+
+uncertainty 
+
+
+
+Definition at line 22 of file class\_\-PhysicalConstants.f90.
+
+\hypertarget{namespaceclass__PhysicalConstants_a44b1992769a901faa8885324ef348271}{
+\index{class\_\-PhysicalConstants@{class\_\-PhysicalConstants}!SPEED\_\-OF\_\-LIGHT@{SPEED\_\-OF\_\-LIGHT}}
+\index{SPEED\_\-OF\_\-LIGHT@{SPEED\_\-OF\_\-LIGHT}!class_PhysicalConstants@{class\_\-PhysicalConstants}}
+\subsubsection[{SPEED\_\-OF\_\-LIGHT}]{\setlength{\rightskip}{0pt plus 5cm}real (Long) {\bf class\_\-PhysicalConstants::SPEED\_\-OF\_\-LIGHT}}}
+\label{namespaceclass__PhysicalConstants_a44b1992769a901faa8885324ef348271}
+
+
+in current units 
+
+
+
+Definition at line 23 of file class\_\-PhysicalConstants.f90.
+

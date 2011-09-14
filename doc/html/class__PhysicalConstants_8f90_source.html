@@ -63,61 +63,61 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <a href="class__PhysicalConstants_8f90.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
-<a name="l00005"></a><a class="code" href="namespacephys__cons.html">00005</a> <span class="keyword">MODULE</span> phys_cons
+<a name="l00005"></a><a class="code" href="namespaceclass__PhysicalConstants.html">00005</a> <span class="keyword">MODULE</span> class_PhysicalConstants
 <a name="l00006"></a>00006   use <span class="keywordflow">class_PhysicalQuantity</span>
 <a name="l00007"></a>00007   USE <span class="keywordflow">prec_def</span>
 <a name="l00008"></a>00008   <span class="keyword">IMPLICIT NONE</span>
 <a name="l00009"></a>00009 
 <a name="l00010"></a>00010   <span class="comment">!math constants (unitless)</span>
-<a name="l00011"></a><a class="code" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">00011</a>   <span class="keywordtype">complex*16</span>,   <span class="keywordtype">parameter</span> :: imagi=cmplx(0.d0,1.d0,8)  <span class="comment">!sqrt(-1)</span>
-<a name="l00012"></a><a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">00012</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: pi=4d0*atan(1d0)
-<a name="l00013"></a><a class="code" href="namespacephys__cons.html#aa8683f00f4216acc1822dfcb85b1ee00">00013</a>   <span class="keywordtype">real (long)</span> , <span class="keywordtype">parameter</span> :: invpi=1d0/pi  <span class="comment">!1/pi</span>
-<a name="l00014"></a><a class="code" href="namespacephys__cons.html#a369d33713444a99a71f80a74c0652d4e">00014</a>   <span class="keywordtype">real (long)</span> , <span class="keywordtype">parameter</span> :: invsqrt2pi=1d0/sqrt(2d0*pi)
+<a name="l00011"></a><a class="code" href="namespaceclass__PhysicalConstants.html#ac45be97becb491b16f05e8f0695d03ba">00011</a>   <span class="keywordtype">complex*16</span>,   <span class="keywordtype">parameter</span> :: imagi=cmplx(0.d0,1.d0,8)  <span class="comment">!sqrt(-1)</span>
+<a name="l00012"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a42d7c56a3a05fa73be90f78ecc833f34">00012</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: pi=4d0*atan(1d0)
+<a name="l00013"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a3c84b6c8e14a53682461f34fd08584bb">00013</a>   <span class="keywordtype">real (long)</span> , <span class="keywordtype">parameter</span> :: invpi=1d0/pi  <span class="comment">!1/pi</span>
+<a name="l00014"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a7dee25e7580520ed07ea8ea46cd96706">00014</a>   <span class="keywordtype">real (long)</span> , <span class="keywordtype">parameter</span> :: invsqrt2pi=1d0/sqrt(2d0*pi)
 <a name="l00015"></a>00015 
 <a name="l00016"></a>00016   <span class="comment">!physical constants in SI units, with &quot;current units&quot; as well</span>
 <a name="l00017"></a>00017 
 <a name="l00018"></a>00018 
-<a name="l00021"></a><a class="code" href="namespacephys__cons.html#ae265fad966cfc841f9a073a52955d742">00021</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_SPEED_OF_LIGHT   = 299792458d0
-<a name="l00022"></a><a class="code" href="namespacephys__cons.html#a5547546b06eb8853e52e304b25cc7596">00022</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_SPEED_OF_LIGHT_D = 0d0 <span class="comment">!&lt; uncertainty</span>
-<a name="l00023"></a><a class="code" href="namespacephys__cons.html#ac31faa4bb5e82aecbdffa3b3d43a1736">00023</a>   <span class="keywordtype">real (Long)</span>            :: SPEED_OF_LIGHT            <span class="comment">!&lt; in current units</span>
+<a name="l00021"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a30ec603cc75f0d29a1429faabdce848c">00021</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_SPEED_OF_LIGHT   = 299792458d0
+<a name="l00022"></a><a class="code" href="namespaceclass__PhysicalConstants.html#aa56bb92d92839b2fef368f7be3640777">00022</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_SPEED_OF_LIGHT_D = 0d0 <span class="comment">!&lt; uncertainty</span>
+<a name="l00023"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a44b1992769a901faa8885324ef348271">00023</a>   <span class="keywordtype">real (Long)</span>            :: SPEED_OF_LIGHT            <span class="comment">!&lt; in current units</span>
 <a name="l00024"></a>00024 
-<a name="l00026"></a><a class="code" href="namespacephys__cons.html#ab49e79c21c913c5857dedf2c555d2c21">00026</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_PLANCKS_CONSTANT_HBAR   = 1.054571726e-34_Long
+<a name="l00026"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a600c7e7a8a69f32b4bcab8d52fc15073">00026</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_PLANCKS_CONSTANT_HBAR   = 1.054571726e-34_Long
 <a name="l00027"></a>00027 
-<a name="l00028"></a><a class="code" href="namespacephys__cons.html#af8ab82739d58ac3a1e1d9c97d3cfb4da">00028</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_PLANCKS_CONSTANT_HBAR_D = 0.000000047e-34_Long
+<a name="l00028"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a3d0c994c98a42bfcf113f5b427c36962">00028</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_PLANCKS_CONSTANT_HBAR_D = 0.000000047e-34_Long
 <a name="l00029"></a>00029 
-<a name="l00030"></a><a class="code" href="namespacephys__cons.html#af0b754235993060b14fc81b7d1f702a5">00030</a>   <span class="keywordtype">real (Long)</span>            :: PLANCKS_CONSTANT_HBAR
+<a name="l00030"></a><a class="code" href="namespaceclass__PhysicalConstants.html#ae4331c74d5e362ec511a71f7a10d7c5b">00030</a>   <span class="keywordtype">real (Long)</span>            :: PLANCKS_CONSTANT_HBAR
 <a name="l00031"></a>00031 
-<a name="l00033"></a><a class="code" href="namespacephys__cons.html#ab117ad83bb79e4ed199d17f3c63ec4b3">00033</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_MASS_NEUTRON   = 1.674927351e-27_Long
+<a name="l00033"></a><a class="code" href="namespaceclass__PhysicalConstants.html#ae630d55c57af72ecd1cf1b926512f9e4">00033</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_MASS_NEUTRON   = 1.674927351e-27_Long
 <a name="l00034"></a>00034 
-<a name="l00035"></a><a class="code" href="namespacephys__cons.html#af635c94d544c5bc6dcb05186a9f81d84">00035</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_MASS_NEUTRON_D = 0.000000074e-27_Long
+<a name="l00035"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a2a2b96dae5b376e21555324d6f18d7b4">00035</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_MASS_NEUTRON_D = 0.000000074e-27_Long
 <a name="l00036"></a>00036 
-<a name="l00037"></a><a class="code" href="namespacephys__cons.html#abeff422917cc48601644e90ab12fb7c0">00037</a>   <span class="keywordtype">real (Long)</span>            :: MASS_NEUTRON
+<a name="l00037"></a><a class="code" href="namespaceclass__PhysicalConstants.html#af0ecc86a3048c06a15619a67d8a21687">00037</a>   <span class="keywordtype">real (Long)</span>            :: MASS_NEUTRON
 <a name="l00038"></a>00038 
-<a name="l00040"></a><a class="code" href="namespacephys__cons.html#a6a740864089f117512dc89ea53f3dc5f">00040</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_MASS_PROTON   = 1.672621777e-27_Long
+<a name="l00040"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a2449bd62711b0a1ee76be095516a13da">00040</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_MASS_PROTON   = 1.672621777e-27_Long
 <a name="l00041"></a>00041 
-<a name="l00042"></a><a class="code" href="namespacephys__cons.html#a3c37a18a918519962cfc26597082d53d">00042</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_MASS_PROTON_D = 0.000000074e-27_Long
+<a name="l00042"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a22a22c3caa590bb80989439fea138dca">00042</a>   <span class="keywordtype">real (Long)</span>, <span class="keywordtype">parameter</span> :: SI_MASS_PROTON_D = 0.000000074e-27_Long
 <a name="l00043"></a>00043 
-<a name="l00044"></a><a class="code" href="namespacephys__cons.html#a20e8ed3d7ff389588ce024048c5ccf85">00044</a>   <span class="keywordtype">real (Long)</span>            :: MASS_PROTON
+<a name="l00044"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a91ea21ef8a0bb29bf99b041c512b6859">00044</a>   <span class="keywordtype">real (Long)</span>            :: MASS_PROTON
 <a name="l00045"></a>00045 
-<a name="l00046"></a><a class="code" href="namespacephys__cons.html#a4b10513970a98ad78b85723c60d9a8b6">00046</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: rho0=0.16d0       <span class="comment">!nuclear saturation density [fm^-3]</span>
-<a name="l00047"></a><a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">00047</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: hbc=197.326963d0  <span class="comment">!h-bar*c [MeV fm]</span>
-<a name="l00048"></a><a class="code" href="namespacephys__cons.html#a030a10874bc73b7d042adb32fad75614">00048</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: hbc2=hbc*hbc
-<a name="l00049"></a><a class="code" href="namespacephys__cons.html#ae2a4cb4e421fe399f19d0729b5617fed">00049</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: mp=938.272013d0   <span class="comment">!proton mass [MeV/c^2]</span>
-<a name="l00050"></a><a class="code" href="namespacephys__cons.html#ad68aaba74b75e1e13f1367c1eb0904c1">00050</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: mn=939.565560d0   <span class="comment">!neutron mass</span>
-<a name="l00051"></a><a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">00051</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: m0=(mp+mn)*0.5d0
-<a name="l00052"></a><a class="code" href="namespacephys__cons.html#a02e8bb2c808e0085a317bf36ff79ae2a">00052</a>   <span class="keywordtype">REAL (Long)</span> , <span class="keywordtype">PARAMETER</span> :: a0=931.494028d0   <span class="comment">!atomic mass unit</span>
-<a name="l00053"></a><a class="code" href="namespacephys__cons.html#ad97ad749ef4f8f66c56a0facb7394cb5">00053</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: hm=hbc*hbc/(2.d0*m0)   <span class="comment">!hbar^2/2m (useful for kinetic </span>
+<a name="l00046"></a><a class="code" href="namespaceclass__PhysicalConstants.html#afd1e8c949a1607aa74c06b2cf93718a8">00046</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: rho0=0.16d0       <span class="comment">!nuclear saturation density [fm^-3]</span>
+<a name="l00047"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a7d9801ae88aee6ffd97a9c8e988c66ec">00047</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: hbc=197.326963d0  <span class="comment">!h-bar*c [MeV fm]</span>
+<a name="l00048"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a122a8419f83dc397e3a760e7b07d672f">00048</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: hbc2=hbc*hbc
+<a name="l00049"></a><a class="code" href="namespaceclass__PhysicalConstants.html#af900f95fb8cae7b7b7b9b8489734d0e1">00049</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: mp=938.272013d0   <span class="comment">!proton mass [MeV/c^2]</span>
+<a name="l00050"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a666719c036c1ac2a2ad0f78137eb7b99">00050</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: mn=939.565560d0   <span class="comment">!neutron mass</span>
+<a name="l00051"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a6a2b98e5cc0028b726afab655255b5c8">00051</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: m0=(mp+mn)*0.5d0
+<a name="l00052"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a1e0e8fd471248a1082bc06f8ff7ecd65">00052</a>   <span class="keywordtype">REAL (Long)</span> , <span class="keywordtype">PARAMETER</span> :: a0=931.494028d0   <span class="comment">!atomic mass unit</span>
+<a name="l00053"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a5d8b8543af92098fe08729607d72a22a">00053</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: hm=hbc*hbc/(2.d0*m0)   <span class="comment">!hbar^2/2m (useful for kinetic </span>
 <a name="l00054"></a>00054                                              <span class="comment">! time evolution)</span>
-<a name="l00055"></a><a class="code" href="namespacephys__cons.html#a553e3e17652770308e6bffcb8fcb5a95">00055</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: deg=4.d0 <span class="comment">! degeneracy</span>
+<a name="l00055"></a><a class="code" href="namespaceclass__PhysicalConstants.html#ace0fddb4ccc5b1acf56249fc4ab56379">00055</a>   <span class="keywordtype">REAL (long)</span> , <span class="keywordtype">PARAMETER</span> :: deg=4.d0 <span class="comment">! degeneracy</span>
 <a name="l00056"></a>00056 
 <a name="l00057"></a>00057 <span class="keyword">contains</span>
 <a name="l00058"></a>00058 
-<a name="l00060"></a><a class="code" href="namespacephys__cons.html#a2197fe7eff35572113dcf41a6493794c">00060</a>  <span class="keyword">subroutine </span><a class="code" href="namespacephys__cons.html#a2197fe7eff35572113dcf41a6493794c">phys_cons_initialize</a>()
+<a name="l00060"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a12646466fa3b6eb776e5be6f53b5eb5b">00060</a>  <span class="keyword">subroutine </span><a class="code" href="namespaceclass__PhysicalConstants.html#a12646466fa3b6eb776e5be6f53b5eb5b">phys_cons_initialize</a>()
 <a name="l00061"></a>00061   <span class="keyword">implicit none</span>
 <a name="l00062"></a>00062 
 <a name="l00063"></a>00063 <span class="keyword"> end subroutine phys_cons_initialize</span>
 <a name="l00064"></a>00064 
-<a name="l00065"></a><a class="code" href="namespacephys__cons.html#abfc9a7567c3e76fdbbad91b88b46426e">00065</a>  <span class="keyword">subroutine </span><a class="code" href="namespacephys__cons.html#abfc9a7567c3e76fdbbad91b88b46426e">phys_cons_initialize_SI</a>
+<a name="l00065"></a><a class="code" href="namespaceclass__PhysicalConstants.html#a60f39db2f3075d17f5e1b47ed02ad092">00065</a>  <span class="keyword">subroutine </span><a class="code" href="namespaceclass__PhysicalConstants.html#a60f39db2f3075d17f5e1b47ed02ad092">phys_cons_initialize_SI</a>
 <a name="l00066"></a>00066   <span class="keyword">implicit none</span>
 <a name="l00067"></a>00067 
 <a name="l00068"></a>00068   
@@ -125,7 +125,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00070"></a>00070 <span class="keyword"> end subroutine phys_cons_initialize_SI</span>
 <a name="l00071"></a>00071 
 <a name="l00072"></a>00072 
-<a name="l00073"></a>00073 <span class="keyword">END MODULE phys_cons</span>
+<a name="l00073"></a>00073 <span class="keyword">END MODULE class_PhysicalConstants</span>
 <a name="l00074"></a>00074 
 <a name="l00075"></a>00075 
 </pre></div></div>
@@ -144,7 +144,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Sep 8 2011 13:32:37 for demagoque by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Sep 12 2011 13:47:05 for demagoque by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

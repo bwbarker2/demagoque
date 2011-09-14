@@ -107,7 +107,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00043"></a>00043 <span class="comment">!     write(70,*)&#39;ika,pk2&#39;,it,ika,pk2(ika)</span>
 <a name="l00044"></a>00044   <span class="keyword">enddo</span>
 <a name="l00045"></a>00045 
-<a name="l00046"></a>00046   <a class="code" href="namespacecons__laws.html#a8d6ef7d1726b52d17e21c62607c22c3b">ekin</a>=<a class="code" href="namespacecons__laws.html#a8d6ef7d1726b52d17e21c62607c22c3b">ekin</a>*<a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>*<a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>/(2d0*<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>)/<a class="code" href="namespacemesh.html#a753aba092294fa8bffbee1fc1b099584">norm_thy</a>*<a class="code" href="namespacemesh.html#a93c5cfe69a9cda5c977adaf99030481d">delka</a>
+<a name="l00046"></a>00046   <a class="code" href="namespacecons__laws.html#a8d6ef7d1726b52d17e21c62607c22c3b">ekin</a>=<a class="code" href="namespacecons__laws.html#a8d6ef7d1726b52d17e21c62607c22c3b">ekin</a>*<a class="code" href="namespacephys__cons.html#a10c52cbe8a9d32eb836e12b67ef7da3b">hbar</a>*<a class="code" href="namespacephys__cons.html#a10c52cbe8a9d32eb836e12b67ef7da3b">hbar</a>/(2d0*<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>)/<a class="code" href="namespacemesh.html#a753aba092294fa8bffbee1fc1b099584">norm_thy</a>*<a class="code" href="namespacemesh.html#a93c5cfe69a9cda5c977adaf99030481d">delka</a>
 <a name="l00047"></a>00047   knum=knum*<a class="code" href="namespacemesh.html#a93c5cfe69a9cda5c977adaf99030481d">delka</a>/<a class="code" href="namespacemesh.html#a753aba092294fa8bffbee1fc1b099584">norm_thy</a>
 <a name="l00048"></a>00048 
 <a name="l00049"></a>00049 <span class="comment">!  call dint_simp1(Nxr+1, pk2, delka, ekin, ekerr)</span>
@@ -115,13 +115,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00051"></a>00051 
 <a name="l00052"></a>00052   <span class="comment">! Arnau has a reason for the last part of the next lines - BWB 2010-03-26</span>
 <a name="l00053"></a>00053   <span class="comment">! I have a better reason to not have it - BWB 2010-09-01</span>
-<a name="l00054"></a>00054 <span class="comment">!  ekin=ekin*hbc*hbc/(2.d0*m0)/(Nmax+1.d0)            !/delka*delxa/Nxr*Nxa*Nxr</span>
+<a name="l00054"></a>00054 <span class="comment">!  ekin=ekin*hbar*hbar/(2.d0*m0)/(Nmax+1.d0)            !/delka*delxa/Nxr*Nxa*Nxr</span>
 <a name="l00055"></a>00055 <span class="comment">!  knum=knum/(Nmax+1.d0)                        !/delka*delxa/Nxr*Nxa*Nxr</span>
 <a name="l00056"></a>00056 <span class="comment">!  ekin=ekin/delka</span>
 <a name="l00057"></a>00057 
 <a name="l00058"></a>00058 <span class="comment">!  write(*,*)&#39;m0=&#39;,m0</span>
 <a name="l00059"></a>00059 
-<a name="l00060"></a>00060 <span class="comment">!  ekerr=ekerr*hbc*hbc/(2.d0*m0)/(Nmax+1.d0)    !/delka*delxa*Nxa</span>
+<a name="l00060"></a>00060 <span class="comment">!  ekerr=ekerr*hbar*hbar/(2.d0*m0)/(Nmax+1.d0)    !/delka*delxa*Nxa</span>
 <a name="l00061"></a>00061   <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;ekin,ekerr=&#39;</span>,<a class="code" href="namespacecons__laws.html#a8d6ef7d1726b52d17e21c62607c22c3b">ekin</a>,<a class="code" href="namespacecons__laws.html#aaaca27b785c52ee051b7f12c73182924">ekerr</a>
 <a name="l00062"></a>00062   <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;knum,eknum=&#39;</span>,knum,eknum
 <a name="l00063"></a>00063 
@@ -143,7 +143,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00079"></a>00079   
 <a name="l00080"></a>00080   call <a class="code" href="namespacemesh.html#aef51df23ee69f610420b25672a2da3ef">setState</a>(<a class="code" href="namespacemesh.html#a0c6bae5d6531a6b0f0428c0c056f759d">SPACE</a>)
 <a name="l00081"></a>00081 
-<a name="l00082"></a>00082   call <a class="code" href="time__evol_8f90.html#acb2e7591d9be67610ed55e3780e90d3b">calcPotDiag</a>()
+<a name="l00082"></a>00082   call calcPotDiag()
 <a name="l00083"></a>00083 
 <a name="l00084"></a>00084   <a class="code" href="namespacecons__laws.html#a63e2f83fe00d6af9a68267f70281beac">epot</a>=0d0
 <a name="l00085"></a>00085   <a class="code" href="namespacecons__laws.html#ac8202a23f94b9d534dfc7d5169d2e4bf">nnum</a>=0d0
@@ -187,7 +187,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Sep 8 2011 13:32:37 for demagoque by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Sep 12 2011 13:47:05 for demagoque by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

@@ -93,437 +93,440 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00029"></a>00029   use <span class="keywordflow">phys_cons</span>
 <a name="l00030"></a>00030   <span class="keyword">implicit none</span>
 <a name="l00031"></a>00031 
-<a name="l00032"></a>00032   call <a class="code" href="namespacemesh.html#a742012f09e48891eb9dd2a85601674a8">initializeMesh</a>
-<a name="l00033"></a>00033 
-<a name="l00034"></a>00034   <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;1D to 3D factor:&#39;</span>,<a class="code" href="namespacemesh.html#a43130e9d2b4c80b7862ea7d6226a7a4d">facd</a>
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036   <span class="comment">! oscillator data</span>
-<a name="l00037"></a>00037   <a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">w</a>=<a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>/<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*6.d0*(<a class="code" href="namespacephys__cons.html#a4b10513970a98ad78b85723c60d9a8b6">rho0</a>/<a class="code" href="namespacemesh.html#a43130e9d2b4c80b7862ea7d6226a7a4d">facd</a>)**2/(<a class="code" href="namespaceinput__parameters.html#a29545f09a06c5a3def5df7fdb5f966ab">Nmax</a>+1.d0)<span class="comment">!   *0.1</span>
-<a name="l00038"></a>00038   <a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>=<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*<a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">w</a>/<a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040     <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;Parameters of the calculation:&#39;</span>
-<a name="l00041"></a>00041   <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;dxr=&#39;</span>,<a class="code" href="namespacemesh.html#a8517784a828d82832ad38e911e58cdf1">delxr</a>,<span class="stringliteral">&#39;dxa=&#39;</span>,<a class="code" href="namespacemesh.html#a4bbd964b605a9fedc6fd4b5feaf2d226">delxa</a>,<span class="stringliteral">&#39;dkr=&#39;</span>,<a class="code" href="namespacemesh.html#a30ce8cdfbc09510b555134e5ee1c2472">delkr</a>,<span class="stringliteral">&#39;dka=&#39;</span>,<a class="code" href="namespacemesh.html#a93c5cfe69a9cda5c977adaf99030481d">delka</a>,<span class="stringliteral">&#39;whm=&#39;</span>,<a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>
-<a name="l00042"></a>00042   
-<a name="l00043"></a>00043   
-<a name="l00044"></a>00044   <span class="keyword">allocate</span>(<a class="code" href="namespacecons__laws.html#a5e16e552d92dd5dd52c3cdc8600e62fe">potx</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>:<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>))
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033   call <a class="code" href="namespacephys__cons.html#ab13f84d8b6f574eb73870a2964a82b8b">phys_cons_initializeNuclear</a>
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035   call <a class="code" href="namespacemesh.html#a742012f09e48891eb9dd2a85601674a8">initializeMesh</a>
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037   <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;1D to 3D factor:&#39;</span>,<a class="code" href="namespacemesh.html#a43130e9d2b4c80b7862ea7d6226a7a4d">facd</a>
+<a name="l00038"></a>00038 
+<a name="l00039"></a>00039   <span class="comment">! oscillator data</span>
+<a name="l00040"></a>00040   <a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">w</a>=<a class="code" href="namespacephys__cons.html#a10c52cbe8a9d32eb836e12b67ef7da3b">hbar</a>/<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*6.d0*(<a class="code" href="namespacephys__cons.html#a4b10513970a98ad78b85723c60d9a8b6">rho0</a>/<a class="code" href="namespacemesh.html#a43130e9d2b4c80b7862ea7d6226a7a4d">facd</a>)**2/(<a class="code" href="namespaceinput__parameters.html#a29545f09a06c5a3def5df7fdb5f966ab">Nmax</a>+1.d0)<span class="comment">!   *0.1</span>
+<a name="l00041"></a>00041   <a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>=<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*<a class="code" href="namespaceinput__parameters.html#a745c6398e72faacdaacba0cf01027565">w</a>/<a class="code" href="namespacephys__cons.html#a10c52cbe8a9d32eb836e12b67ef7da3b">hbar</a>
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043     <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;Parameters of the calculation:&#39;</span>
+<a name="l00044"></a>00044   <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;dxr=&#39;</span>,<a class="code" href="namespacemesh.html#a8517784a828d82832ad38e911e58cdf1">delxr</a>,<span class="stringliteral">&#39;dxa=&#39;</span>,<a class="code" href="namespacemesh.html#a4bbd964b605a9fedc6fd4b5feaf2d226">delxa</a>,<span class="stringliteral">&#39;dkr=&#39;</span>,<a class="code" href="namespacemesh.html#a30ce8cdfbc09510b555134e5ee1c2472">delkr</a>,<span class="stringliteral">&#39;dka=&#39;</span>,<a class="code" href="namespacemesh.html#a93c5cfe69a9cda5c977adaf99030481d">delka</a>,<span class="stringliteral">&#39;whm=&#39;</span>,<a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>
 <a name="l00045"></a>00045   
-<a name="l00046"></a>00046 <span class="keyword">end SUBROUTINE calcInitial</span>
-<a name="l00047"></a>00047 
-<a name="l00048"></a>00048 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
-<a name="l00049"></a>00049 
-<a name="l00050"></a><a class="code" href="initial_8f90.html#ae3fd441fd7d3cf3f49c5745a9f496b1a">00050</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#ae3fd441fd7d3cf3f49c5745a9f496b1a">initialState</a>
-<a name="l00051"></a>00051   use <span class="keywordflow">input_parameters</span>
-<a name="l00052"></a>00052   use <span class="keywordflow">mesh</span>
-<a name="l00053"></a>00053   use <span class="keywordflow">phys_cons</span>
-<a name="l00054"></a>00054   use <span class="keywordflow">prec_def</span>
-<a name="l00055"></a>00055   <span class="keyword">implicit none</span>
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057   <span class="keywordtype">real (Long)</span> :: wfnho,xx1,xx2
-<a name="l00058"></a>00058   <span class="keywordtype">complex*16</span>  :: y1,y2,den0
-<a name="l00059"></a>00059   <span class="keywordtype">integer</span> :: ixa, ixr, iin
-<a name="l00060"></a>00060   <span class="keywordtype">integer</span> :: initState_kdelta_index
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062   <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#aae45dd03716b9ad9a0600a9d9a798935">initState_kdelta</a>) <span class="keyword">then</span>
-<a name="l00063"></a>00063    initState_kdelta_index=<a class="code" href="namespacemesh.html#ad1beeceb5580c23eb4fd6530573c395c">getNearestIndexX</a>(<a class="code" href="namespaceinput__parameters.html#a65eb9165c6a1fd054daefc2a96e7ae2a">initState_kdelta_x0</a>)
-<a name="l00064"></a>00064   <span class="keyword">else</span>
-<a name="l00065"></a>00065    initState_kdelta_index=99
-<a name="l00066"></a>00066   <span class="keyword">endif</span>
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068   <span class="keyword">do</span> ixa=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1
-<a name="l00069"></a>00069      <span class="keyword">do</span> ixr=-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
-<a name="l00070"></a>00070         <span class="comment">!convert to x,x&#39; representation</span>
-<a name="l00071"></a>00071         call <a class="code" href="initial_8f90.html#a00ff7d260d65e323892041631c2343bc">getX12</a>(ixa,ixr,xx1,xx2)
-<a name="l00072"></a>00072 <span class="comment">!        xx1=(xa(ixa)+xr(ixr)/2.d0)</span>
-<a name="l00073"></a>00073 <span class="comment">!        xx2=(xa(ixa)-xr(ixr)/2.d0)</span>
-<a name="l00074"></a>00074 
-<a name="l00075"></a>00075         den0=0.0d0
-<a name="l00076"></a>00076         y1=0d0
-<a name="l00077"></a>00077         y2=0d0
-<a name="l00078"></a>00078         <span class="keyword">do</span> iin=0,<a class="code" href="namespaceinput__parameters.html#a29545f09a06c5a3def5df7fdb5f966ab">Nmax</a>
-<a name="l00079"></a>00079           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#add8bfc502078fcdca67fff41e00114f7">initState_gaussianNuclear</a>) <span class="keyword">then</span>
-<a name="l00080"></a>00080            y1=wfnho(xx1,iin,<a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>)
-<a name="l00081"></a>00081            y2=wfnho(xx2,iin,<a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>)
-<a name="l00082"></a>00082            den0=den0+y1*y2
-<a name="l00083"></a>00083           <span class="keyword">endif</span>
-<a name="l00084"></a>00084 
-<a name="l00085"></a>00085           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#a794b8486b7ecd6258448887bce533681">initState_cosine</a>) <span class="keyword">then</span>
-<a name="l00086"></a>00086            y1=sqrt(<a class="code" href="namespaceinput__parameters.html#a51d2cc916f531fadef1a6f0729644174">initState_cosine_norm</a>/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
-<a name="l00087"></a>00087               *cos(<a class="code" href="namespaceinput__parameters.html#ad5ff3d9c110be99ed08bbe970f1630c8">initState_cosine_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx1/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> + <a class="code" href="namespaceinput__parameters.html#ac3a5530df841dc82b4819f34f1e44980">initState_cosine_shift</a>)
-<a name="l00088"></a>00088            y2=sqrt(<a class="code" href="namespaceinput__parameters.html#a51d2cc916f531fadef1a6f0729644174">initState_cosine_norm</a>/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
-<a name="l00089"></a>00089               *cos(<a class="code" href="namespaceinput__parameters.html#ad5ff3d9c110be99ed08bbe970f1630c8">initState_cosine_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx2/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> + <a class="code" href="namespaceinput__parameters.html#ac3a5530df841dc82b4819f34f1e44980">initState_cosine_shift</a>)
-<a name="l00090"></a>00090            den0=den0+y1*y2
-<a name="l00091"></a>00091           <span class="keyword">endif</span>
-<a name="l00092"></a>00092 
-<a name="l00093"></a>00093           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#aae45dd03716b9ad9a0600a9d9a798935">initState_kdelta</a>) <span class="keyword">then</span>
-<a name="l00094"></a>00094            <span class="keyword">if</span>(ixr==0.AND.ixa==initState_kdelta_index) <span class="keyword">then</span>
-<a name="l00095"></a>00095             den0=den0+<a class="code" href="namespaceinput__parameters.html#a1b2e5c088ab1d39d896586d7fb18b142">initState_kdelta_norm</a>*2d0*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>/<a class="code" href="namespacemesh.html#a9b60e77e26ab439594233774c928b35c">kLa</a>
-<a name="l00096"></a>00096            <span class="keyword">endif</span>
-<a name="l00097"></a>00097           <span class="keyword">endif</span>
-<a name="l00098"></a>00098 
-<a name="l00099"></a>00099           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#a727a13be305b5dde7955fd2d02f955e4">initState_plane</a>) <span class="keyword">then</span>
-<a name="l00100"></a>00100            y1=sqrt(<a class="code" href="namespaceinput__parameters.html#a22ba3f1343580a0db34433e32279e365">initState_plane_norm</a>*0.5d0/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
-<a name="l00101"></a>00101               *exp(-<a class="code" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">imagi</a>*<a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">initState_plane_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx1/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> &amp;
-<a name="l00102"></a>00102                    +<a class="code" href="namespaceinput__parameters.html#a97253a3c66d919b8a99dd33c633d3bd8">initState_plane_shift</a>)
-<a name="l00103"></a>00103            y2=sqrt(<a class="code" href="namespaceinput__parameters.html#a22ba3f1343580a0db34433e32279e365">initState_plane_norm</a>*0.5d0/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
-<a name="l00104"></a>00104               *exp(-<a class="code" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">imagi</a>*<a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">initState_plane_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx2/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> &amp;
+<a name="l00046"></a>00046   
+<a name="l00047"></a>00047   <span class="keyword">allocate</span>(<a class="code" href="namespacecons__laws.html#a5e16e552d92dd5dd52c3cdc8600e62fe">potx</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>:<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>))
+<a name="l00048"></a>00048   
+<a name="l00049"></a>00049 <span class="keyword">end SUBROUTINE calcInitial</span>
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+<a name="l00052"></a>00052 
+<a name="l00053"></a><a class="code" href="initial_8f90.html#ae3fd441fd7d3cf3f49c5745a9f496b1a">00053</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#ae3fd441fd7d3cf3f49c5745a9f496b1a">initialState</a>
+<a name="l00054"></a>00054   use <span class="keywordflow">input_parameters</span>
+<a name="l00055"></a>00055   use <span class="keywordflow">mesh</span>
+<a name="l00056"></a>00056   use <span class="keywordflow">phys_cons</span>
+<a name="l00057"></a>00057   use <span class="keywordflow">prec_def</span>
+<a name="l00058"></a>00058   <span class="keyword">implicit none</span>
+<a name="l00059"></a>00059 
+<a name="l00060"></a>00060   <span class="keywordtype">real (Long)</span> :: wfnho,xx1,xx2
+<a name="l00061"></a>00061   <span class="keywordtype">complex*16</span>  :: y1,y2,den0
+<a name="l00062"></a>00062   <span class="keywordtype">integer</span> :: ixa, ixr, iin
+<a name="l00063"></a>00063   <span class="keywordtype">integer</span> :: initState_kdelta_index
+<a name="l00064"></a>00064 
+<a name="l00065"></a>00065   <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#aae45dd03716b9ad9a0600a9d9a798935">initState_kdelta</a>) <span class="keyword">then</span>
+<a name="l00066"></a>00066    initState_kdelta_index=<a class="code" href="namespacemesh.html#ad1beeceb5580c23eb4fd6530573c395c">getNearestIndexX</a>(<a class="code" href="namespaceinput__parameters.html#a65eb9165c6a1fd054daefc2a96e7ae2a">initState_kdelta_x0</a>)
+<a name="l00067"></a>00067   <span class="keyword">else</span>
+<a name="l00068"></a>00068    initState_kdelta_index=99
+<a name="l00069"></a>00069   <span class="keyword">endif</span>
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071   <span class="keyword">do</span> ixa=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1
+<a name="l00072"></a>00072      <span class="keyword">do</span> ixr=-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
+<a name="l00073"></a>00073         <span class="comment">!convert to x,x&#39; representation</span>
+<a name="l00074"></a>00074         call <a class="code" href="initial_8f90.html#a00ff7d260d65e323892041631c2343bc">getX12</a>(ixa,ixr,xx1,xx2)
+<a name="l00075"></a>00075 <span class="comment">!        xx1=(xa(ixa)+xr(ixr)/2.d0)</span>
+<a name="l00076"></a>00076 <span class="comment">!        xx2=(xa(ixa)-xr(ixr)/2.d0)</span>
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078         den0=0.0d0
+<a name="l00079"></a>00079         y1=0d0
+<a name="l00080"></a>00080         y2=0d0
+<a name="l00081"></a>00081         <span class="keyword">do</span> iin=0,<a class="code" href="namespaceinput__parameters.html#a29545f09a06c5a3def5df7fdb5f966ab">Nmax</a>
+<a name="l00082"></a>00082           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#add8bfc502078fcdca67fff41e00114f7">initState_gaussianNuclear</a>) <span class="keyword">then</span>
+<a name="l00083"></a>00083            y1=wfnho(xx1,iin,<a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>)
+<a name="l00084"></a>00084            y2=wfnho(xx2,iin,<a class="code" href="namespaceinput__parameters.html#ae3a25357531dd0d2b8c5c4cc2de073d9">whm</a>)
+<a name="l00085"></a>00085            den0=den0+y1*y2
+<a name="l00086"></a>00086           <span class="keyword">endif</span>
+<a name="l00087"></a>00087 
+<a name="l00088"></a>00088           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#a794b8486b7ecd6258448887bce533681">initState_cosine</a>) <span class="keyword">then</span>
+<a name="l00089"></a>00089            y1=sqrt(<a class="code" href="namespaceinput__parameters.html#a51d2cc916f531fadef1a6f0729644174">initState_cosine_norm</a>/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
+<a name="l00090"></a>00090               *cos(<a class="code" href="namespaceinput__parameters.html#ad5ff3d9c110be99ed08bbe970f1630c8">initState_cosine_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx1/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> + <a class="code" href="namespaceinput__parameters.html#ac3a5530df841dc82b4819f34f1e44980">initState_cosine_shift</a>)
+<a name="l00091"></a>00091            y2=sqrt(<a class="code" href="namespaceinput__parameters.html#a51d2cc916f531fadef1a6f0729644174">initState_cosine_norm</a>/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
+<a name="l00092"></a>00092               *cos(<a class="code" href="namespaceinput__parameters.html#ad5ff3d9c110be99ed08bbe970f1630c8">initState_cosine_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx2/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> + <a class="code" href="namespaceinput__parameters.html#ac3a5530df841dc82b4819f34f1e44980">initState_cosine_shift</a>)
+<a name="l00093"></a>00093            den0=den0+y1*y2
+<a name="l00094"></a>00094           <span class="keyword">endif</span>
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#aae45dd03716b9ad9a0600a9d9a798935">initState_kdelta</a>) <span class="keyword">then</span>
+<a name="l00097"></a>00097            <span class="keyword">if</span>(ixr==0.AND.ixa==initState_kdelta_index) <span class="keyword">then</span>
+<a name="l00098"></a>00098             den0=den0+<a class="code" href="namespaceinput__parameters.html#a1b2e5c088ab1d39d896586d7fb18b142">initState_kdelta_norm</a>*2d0*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>/<a class="code" href="namespacemesh.html#a9b60e77e26ab439594233774c928b35c">kLa</a>
+<a name="l00099"></a>00099            <span class="keyword">endif</span>
+<a name="l00100"></a>00100           <span class="keyword">endif</span>
+<a name="l00101"></a>00101 
+<a name="l00102"></a>00102           <span class="keyword">if</span>(<a class="code" href="namespaceinput__parameters.html#a727a13be305b5dde7955fd2d02f955e4">initState_plane</a>) <span class="keyword">then</span>
+<a name="l00103"></a>00103            y1=sqrt(<a class="code" href="namespaceinput__parameters.html#a22ba3f1343580a0db34433e32279e365">initState_plane_norm</a>*0.5d0/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
+<a name="l00104"></a>00104               *exp(-<a class="code" href="namespacephys__cons.html#a0dbb22856790b16e206de451e9cdd74a">imagi</a>*<a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">initState_plane_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx1/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> &amp;
 <a name="l00105"></a>00105                    +<a class="code" href="namespaceinput__parameters.html#a97253a3c66d919b8a99dd33c633d3bd8">initState_plane_shift</a>)
-<a name="l00106"></a>00106            den0=den0+conjg(y1)*y2
-<a name="l00107"></a>00107           <span class="keyword">endif</span>
-<a name="l00108"></a>00108 
-<a name="l00109"></a>00109 <span class="comment">!           if(useImEvol) then</span>
-<a name="l00110"></a>00110 <span class="comment">!            ! multiply by e^(2 E t / hbc) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.</span>
-<a name="l00111"></a>00111 <span class="comment">!            den0=den0+y1*y2*exp(2d0*w*(iin+0.5d0)*delt*Nimev)</span>
-<a name="l00112"></a>00112 <span class="comment">!           else</span>
-<a name="l00113"></a>00113 <span class="comment">!            den0=den0+y1*y2</span>
-<a name="l00114"></a>00114 <span class="comment">!           endif</span>
-<a name="l00115"></a>00115 
-<a name="l00116"></a>00116         <span class="keyword">enddo</span> <span class="comment">!in</span>
-<a name="l00117"></a>00117 
-<a name="l00118"></a>00118 <span class="comment">!        if(abs(den0).lt.1e-40) den0=0.0d0</span>
-<a name="l00119"></a>00119 
-<a name="l00120"></a>00120         call <a class="code" href="namespacemesh.html#a7f55b8b4c3e045f04553b292c323b43a">setDenX</a>(ixa,ixr,den0)
-<a name="l00121"></a>00121 
-<a name="l00122"></a>00122 <span class="comment">!        if(ixa==2) then</span>
-<a name="l00123"></a>00123 <span class="comment">!         if(ixr==1.or.ixr==-1)then</span>
-<a name="l00124"></a>00124 <span class="comment">!          write(*,&#39;(I3,I3,O24,O24)&#39;)ixa,ixr,den0,dble(denmat(ixa,ixr))</span>
-<a name="l00125"></a>00125 <span class="comment">!         endif</span>
-<a name="l00126"></a>00126 <span class="comment">!        endif</span>
-<a name="l00127"></a>00127         
-<a name="l00128"></a>00128 
-<a name="l00129"></a>00129      <span class="keyword">enddo</span> <span class="comment">!ixr</span>
-<a name="l00130"></a>00130   <span class="keyword">enddo</span> <span class="comment">!ixa</span>
+<a name="l00106"></a>00106            y2=sqrt(<a class="code" href="namespaceinput__parameters.html#a22ba3f1343580a0db34433e32279e365">initState_plane_norm</a>*0.5d0/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>) &amp;
+<a name="l00107"></a>00107               *exp(-<a class="code" href="namespacephys__cons.html#a0dbb22856790b16e206de451e9cdd74a">imagi</a>*<a class="code" href="namespaceinput__parameters.html#a876ac6edc93b733aeb66f54aca167741">initState_plane_number</a>*<a class="code" href="namespacephys__cons.html#aae3c6cb8ae765b0262bb110ff739ba9d">pi</a>*xx2/<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a> &amp;
+<a name="l00108"></a>00108                    +<a class="code" href="namespaceinput__parameters.html#a97253a3c66d919b8a99dd33c633d3bd8">initState_plane_shift</a>)
+<a name="l00109"></a>00109            den0=den0+conjg(y1)*y2
+<a name="l00110"></a>00110           <span class="keyword">endif</span>
+<a name="l00111"></a>00111 
+<a name="l00112"></a>00112 <span class="comment">!           if(useImEvol) then</span>
+<a name="l00113"></a>00113 <span class="comment">!            ! multiply by e^(2 E t / hbar) to get tr(rho)=1 after imaginary evolution, see notes BWB 2011-02-22.</span>
+<a name="l00114"></a>00114 <span class="comment">!            den0=den0+y1*y2*exp(2d0*w*(iin+0.5d0)*delt*Nimev)</span>
+<a name="l00115"></a>00115 <span class="comment">!           else</span>
+<a name="l00116"></a>00116 <span class="comment">!            den0=den0+y1*y2</span>
+<a name="l00117"></a>00117 <span class="comment">!           endif</span>
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119         <span class="keyword">enddo</span> <span class="comment">!in</span>
+<a name="l00120"></a>00120 
+<a name="l00121"></a>00121 <span class="comment">!        if(abs(den0).lt.1e-40) den0=0.0d0</span>
+<a name="l00122"></a>00122 
+<a name="l00123"></a>00123         call <a class="code" href="namespacemesh.html#a7f55b8b4c3e045f04553b292c323b43a">setDenX</a>(ixa,ixr,den0)
+<a name="l00124"></a>00124 
+<a name="l00125"></a>00125 <span class="comment">!        if(ixa==2) then</span>
+<a name="l00126"></a>00126 <span class="comment">!         if(ixr==1.or.ixr==-1)then</span>
+<a name="l00127"></a>00127 <span class="comment">!          write(*,&#39;(I3,I3,O24,O24)&#39;)ixa,ixr,den0,dble(denmat(ixa,ixr))</span>
+<a name="l00128"></a>00128 <span class="comment">!         endif</span>
+<a name="l00129"></a>00129 <span class="comment">!        endif</span>
+<a name="l00130"></a>00130         
 <a name="l00131"></a>00131 
-<a name="l00132"></a>00132   call <a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">copyExtra</a>
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134   <span class="comment">! set density matrix to X state</span>
-<a name="l00135"></a>00135   <a class="code" href="namespacemesh.html#a451ed2546542175ea54b5c9a780b5462">denState</a>=<a class="code" href="namespacemesh.html#a0c6bae5d6531a6b0f0428c0c056f759d">SPACE</a>
+<a name="l00132"></a>00132      <span class="keyword">enddo</span> <span class="comment">!ixr</span>
+<a name="l00133"></a>00133   <span class="keyword">enddo</span> <span class="comment">!ixa</span>
+<a name="l00134"></a>00134 
+<a name="l00135"></a>00135   call <a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">copyExtra</a>
 <a name="l00136"></a>00136 
-<a name="l00137"></a>00137 <span class="keyword">end subroutine initialState</span>
-<a name="l00138"></a>00138 
-<a name="l00139"></a>00139 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
-<a name="l00140"></a>00140 
-<a name="l00141"></a><a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">00141</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">copyExtra</a>
-<a name="l00142"></a>00142  <span class="comment">!! copyExtra - copies matrix to extra part (&gt;Nxr2 and &lt;-Nxr2)</span>
-<a name="l00143"></a>00143  <span class="comment">! 2011-06-30 - now copy directly denmat(:,Nxr2)=denmat(:,-Nxr2) to satisfy numerical hermiticity for xLr.lt.xLa</span>
-<a name="l00144"></a>00144  use <span class="keywordflow">mesh</span>
-<a name="l00145"></a>00145  <span class="keyword">implicit none</span>
-<a name="l00146"></a>00146 
-<a name="l00147"></a>00147  <span class="keywordtype">integer</span> :: ixr,ixa
-<a name="l00148"></a>00148 
-<a name="l00149"></a>00149  <span class="comment">!left side</span>
-<a name="l00150"></a>00150  <span class="keyword">do</span> ixa=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-1
+<a name="l00137"></a>00137   <span class="comment">! set density matrix to X state</span>
+<a name="l00138"></a>00138   <a class="code" href="namespacemesh.html#a451ed2546542175ea54b5c9a780b5462">denState</a>=<a class="code" href="namespacemesh.html#a0c6bae5d6531a6b0f0428c0c056f759d">SPACE</a>
+<a name="l00139"></a>00139 
+<a name="l00140"></a>00140 <span class="keyword">end subroutine initialState</span>
+<a name="l00141"></a>00141 
+<a name="l00142"></a>00142 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+<a name="l00143"></a>00143 
+<a name="l00144"></a><a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">00144</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">copyExtra</a>
+<a name="l00145"></a>00145  <span class="comment">!! copyExtra - copies matrix to extra part (&gt;Nxr2 and &lt;-Nxr2)</span>
+<a name="l00146"></a>00146  <span class="comment">! 2011-06-30 - now copy directly denmat(:,Nxr2)=denmat(:,-Nxr2) to satisfy numerical hermiticity for xLr.lt.xLa</span>
+<a name="l00147"></a>00147  use <span class="keywordflow">mesh</span>
+<a name="l00148"></a>00148  <span class="keyword">implicit none</span>
+<a name="l00149"></a>00149 
+<a name="l00150"></a>00150  <span class="keywordtype">integer</span> :: ixr,ixa
 <a name="l00151"></a>00151 
-<a name="l00152"></a>00152   <span class="comment">!upper left corner</span>
-<a name="l00153"></a>00153   <span class="keyword">do</span> ixr=<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>-1
-<a name="l00154"></a>00154    <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa+<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,ixr-<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>)
-<a name="l00155"></a>00155   <span class="keyword">enddo</span>
-<a name="l00156"></a>00156 
-<a name="l00157"></a>00157   <span class="comment">!lower left corner</span>
-<a name="l00158"></a>00158   <span class="keyword">do</span> ixr=-<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
-<a name="l00159"></a>00159    <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa+<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,ixr+<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>)
-<a name="l00160"></a>00160   <span class="keyword">enddo</span>
-<a name="l00161"></a>00161 
-<a name="l00162"></a>00162  <span class="keyword">enddo</span>
-<a name="l00163"></a>00163 
-<a name="l00164"></a>00164  <span class="comment">!right side</span>
-<a name="l00165"></a>00165  <span class="keyword">do</span> ixa=0,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1
+<a name="l00152"></a>00152  <span class="comment">!left side</span>
+<a name="l00153"></a>00153  <span class="keyword">do</span> ixa=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-1
+<a name="l00154"></a>00154 
+<a name="l00155"></a>00155   <span class="comment">!upper left corner</span>
+<a name="l00156"></a>00156   <span class="keyword">do</span> ixr=<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>-1
+<a name="l00157"></a>00157    <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa+<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,ixr-<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>)
+<a name="l00158"></a>00158   <span class="keyword">enddo</span>
+<a name="l00159"></a>00159 
+<a name="l00160"></a>00160   <span class="comment">!lower left corner</span>
+<a name="l00161"></a>00161   <span class="keyword">do</span> ixr=-<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
+<a name="l00162"></a>00162    <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa+<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,ixr+<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>)
+<a name="l00163"></a>00163   <span class="keyword">enddo</span>
+<a name="l00164"></a>00164 
+<a name="l00165"></a>00165  <span class="keyword">enddo</span>
 <a name="l00166"></a>00166 
-<a name="l00167"></a>00167   <span class="comment">!upper right corner</span>
-<a name="l00168"></a>00168   <span class="keyword">do</span> ixr=<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>-1
-<a name="l00169"></a>00169    <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,ixr-<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>)
-<a name="l00170"></a>00170   <span class="keyword">enddo</span>
-<a name="l00171"></a>00171 
-<a name="l00172"></a>00172   <span class="comment">!lower right corner</span>
-<a name="l00173"></a>00173   <span class="keyword">do</span> ixr=-<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
-<a name="l00174"></a>00174    <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,ixr+<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>)
-<a name="l00175"></a>00175   <span class="keyword">enddo</span>
-<a name="l00176"></a>00176 
-<a name="l00177"></a>00177  <span class="keyword">enddo</span>
-<a name="l00178"></a>00178 
-<a name="l00179"></a>00179  <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)=0.5d0*DBLE((<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)+<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)))
-<a name="l00180"></a>00180  <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)
+<a name="l00167"></a>00167  <span class="comment">!right side</span>
+<a name="l00168"></a>00168  <span class="keyword">do</span> ixa=0,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1
+<a name="l00169"></a>00169 
+<a name="l00170"></a>00170   <span class="comment">!upper right corner</span>
+<a name="l00171"></a>00171   <span class="keyword">do</span> ixr=<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>-1
+<a name="l00172"></a>00172    <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,ixr-<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>)
+<a name="l00173"></a>00173   <span class="keyword">enddo</span>
+<a name="l00174"></a>00174 
+<a name="l00175"></a>00175   <span class="comment">!lower right corner</span>
+<a name="l00176"></a>00176   <span class="keyword">do</span> ixr=-<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
+<a name="l00177"></a>00177    <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,ixr+<a class="code" href="namespacemesh.html#a4fae0f9e86bfdcb8fec5dc0aefd8fe71">Nxr</a>)
+<a name="l00178"></a>00178   <span class="keyword">enddo</span>
+<a name="l00179"></a>00179 
+<a name="l00180"></a>00180  <span class="keyword">enddo</span>
 <a name="l00181"></a>00181 
-<a name="l00182"></a>00182 <span class="keyword">end subroutine copyExtra</span>
-<a name="l00183"></a>00183 
-<a name="l00184"></a>00184 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
-<a name="l00185"></a>00185 
-<a name="l00186"></a><a class="code" href="initial_8f90.html#af10aed743d4a9864da67c314b2ccd0f6">00186</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#af10aed743d4a9864da67c314b2ccd0f6">boost</a>
-<a name="l00187"></a>00187   use <span class="keywordflow">input_parameters</span>
-<a name="l00188"></a>00188   use <span class="keywordflow">mesh</span>
-<a name="l00189"></a>00189   use <span class="keywordflow">phys_cons</span>
-<a name="l00190"></a>00190   <span class="keyword">implicit none</span>
-<a name="l00191"></a>00191 
-<a name="l00192"></a>00192   <span class="keywordtype">INTEGER</span> ixr <span class="comment">!loop variables</span>
-<a name="l00193"></a>00193   <span class="keywordtype">real*8</span> :: kea <span class="comment">!momentum, given ea</span>
-<a name="l00194"></a>00194 <span class="comment">!  real*8 :: cos2k, sin2k !cos,sin part of exp, exponent itself</span>
-<a name="l00195"></a>00195 <span class="comment">!  real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real</span>
-<a name="l00196"></a>00196 <span class="comment">!  real*8 :: x1,x2   !position in x,x&#39; basis</span>
-<a name="l00197"></a>00197 
-<a name="l00198"></a>00198   <span class="keywordtype">complex*16</span> :: epx
-<a name="l00199"></a>00199 
-<a name="l00200"></a>00200   call <a class="code" href="namespacemesh.html#aef51df23ee69f610420b25672a2da3ef">setState</a>(<a class="code" href="namespacemesh.html#a0c6bae5d6531a6b0f0428c0c056f759d">SPACE</a>)
-<a name="l00201"></a>00201 
-<a name="l00202"></a>00202   <span class="comment">! non-relativistic conversion</span>
-<a name="l00203"></a>00203   kea=sign(1d0,<a class="code" href="namespaceinput__parameters.html#ac937498371c0568d2d4ed1e1ef034e1d">ea</a>)*sqrt(2.d0*<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*abs(<a class="code" href="namespaceinput__parameters.html#ac937498371c0568d2d4ed1e1ef034e1d">ea</a>))/<a class="code" href="namespacephys__cons.html#a2d3539e3579b581a4e69eff7347b4fa2">hbc</a>
+<a name="l00182"></a>00182  <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)=0.5d0*DBLE((<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)+<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)))
+<a name="l00183"></a>00183  <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>)
+<a name="l00184"></a>00184 
+<a name="l00185"></a>00185 <span class="keyword">end subroutine copyExtra</span>
+<a name="l00186"></a>00186 
+<a name="l00187"></a>00187 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+<a name="l00188"></a>00188 
+<a name="l00189"></a><a class="code" href="initial_8f90.html#af10aed743d4a9864da67c314b2ccd0f6">00189</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#af10aed743d4a9864da67c314b2ccd0f6">boost</a>
+<a name="l00190"></a>00190   use <span class="keywordflow">input_parameters</span>
+<a name="l00191"></a>00191   use <span class="keywordflow">mesh</span>
+<a name="l00192"></a>00192   use <span class="keywordflow">phys_cons</span>
+<a name="l00193"></a>00193   <span class="keyword">implicit none</span>
+<a name="l00194"></a>00194 
+<a name="l00195"></a>00195   <span class="keywordtype">INTEGER</span> ixr <span class="comment">!loop variables</span>
+<a name="l00196"></a>00196   <span class="keywordtype">real*8</span> :: kea <span class="comment">!momentum, given ea</span>
+<a name="l00197"></a>00197 <span class="comment">!  real*8 :: cos2k, sin2k !cos,sin part of exp, exponent itself</span>
+<a name="l00198"></a>00198 <span class="comment">!  real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real</span>
+<a name="l00199"></a>00199 <span class="comment">!  real*8 :: x1,x2   !position in x,x&#39; basis</span>
+<a name="l00200"></a>00200 
+<a name="l00201"></a>00201   <span class="keywordtype">complex*16</span> :: epx
+<a name="l00202"></a>00202 
+<a name="l00203"></a>00203   call <a class="code" href="namespacemesh.html#aef51df23ee69f610420b25672a2da3ef">setState</a>(<a class="code" href="namespacemesh.html#a0c6bae5d6531a6b0f0428c0c056f759d">SPACE</a>)
 <a name="l00204"></a>00204 
-<a name="l00205"></a>00205   <span class="comment">!loop over all grid points</span>
-<a name="l00206"></a>00206   <span class="keyword">DO</span> ixr=-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
+<a name="l00205"></a>00205   <span class="comment">! non-relativistic conversion</span>
+<a name="l00206"></a>00206   kea=sign(1d0,<a class="code" href="namespaceinput__parameters.html#ac937498371c0568d2d4ed1e1ef034e1d">ea</a>)*sqrt(2.d0*<a class="code" href="namespacephys__cons.html#afa35c20a6e2a70b58142d10071eeef10">m0</a>*abs(<a class="code" href="namespaceinput__parameters.html#ac937498371c0568d2d4ed1e1ef034e1d">ea</a>))/<a class="code" href="namespacephys__cons.html#a10c52cbe8a9d32eb836e12b67ef7da3b">hbar</a>
 <a name="l00207"></a>00207 
-<a name="l00208"></a>00208      epx=exp(<a class="code" href="namespacephys__cons.html#af15f96806bfb6b9c6b1a279971d5d34b">imagi</a>*kea*<a class="code" href="namespacemesh.html#a0351493d48c86a4a92f34aa94f8cc099">xr</a>(ixr))
-<a name="l00209"></a>00209 
-<a name="l00210"></a>00210 <span class="comment">!call mesh_setReflectedLR(.true.)</span>
-<a name="l00211"></a>00211 
-<a name="l00212"></a>00212      <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,ixr)*epx
-<a name="l00213"></a>00213 
-<a name="l00214"></a>00214 <span class="comment">!call mesh_setReflectedLR(.false.)</span>
-<a name="l00215"></a>00215 
-<a name="l00216"></a>00216 <span class="comment">!     DO ixa=-Nxa2,Nxa2-1</span>
-<a name="l00217"></a>00217      
-<a name="l00218"></a>00218         
-<a name="l00219"></a>00219 <span class="comment">!  call mesh_setReflectedLR(.true.)</span>
-<a name="l00220"></a>00220         <span class="comment">!convert into x,x&#39; coordinates</span>
-<a name="l00221"></a>00221 <span class="comment">!        call getX12(ixa,ixr,x1,x2)</span>
-<a name="l00222"></a>00222 
-<a name="l00223"></a>00223         <span class="comment">!dispacement operator = exp(-iK(X&#39;-X))</span>
-<a name="l00224"></a>00224 <span class="comment">!        epx=kea*(x1-x2)</span>
-<a name="l00225"></a>00225 <span class="comment">!        epx=kea*xr(ixr)</span>
-<a name="l00226"></a>00226 <span class="comment">!        denmat(ixa,ixr)=denmat(ixa,ixr)*exp(imagi*epx)</span>
-<a name="l00227"></a>00227 <span class="comment">!  call mesh_setReflectedLR(.false.)</span>
-<a name="l00228"></a>00228 <span class="comment">!        udt=m0*w**2*2*xa(ixa)*xr(ixr)*dtim/hbc/2.0_Long</span>
-<a name="l00229"></a>00229 <span class="comment">!        udt=0</span>
-<a name="l00230"></a>00230 <span class="comment">!        cos2k=cos(epx)</span>
-<a name="l00231"></a>00231 <span class="comment">!        sin2k=sin(epx)</span>
-<a name="l00232"></a>00232 
-<a name="l00233"></a>00233 <span class="comment">!        xre=DBLE(getDenX(ixa,ixr))</span>
-<a name="l00234"></a>00234 <span class="comment">!        xim=DIMAG(getDenX(ixa,ixr))</span>
-<a name="l00235"></a>00235         
-<a name="l00236"></a>00236         <span class="comment">! exp(i*edt) = cos2k + i*sin2k</span>
-<a name="l00237"></a>00237 <span class="comment">!        xre2=xre*cos2k - xim*sin2k</span>
-<a name="l00238"></a>00238 <span class="comment">!        xim2=xre*sin2k + xim*cos2k</span>
-<a name="l00239"></a>00239 
-<a name="l00240"></a>00240 <span class="comment">!        call setDenX(ixa,ixr,cmplx(xre2,xim2,8))</span>
-<a name="l00241"></a>00241 
-<a name="l00242"></a>00242 <span class="comment">!     ENDDO</span>
-<a name="l00243"></a>00243      
-<a name="l00244"></a>00244   <span class="keyword">ENDDO</span>
-<a name="l00245"></a>00245 
-<a name="l00246"></a>00246 
-<a name="l00247"></a>00247   call <a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">copyExtra</a> 
+<a name="l00208"></a>00208   <span class="comment">!loop over all grid points</span>
+<a name="l00209"></a>00209   <span class="keyword">DO</span> ixr=-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>,<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1
+<a name="l00210"></a>00210 
+<a name="l00211"></a>00211      epx=exp(<a class="code" href="namespacephys__cons.html#a0dbb22856790b16e206de451e9cdd74a">imagi</a>*kea*<a class="code" href="namespacemesh.html#a0351493d48c86a4a92f34aa94f8cc099">xr</a>(ixr))
+<a name="l00212"></a>00212 
+<a name="l00213"></a>00213 <span class="comment">!call mesh_setReflectedLR(.true.)</span>
+<a name="l00214"></a>00214 
+<a name="l00215"></a>00215      <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,ixr)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,ixr)*epx
+<a name="l00216"></a>00216 
+<a name="l00217"></a>00217 <span class="comment">!call mesh_setReflectedLR(.false.)</span>
+<a name="l00218"></a>00218 
+<a name="l00219"></a>00219 <span class="comment">!     DO ixa=-Nxa2,Nxa2-1</span>
+<a name="l00220"></a>00220      
+<a name="l00221"></a>00221         
+<a name="l00222"></a>00222 <span class="comment">!  call mesh_setReflectedLR(.true.)</span>
+<a name="l00223"></a>00223         <span class="comment">!convert into x,x&#39; coordinates</span>
+<a name="l00224"></a>00224 <span class="comment">!        call getX12(ixa,ixr,x1,x2)</span>
+<a name="l00225"></a>00225 
+<a name="l00226"></a>00226         <span class="comment">!dispacement operator = exp(-iK(X&#39;-X))</span>
+<a name="l00227"></a>00227 <span class="comment">!        epx=kea*(x1-x2)</span>
+<a name="l00228"></a>00228 <span class="comment">!        epx=kea*xr(ixr)</span>
+<a name="l00229"></a>00229 <span class="comment">!        denmat(ixa,ixr)=denmat(ixa,ixr)*exp(imagi*epx)</span>
+<a name="l00230"></a>00230 <span class="comment">!  call mesh_setReflectedLR(.false.)</span>
+<a name="l00231"></a>00231 <span class="comment">!        udt=m0*w**2*2*xa(ixa)*xr(ixr)*dtim/hbar/2.0_Long</span>
+<a name="l00232"></a>00232 <span class="comment">!        udt=0</span>
+<a name="l00233"></a>00233 <span class="comment">!        cos2k=cos(epx)</span>
+<a name="l00234"></a>00234 <span class="comment">!        sin2k=sin(epx)</span>
+<a name="l00235"></a>00235 
+<a name="l00236"></a>00236 <span class="comment">!        xre=DBLE(getDenX(ixa,ixr))</span>
+<a name="l00237"></a>00237 <span class="comment">!        xim=DIMAG(getDenX(ixa,ixr))</span>
+<a name="l00238"></a>00238         
+<a name="l00239"></a>00239         <span class="comment">! exp(i*edt) = cos2k + i*sin2k</span>
+<a name="l00240"></a>00240 <span class="comment">!        xre2=xre*cos2k - xim*sin2k</span>
+<a name="l00241"></a>00241 <span class="comment">!        xim2=xre*sin2k + xim*cos2k</span>
+<a name="l00242"></a>00242 
+<a name="l00243"></a>00243 <span class="comment">!        call setDenX(ixa,ixr,cmplx(xre2,xim2,8))</span>
+<a name="l00244"></a>00244 
+<a name="l00245"></a>00245 <span class="comment">!     ENDDO</span>
+<a name="l00246"></a>00246      
+<a name="l00247"></a>00247   <span class="keyword">ENDDO</span>
 <a name="l00248"></a>00248 
 <a name="l00249"></a>00249 
-<a name="l00250"></a>00250 <span class="keyword">end subroutine boost</span>
+<a name="l00250"></a>00250   call <a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">copyExtra</a> 
 <a name="l00251"></a>00251 
-<a name="l00252"></a>00252 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
-<a name="l00253"></a>00253 
-<a name="l00254"></a><a class="code" href="initial_8f90.html#a8febc15c68033c55e7f246e07e193ed3">00254</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#a8febc15c68033c55e7f246e07e193ed3">displaceLeft</a>(nx)
-<a name="l00255"></a>00255  <span class="comment">!! displace - shifts density matrix by &#39;nx&#39; spatial indices in -xa direction</span>
-<a name="l00256"></a>00256  use <span class="keywordflow">mesh</span>
-<a name="l00257"></a>00257  <span class="keyword">implicit none</span>
-<a name="l00258"></a>00258 
-<a name="l00259"></a>00259  <span class="keywordtype">integer</span>, <span class="keywordtype">intent(in)</span> :: nx
-<a name="l00260"></a>00260 
-<a name="l00261"></a>00261  <span class="keywordtype">complex*16</span>, <span class="keywordtype">dimension(0:nx-1,-Nxr:Nxr-1)</span> :: wmat  <span class="comment">!working matrix</span>
-<a name="l00262"></a>00262 
-<a name="l00263"></a>00263  <span class="keywordtype">integer</span> :: i
-<a name="l00264"></a>00264 
-<a name="l00265"></a>00265  <span class="comment">!copy cells that are shifted &#39;off&#39; the left (negative) side of the matrix</span>
-<a name="l00266"></a>00266  <span class="keyword">do</span> i=0,nx-1
-<a name="l00267"></a>00267   wmat(i,:)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+i,:)
-<a name="l00268"></a>00268  <span class="keyword">enddo</span> <span class="comment">!i</span>
-<a name="l00269"></a>00269 
-<a name="l00270"></a>00270  <span class="comment">!shift cells within denmat</span>
-<a name="l00271"></a>00271  <span class="keyword">do</span> i=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1-nx
-<a name="l00272"></a>00272   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i,:)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i+nx,:)
-<a name="l00273"></a>00273  <span class="keyword">enddo</span> <span class="comment">!i</span>
-<a name="l00274"></a>00274 
-<a name="l00275"></a>00275  <span class="comment">!copy periodically shifted cells to other (positive) side of matrix</span>
-<a name="l00276"></a>00276  <span class="keyword">do</span> i=<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-nx,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1
-<a name="l00277"></a>00277   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i,:)=wmat(i-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+nx,:)
-<a name="l00278"></a>00278  <span class="keyword">enddo</span>
-<a name="l00279"></a>00279 
-<a name="l00280"></a>00280 <span class="keyword">end subroutine displaceLeft</span>
-<a name="l00281"></a>00281 
-<a name="l00282"></a>00282 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
-<a name="l00283"></a>00283 
-<a name="l00284"></a><a class="code" href="initial_8f90.html#af0a399573512e92199bb43c56efa632b">00284</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#af0a399573512e92199bb43c56efa632b">displaceRight</a>(nx)
-<a name="l00285"></a>00285  <span class="comment">!! displace - shifts density matrix by &#39;nx&#39; spatial indices in +xa direction</span>
-<a name="l00286"></a>00286  use <span class="keywordflow">mesh</span>
-<a name="l00287"></a>00287  <span class="keyword">implicit none</span>
-<a name="l00288"></a>00288 
-<a name="l00289"></a>00289  <span class="keywordtype">integer</span>, <span class="keywordtype">intent(in)</span> :: nx
-<a name="l00290"></a>00290 
-<a name="l00291"></a>00291  <span class="keywordtype">complex*16</span>, <span class="keywordtype">dimension(0:nx-1,-Nxr:Nxr-1)</span> :: wmat  <span class="comment">!working matrix</span>
-<a name="l00292"></a>00292 
-<a name="l00293"></a>00293  <span class="keywordtype">integer</span> :: i
-<a name="l00294"></a>00294 
-<a name="l00295"></a>00295  <span class="comment">!copy cells that are shifted &#39;off&#39; the right (positive) side of the matrix</span>
-<a name="l00296"></a>00296  <span class="keyword">do</span> i=0,nx-1
-<a name="l00297"></a>00297   wmat(i,:)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-nx+i,:)
-<a name="l00298"></a>00298  <span class="keyword">enddo</span> <span class="comment">!i</span>
-<a name="l00299"></a>00299 
-<a name="l00300"></a>00300  <span class="comment">!shift cells within denmat</span>
-<a name="l00301"></a>00301  <span class="keyword">do</span> i=<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1,-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+nx,-1
-<a name="l00302"></a>00302   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i,:)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i-nx,:)
-<a name="l00303"></a>00303  <span class="keyword">enddo</span> <span class="comment">!i</span>
-<a name="l00304"></a>00304 
-<a name="l00305"></a>00305  <span class="comment">!copy periodically shifted cells to other (negative) side of matrix</span>
-<a name="l00306"></a>00306  <span class="keyword">do</span> i=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+nx-1
-<a name="l00307"></a>00307   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i,:)=wmat(i+<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,:)
-<a name="l00308"></a>00308  <span class="keyword">enddo</span>
-<a name="l00309"></a>00309 
-<a name="l00310"></a>00310 <span class="keyword">end subroutine displaceRight</span>
-<a name="l00311"></a>00311 
-<a name="l00312"></a>00312 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
-<a name="l00313"></a>00313 
+<a name="l00252"></a>00252 
+<a name="l00253"></a>00253 <span class="keyword">end subroutine boost</span>
+<a name="l00254"></a>00254 
+<a name="l00255"></a>00255 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+<a name="l00256"></a>00256 
+<a name="l00257"></a><a class="code" href="initial_8f90.html#a8febc15c68033c55e7f246e07e193ed3">00257</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#a8febc15c68033c55e7f246e07e193ed3">displaceLeft</a>(nx)
+<a name="l00258"></a>00258  <span class="comment">!! displace - shifts density matrix by &#39;nx&#39; spatial indices in -xa direction</span>
+<a name="l00259"></a>00259  use <span class="keywordflow">mesh</span>
+<a name="l00260"></a>00260  <span class="keyword">implicit none</span>
+<a name="l00261"></a>00261 
+<a name="l00262"></a>00262  <span class="keywordtype">integer</span>, <span class="keywordtype">intent(in)</span> :: nx
+<a name="l00263"></a>00263 
+<a name="l00264"></a>00264  <span class="keywordtype">complex*16</span>, <span class="keywordtype">dimension(0:nx-1,-Nxr:Nxr-1)</span> :: wmat  <span class="comment">!working matrix</span>
+<a name="l00265"></a>00265 
+<a name="l00266"></a>00266  <span class="keywordtype">integer</span> :: i
+<a name="l00267"></a>00267 
+<a name="l00268"></a>00268  <span class="comment">!copy cells that are shifted &#39;off&#39; the left (negative) side of the matrix</span>
+<a name="l00269"></a>00269  <span class="keyword">do</span> i=0,nx-1
+<a name="l00270"></a>00270   wmat(i,:)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+i,:)
+<a name="l00271"></a>00271  <span class="keyword">enddo</span> <span class="comment">!i</span>
+<a name="l00272"></a>00272 
+<a name="l00273"></a>00273  <span class="comment">!shift cells within denmat</span>
+<a name="l00274"></a>00274  <span class="keyword">do</span> i=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1-nx
+<a name="l00275"></a>00275   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i,:)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i+nx,:)
+<a name="l00276"></a>00276  <span class="keyword">enddo</span> <span class="comment">!i</span>
+<a name="l00277"></a>00277 
+<a name="l00278"></a>00278  <span class="comment">!copy periodically shifted cells to other (positive) side of matrix</span>
+<a name="l00279"></a>00279  <span class="keyword">do</span> i=<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-nx,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1
+<a name="l00280"></a>00280   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i,:)=wmat(i-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+nx,:)
+<a name="l00281"></a>00281  <span class="keyword">enddo</span>
+<a name="l00282"></a>00282 
+<a name="l00283"></a>00283 <span class="keyword">end subroutine displaceLeft</span>
+<a name="l00284"></a>00284 
+<a name="l00285"></a>00285 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+<a name="l00286"></a>00286 
+<a name="l00287"></a><a class="code" href="initial_8f90.html#af0a399573512e92199bb43c56efa632b">00287</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#af0a399573512e92199bb43c56efa632b">displaceRight</a>(nx)
+<a name="l00288"></a>00288  <span class="comment">!! displace - shifts density matrix by &#39;nx&#39; spatial indices in +xa direction</span>
+<a name="l00289"></a>00289  use <span class="keywordflow">mesh</span>
+<a name="l00290"></a>00290  <span class="keyword">implicit none</span>
+<a name="l00291"></a>00291 
+<a name="l00292"></a>00292  <span class="keywordtype">integer</span>, <span class="keywordtype">intent(in)</span> :: nx
+<a name="l00293"></a>00293 
+<a name="l00294"></a>00294  <span class="keywordtype">complex*16</span>, <span class="keywordtype">dimension(0:nx-1,-Nxr:Nxr-1)</span> :: wmat  <span class="comment">!working matrix</span>
+<a name="l00295"></a>00295 
+<a name="l00296"></a>00296  <span class="keywordtype">integer</span> :: i
+<a name="l00297"></a>00297 
+<a name="l00298"></a>00298  <span class="comment">!copy cells that are shifted &#39;off&#39; the right (positive) side of the matrix</span>
+<a name="l00299"></a>00299  <span class="keyword">do</span> i=0,nx-1
+<a name="l00300"></a>00300   wmat(i,:)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-nx+i,:)
+<a name="l00301"></a>00301  <span class="keyword">enddo</span> <span class="comment">!i</span>
+<a name="l00302"></a>00302 
+<a name="l00303"></a>00303  <span class="comment">!shift cells within denmat</span>
+<a name="l00304"></a>00304  <span class="keyword">do</span> i=<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1,-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+nx,-1
+<a name="l00305"></a>00305   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i,:)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i-nx,:)
+<a name="l00306"></a>00306  <span class="keyword">enddo</span> <span class="comment">!i</span>
+<a name="l00307"></a>00307 
+<a name="l00308"></a>00308  <span class="comment">!copy periodically shifted cells to other (negative) side of matrix</span>
+<a name="l00309"></a>00309  <span class="keyword">do</span> i=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+nx-1
+<a name="l00310"></a>00310   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(i,:)=wmat(i+<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,:)
+<a name="l00311"></a>00311  <span class="keyword">enddo</span>
+<a name="l00312"></a>00312 
+<a name="l00313"></a>00313 <span class="keyword">end subroutine displaceRight</span>
 <a name="l00314"></a>00314 
-<a name="l00315"></a>00315 
-<a name="l00316"></a><a class="code" href="initial_8f90.html#a2efc6884e391e25a879a5231eeda9956">00316</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#a2efc6884e391e25a879a5231eeda9956">flipclone</a>
-<a name="l00317"></a>00317  <span class="comment">!! flipclone - adds the density matrix to its clone, flipped across and conjugated (to reverse momentum) </span>
-<a name="l00318"></a>00318  use <span class="keywordflow">mesh</span>
-<a name="l00319"></a>00319  <span class="keyword">implicit none</span>
-<a name="l00320"></a>00320 
-<a name="l00321"></a>00321  <span class="keywordtype">complex*16</span>, <span class="keywordtype">dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1)</span> :: den2
-<a name="l00322"></a>00322 
-<a name="l00323"></a>00323  <span class="keywordtype">integer</span> :: ixa
-<a name="l00324"></a>00324 
-<a name="l00325"></a>00325  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;flipclone started&#39;</span>
-<a name="l00326"></a>00326 
-<a name="l00327"></a>00327  den2=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1)
-<a name="l00328"></a>00328 
-<a name="l00329"></a>00329  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;den2 assigned&#39;</span>
-<a name="l00330"></a>00330 
-<a name="l00331"></a>00331  <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1) &amp;
-<a name="l00332"></a>00332                             +conjg(<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1))
-<a name="l00333"></a>00333  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;first denmat column multiply&#39;</span>
-<a name="l00334"></a>00334  <span class="keyword">do</span> ixa=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+1,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1
-<a name="l00335"></a>00335   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1)+conjg(den2(-ixa,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1))
-<a name="l00336"></a>00336  <span class="keyword">enddo</span>
-<a name="l00337"></a>00337  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;do-loop finished&#39;</span>
-<a name="l00338"></a>00338 
-<a name="l00339"></a>00339  call <a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">copyExtra</a>
-<a name="l00340"></a>00340  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;copyExtra finished&#39;</span>
+<a name="l00315"></a>00315 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+<a name="l00316"></a>00316 
+<a name="l00317"></a>00317 
+<a name="l00318"></a>00318 
+<a name="l00319"></a><a class="code" href="initial_8f90.html#a2efc6884e391e25a879a5231eeda9956">00319</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#a2efc6884e391e25a879a5231eeda9956">flipclone</a>
+<a name="l00320"></a>00320  <span class="comment">!! flipclone - adds the density matrix to its clone, flipped across and conjugated (to reverse momentum) </span>
+<a name="l00321"></a>00321  use <span class="keywordflow">mesh</span>
+<a name="l00322"></a>00322  <span class="keyword">implicit none</span>
+<a name="l00323"></a>00323 
+<a name="l00324"></a>00324  <span class="keywordtype">complex*16</span>, <span class="keywordtype">dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1)</span> :: den2
+<a name="l00325"></a>00325 
+<a name="l00326"></a>00326  <span class="keywordtype">integer</span> :: ixa
+<a name="l00327"></a>00327 
+<a name="l00328"></a>00328  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;flipclone started&#39;</span>
+<a name="l00329"></a>00329 
+<a name="l00330"></a>00330  den2=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(:,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1)
+<a name="l00331"></a>00331 
+<a name="l00332"></a>00332  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;den2 assigned&#39;</span>
+<a name="l00333"></a>00333 
+<a name="l00334"></a>00334  <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1) &amp;
+<a name="l00335"></a>00335                             +conjg(<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1))
+<a name="l00336"></a>00336  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;first denmat column multiply&#39;</span>
+<a name="l00337"></a>00337  <span class="keyword">do</span> ixa=-<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>+1,<a class="code" href="namespacemesh.html#a632597390bacfaae4c10d8cb907b2aec">Nxa2</a>-1
+<a name="l00338"></a>00338   <a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1)=<a class="code" href="namespacemesh.html#ad78af6f9bdcc56004176e07e81d419f8">denmat</a>(ixa,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1)+conjg(den2(-ixa,-<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>:<a class="code" href="namespacemesh.html#a7838433bd66eb8c9d5155928904d9a5a">Nxr2</a>-1))
+<a name="l00339"></a>00339  <span class="keyword">enddo</span>
+<a name="l00340"></a>00340  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;do-loop finished&#39;</span>
 <a name="l00341"></a>00341 
-<a name="l00342"></a>00342 <span class="keyword">end subroutine flipclone</span>
-<a name="l00343"></a>00343 
-<a name="l00344"></a>00344 <span class="comment">!subroutine displace(xc)</span>
-<a name="l00345"></a>00345 <span class="comment">! !! displace - shifts density matrix by &#39;xc&#39; fm in xa direction</span>
-<a name="l00346"></a>00346 <span class="comment">! use mesh</span>
-<a name="l00347"></a>00347 <span class="comment">! implicit none</span>
-<a name="l00348"></a>00348 <span class="comment">!</span>
-<a name="l00349"></a>00349 <span class="comment">! real*8, intent(in) :: xc</span>
-<a name="l00350"></a>00350 <span class="comment">!</span>
-<a name="l00351"></a>00351 <span class="comment">! integer                       :: ixa, ixr, iixr, ki</span>
-<a name="l00352"></a>00352 <span class="comment">! real*8, dimension(Nxa,Nxr)    :: d2_re, d2_im  !working matrix</span>
-<a name="l00353"></a>00353 <span class="comment">! real*8, dimension(-Nxa2:Nxa2) :: row_re, row_im</span>
-<a name="l00354"></a>00354 <span class="comment">! real*8, dimension(-Nxa2:Nxa2) :: rxc !vector of shifted coordinates</span>
-<a name="l00355"></a>00355 <span class="comment">!</span>
-<a name="l00356"></a>00356 <span class="comment">! ki=1</span>
-<a name="l00357"></a>00357 <span class="comment">!</span>
-<a name="l00358"></a>00358 <span class="comment">! if(.not.isDenX) then</span>
-<a name="l00359"></a>00359 <span class="comment">!  write(*,*)&#39;displace called on non x-space matrix, wtf?&#39;</span>
-<a name="l00360"></a>00360 <span class="comment">!  stop</span>
-<a name="l00361"></a>00361 <span class="comment">! endif</span>
-<a name="l00362"></a>00362 <span class="comment">!</span>
-<a name="l00363"></a>00363 <span class="comment">! do ixa=-Nxa2,Nxa2</span>
-<a name="l00364"></a>00364 <span class="comment">!  rxc(ixa)=xa(ixa)-xc</span>
-<a name="l00365"></a>00365 <span class="comment">!  if(rxc(ixa)&lt;xa(-Nxa2))then</span>
-<a name="l00366"></a>00366 <span class="comment">!   rxc(ixa)=rxc(ixa)+2*xa(Nxa2)</span>
-<a name="l00367"></a>00367 <span class="comment">!  elseif(rxc(ixa)&gt;xa(Nxa2)) then</span>
-<a name="l00368"></a>00368 <span class="comment">!   rxc(ixa)=rxc(ixa)-2*xa(Nxa2)</span>
-<a name="l00369"></a>00369 <span class="comment">!  endif</span>
-<a name="l00370"></a>00370 <span class="comment">! enddo</span>
-<a name="l00371"></a>00371 <span class="comment">!</span>
-<a name="l00372"></a>00372 <span class="comment">!</span>
-<a name="l00373"></a>00373 <span class="comment">! do ixr=-Nxr2,Nxr2</span>
-<a name="l00374"></a>00374 <span class="comment">!  !construct row vector in -Nxa2,Nxa2 form</span>
-<a name="l00375"></a>00375 <span class="comment">!  do ixa=-Nxa2,Nxa2</span>
-<a name="l00376"></a>00376 <span class="comment">!   row_re(ixa)=DBLE(getDen(ixa,ixr))</span>
-<a name="l00377"></a>00377 <span class="comment">!   row_im(ixa)=DIMAG(getDen(ixa,ixr))</span>
-<a name="l00378"></a>00378 <span class="comment">!  enddo</span>
-<a name="l00379"></a>00379 <span class="comment">!</span>
-<a name="l00380"></a>00380 <span class="comment">!  do ixa=-Nxa2,Nxa2-1</span>
-<a name="l00381"></a>00381 <span class="comment">!   call LIN_INT(xa,row_re,Nxa+1,rxc(ixa),d2_re(iNxa2(ixa),iixr),ki)</span>
-<a name="l00382"></a>00382 <span class="comment">!   call LIN_INT(xa,row_im,Nxa+1,rxc(ixa),d2_im(iNxa2(ixa),iixr),ki)</span>
-<a name="l00383"></a>00383 <span class="comment">!  enddo</span>
-<a name="l00384"></a>00384 <span class="comment">! enddo</span>
-<a name="l00385"></a>00385 <span class="comment">!</span>
-<a name="l00386"></a>00386 <span class="comment">! denmat=cmplx(d2_re,d2_im,8)</span>
-<a name="l00387"></a>00387 <span class="comment">!</span>
-<a name="l00388"></a>00388 <span class="comment">!end subroutine displace</span>
-<a name="l00389"></a>00389 
-<a name="l00390"></a>00390 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
-<a name="l00391"></a>00391 
-<a name="l00392"></a><a class="code" href="initial_8f90.html#a00ff7d260d65e323892041631c2343bc">00392</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#a00ff7d260d65e323892041631c2343bc">getX12</a>(ixa, ixr, x1, x2)
-<a name="l00393"></a>00393 <span class="comment">!! getX12 - converts ixa, ixr grid indices to values of x1,x2 space and</span>
-<a name="l00394"></a>00394 <span class="comment">!maintains periodicity.</span>
-<a name="l00395"></a>00395  use <span class="keywordflow">mesh</span>
-<a name="l00396"></a>00396  use <span class="keywordflow">prec_def</span>
-<a name="l00397"></a>00397  <span class="keyword">implicit none</span>
-<a name="l00398"></a>00398 
-<a name="l00399"></a>00399  <span class="keywordtype">integer</span>,     <span class="keywordtype">intent(in)</span>  :: ixa, ixr <span class="comment">!human-read index of grid in xa,xr space</span>
-<a name="l00400"></a>00400  <span class="keywordtype">real (Long)</span>, <span class="keywordtype">intent(out)</span> :: x1,x2    <span class="comment">!x,x&#39; position in x,x&#39; space</span>
+<a name="l00342"></a>00342  call <a class="code" href="initial_8f90.html#aa3d543e8caceb0c26b94720e00c38e61">copyExtra</a>
+<a name="l00343"></a>00343  <span class="keyword">write</span>(*,*)<span class="stringliteral">&#39;copyExtra finished&#39;</span>
+<a name="l00344"></a>00344 
+<a name="l00345"></a>00345 <span class="keyword">end subroutine flipclone</span>
+<a name="l00346"></a>00346 
+<a name="l00347"></a>00347 <span class="comment">!subroutine displace(xc)</span>
+<a name="l00348"></a>00348 <span class="comment">! !! displace - shifts density matrix by &#39;xc&#39; fm in xa direction</span>
+<a name="l00349"></a>00349 <span class="comment">! use mesh</span>
+<a name="l00350"></a>00350 <span class="comment">! implicit none</span>
+<a name="l00351"></a>00351 <span class="comment">!</span>
+<a name="l00352"></a>00352 <span class="comment">! real*8, intent(in) :: xc</span>
+<a name="l00353"></a>00353 <span class="comment">!</span>
+<a name="l00354"></a>00354 <span class="comment">! integer                       :: ixa, ixr, iixr, ki</span>
+<a name="l00355"></a>00355 <span class="comment">! real*8, dimension(Nxa,Nxr)    :: d2_re, d2_im  !working matrix</span>
+<a name="l00356"></a>00356 <span class="comment">! real*8, dimension(-Nxa2:Nxa2) :: row_re, row_im</span>
+<a name="l00357"></a>00357 <span class="comment">! real*8, dimension(-Nxa2:Nxa2) :: rxc !vector of shifted coordinates</span>
+<a name="l00358"></a>00358 <span class="comment">!</span>
+<a name="l00359"></a>00359 <span class="comment">! ki=1</span>
+<a name="l00360"></a>00360 <span class="comment">!</span>
+<a name="l00361"></a>00361 <span class="comment">! if(.not.isDenX) then</span>
+<a name="l00362"></a>00362 <span class="comment">!  write(*,*)&#39;displace called on non x-space matrix, wtf?&#39;</span>
+<a name="l00363"></a>00363 <span class="comment">!  stop</span>
+<a name="l00364"></a>00364 <span class="comment">! endif</span>
+<a name="l00365"></a>00365 <span class="comment">!</span>
+<a name="l00366"></a>00366 <span class="comment">! do ixa=-Nxa2,Nxa2</span>
+<a name="l00367"></a>00367 <span class="comment">!  rxc(ixa)=xa(ixa)-xc</span>
+<a name="l00368"></a>00368 <span class="comment">!  if(rxc(ixa)&lt;xa(-Nxa2))then</span>
+<a name="l00369"></a>00369 <span class="comment">!   rxc(ixa)=rxc(ixa)+2*xa(Nxa2)</span>
+<a name="l00370"></a>00370 <span class="comment">!  elseif(rxc(ixa)&gt;xa(Nxa2)) then</span>
+<a name="l00371"></a>00371 <span class="comment">!   rxc(ixa)=rxc(ixa)-2*xa(Nxa2)</span>
+<a name="l00372"></a>00372 <span class="comment">!  endif</span>
+<a name="l00373"></a>00373 <span class="comment">! enddo</span>
+<a name="l00374"></a>00374 <span class="comment">!</span>
+<a name="l00375"></a>00375 <span class="comment">!</span>
+<a name="l00376"></a>00376 <span class="comment">! do ixr=-Nxr2,Nxr2</span>
+<a name="l00377"></a>00377 <span class="comment">!  !construct row vector in -Nxa2,Nxa2 form</span>
+<a name="l00378"></a>00378 <span class="comment">!  do ixa=-Nxa2,Nxa2</span>
+<a name="l00379"></a>00379 <span class="comment">!   row_re(ixa)=DBLE(getDen(ixa,ixr))</span>
+<a name="l00380"></a>00380 <span class="comment">!   row_im(ixa)=DIMAG(getDen(ixa,ixr))</span>
+<a name="l00381"></a>00381 <span class="comment">!  enddo</span>
+<a name="l00382"></a>00382 <span class="comment">!</span>
+<a name="l00383"></a>00383 <span class="comment">!  do ixa=-Nxa2,Nxa2-1</span>
+<a name="l00384"></a>00384 <span class="comment">!   call LIN_INT(xa,row_re,Nxa+1,rxc(ixa),d2_re(iNxa2(ixa),iixr),ki)</span>
+<a name="l00385"></a>00385 <span class="comment">!   call LIN_INT(xa,row_im,Nxa+1,rxc(ixa),d2_im(iNxa2(ixa),iixr),ki)</span>
+<a name="l00386"></a>00386 <span class="comment">!  enddo</span>
+<a name="l00387"></a>00387 <span class="comment">! enddo</span>
+<a name="l00388"></a>00388 <span class="comment">!</span>
+<a name="l00389"></a>00389 <span class="comment">! denmat=cmplx(d2_re,d2_im,8)</span>
+<a name="l00390"></a>00390 <span class="comment">!</span>
+<a name="l00391"></a>00391 <span class="comment">!end subroutine displace</span>
+<a name="l00392"></a>00392 
+<a name="l00393"></a>00393 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+<a name="l00394"></a>00394 
+<a name="l00395"></a><a class="code" href="initial_8f90.html#a00ff7d260d65e323892041631c2343bc">00395</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#a00ff7d260d65e323892041631c2343bc">getX12</a>(ixa, ixr, x1, x2)
+<a name="l00396"></a>00396 <span class="comment">!! getX12 - converts ixa, ixr grid indices to values of x1,x2 space and</span>
+<a name="l00397"></a>00397 <span class="comment">!maintains periodicity.</span>
+<a name="l00398"></a>00398  use <span class="keywordflow">mesh</span>
+<a name="l00399"></a>00399  use <span class="keywordflow">prec_def</span>
+<a name="l00400"></a>00400  <span class="keyword">implicit none</span>
 <a name="l00401"></a>00401 
-<a name="l00402"></a>00402  <span class="keywordtype">real*8</span> :: xa1,xr1
-<a name="l00403"></a>00403 
-<a name="l00404"></a>00404  xa1=<a class="code" href="namespacemesh.html#af9469b274e48a8fcc34f1c8df7976271">xa</a>(ixa)
-<a name="l00405"></a>00405  xr1=<a class="code" href="namespacemesh.html#a0351493d48c86a4a92f34aa94f8cc099">xr</a>(ixr)
+<a name="l00402"></a>00402  <span class="keywordtype">integer</span>,     <span class="keywordtype">intent(in)</span>  :: ixa, ixr <span class="comment">!human-read index of grid in xa,xr space</span>
+<a name="l00403"></a>00403  <span class="keywordtype">real (Long)</span>, <span class="keywordtype">intent(out)</span> :: x1,x2    <span class="comment">!x,x&#39; position in x,x&#39; space</span>
+<a name="l00404"></a>00404 
+<a name="l00405"></a>00405  <span class="keywordtype">real*8</span> :: xa1,xr1
 <a name="l00406"></a>00406 
-<a name="l00407"></a>00407  call <a class="code" href="initial_8f90.html#aa274d8457716dc63d8ed63a03a880a19">getrX12</a>(xa1,xr1,x1,x2)
-<a name="l00408"></a>00408 
-<a name="l00409"></a>00409 <span class="comment">! x1=xa(ixa)+0.5d0*xr(ixr)</span>
-<a name="l00410"></a>00410 <span class="comment">! x2=xa(ixa)-0.5d0*xr(ixr)</span>
-<a name="l00411"></a>00411 <span class="comment">!</span>
-<a name="l00412"></a>00412 <span class="comment">! ! if xx is outside the box, move it in periodically</span>
-<a name="l00413"></a>00413 <span class="comment">! if(x1.gt.xLa)x1=x1-xLa-xLa</span>
-<a name="l00414"></a>00414 <span class="comment">! if(x1.lt.-xLa)x1=x1+xLa+xLa</span>
-<a name="l00415"></a>00415 <span class="comment">! if(x2.gt.xLa)x2=x2-xLa-xLa</span>
-<a name="l00416"></a>00416 <span class="comment">! if(x2.lt.-xLa)x2=x2+xLa+xLa</span>
-<a name="l00417"></a>00417 
-<a name="l00418"></a>00418 <span class="keyword">end subroutine getX12</span>
-<a name="l00419"></a>00419 
-<a name="l00420"></a>00420 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1</span>
-<a name="l00421"></a>00421 
-<a name="l00422"></a><a class="code" href="initial_8f90.html#aa274d8457716dc63d8ed63a03a880a19">00422</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#aa274d8457716dc63d8ed63a03a880a19">getrX12</a>(xa1,xr1,x1,x2)
-<a name="l00423"></a>00423  <span class="comment">!! getrX12 - converst xa,xr coordinates to x1,x2 and maintains periodicity</span>
-<a name="l00424"></a>00424  use <span class="keywordflow">mesh</span>
-<a name="l00425"></a>00425  <span class="keyword">implicit none</span>
-<a name="l00426"></a>00426 
-<a name="l00427"></a>00427  <span class="keywordtype">real*8</span>, <span class="keywordtype">intent(in)</span>  :: xa1,xr1
-<a name="l00428"></a>00428  <span class="keywordtype">real*8</span>, <span class="keywordtype">intent(out)</span> :: x1,x2
+<a name="l00407"></a>00407  xa1=<a class="code" href="namespacemesh.html#af9469b274e48a8fcc34f1c8df7976271">xa</a>(ixa)
+<a name="l00408"></a>00408  xr1=<a class="code" href="namespacemesh.html#a0351493d48c86a4a92f34aa94f8cc099">xr</a>(ixr)
+<a name="l00409"></a>00409 
+<a name="l00410"></a>00410  call <a class="code" href="initial_8f90.html#aa274d8457716dc63d8ed63a03a880a19">getrX12</a>(xa1,xr1,x1,x2)
+<a name="l00411"></a>00411 
+<a name="l00412"></a>00412 <span class="comment">! x1=xa(ixa)+0.5d0*xr(ixr)</span>
+<a name="l00413"></a>00413 <span class="comment">! x2=xa(ixa)-0.5d0*xr(ixr)</span>
+<a name="l00414"></a>00414 <span class="comment">!</span>
+<a name="l00415"></a>00415 <span class="comment">! ! if xx is outside the box, move it in periodically</span>
+<a name="l00416"></a>00416 <span class="comment">! if(x1.gt.xLa)x1=x1-xLa-xLa</span>
+<a name="l00417"></a>00417 <span class="comment">! if(x1.lt.-xLa)x1=x1+xLa+xLa</span>
+<a name="l00418"></a>00418 <span class="comment">! if(x2.gt.xLa)x2=x2-xLa-xLa</span>
+<a name="l00419"></a>00419 <span class="comment">! if(x2.lt.-xLa)x2=x2+xLa+xLa</span>
+<a name="l00420"></a>00420 
+<a name="l00421"></a>00421 <span class="keyword">end subroutine getX12</span>
+<a name="l00422"></a>00422 
+<a name="l00423"></a>00423 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1</span>
+<a name="l00424"></a>00424 
+<a name="l00425"></a><a class="code" href="initial_8f90.html#aa274d8457716dc63d8ed63a03a880a19">00425</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#aa274d8457716dc63d8ed63a03a880a19">getrX12</a>(xa1,xr1,x1,x2)
+<a name="l00426"></a>00426  <span class="comment">!! getrX12 - converst xa,xr coordinates to x1,x2 and maintains periodicity</span>
+<a name="l00427"></a>00427  use <span class="keywordflow">mesh</span>
+<a name="l00428"></a>00428  <span class="keyword">implicit none</span>
 <a name="l00429"></a>00429 
-<a name="l00430"></a>00430  x1=xa1+0.5d0*xr1
-<a name="l00431"></a>00431  x2=xa1-0.5d0*xr1
+<a name="l00430"></a>00430  <span class="keywordtype">real*8</span>, <span class="keywordtype">intent(in)</span>  :: xa1,xr1
+<a name="l00431"></a>00431  <span class="keywordtype">real*8</span>, <span class="keywordtype">intent(out)</span> :: x1,x2
 <a name="l00432"></a>00432 
-<a name="l00433"></a>00433 <span class="comment">! if xx is outside the box, move it in periodically</span>
-<a name="l00434"></a>00434  <span class="keyword">if</span>(x1.ge.<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>)x1=x1-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>
-<a name="l00435"></a>00435  <span class="keyword">if</span>(x1.le.-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>)x1=x1+<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>+<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>
-<a name="l00436"></a>00436  <span class="keyword">if</span>(x2.ge.<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>)x2=x2-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>
-<a name="l00437"></a>00437  <span class="keyword">if</span>(x2.le.-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>)x2=x2+<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>+<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>
-<a name="l00438"></a>00438 
-<a name="l00439"></a>00439 <span class="keyword">end subroutine getrX12</span>
-<a name="l00440"></a>00440 
-<a name="l00441"></a>00441 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
-<a name="l00442"></a>00442 
-<a name="l00443"></a><a class="code" href="initial_8f90.html#a95f93172bd89ed6a8d446e339f217cef">00443</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#a95f93172bd89ed6a8d446e339f217cef">getK12</a>(ika,ikr,k1,k2)
-<a name="l00444"></a>00444 <span class="comment">!! getK12 - converts ixa, ixr grid indices to values of x1,x2 space</span>
-<a name="l00445"></a>00445  use <span class="keywordflow">mesh</span>
-<a name="l00446"></a>00446  <span class="keyword">implicit none</span>
-<a name="l00447"></a>00447 
-<a name="l00448"></a>00448  <span class="keywordtype">integer</span>,     <span class="keywordtype">intent(in)</span>  :: ika, ikr <span class="comment">!human-read index of grid in xa,xr space</span>
-<a name="l00449"></a>00449  <span class="keywordtype">real*8</span>, <span class="keywordtype">intent(out)</span> :: k1,k2    <span class="comment">!x,x&#39; position in x,x&#39; space</span>
+<a name="l00433"></a>00433  x1=xa1+0.5d0*xr1
+<a name="l00434"></a>00434  x2=xa1-0.5d0*xr1
+<a name="l00435"></a>00435 
+<a name="l00436"></a>00436 <span class="comment">! if xx is outside the box, move it in periodically</span>
+<a name="l00437"></a>00437  <span class="keyword">if</span>(x1.ge.<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>)x1=x1-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>
+<a name="l00438"></a>00438  <span class="keyword">if</span>(x1.le.-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>)x1=x1+<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>+<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>
+<a name="l00439"></a>00439  <span class="keyword">if</span>(x2.ge.<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>)x2=x2-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>
+<a name="l00440"></a>00440  <span class="keyword">if</span>(x2.le.-<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>)x2=x2+<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>+<a class="code" href="namespacemesh.html#a7b0412308700e4488efc480ace9412b8">xLa</a>
+<a name="l00441"></a>00441 
+<a name="l00442"></a>00442 <span class="keyword">end subroutine getrX12</span>
+<a name="l00443"></a>00443 
+<a name="l00444"></a>00444 <span class="comment">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+<a name="l00445"></a>00445 
+<a name="l00446"></a><a class="code" href="initial_8f90.html#a95f93172bd89ed6a8d446e339f217cef">00446</a> <span class="keyword">subroutine </span><a class="code" href="initial_8f90.html#a95f93172bd89ed6a8d446e339f217cef">getK12</a>(ika,ikr,k1,k2)
+<a name="l00447"></a>00447 <span class="comment">!! getK12 - converts ixa, ixr grid indices to values of x1,x2 space</span>
+<a name="l00448"></a>00448  use <span class="keywordflow">mesh</span>
+<a name="l00449"></a>00449  <span class="keyword">implicit none</span>
 <a name="l00450"></a>00450 
-<a name="l00451"></a>00451  k1=<a class="code" href="namespacemesh.html#acdc9121ee94e3c62c59255106d13fddd">ka</a>(ika)+0.5d0*<a class="code" href="namespacemesh.html#a0eb10f03f0d716aafcb803855dff1b80">kr</a>(ikr)
-<a name="l00452"></a>00452  k2=<a class="code" href="namespacemesh.html#acdc9121ee94e3c62c59255106d13fddd">ka</a>(ika)-0.5d0*<a class="code" href="namespacemesh.html#a0eb10f03f0d716aafcb803855dff1b80">kr</a>(ikr)
+<a name="l00451"></a>00451  <span class="keywordtype">integer</span>,     <span class="keywordtype">intent(in)</span>  :: ika, ikr <span class="comment">!human-read index of grid in xa,xr space</span>
+<a name="l00452"></a>00452  <span class="keywordtype">real*8</span>, <span class="keywordtype">intent(out)</span> :: k1,k2    <span class="comment">!x,x&#39; position in x,x&#39; space</span>
 <a name="l00453"></a>00453 
-<a name="l00454"></a>00454 <span class="comment">! k isn&#39;t periodic, so don&#39;t move periodically - BWB 2010-11-21</span>
-<a name="l00455"></a>00455 <span class="comment">! ! if k1,k2 is outside the box, move it in periodically</span>
-<a name="l00456"></a>00456 <span class="comment">! if(k1.gt.kLa)k1=k1-kLa-kLa</span>
-<a name="l00457"></a>00457 <span class="comment">! if(k1.lt.-kLa)k1=k1+kLa+kLa</span>
-<a name="l00458"></a>00458 <span class="comment">! if(k2.gt.kLa)k2=k2-kLa-kLa</span>
-<a name="l00459"></a>00459 <span class="comment">! if(k2.lt.-kLa)k2=k2+kLa+kLa</span>
-<a name="l00460"></a>00460 
-<a name="l00461"></a>00461 <span class="keyword">end subroutine getK12</span>
-<a name="l00462"></a>00462 
+<a name="l00454"></a>00454  k1=<a class="code" href="namespacemesh.html#acdc9121ee94e3c62c59255106d13fddd">ka</a>(ika)+0.5d0*<a class="code" href="namespacemesh.html#a0eb10f03f0d716aafcb803855dff1b80">kr</a>(ikr)
+<a name="l00455"></a>00455  k2=<a class="code" href="namespacemesh.html#acdc9121ee94e3c62c59255106d13fddd">ka</a>(ika)-0.5d0*<a class="code" href="namespacemesh.html#a0eb10f03f0d716aafcb803855dff1b80">kr</a>(ikr)
+<a name="l00456"></a>00456 
+<a name="l00457"></a>00457 <span class="comment">! k isn&#39;t periodic, so don&#39;t move periodically - BWB 2010-11-21</span>
+<a name="l00458"></a>00458 <span class="comment">! ! if k1,k2 is outside the box, move it in periodically</span>
+<a name="l00459"></a>00459 <span class="comment">! if(k1.gt.kLa)k1=k1-kLa-kLa</span>
+<a name="l00460"></a>00460 <span class="comment">! if(k1.lt.-kLa)k1=k1+kLa+kLa</span>
+<a name="l00461"></a>00461 <span class="comment">! if(k2.gt.kLa)k2=k2-kLa-kLa</span>
+<a name="l00462"></a>00462 <span class="comment">! if(k2.lt.-kLa)k2=k2+kLa+kLa</span>
+<a name="l00463"></a>00463 
+<a name="l00464"></a>00464 <span class="keyword">end subroutine getK12</span>
+<a name="l00465"></a>00465 
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -540,7 +543,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Sep 8 2011 13:32:37 for demagoque by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Sep 12 2011 13:47:05 for demagoque by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

@@ -56,6 +56,7 @@
 !! <tr><td> 1 </td><td>  nonlocal meanfield harmonic oscillator</td></tr>
 !! <tr><td> 2 </td><td>  Skyrme-like contact potential (local density dependent) </td></tr>
 !! <tr><td> 3 </td><td> same as pot=0, but with exact evolution from Chin, Krotsheck, Phys Rev E72, 036705 (2005) </td></tr>
+!! <tr><td> 4 </td><td> external HO with effective 1D nonpolynomial meanfield from Mateo, Delgado, Malomed, Phys Rev A 83, 053610 (2011) </td></tr>
 !! </table>
 !!
 !! \section options Options
@@ -316,6 +317,7 @@ END PROGRAM dmtdhf
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! reads data from standard input
 SUBROUTINE getStdIn
+ use bexception
  use input_parameters
  use bstring
   USE mesh
@@ -394,12 +396,15 @@ SUBROUTINE getStdIn
 
  !set default options
  initialSeparation=0d0  !don't use initial separation
+ initState_gaussian=.false.
  initState_gaussianNuclear=.false.
  initState_cosine=.false.
  initState_kdelta=.false.
  initState_plane=.false.
  Nmax=0
  norm_thy=0d0
+ unitSystem_bec=.false.
+ unitSystem_nuclear=.true.
  useImCutoff=.false.
  useFlipClone=.false.
  splitOperatorMethod=0  !don't use Split Operator Method
@@ -412,23 +417,55 @@ SUBROUTINE getStdIn
   if(isComment(inline))cycle
 
   call findFirstWord(inline,' ',ibeg,iend)
-!  read(inline,*)idummy
-!  write(*,*)idummy
 
   !if it's the sentinel, then exit loop
   if(inline(ibeg:iend)=="END_OF_OPTIONS") then
 !   write(*,*)'input sentinel reached, exiting input loop'
    exit
-  endif
+  endif !inline
+ enddo !while true
 
-  select case(inline(ibeg:iend))
+  call procOptionLine(inline)
 
-   case("initialSeparation")
-    read(inline(iend+1:len(inline)),*)initialSeparation
-    write(*,*)'Initial Separation, initialSeparation=' &
-              ,initialSeparation,'fm'
+ !verify option dependencies
 
-   case("initState_gaussianNuclear")
+ if(useFlipClone.and.abs(initialSeparation)<xLa/Nxa)then
+  write(stderr,*)
+  write(stderr,*)'*****'
+  write(stderr,*)'getStdIn: useFlipClone is set, but not initialSeparation!'
+  write(stderr,*)'getStdIn: Setting initialSeparation to half xLa'
+  write(stderr,*)'*****'
+  write(stderr,*)
+
+  initialSeparation=xLa/2d0
+ endif
+
+END SUBROUTINE getStdIn
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Processes line of options
+subroutine procOptionLine(inline)
+ use bexception
+ use bstring
+ use input_parameters
+ use mesh
+ implicit none
+
+ character(*), intent(in) :: inline !< line to be processed
+
+ integer :: ibeg,iend
+
+ call findFirstWord(inline,' ',ibeg,iend)
+
+ select case(inline(ibeg:iend))
+
+  case("initialSeparation")
+   read(inline(iend+1:len(inline)),*)initialSeparation
+   write(*,*)'Initial Separation, initialSeparation=' &
+             ,initialSeparation,'fm'
+
+  case("initState_gaussianNuclear")
     read(inline(iend+1:len(inline)),*)Nmax
     initState_gaussianNuclear=.true.
     norm_thy=norm_thy+Nmax+1
@@ -462,6 +499,15 @@ SUBROUTINE getStdIn
     write(*,*)'                     initState_plane_number=',initState_plane_number
     write(*,*)'                     initState_cosine_norm  =',initState_plane_norm
     write(*,*)'                     initState_cosine_shift =',initState_plane_shift
+
+   case("pot4")
+    read(inline(iend+1:len(inline)),*)ho_mateo_wz, ho_mateo_wt, &
+                                      ho_mateo_scat, ho_mateo_Npart
+    initState_gaussian=.true.
+    write(*,*)'Potential 4 options: ho_mateo_wz=',ho_mateo_wz
+    write(*,*)'                     ho_mateo_wt=',ho_mateo_wt
+    write(*,*)'                     ho_mateo_scat=',ho_mateo_scat
+    write(*,*)'                     ho_mateo_Npart=',ho_mateo_Npart
   
    case("splitOperatorMethod")
     read(inline(iend+1:len(inline)),*)splitOperatorMethod
@@ -473,29 +519,35 @@ SUBROUTINE getStdIn
     write(*,*)'Using imaginary off-diagonal cutoff, w0,x0,d0=' &
               ,cutoff_w0,cutoff_x0,cutoff_d0
 
+   case("unitSystem")
+    ! reset unit system declaration so we can specify a new one.
+    unitSystem_bec=.false.
+    unitSystem_nuclear=.false.
+
+    call findFirstWord(inline(iend+1:len(inline)),' ',ibeg,iend)
+    ibeg=ibeg+10  !10 is length of string 'unitSystem' (previous iend)
+    iend=iend+10
+    select case(inline(ibeg:iend))
+     case("bec")
+      unitSystem_bec=.true.
+      write(*,*)'Defining unit system: bec'
+
+     case("nuclear")
+      unitSystem_nuclear=.true.
+      write(*,*)'Defining unit system: nuclear'
+
+     case default
+      call throwException('getStdIn: invalid unit system chosen: '//inline(ibeg:iend),BEXCEPTION_FATAL)
+     
+    end select ! unitSystem
+
    case("useFlipClone")
     useFlipClone=.true.
     write(*,*)'Making symmetric collision with flipClone'
 
    case default
-    write(*,*)'***'
-    write(*,*)'Option does not exist: ' // inline(ibeg:iend) // '. Skipping input line.'
-    write(*,*)'***'
-  end select
+    call throwException('getStdIn: Option does not exist: ' // inline(ibeg:iend),BEXCEPTION_FATAL)
 
- enddo
+  end select ! inline
 
- !verify option dependencies
-
- if(useFlipClone.and.abs(initialSeparation)<xLa/Nxa)then
-  write(stderr,*)
-  write(stderr,*)'*****'
-  write(stderr,*)'getStdIn: useFlipClone is set, but not initialSeparation!'
-  write(stderr,*)'getStdIn: Setting initialSeparation to half xLa'
-  write(stderr,*)'*****'
-  write(stderr,*)
-
-  initialSeparation=xLa/2d0
- endif
-
-END SUBROUTINE getStdIn
+end subroutine procOptionLine

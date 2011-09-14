@@ -502,6 +502,8 @@ end function getWeight
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine getPotX(potX,potType,ix)
+ use bexception
+ use input_parameters
  use mesh
  use prec_def
  implicit none
@@ -522,12 +524,45 @@ subroutine getPotX(potX,potType,ix)
    call potSkyrme(potX,ix)
   case (3)
    call potHOexact(potX,ix)
+  case (4)
+   call potBEC_1D_HO_Mateo2011(potX,ix,ho_mateo_wz,ho_mateo_wt,ho_mateo_scat,ho_mateo_Npart)
   case default
-   write(*,*)'getPotX: Improper potential type:',potType,'Assuming no potential'
+   call throwException('getPotX: improper potential type', BEXCEPTION_FATAL)
    potX=0.d0
  end select
 
 end subroutine getPotX
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> calculates potential due to a 3D harmonic trap, but with trapping potential
+!! much greater in z direction, such that it can be described with modified
+!! 1D GPE.
+subroutine potBEC_1D_HO_Mateo2011(potX,ix,wz,wt,scat,Npart)
+ use mesh
+ use phys_cons
+ use prec_def
+ implicit none
+
+ real (Long),  intent(out) :: potX
+ integer,      intent(in)  :: ix
+
+ !> angular frequency of harmonic trap in z (elongated) direction
+ real (Long),  intent(in)  :: wz
+
+ !> angular frequency of harmonic trap in transverse direction
+ real (Long),  intent(in)  :: wt
+
+ !> s-wave scattering length of particle
+ real (Long), intent(in) :: scat
+
+ !> total number of particles in condensate
+ real (Long), intent(in) :: Npart
+
+ potX=0.5_Long*m0*wz**2*xa(ix)**2 &
+      +hbar*wt*sqrt(1_Long+4_Long*scat*Npart*getDenX(ix,0))
+
+end subroutine potBEC_1D_HO_Mateo2011
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

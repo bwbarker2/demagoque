@@ -10,16 +10,14 @@ Stores mathematical and physical constants, both in SI units and user-\/defined 
 \subsection*{Functions/Subroutines}
 \begin{DoxyCompactItemize}
 \item 
-subroutine \hyperlink{namespacephys__cons_a2197fe7eff35572113dcf41a6493794c}{phys\_\-cons\_\-initialize} ()
-\begin{DoxyCompactList}\small\item\em Initializes module, assumes current system of units is SI. \item\end{DoxyCompactList}\item 
-subroutine \hyperlink{namespacephys__cons_abfc9a7567c3e76fdbbad91b88b46426e}{phys\_\-cons\_\-initialize\_\-SI}
-\item 
 subroutine \hyperlink{namespacephys__cons_ab13f84d8b6f574eb73870a2964a82b8b}{phys\_\-cons\_\-initializeNuclear}
-\begin{DoxyCompactList}\small\item\em Initializes physical constants, using nuclear system: \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Initializes physical constants, using nuclear system: \item\end{DoxyCompactList}\item 
+subroutine \hyperlink{namespacephys__cons_ae56f25b6648518608cb32e16cfce196e}{phys\_\-cons\_\-initializeBEC}
+\begin{DoxyCompactList}\small\item\em Initializes physical constants for BEC evolution (87-\/Rb) \item\end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-complex $\ast$16, parameter \hyperlink{namespacephys__cons_af15f96806bfb6b9c6b1a279971d5d34b}{imagi} = cmplx(0.d0, 1.d0, 8)
+complex $\ast$16, parameter \hyperlink{namespacephys__cons_a0dbb22856790b16e206de451e9cdd74a}{imagi} = cmplx(0.d0, 1.d0, 8)
 \item 
 REAL(long), parameter \hyperlink{namespacephys__cons_aae3c6cb8ae765b0262bb110ff739ba9d}{pi} = 4d0$\ast$atan(1d0)
 \item 
@@ -27,6 +25,22 @@ real(long), parameter \hyperlink{namespacephys__cons_aa8683f00f4216acc1822dfcb85
 \item 
 real(long), parameter \hyperlink{namespacephys__cons_a369d33713444a99a71f80a74c0652d4e}{invsqrt2pi} = 1d0/sqrt(2d0$\ast$pi)
 \item 
+real(Long), parameter \hyperlink{namespacephys__cons_a41d46c36bfd57d8d6d1721791aa48ae2}{MASS\_\-REL\_\-RUBIDIUM\_\-87} = 86.909180527\_\-Long
+\begin{DoxyCompactList}\small\item\em relative atomic mass of 87 Rubidium, in u, from Audi 2003 \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_afb707c156dff06d8cfcf41488ce7aeda}{MASS\_\-REL\_\-RUBIDIUM\_\-87\_\-D} = 0.000000013\_\-Long
+\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a9e80f5448f5f42cf9983890809e55d88}{MASS\_\-NEUTRON\_\-MEV\_\-C2} = 939.565379\_\-Long
+\begin{DoxyCompactList}\small\item\em Mass of the neutron, in MeV/c$^{\mbox{$^\wedge$2}}$ , from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_ab5fb46dc243eb307a344a134a593edd0}{MASS\_\-NEUTRON\_\-MEV\_\-C2\_\-D} = 0.000021\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a3460d18828c87b266ab35b1cdeb4a0a5}{MASS\_\-PROTON\_\-MEV\_\-C2} = 938.272046\_\-Long
+\begin{DoxyCompactList}\small\item\em Mass of the proton, in MeV/c$^{\mbox{$^\wedge$2}}$ , from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a3299e2ce8c6c720ed740eff7968b27a8}{MASS\_\-PROTON\_\-MEV\_\-C2\_\-D} = 0.000021\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_aed64b5904d4665ea8272a82b187b78c9}{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C} = 197.3269718\_\-Long
+\begin{DoxyCompactList}\small\item\em Planck's constant divided by 2π, in MeV fm/c, from 2010 CODATA. \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a62594785e48a010b70b6d8320dc50269}{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C\_\-D} = 0.0000044\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
 real(Long), parameter \hyperlink{namespacephys__cons_ae265fad966cfc841f9a073a52955d742}{SI\_\-SPEED\_\-OF\_\-LIGHT} = 299792458d0
 \begin{DoxyCompactList}\small\item\em speed of light in vacuum, c, in m s$^{\mbox{-\/1}}$ , from 2010 CODATA recommended values \item\end{DoxyCompactList}\item 
 real(Long), parameter \hyperlink{namespacephys__cons_a5547546b06eb8853e52e304b25cc7596}{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D} = 0d0
@@ -39,6 +53,10 @@ real(Long), parameter \hyperlink{namespacephys__cons_af8ab82739d58ac3a1e1d9c97d3
 \begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
 real(Long) \hyperlink{namespacephys__cons_af0b754235993060b14fc81b7d1f702a5}{PLANCKS\_\-CONSTANT\_\-HBAR}
 \begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a0a98df5d38297f3acc9d5557b4080055}{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT} = 1.660538921e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em atomic mass constant, u, in kg, from 2010 CODATA \item\end{DoxyCompactList}\item 
+real(Long), parameter \hyperlink{namespacephys__cons_a6e13c059ed2f1228592194ed5f16222c}{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT\_\-D} = 0.000000073e-\/27\_\-Long
+\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
 real(Long), parameter \hyperlink{namespacephys__cons_ab117ad83bb79e4ed199d17f3c63ec4b3}{SI\_\-MASS\_\-NEUTRON} = 1.674927351e-\/27\_\-Long
 \begin{DoxyCompactList}\small\item\em mass of the neutron, m$_{\mbox{n}}$ , in kg, from 2010 CODATA \item\end{DoxyCompactList}\item 
 real(Long), parameter \hyperlink{namespacephys__cons_af635c94d544c5bc6dcb05186a9f81d84}{SI\_\-MASS\_\-NEUTRON\_\-D} = 0.000000074e-\/27\_\-Long
@@ -53,79 +71,43 @@ real(Long) \hyperlink{namespacephys__cons_a20e8ed3d7ff389588ce024048c5ccf85}{MAS
 \begin{DoxyCompactList}\small\item\em in current units \item\end{DoxyCompactList}\item 
 REAL(long), parameter \hyperlink{namespacephys__cons_a4b10513970a98ad78b85723c60d9a8b6}{rho0} = 0.16d0
 \item 
-REAL(long), parameter \hyperlink{namespacephys__cons_a2d3539e3579b581a4e69eff7347b4fa2}{hbc} = 197.326963d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_a030a10874bc73b7d042adb32fad75614}{hbc2} = \hyperlink{namespacephys__cons_a2d3539e3579b581a4e69eff7347b4fa2}{hbc}$\ast$\hyperlink{namespacephys__cons_a2d3539e3579b581a4e69eff7347b4fa2}{hbc}
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_ae2a4cb4e421fe399f19d0729b5617fed}{mp} = 938.272013d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_ad68aaba74b75e1e13f1367c1eb0904c1}{mn} = 939.565560d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_afa35c20a6e2a70b58142d10071eeef10}{m0} = (\hyperlink{namespacephys__cons_ae2a4cb4e421fe399f19d0729b5617fed}{mp}+\hyperlink{namespacephys__cons_ad68aaba74b75e1e13f1367c1eb0904c1}{mn})$\ast$0.5d0
+REAL(long) \hyperlink{namespacephys__cons_a10c52cbe8a9d32eb836e12b67ef7da3b}{hbar}
+\begin{DoxyCompactList}\small\item\em Planck's constant in current unit system. \item\end{DoxyCompactList}\item 
+REAL(long) \hyperlink{namespacephys__cons_afa35c20a6e2a70b58142d10071eeef10}{m0}
 \begin{DoxyCompactList}\small\item\em mass of particle being evolved in time \item\end{DoxyCompactList}\item 
-REAL(Long), parameter \hyperlink{namespacephys__cons_a02e8bb2c808e0085a317bf36ff79ae2a}{a0} = 931.494028d0
-\item 
-REAL(long), parameter \hyperlink{namespacephys__cons_ad97ad749ef4f8f66c56a0facb7394cb5}{hm} = \hyperlink{namespacephys__cons_a2d3539e3579b581a4e69eff7347b4fa2}{hbc}$\ast$\hyperlink{namespacephys__cons_a2d3539e3579b581a4e69eff7347b4fa2}{hbc}/(2.d0$\ast$\hyperlink{namespacephys__cons_afa35c20a6e2a70b58142d10071eeef10}{m0})
-\item 
 REAL(long), parameter \hyperlink{namespacephys__cons_a553e3e17652770308e6bffcb8fcb5a95}{deg} = 4.d0
-\item 
-real(Long), parameter \hyperlink{namespacephys__cons_a9e80f5448f5f42cf9983890809e55d88}{MASS\_\-NEUTRON\_\-MEV\_\-C2} = 939.565379\_\-Long
-\begin{DoxyCompactList}\small\item\em Mass of the neutron, in MeV/c$^{\mbox{$^\wedge$2}}$ , from 2010 CODATA. \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_ab5fb46dc243eb307a344a134a593edd0}{MASS\_\-NEUTRON\_\-MEV\_\-C2\_\-D} = 0.000021\_\-Long
-\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_a3460d18828c87b266ab35b1cdeb4a0a5}{MASS\_\-PROTON\_\-MEV\_\-C2} = 938.272046\_\-Long
-\begin{DoxyCompactList}\small\item\em Mass of the proton, in MeV/c$^{\mbox{$^\wedge$2}}$ , from 2010 CODATA. \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_a3299e2ce8c6c720ed740eff7968b27a8}{MASS\_\-PROTON\_\-MEV\_\-C2\_\-D} = 0.000021\_\-Long
-\begin{DoxyCompactList}\small\item\em uncertainty \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_a7efa4134b36e258435906be7fd9ca165}{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM} = 197.3269718\_\-Long
-\begin{DoxyCompactList}\small\item\em Planck's constant divided by 2π times speed of light, in MeV fm, from 2010 CODATA. \item\end{DoxyCompactList}\item 
-real(Long), parameter \hyperlink{namespacephys__cons_a86cb86e86548ce7318d0143b2f4b2f88}{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM\_\-D} = 0.0000044\_\-Long
 \end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
 Stores mathematical and physical constants, both in SI units and user-\/defined units. \begin{Desc}
-\item[\hyperlink{todo__todo000001}{Todo}]give citations for all units 
-
-code them in SI, provide conversion routines \end{Desc}
-
-
-\begin{Desc}
 \item[\hyperlink{todo__todo000002}{Todo}]give citations for all units 
 
-code them in SI, provide conversion routines, see class\_\-PhysicalConstants for current work \end{Desc}
+code them in SI, provide conversion routines, see \hyperlink{namespaceclass__PhysicalConstants}{class\_\-PhysicalConstants} for current work \end{Desc}
 
 
 \subsection{Function/Subroutine Documentation}
-\hypertarget{namespacephys__cons_a2197fe7eff35572113dcf41a6493794c}{
-\index{phys\_\-cons@{phys\_\-cons}!phys\_\-cons\_\-initialize@{phys\_\-cons\_\-initialize}}
-\index{phys\_\-cons\_\-initialize@{phys\_\-cons\_\-initialize}!phys_cons@{phys\_\-cons}}
-\subsubsection[{phys\_\-cons\_\-initialize}]{\setlength{\rightskip}{0pt plus 5cm}subroutine phys\_\-cons::phys\_\-cons\_\-initialize (
+\hypertarget{namespacephys__cons_ae56f25b6648518608cb32e16cfce196e}{
+\index{phys\_\-cons@{phys\_\-cons}!phys\_\-cons\_\-initializeBEC@{phys\_\-cons\_\-initializeBEC}}
+\index{phys\_\-cons\_\-initializeBEC@{phys\_\-cons\_\-initializeBEC}!phys_cons@{phys\_\-cons}}
+\subsubsection[{phys\_\-cons\_\-initializeBEC}]{\setlength{\rightskip}{0pt plus 5cm}subroutine phys\_\-cons::phys\_\-cons\_\-initializeBEC (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
 )}}
-\label{namespacephys__cons_a2197fe7eff35572113dcf41a6493794c}
+\label{namespacephys__cons_ae56f25b6648518608cb32e16cfce196e}
 
 
-Initializes module, assumes current system of units is SI. 
+Initializes physical constants for BEC evolution (87-\/Rb) 
 
 
+\begin{DoxyEnumerate}
+\item length = micrometer -\/ um
+\item mass = atomic mass unit -\/ u
+\item time = millisecond -\/ ms 
+\end{DoxyEnumerate}
 
-Definition at line 60 of file class\_\-PhysicalConstants.f90.
-
-\hypertarget{namespacephys__cons_abfc9a7567c3e76fdbbad91b88b46426e}{
-\index{phys\_\-cons@{phys\_\-cons}!phys\_\-cons\_\-initialize\_\-SI@{phys\_\-cons\_\-initialize\_\-SI}}
-\index{phys\_\-cons\_\-initialize\_\-SI@{phys\_\-cons\_\-initialize\_\-SI}!phys_cons@{phys\_\-cons}}
-\subsubsection[{phys\_\-cons\_\-initialize\_\-SI}]{\setlength{\rightskip}{0pt plus 5cm}subroutine phys\_\-cons::phys\_\-cons\_\-initialize\_\-SI (
-\begin{DoxyParamCaption}
-{}
-\end{DoxyParamCaption}
-)}}
-\label{namespacephys__cons_abfc9a7567c3e76fdbbad91b88b46426e}
-
-
-Definition at line 65 of file class\_\-PhysicalConstants.f90.
+Definition at line 99 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ab13f84d8b6f574eb73870a2964a82b8b}{
 \index{phys\_\-cons@{phys\_\-cons}!phys\_\-cons\_\-initializeNuclear@{phys\_\-cons\_\-initializeNuclear}}
@@ -147,20 +129,22 @@ Initializes physical constants, using nuclear system:
 \item time -\/ femtometer / speed of light -\/ fm/c 
 \end{DoxyEnumerate}
 
-Definition at line 75 of file phys\_\-cons.f90.
+Definition at line 83 of file phys\_\-cons.f90.
+
+
+
+Here is the caller graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=400pt]{namespacephys__cons_ab13f84d8b6f574eb73870a2964a82b8b_icgraph}
+\end{center}
+\end{figure}
+
 
 
 
 \subsection{Variable Documentation}
-\hypertarget{namespacephys__cons_a02e8bb2c808e0085a317bf36ff79ae2a}{
-\index{phys\_\-cons@{phys\_\-cons}!a0@{a0}}
-\index{a0@{a0}!phys_cons@{phys\_\-cons}}
-\subsubsection[{a0}]{\setlength{\rightskip}{0pt plus 5cm}REAL (Long),parameter {\bf phys\_\-cons::a0} = 931.494028d0}}
-\label{namespacephys__cons_a02e8bb2c808e0085a317bf36ff79ae2a}
-
-
-Definition at line 52 of file class\_\-PhysicalConstants.f90.
-
 \hypertarget{namespacephys__cons_a553e3e17652770308e6bffcb8fcb5a95}{
 \index{phys\_\-cons@{phys\_\-cons}!deg@{deg}}
 \index{deg@{deg}!phys_cons@{phys\_\-cons}}
@@ -168,43 +152,29 @@ Definition at line 52 of file class\_\-PhysicalConstants.f90.
 \label{namespacephys__cons_a553e3e17652770308e6bffcb8fcb5a95}
 
 
-Definition at line 55 of file class\_\-PhysicalConstants.f90.
+Definition at line 73 of file phys\_\-cons.f90.
 
-\hypertarget{namespacephys__cons_a2d3539e3579b581a4e69eff7347b4fa2}{
-\index{phys\_\-cons@{phys\_\-cons}!hbc@{hbc}}
-\index{hbc@{hbc}!phys_cons@{phys\_\-cons}}
-\subsubsection[{hbc}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long) {\bf phys\_\-cons::hbc} = 197.326963d0}}
-\label{namespacephys__cons_a2d3539e3579b581a4e69eff7347b4fa2}
-
-
-Definition at line 47 of file class\_\-PhysicalConstants.f90.
-
-\hypertarget{namespacephys__cons_a030a10874bc73b7d042adb32fad75614}{
-\index{phys\_\-cons@{phys\_\-cons}!hbc2@{hbc2}}
-\index{hbc2@{hbc2}!phys_cons@{phys\_\-cons}}
-\subsubsection[{hbc2}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long) {\bf phys\_\-cons::hbc2} = {\bf hbc}$\ast${\bf hbc}}}
-\label{namespacephys__cons_a030a10874bc73b7d042adb32fad75614}
+\hypertarget{namespacephys__cons_a10c52cbe8a9d32eb836e12b67ef7da3b}{
+\index{phys\_\-cons@{phys\_\-cons}!hbar@{hbar}}
+\index{hbar@{hbar}!phys_cons@{phys\_\-cons}}
+\subsubsection[{hbar}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long) {\bf phys\_\-cons::hbar}}}
+\label{namespacephys__cons_a10c52cbe8a9d32eb836e12b67ef7da3b}
 
 
-Definition at line 48 of file class\_\-PhysicalConstants.f90.
-
-\hypertarget{namespacephys__cons_ad97ad749ef4f8f66c56a0facb7394cb5}{
-\index{phys\_\-cons@{phys\_\-cons}!hm@{hm}}
-\index{hm@{hm}!phys_cons@{phys\_\-cons}}
-\subsubsection[{hm}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf phys\_\-cons::hm} = {\bf hbc}$\ast${\bf hbc}/(2.d0$\ast${\bf m0})}}
-\label{namespacephys__cons_ad97ad749ef4f8f66c56a0facb7394cb5}
+Planck's constant in current unit system. 
 
 
-Definition at line 53 of file class\_\-PhysicalConstants.f90.
 
-\hypertarget{namespacephys__cons_af15f96806bfb6b9c6b1a279971d5d34b}{
+Definition at line 71 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a0dbb22856790b16e206de451e9cdd74a}{
 \index{phys\_\-cons@{phys\_\-cons}!imagi@{imagi}}
 \index{imagi@{imagi}!phys_cons@{phys\_\-cons}}
-\subsubsection[{imagi}]{\setlength{\rightskip}{0pt plus 5cm}complex $\ast$parameter {\bf phys\_\-cons::imagi} = cmplx(0.d0, 1.d0, 8)}}
-\label{namespacephys__cons_af15f96806bfb6b9c6b1a279971d5d34b}
+\subsubsection[{imagi}]{\setlength{\rightskip}{0pt plus 5cm}complex$\ast$16,parameter {\bf phys\_\-cons::imagi} = cmplx(0.d0, 1.d0, 8)}}
+\label{namespacephys__cons_a0dbb22856790b16e206de451e9cdd74a}
 
 
-Definition at line 11 of file class\_\-PhysicalConstants.f90.
+Definition at line 11 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_aa8683f00f4216acc1822dfcb85b1ee00}{
 \index{phys\_\-cons@{phys\_\-cons}!invpi@{invpi}}
@@ -213,7 +183,7 @@ Definition at line 11 of file class\_\-PhysicalConstants.f90.
 \label{namespacephys__cons_aa8683f00f4216acc1822dfcb85b1ee00}
 
 
-Definition at line 13 of file class\_\-PhysicalConstants.f90.
+Definition at line 13 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a369d33713444a99a71f80a74c0652d4e}{
 \index{phys\_\-cons@{phys\_\-cons}!invsqrt2pi@{invsqrt2pi}}
@@ -222,12 +192,12 @@ Definition at line 13 of file class\_\-PhysicalConstants.f90.
 \label{namespacephys__cons_a369d33713444a99a71f80a74c0652d4e}
 
 
-Definition at line 14 of file class\_\-PhysicalConstants.f90.
+Definition at line 14 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_afa35c20a6e2a70b58142d10071eeef10}{
 \index{phys\_\-cons@{phys\_\-cons}!m0@{m0}}
 \index{m0@{m0}!phys_cons@{phys\_\-cons}}
-\subsubsection[{m0}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long) {\bf phys\_\-cons::m0} = ({\bf mp}+{\bf mn})$\ast$0.5d0}}
+\subsubsection[{m0}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long) {\bf phys\_\-cons::m0}}}
 \label{namespacephys__cons_afa35c20a6e2a70b58142d10071eeef10}
 
 
@@ -235,7 +205,7 @@ mass of particle being evolved in time
 
 
 
-Definition at line 51 of file class\_\-PhysicalConstants.f90.
+Definition at line 72 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_abeff422917cc48601644e90ab12fb7c0}{
 \index{phys\_\-cons@{phys\_\-cons}!MASS\_\-NEUTRON@{MASS\_\-NEUTRON}}
@@ -248,7 +218,7 @@ in current units
 
 
 
-Definition at line 37 of file class\_\-PhysicalConstants.f90.
+Definition at line 61 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a9e80f5448f5f42cf9983890809e55d88}{
 \index{phys\_\-cons@{phys\_\-cons}!MASS\_\-NEUTRON\_\-MEV\_\-C2@{MASS\_\-NEUTRON\_\-MEV\_\-C2}}
@@ -261,7 +231,7 @@ Mass of the neutron, in MeV/c$^{\mbox{$^\wedge$2}}$ , from 2010 CODATA.
 
 
 
-Definition at line 19 of file phys\_\-cons.f90.
+Definition at line 24 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ab5fb46dc243eb307a344a134a593edd0}{
 \index{phys\_\-cons@{phys\_\-cons}!MASS\_\-NEUTRON\_\-MEV\_\-C2\_\-D@{MASS\_\-NEUTRON\_\-MEV\_\-C2\_\-D}}
@@ -274,7 +244,7 @@ uncertainty
 
 
 
-Definition at line 21 of file phys\_\-cons.f90.
+Definition at line 24 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a20e8ed3d7ff389588ce024048c5ccf85}{
 \index{phys\_\-cons@{phys\_\-cons}!MASS\_\-PROTON@{MASS\_\-PROTON}}
@@ -287,7 +257,7 @@ in current units
 
 
 
-Definition at line 44 of file class\_\-PhysicalConstants.f90.
+Definition at line 68 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a3460d18828c87b266ab35b1cdeb4a0a5}{
 \index{phys\_\-cons@{phys\_\-cons}!MASS\_\-PROTON\_\-MEV\_\-C2@{MASS\_\-PROTON\_\-MEV\_\-C2}}
@@ -300,7 +270,7 @@ Mass of the proton, in MeV/c$^{\mbox{$^\wedge$2}}$ , from 2010 CODATA.
 
 
 
-Definition at line 24 of file phys\_\-cons.f90.
+Definition at line 29 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a3299e2ce8c6c720ed740eff7968b27a8}{
 \index{phys\_\-cons@{phys\_\-cons}!MASS\_\-PROTON\_\-MEV\_\-C2\_\-D@{MASS\_\-PROTON\_\-MEV\_\-C2\_\-D}}
@@ -313,25 +283,29 @@ uncertainty
 
 
 
-Definition at line 26 of file phys\_\-cons.f90.
+Definition at line 31 of file phys\_\-cons.f90.
 
-\hypertarget{namespacephys__cons_ad68aaba74b75e1e13f1367c1eb0904c1}{
-\index{phys\_\-cons@{phys\_\-cons}!mn@{mn}}
-\index{mn@{mn}!phys_cons@{phys\_\-cons}}
-\subsubsection[{mn}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf phys\_\-cons::mn} = 939.565560d0}}
-\label{namespacephys__cons_ad68aaba74b75e1e13f1367c1eb0904c1}
-
-
-Definition at line 50 of file class\_\-PhysicalConstants.f90.
-
-\hypertarget{namespacephys__cons_ae2a4cb4e421fe399f19d0729b5617fed}{
-\index{phys\_\-cons@{phys\_\-cons}!mp@{mp}}
-\index{mp@{mp}!phys_cons@{phys\_\-cons}}
-\subsubsection[{mp}]{\setlength{\rightskip}{0pt plus 5cm}REAL (long),parameter {\bf phys\_\-cons::mp} = 938.272013d0}}
-\label{namespacephys__cons_ae2a4cb4e421fe399f19d0729b5617fed}
+\hypertarget{namespacephys__cons_a41d46c36bfd57d8d6d1721791aa48ae2}{
+\index{phys\_\-cons@{phys\_\-cons}!MASS\_\-REL\_\-RUBIDIUM\_\-87@{MASS\_\-REL\_\-RUBIDIUM\_\-87}}
+\index{MASS\_\-REL\_\-RUBIDIUM\_\-87@{MASS\_\-REL\_\-RUBIDIUM\_\-87}!phys_cons@{phys\_\-cons}}
+\subsubsection[{MASS\_\-REL\_\-RUBIDIUM\_\-87}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::MASS\_\-REL\_\-RUBIDIUM\_\-87} = 86.909180527\_\-Long}}
+\label{namespacephys__cons_a41d46c36bfd57d8d6d1721791aa48ae2}
 
 
-Definition at line 49 of file class\_\-PhysicalConstants.f90.
+relative atomic mass of 87 Rubidium, in u, from Audi 2003 
+
+
+
+Definition at line 19 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_afb707c156dff06d8cfcf41488ce7aeda}{
+\index{phys\_\-cons@{phys\_\-cons}!MASS\_\-REL\_\-RUBIDIUM\_\-87\_\-D@{MASS\_\-REL\_\-RUBIDIUM\_\-87\_\-D}}
+\index{MASS\_\-REL\_\-RUBIDIUM\_\-87\_\-D@{MASS\_\-REL\_\-RUBIDIUM\_\-87\_\-D}!phys_cons@{phys\_\-cons}}
+\subsubsection[{MASS\_\-REL\_\-RUBIDIUM\_\-87\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::MASS\_\-REL\_\-RUBIDIUM\_\-87\_\-D} = 0.000000013\_\-Long}}
+\label{namespacephys__cons_afb707c156dff06d8cfcf41488ce7aeda}
+
+
+Definition at line 19 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_aae3c6cb8ae765b0262bb110ff739ba9d}{
 \index{phys\_\-cons@{phys\_\-cons}!pi@{pi}}
@@ -340,7 +314,7 @@ Definition at line 49 of file class\_\-PhysicalConstants.f90.
 \label{namespacephys__cons_aae3c6cb8ae765b0262bb110ff739ba9d}
 
 
-Definition at line 12 of file class\_\-PhysicalConstants.f90.
+Definition at line 12 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_af0b754235993060b14fc81b7d1f702a5}{
 \index{phys\_\-cons@{phys\_\-cons}!PLANCKS\_\-CONSTANT\_\-HBAR@{PLANCKS\_\-CONSTANT\_\-HBAR}}
@@ -353,29 +327,33 @@ in current units
 
 
 
-Definition at line 30 of file class\_\-PhysicalConstants.f90.
+Definition at line 49 of file phys\_\-cons.f90.
 
-\hypertarget{namespacephys__cons_a7efa4134b36e258435906be7fd9ca165}{
-\index{phys\_\-cons@{phys\_\-cons}!PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM@{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM}}
-\index{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM@{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM}!phys_cons@{phys\_\-cons}}
-\subsubsection[{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM} = 197.3269718\_\-Long}}
-\label{namespacephys__cons_a7efa4134b36e258435906be7fd9ca165}
-
-
-Planck's constant divided by 2π times speed of light, in MeV fm, from 2010 CODATA. 
+\hypertarget{namespacephys__cons_aed64b5904d4665ea8272a82b187b78c9}{
+\index{phys\_\-cons@{phys\_\-cons}!PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C@{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C}}
+\index{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C@{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C}!phys_cons@{phys\_\-cons}}
+\subsubsection[{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C} = 197.3269718\_\-Long}}
+\label{namespacephys__cons_aed64b5904d4665ea8272a82b187b78c9}
 
 
-
-Definition at line 30 of file phys\_\-cons.f90.
-
-\hypertarget{namespacephys__cons_a86cb86e86548ce7318d0143b2f4b2f88}{
-\index{phys\_\-cons@{phys\_\-cons}!PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM\_\-D@{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM\_\-D}}
-\index{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM\_\-D@{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM\_\-D}!phys_cons@{phys\_\-cons}}
-\subsubsection[{PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR\_\-C\_\-MEV\_\-FM\_\-D} = 0.0000044\_\-Long}}
-\label{namespacephys__cons_a86cb86e86548ce7318d0143b2f4b2f88}
+Planck's constant divided by 2π, in MeV fm/c, from 2010 CODATA. 
 
 
-Definition at line 30 of file phys\_\-cons.f90.
+
+Definition at line 34 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a62594785e48a010b70b6d8320dc50269}{
+\index{phys\_\-cons@{phys\_\-cons}!PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C\_\-D@{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C\_\-D}}
+\index{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C\_\-D@{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C\_\-D}!phys_cons@{phys\_\-cons}}
+\subsubsection[{PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::PLANCKS\_\-CONSTANT\_\-HBAR\_\-MEV\_\-FM\_\-C\_\-D} = 0.0000044\_\-Long}}
+\label{namespacephys__cons_a62594785e48a010b70b6d8320dc50269}
+
+
+uncertainty 
+
+
+
+Definition at line 34 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a4b10513970a98ad78b85723c60d9a8b6}{
 \index{phys\_\-cons@{phys\_\-cons}!rho0@{rho0}}
@@ -384,7 +362,33 @@ Definition at line 30 of file phys\_\-cons.f90.
 \label{namespacephys__cons_a4b10513970a98ad78b85723c60d9a8b6}
 
 
-Definition at line 46 of file class\_\-PhysicalConstants.f90.
+Definition at line 70 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a0a98df5d38297f3acc9d5557b4080055}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-ATOMIC\_\-MASS\_\-CONSTANT@{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT}}
+\index{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT@{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-ATOMIC\_\-MASS\_\-CONSTANT} = 1.660538921e-\/27\_\-Long}}
+\label{namespacephys__cons_a0a98df5d38297f3acc9d5557b4080055}
+
+
+atomic mass constant, u, in kg, from 2010 CODATA 
+
+
+
+Definition at line 52 of file phys\_\-cons.f90.
+
+\hypertarget{namespacephys__cons_a6e13c059ed2f1228592194ed5f16222c}{
+\index{phys\_\-cons@{phys\_\-cons}!SI\_\-ATOMIC\_\-MASS\_\-CONSTANT\_\-D@{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT\_\-D}}
+\index{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT\_\-D@{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT\_\-D}!phys_cons@{phys\_\-cons}}
+\subsubsection[{SI\_\-ATOMIC\_\-MASS\_\-CONSTANT\_\-D}]{\setlength{\rightskip}{0pt plus 5cm}real (Long),parameter {\bf phys\_\-cons::SI\_\-ATOMIC\_\-MASS\_\-CONSTANT\_\-D} = 0.000000073e-\/27\_\-Long}}
+\label{namespacephys__cons_a6e13c059ed2f1228592194ed5f16222c}
+
+
+uncertainty 
+
+
+
+Definition at line 52 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ab117ad83bb79e4ed199d17f3c63ec4b3}{
 \index{phys\_\-cons@{phys\_\-cons}!SI\_\-MASS\_\-NEUTRON@{SI\_\-MASS\_\-NEUTRON}}
@@ -397,7 +401,7 @@ mass of the neutron, m$_{\mbox{n}}$ , in kg, from 2010 CODATA
 
 
 
-Definition at line 33 of file class\_\-PhysicalConstants.f90.
+Definition at line 57 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_af635c94d544c5bc6dcb05186a9f81d84}{
 \index{phys\_\-cons@{phys\_\-cons}!SI\_\-MASS\_\-NEUTRON\_\-D@{SI\_\-MASS\_\-NEUTRON\_\-D}}
@@ -410,7 +414,7 @@ uncertainty
 
 
 
-Definition at line 35 of file class\_\-PhysicalConstants.f90.
+Definition at line 59 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a6a740864089f117512dc89ea53f3dc5f}{
 \index{phys\_\-cons@{phys\_\-cons}!SI\_\-MASS\_\-PROTON@{SI\_\-MASS\_\-PROTON}}
@@ -423,7 +427,7 @@ mass of the proton, m$_{\mbox{p}}$ , in kg.
 
 
 
-Definition at line 40 of file class\_\-PhysicalConstants.f90.
+Definition at line 64 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a3c37a18a918519962cfc26597082d53d}{
 \index{phys\_\-cons@{phys\_\-cons}!SI\_\-MASS\_\-PROTON\_\-D@{SI\_\-MASS\_\-PROTON\_\-D}}
@@ -436,7 +440,7 @@ uncertainty
 
 
 
-Definition at line 42 of file class\_\-PhysicalConstants.f90.
+Definition at line 66 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ab49e79c21c913c5857dedf2c555d2c21}{
 \index{phys\_\-cons@{phys\_\-cons}!SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR}}
@@ -449,7 +453,7 @@ Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA.
 
 
 
-Definition at line 26 of file class\_\-PhysicalConstants.f90.
+Definition at line 45 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_af8ab82739d58ac3a1e1d9c97d3cfb4da}{
 \index{phys\_\-cons@{phys\_\-cons}!SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D@{SI\_\-PLANCKS\_\-CONSTANT\_\-HBAR\_\-D}}
@@ -462,7 +466,7 @@ uncertainty
 
 
 
-Definition at line 28 of file class\_\-PhysicalConstants.f90.
+Definition at line 47 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ae265fad966cfc841f9a073a52955d742}{
 \index{phys\_\-cons@{phys\_\-cons}!SI\_\-SPEED\_\-OF\_\-LIGHT@{SI\_\-SPEED\_\-OF\_\-LIGHT}}
@@ -475,7 +479,7 @@ speed of light in vacuum, c, in m s$^{\mbox{-\/1}}$ , from 2010 CODATA recommend
 
 
 
-Definition at line 21 of file class\_\-PhysicalConstants.f90.
+Definition at line 40 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_a5547546b06eb8853e52e304b25cc7596}{
 \index{phys\_\-cons@{phys\_\-cons}!SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D@{SI\_\-SPEED\_\-OF\_\-LIGHT\_\-D}}
@@ -488,7 +492,7 @@ uncertainty
 
 
 
-Definition at line 22 of file class\_\-PhysicalConstants.f90.
+Definition at line 41 of file phys\_\-cons.f90.
 
 \hypertarget{namespacephys__cons_ac31faa4bb5e82aecbdffa3b3d43a1736}{
 \index{phys\_\-cons@{phys\_\-cons}!SPEED\_\-OF\_\-LIGHT@{SPEED\_\-OF\_\-LIGHT}}
@@ -501,5 +505,5 @@ in current units
 
 
 
-Definition at line 23 of file class\_\-PhysicalConstants.f90.
+Definition at line 42 of file phys\_\-cons.f90.
 

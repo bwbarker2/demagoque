@@ -18,6 +18,7 @@ AC_PROG_SED
 # actually removes the default -O2 option from FCFLAGS
 if test X$user_set_fcflags != Xyes; then
  FCFLAGS=`echo ${FCFLAGS} | ${SED} s/\ -O2//`
+ FFLAGS=`echo ${FFLAGS} | ${SED} s/\ -O2//`
 fi
 
 AC_LANG([Fortran])

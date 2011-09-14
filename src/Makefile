@@ -44,9 +44,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_demagoque_OBJECTS = demagoque-bmath.$(OBJEXT) \
-	demagoque-bstring.$(OBJEXT) demagoque-prec_def.$(OBJEXT) \
-	demagoque-cons_laws.$(OBJEXT) \
+am_demagoque_OBJECTS = demagoque-bexception.$(OBJEXT) \
+	demagoque-bmath.$(OBJEXT) demagoque-bstring.$(OBJEXT) \
+	demagoque-prec_def.$(OBJEXT) demagoque-cons_laws.$(OBJEXT) \
 	demagoque-input_parameters.$(OBJEXT) \
 	demagoque-phys_cons.$(OBJEXT) demagoque-lib_lapack.$(OBJEXT) \
 	demagoque-lib_fftw.$(OBJEXT) demagoque-mesh.$(OBJEXT) \
@@ -81,7 +81,7 @@ AUTOHEADER = autoheader
 AUTOMAKE = automake-1.11
 AWK = gawk
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"demagoque\" -DPACKAGE_TARNAME=\"demagoque\" -DPACKAGE_VERSION=\"0.01r33\" -DPACKAGE_STRING=\"demagoque\ 0.01r33\" -DPACKAGE_BUGREPORT=\"barker@nscl.msu.edu\" -DPACKAGE_URL=\"https://launchpad.net/demagoque\" -DPACKAGE=\"demagoque\" -DVERSION=\"0.01r33\" -DHAVE_LIBFFTW3=1 -DHAVE_LIBLAPACK=1
+DEFS = -DPACKAGE_NAME=\"demagoque\" -DPACKAGE_TARNAME=\"demagoque\" -DPACKAGE_VERSION=\"0.01r36\" -DPACKAGE_STRING=\"demagoque\ 0.01r36\" -DPACKAGE_BUGREPORT=\"barker@nscl.msu.edu\" -DPACKAGE_URL=\"https://launchpad.net/demagoque\" -DPACKAGE=\"demagoque\" -DVERSION=\"0.01r36\" -DHAVE_LIBFFTW3=1 -DHAVE_LIBLAPACK=1
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
@@ -90,7 +90,7 @@ F77 = gfortran
 FC = gfortran
 FCFLAGS = -g
 FCFLAGS_f90 = 
-FFLAGS = -g -O2
+FFLAGS = -g
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
@@ -106,16 +106,16 @@ OBJEXT = o
 PACKAGE = demagoque
 PACKAGE_BUGREPORT = barker@nscl.msu.edu
 PACKAGE_NAME = demagoque
-PACKAGE_STRING = demagoque 0.01r33
+PACKAGE_STRING = demagoque 0.01r36
 PACKAGE_TARNAME = demagoque
 PACKAGE_URL = https://launchpad.net/demagoque
-PACKAGE_VERSION = 0.01r33
+PACKAGE_VERSION = 0.01r36
 PATH_SEPARATOR = :
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 0.01r33
+VERSION = 0.01r36
 abs_builddir = /home/bob/proj/DEMAGOQUE/work2/trunk/src
 abs_srcdir = /home/bob/proj/DEMAGOQUE/work2/trunk/src
 abs_top_builddir = /home/bob/proj/DEMAGOQUE/work2/trunk
@@ -159,7 +159,10 @@ top_builddir = ..
 top_srcdir = ..
 AM_FCFLAGS = -fbounds-check -Wall -ggdb -O3
 AM_FCFLAGS_f90 = -g -O3
-demagoque_SOURCES = bmath.f90 bstring.f90 prec_def.f90 cons_laws.f90 input_parameters.f90 phys_cons.f90 lib_lapack.f90 lib_fftw.f90 mesh.f90 time.f90 dmtdhf.f90 ener.f90 \
+AM_FFLAGS = -fbounds-check -Wall -ggdb -O3
+demagoque_SOURCES = bexception.f90 bmath.f90 bstring.f90 prec_def.f90 \
+          cons_laws.f90 input_parameters.f90 phys_cons.f90 lib_lapack.f90 \
+          lib_fftw.f90 mesh.f90 time.f90 dmtdhf.f90 ener.f90 \
           initial.f90 integra.f90 \
           interp.f \
           outAnalHarmonic.f90 formatting.f90 output.f90 \
@@ -261,6 +264,12 @@ distclean-compile:
 
 .f90.obj:
 	$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) `$(CYGPATH_W) '$<'`
+
+demagoque-bexception.o: bexception.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-bexception.o $(FCFLAGS_f90) `test -f 'bexception.f90' || echo '$(srcdir)/'`bexception.f90
+
+demagoque-bexception.obj: bexception.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-bexception.obj $(FCFLAGS_f90) `if test -f 'bexception.f90'; then $(CYGPATH_W) 'bexception.f90'; else $(CYGPATH_W) '$(srcdir)/bexception.f90'; fi`
 
 demagoque-bmath.o: bmath.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-bmath.o $(FCFLAGS_f90) `test -f 'bmath.f90' || echo '$(srcdir)/'`bmath.f90

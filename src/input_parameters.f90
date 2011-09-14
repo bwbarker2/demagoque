@@ -2,6 +2,12 @@ module input_parameters
  use prec_def
  implicit none
 
+ logical     :: initState_gaussian
+ real (Long) :: ho_mateo_wz,   &  !< angular freq in z direction
+                ho_mateo_wt,   &  !< angular freq in transverse direction
+                ho_mateo_scat, &  !< s-wave scattering length
+                ho_mateo_Npart    !< total number of particles
+
  integer :: potInitial    ! potential  with initial state
  integer :: potFinal      ! potential for time evolution
 
@@ -20,9 +26,13 @@ module input_parameters
 
  real (Long) :: initialSeparation ! 0 if not used, initial distance in fm between slabs
 
+! logical     :: initState_BEC_q1D  !< use Bose-Einstein Condensate for initial state
+! real (Long) :: initState_BEC_q1D_numpart  !< number of atoms in condensate
+! real (Long) :: initState_BEC_q1D_scatLength  !< s-wave scattering length
+
  logical     :: initState_gaussianNuclear
- REAL (long) :: w
- REAL (long) :: whm
+ REAL (long) :: w      !< angular frequency
+ REAL (long) :: whm    !< angular wavenumber squared
  INTEGER     :: Nmax   ! maximum oscillator shell
 
  logical     :: initState_cosine !add sine wave to initial state
@@ -39,12 +49,14 @@ module input_parameters
  real (Long) :: initState_kdelta_norm
  real (Long) :: initState_kdelta_x0  !center of delta function
 
-
 ! logical :: initState_randomG  !add a random number (Gaussian) to initial state
 ! real (Long) :: initState_random_norm  !norm
 ! real (Long) :: initState_random_fwhm  !full width half max
 
  integer     :: splitOperatorMethod !0 if not used, otherwise order of method
+
+ logical     :: unitSystem_bec      !< Use unit system for Bose-Einstein Condensate
+ logical     :: unitSystem_nuclear  !< Use unit system for nuclear collision [default]
 
  logical     :: useImEvol   ! use imaginary evolution?
  integer     :: Nimev  ! number of timesteps for imaginary evolution
@@ -55,7 +67,6 @@ module input_parameters
  integer     :: iadib         ! 1 = run adiabatic, 0 = read adiabatic from file
  integer     :: Nad           !adiabatic switching parameters
  real (Long) :: tad,wtad  
-
 
 end module input_parameters
 

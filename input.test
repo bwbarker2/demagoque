@@ -22,6 +22,7 @@
 !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
 initState_kdelta 1d0 0d0     !norm, position
 !initState_plane 1 1d0 0d0    !wave number, norm, phase shift
+unitSystem nuclear
 splitOperatorMethod 3  !use this, setting order of accuracy in time
 !useImCutoff 1000d0 2d0 2d0  !useImCutoff, cutoff w0,x0,d0
 END_OF_OPTIONS !sentinel for end of optional parameters

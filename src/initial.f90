@@ -29,17 +29,29 @@ SUBROUTINE calcInitial
   use phys_cons
   implicit none
 
-  call phys_cons_initializeNuclear
+
+  if(unitSystem_bec) then
+   call phys_cons_initializeBEC
+  elseif(unitSystem_nuclear) then
+   call phys_cons_initializeNuclear
+  endif
 
   call initializeMesh
 
   write(*,*) '1D to 3D factor:',facd
 
   ! oscillator data
-  w=hbar/m0*6.d0*(rho0/facd)**2/(Nmax+1.d0)!   *0.1
-  whm=m0*w/hbar
+  if(initState_gaussianNuclear) then
+   w=hbar/m0*6.d0*(rho0/facd)**2/(Nmax+1.d0)!   *0.1
+   whm=m0*w/hbar
+  endif
 
-    write(*,*) 'Parameters of the calculation:'
+  if(potInitial==4) then
+   w=ho_mateo_wz
+   whm=m0*w/hbar
+  endif
+
+  write(*,*) 'Parameters of the calculation:'
   write(*,*) 'dxr=',delxr,'dxa=',delxa,'dkr=',delkr,'dka=',delka,'whm=',whm
   
   
@@ -78,7 +90,7 @@ subroutine initialState
         y1=0d0
         y2=0d0
         do iin=0,Nmax
-          if(initState_gaussianNuclear) then
+          if(initState_gaussianNuclear.OR.initState_gaussian) then
            y1=wfnho(xx1,iin,whm)
            y2=wfnho(xx2,iin,whm)
            den0=den0+y1*y2
