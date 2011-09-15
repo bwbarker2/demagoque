@@ -21,7 +21,8 @@
 !            1 Cyclotron, East Lansing, MI 48824-1321
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! calculates initial quantities derived from input
+
+!> calculates initial quantities derived from input
 SUBROUTINE calcInitial
   use cons_laws
   use input_parameters
@@ -46,13 +47,14 @@ SUBROUTINE calcInitial
    whm=m0*w/hbar
   endif
 
-  if(potInitial==4) then
+!  if(potInitial==4) then
    w=ho_mateo_wz
    whm=m0*w/hbar
-  endif
+!  endif
 
   write(*,*) 'Parameters of the calculation:'
-  write(*,*) 'dxr=',delxr,'dxa=',delxa,'dkr=',delkr,'dka=',delka,'whm=',whm
+  write(*,*) 'dxr=',delxr,'dxa=',delxa,'dkr=',delkr, &
+             'dka=',delka,'whm=',whm,'w=',w
   
   
   allocate(potx(-Nxa2:Nxa2))

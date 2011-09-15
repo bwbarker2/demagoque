@@ -44,9 +44,10 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_demagoque_OBJECTS = demagoque-bexception.$(OBJEXT) \
-	demagoque-bmath.$(OBJEXT) demagoque-bstring.$(OBJEXT) \
-	demagoque-prec_def.$(OBJEXT) demagoque-cons_laws.$(OBJEXT) \
+am_demagoque_OBJECTS = demagoque-iso_varying_string.$(OBJEXT) \
+	demagoque-bexception.$(OBJEXT) demagoque-bmath.$(OBJEXT) \
+	demagoque-bstring.$(OBJEXT) demagoque-prec_def.$(OBJEXT) \
+	demagoque-cons_laws.$(OBJEXT) \
 	demagoque-input_parameters.$(OBJEXT) \
 	demagoque-phys_cons.$(OBJEXT) demagoque-lib_lapack.$(OBJEXT) \
 	demagoque-lib_fftw.$(OBJEXT) demagoque-mesh.$(OBJEXT) \
@@ -160,7 +161,8 @@ top_srcdir = @top_srcdir@
 AM_FCFLAGS = -fbounds-check -Wall -ggdb -O3
 AM_FCFLAGS_f90 = -g -O3
 AM_FFLAGS = -fbounds-check -Wall -ggdb -O3
-demagoque_SOURCES = bexception.f90 bmath.f90 bstring.f90 prec_def.f90 \
+demagoque_SOURCES = iso_varying_string.f95 bexception.f90 bmath.f90 \
+          bstring.f90 prec_def.f90 \
           cons_laws.f90 input_parameters.f90 phys_cons.f90 lib_lapack.f90 \
           lib_fftw.f90 mesh.f90 time.f90 dmtdhf.f90 ener.f90 \
           initial.f90 integra.f90 \
@@ -175,7 +177,7 @@ demagoque_FCFLAGS = -fbounds-check -Wall -ggdb -O3
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .f .f90 .o .obj
+.SUFFIXES: .f .f90 .f95 .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -264,6 +266,12 @@ distclean-compile:
 
 .f90.obj:
 	$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) `$(CYGPATH_W) '$<'`
+
+demagoque-iso_varying_string.o: iso_varying_string.f95
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-iso_varying_string.o `test -f 'iso_varying_string.f95' || echo '$(srcdir)/'`iso_varying_string.f95
+
+demagoque-iso_varying_string.obj: iso_varying_string.f95
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-iso_varying_string.obj `if test -f 'iso_varying_string.f95'; then $(CYGPATH_W) 'iso_varying_string.f95'; else $(CYGPATH_W) '$(srcdir)/iso_varying_string.f95'; fi`
 
 demagoque-bexception.o: bexception.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-bexception.o $(FCFLAGS_f90) `test -f 'bexception.f90' || echo '$(srcdir)/'`bexception.f90
@@ -396,6 +404,12 @@ demagoque-wfnho.o: wfnho.f90
 
 demagoque-wfnho.obj: wfnho.f90
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-wfnho.obj $(FCFLAGS_f90) `if test -f 'wfnho.f90'; then $(CYGPATH_W) 'wfnho.f90'; else $(CYGPATH_W) '$(srcdir)/wfnho.f90'; fi`
+
+.f95.o:
+	$(FCCOMPILE) -c -o $@ $<
+
+.f95.obj:
+	$(FCCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

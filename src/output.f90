@@ -20,6 +20,7 @@
 !            Michigan State University
 !            1 Cyclotron, East Lansing, MI 48824-1321
 
+!> outputs various snapshot files at certain timesteps.
 SUBROUTINE output
   use cons_laws
   use input_parameters

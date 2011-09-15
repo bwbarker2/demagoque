@@ -178,7 +178,7 @@ PROGRAM dmtdhf
    OPEN(unit=70,file='results/ad_pk2.dat')
    open(unit=72,file='results/ad_2dx.dat')
    open(unit=73,file='results/ad_2dw.dat')
-  open(unit=74,file='results/2dk.dat')
+   open(unit=74,file='results/ad_2dk.dat')
 
    !set number of timesteps for adiabatic switching
    Nt=Nad
@@ -423,9 +423,10 @@ SUBROUTINE getStdIn
 !   write(*,*)'input sentinel reached, exiting input loop'
    exit
   endif !inline
- enddo !while true
 
   call procOptionLine(inline)
+
+ enddo !while true
 
  !verify option dependencies
 
@@ -504,6 +505,7 @@ subroutine procOptionLine(inline)
     read(inline(iend+1:len(inline)),*)ho_mateo_wz, ho_mateo_wt, &
                                       ho_mateo_scat, ho_mateo_Npart
     initState_gaussian=.true.
+    norm_thy=norm_thy+1
     write(*,*)'Potential 4 options: ho_mateo_wz=',ho_mateo_wz
     write(*,*)'                     ho_mateo_wt=',ho_mateo_wt
     write(*,*)'                     ho_mateo_scat=',ho_mateo_scat

@@ -1,11 +1,11 @@
 ! ........... READ AND WRITE PARAMETERS
-1 ! ntime
+10 ! ntime
 ! ........... PHYSICAL PARAMETERS
-0.5d0 ! delt 
-20 ! Nevt
+0.0005d0 ! delt 
+40 ! Nevt
 0d0 ! EA 
-1000d0  ! xLa 
-1000d0 ! xLr 
+25d0  ! xLa 
+25d0 ! xLr 
 100 ! Nxa
 100 ! Nxr
 ! ............. POTENTIAL PARAMETERS
@@ -18,13 +18,13 @@
 10   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
   !initialSeparation 15d0       !separation between centers in fm
-!!!initState_gaussianNuclear 0  !use this, Nmax
+pot4 0.088 5.278 0.00529 5e3
 !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
 !initState_kdelta 1d0 0d0     !norm, position
 !initState_plane 1 1d0 0d0    !wave number, norm, phase shift
-unitSystem nuclear
+unitSystem bec
 splitOperatorMethod 3  !use this, setting order of accuracy in time
-!useImCutoff 1000d0 2d0 2d0  !useImCutoff, cutoff w0,x0,d0
+!useImCutoff 1000d0 23d0 2d0  !useImCutoff, cutoff w0,x0,d0
 END_OF_OPTIONS !sentinel for end of optional parameters
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

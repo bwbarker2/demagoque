@@ -101,10 +101,14 @@ contains
 
   hbar = SI_PLANCKS_CONSTANT_HBAR &
          *1_Long    / SI_ATOMIC_MASS_CONSTANT  &  ! u / kg
+         * 1_Long / MASS_REL_RUBIDIUM_87       &  ! 1 mass of 87Rb / u
          *(1e6_Long / 1_Long)**2               &  ! um / m twice
          *1_Long    / 1e3_Long                    ! s / ms
-  
-  m0 = MASS_REL_RUBIDIUM_87
+ 
+  write(*,*)'hbar=',hbar
+ 
+!  m0 = MASS_REL_RUBIDIUM_87
+  m0 = 1_Long
 
  end subroutine phys_cons_initializeBEC
  

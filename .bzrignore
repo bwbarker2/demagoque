@@ -1,6 +1,11 @@
 *.mod
 *.x
+*/Makefile
+doc/html
+doc/latex
+Makefile
 results/*
 results.*
+src/demagoque
 a.out
 data

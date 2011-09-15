@@ -267,6 +267,7 @@ SUBROUTINE evol_x(dtim)
 
  ! calculates and stores the potential at each grid point in x
  call calcPotDiag()
+! write(*,*)'potDiag:',potDiag
 
 !call mesh_setReflectedLR(.true.)
 ! write(*,*)'finished calcing pot diag'
@@ -559,8 +560,10 @@ subroutine potBEC_1D_HO_Mateo2011(potX,ix,wz,wt,scat,Npart)
  !> total number of particles in condensate
  real (Long), intent(in) :: Npart
 
+!potX=1
  potX=0.5_Long*m0*wz**2*xa(ix)**2 &
       +hbar*wt*sqrt(1_Long+4_Long*scat*Npart*getDenX(ix,0))
+! write(*,*)'m0,wz,xa=',m0,wz,xa(ix)
 
 end subroutine potBEC_1D_HO_Mateo2011
 
