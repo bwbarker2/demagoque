@@ -69,6 +69,7 @@ subroutine ener_x
   !! ener_x - calculates total potential energy
   use cons_laws
   use mesh
+  use time
   implicit none
 
   real (Long) :: nerr
@@ -80,6 +81,18 @@ subroutine ener_x
   call setState(SPACE)
 
   call calcPotDiag()
+
+  if(firstOutput) then
+   write(76,*)'# Potential in position space'
+   write(76,*)'# x   pot(x)'
+  endif
+
+  do ixa=-Nxa2,Nxa2-1
+   write(76,*)xa(ixa),potDiag(ixa)
+  enddo
+
+  write(76,*)
+  write(76,*)
 
   epot=0d0
   nnum=0d0

@@ -47,10 +47,17 @@ SUBROUTINE calcInitial
    whm=m0*w/hbar
   endif
 
-!  if(potInitial==4) then
-   w=ho_mateo_wz
-   whm=m0*w/hbar
+  if(potFinal==4) then
+!   w=ho_mateo_wz
+!   whm=m0*w/hbar
 !  endif
+!  whm=2.25e-2
+!  w=2.5e-5_Long  !hard-coded for Ott2001
+  w=0.00016
+!  w=0.088
+!  w=whm*hbar/m0
+  whm=m0*w/hbar
+ endif
 
   write(*,*) 'Parameters of the calculation:'
   write(*,*) 'dxr=',delxr,'dxa=',delxa,'dkr=',delkr, &

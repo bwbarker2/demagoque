@@ -22,7 +22,7 @@ MODULE class_PhysicalConstants
   real (Long), parameter :: SI_SPEED_OF_LIGHT_D = 0d0 !< uncertainty
   real (Long)            :: SPEED_OF_LIGHT            !< in current units
 
-  !> Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA
+  !> Planck's constant divided by 2 pi, hbar, in J s, from 2010 CODATA
   real (Long), parameter :: SI_PLANCKS_CONSTANT_HBAR   = 1.054571726e-34_Long
   !> uncertainty
   real (Long), parameter :: SI_PLANCKS_CONSTANT_HBAR_D = 0.000000047e-34_Long

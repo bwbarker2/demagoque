@@ -56,7 +56,7 @@ SUBROUTINE output
      CALL outK
   ENDIF
 
-  write(*,*)ekin+epot
+!  write(*,*)ekin+epot
 
   ! write factor that kinetic must be multiplied by to conserve energy
   write(*,*)'timestep,kinetic_correction_factor:',it,(ep0+ek0-epot)/ekin
@@ -237,6 +237,8 @@ SUBROUTINE outDiagX
   INTEGER :: ixa
   REAL (Long) :: ddre, dddim
 
+  real (Long) :: sum1, sum2
+
   WRITE(41,*)'# time=',t,'fm/c'
   WRITE(41,*)'# x [fm], real, imaginary amplitudes'
 
@@ -251,6 +253,21 @@ SUBROUTINE outDiagX
   WRITE(41,*)
 
 !93 format(3e16.8)
+
+  ! This computes and outputs <|x|>
+
+  sum1=0_Long
+  sum2=0_Long
+
+  do ixa=-Nxa2,Nxa2-1
+   sum1=sum1+dble(getDenX(ixa,0))
+   sum2=sum2+abs(xa(ixa))*dble(getDenX(ixa,0))
+  enddo
+
+  if(firstOutput) write(75,*)'# time     <|x|>'
+  
+  write(75,*)t,sum2/sum1
+  write(*,*)'mean_abs_x=',sum2/sum1
 
 END SUBROUTINE outDiagX
 

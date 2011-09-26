@@ -2,12 +2,12 @@
 1 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5d0 ! delt [fm/c]
-20 ! Nevt
+160 ! Nevt
 0d0 ! EA [MeV]
-4d0  ! xLa [fm]
-4d0 ! xLr [fm]
-16 ! Nxa
-16 ! Nxr
+25d0  ! xLa [fm]
+25d0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
 ! ............. POTENTIAL PARAMETERS
 -1  ! potInitial
 -1 ! potFinal
@@ -20,11 +20,11 @@
   !initialSeparation 15d0       !separation between centers in fm
 !!!initState_gaussianNuclear 0  !use this, Nmax
 !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
-initState_kdelta 1d0 0d0     !norm, position
-!initState_plane 1 1d0 0d0    !wave number, norm, phase shift
+!initState_kdelta 1d0 0d0     !norm, position
+initState_plane 3 1d0 0d0    !wave number, norm, phase shift
 unitSystem nuclear
 splitOperatorMethod 3  !use this, setting order of accuracy in time
-!useImCutoff 1000d0 2d0 2d0  !useImCutoff, cutoff w0,x0,d0
+useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
 END_OF_OPTIONS !sentinel for end of optional parameters
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

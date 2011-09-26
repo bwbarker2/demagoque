@@ -116,6 +116,7 @@ SUBROUTINE evol_k(dtim)
   use mesh
   use phys_cons
   use prec_def
+  use time
   IMPLICIT NONE
 
   real (Long), intent(in) :: dtim  !< timestep to use
@@ -230,6 +231,7 @@ SUBROUTINE evol_x(dtim)
  use mesh
  use phys_cons
  use prec_def
+ use time
  IMPLICIT NONE
 
  real*8, intent(in) :: dtim !< timestep
@@ -562,7 +564,10 @@ subroutine potBEC_1D_HO_Mateo2011(potX,ix,wz,wt,scat,Npart)
 
 !potX=1
  potX=0.5_Long*m0*wz**2*xa(ix)**2 &
-      +hbar*wt*sqrt(1_Long+4_Long*scat*Npart*getDenX(ix,0))
+  +sign(1d0,dble(getDenX(ix,0))) &
+   *hbar*wt*(sqrt(1_Long+4_Long*scat*Npart*abs(getDenX(ix,0)))-1_Long)
+!   +2_Long*scat*hbar*wt*Npart*dble(getDen(ix,0))
+!      +hbar*
 ! write(*,*)'m0,wz,xa=',m0,wz,xa(ix)
 
 end subroutine potBEC_1D_HO_Mateo2011

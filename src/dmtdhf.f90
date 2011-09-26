@@ -179,6 +179,8 @@ PROGRAM dmtdhf
    open(unit=72,file='results/ad_2dx.dat')
    open(unit=73,file='results/ad_2dw.dat')
    open(unit=74,file='results/ad_2dk.dat')
+   open(unit=75,file='results/ad_mean_abs_x.dat')
+   open(unit=76,file='results/ad_pot.dat')
 
    !set number of timesteps for adiabatic switching
    Nt=Nad
@@ -206,6 +208,8 @@ PROGRAM dmtdhf
    close(72)
    close(73)
    close(74)
+   close(75)
+   close(76)
 
    useAdiabatic=.false.
 
@@ -240,6 +244,8 @@ PROGRAM dmtdhf
   open(unit=72,file='results/2dx.dat')
   open(unit=73,file='results/2dw.dat')
   open(unit=74,file='results/2dk.dat')
+  open(unit=75,file='results/mean_abs_x.dat')
+  open(unit=76,file='results/pot.dat')
 !  open(unit=101,file='results/pot_diag.dat')
 
   Nt=Nevt
@@ -306,6 +312,8 @@ PROGRAM dmtdhf
   close(72)
   close(73)
   close(74)
+  close(75)
+  close(76)
 !  close(101)
 
   write(*,*)'total time:',etime(timeElapsed)

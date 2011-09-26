@@ -15,8 +15,6 @@ autotools:
 Copy library files to local directory for more portability
 -maybe... what about HPCC apps where HPCC libs are more optimized for arch?
 
-Start using documentation - doxygen
-
 Add error handling module - for example, see http://sourceware.org/autobook/autobook/autobook_54.html#SEC54
 
 Add unit conversion module
@@ -27,6 +25,4 @@ Change sh scripts to use the ${SED} and ${AWK} variables that are set by configu
 
 Convert complex*16 to complex (cLong), defining cLong in prec_def
 
-Use a variable-length string class to define unit names and symbols in phys_cons.f90
--Write bstring class type
-
+Investigate migrating from autotools to another, like scons, cmake, waf, gyp?

@@ -5,13 +5,13 @@
 200 ! Nevt
 25d0 ! EA [MeV]
 25d0  ! xLa [fm]
-9d0 ! xLr [fm]
+25d0 ! xLr [fm]
 100 ! Nxa
-36 ! Nxr
+100 ! Nxr
 ! ............. POTENTIAL PARAMETERS
 0  ! potInitial
 2 ! potFinal
-30 70 1200  ! tad,wtad,Nad
+300 30 1200  ! tad,wtad,Nad
 1  ! iadib
 ! ............. IMAGINARY EVOLUTION PARAMETERS
 .false.     ! useImEvol - use imaginary evolution?
@@ -20,7 +20,7 @@
 initialSeparation 15d0
 initState_gaussianNuclear 1
 splitOperatorMethod 3
-useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
+useImCutoff 1000d0 23d0 2d0  !useImCutoff, cutoff w0,x0,d0
 useFlipClone
 END_OF_OPTIONS !sentinel for end of optional parameters
 

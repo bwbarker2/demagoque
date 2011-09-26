@@ -30,7 +30,7 @@ MODULE phys_cons
   !> uncertainty
   real (Long), parameter :: MASS_PROTON_MEV_C2_D = 0.000021_Long
 
-  !> Planck's constant divided by 2π, in MeV fm/c, from 2010 CODATA
+  !> Planck's constant divided by 2*pi, in MeV fm/c, from 2010 CODATA
   real (Long), parameter :: &
        PLANCKS_CONSTANT_HBAR_MEV_FM_C = 197.3269718_Long, &
        PLANCKS_CONSTANT_HBAR_MEV_FM_C_D = 0.0000044_Long  !< uncertainty
@@ -41,7 +41,7 @@ MODULE phys_cons
   real (Long), parameter :: SI_SPEED_OF_LIGHT_D = 0d0 !< uncertainty
   real (Long)            :: SPEED_OF_LIGHT            !< in current units
 
-  !> Planck's constant divided by 2π, ℏ, in J s, from 2010 CODATA
+  !> Planck's constant divided by 2 pi, hbar, in J s, from 2010 CODATA
   real (Long), parameter :: SI_PLANCKS_CONSTANT_HBAR   = 1.054571726e-34_Long
   !> uncertainty
   real (Long), parameter :: SI_PLANCKS_CONSTANT_HBAR_D = 0.000000047e-34_Long
@@ -93,7 +93,7 @@ contains
 
  !> \brief Initializes physical constants for BEC evolution (87-Rb)
  !!
- !! -# length = micrometer - um
+ !! -# length = 10 micrometer - 10 um
  !! -# mass   = atomic mass unit - u
  !! -# time   = millisecond - ms
  subroutine phys_cons_initializeBEC
@@ -101,14 +101,14 @@ contains
 
   hbar = SI_PLANCKS_CONSTANT_HBAR &
          *1_Long    / SI_ATOMIC_MASS_CONSTANT  &  ! u / kg
-         * 1_Long / MASS_REL_RUBIDIUM_87       &  ! 1 mass of 87Rb / u
-         *(1e6_Long / 1_Long)**2               &  ! um / m twice
+!         * 1_Long / MASS_REL_RUBIDIUM_87       &  ! 1 mass of 87Rb / u
+         *(1e5_Long / 1_Long)**2               &  ! 10 um / m twice
          *1_Long    / 1e3_Long                    ! s / ms
  
   write(*,*)'hbar=',hbar
  
-!  m0 = MASS_REL_RUBIDIUM_87
-  m0 = 1_Long
+  m0 = MASS_REL_RUBIDIUM_87
+!  m0 = 1
 
  end subroutine phys_cons_initializeBEC
  

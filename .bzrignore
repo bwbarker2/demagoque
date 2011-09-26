@@ -3,6 +3,7 @@
 */Makefile
 doc/html
 doc/latex
+*gmon.out
 Makefile
 results/*
 results.*
