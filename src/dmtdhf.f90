@@ -90,6 +90,7 @@
 !! </table>
 PROGRAM dmtdhf
   use input_parameters
+  use formatting
   USE mesh
   use time
   IMPLICIT NONE
@@ -114,6 +115,8 @@ PROGRAM dmtdhf
 
   !write(*,*)'finished initialState'
   if (useImEvol) then
+
+   fout_mode_prefix='imev_'
 
    open(unit=41,file='results/imev_denmat_x_t.dat')
    open(unit=42,file='results/imev_denmat_k_t.dat')
@@ -162,6 +165,9 @@ PROGRAM dmtdhf
   !write(*,*)'useAdiabatic=',useAdiabatic
 
   if (useAdiabatic.and.iadib==1) then
+
+   fout_mode_prefix='ad_'
+
    ! open files to output adiabatic evolution information
    open(unit=41,file='results/ad_denmat_x_t.dat')
    open(unit=42,file='results/ad_denmat_k_t.dat')
@@ -226,6 +232,8 @@ PROGRAM dmtdhf
   endif !useAdiabatic
 
    useAdiabatic=.false.
+
+  fout_mode_prefix=''
  
   ! open files to output time evolution information
   open(unit=41,file='results/denmat_x_t.dat')
