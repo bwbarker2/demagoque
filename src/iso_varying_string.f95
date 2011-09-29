@@ -432,6 +432,20 @@ contains
 
 ! Concatenate two varying strings
 
+! If first string length is zero, don't do anything
+! (otherwise we get array out of bounds error below)
+    if(len(string_a)==0) then
+     concat_string=string_b
+     return
+    endif
+
+! If second string length is zero, don't do anything
+! (otherwise we get array out of bounds error below)
+    if(len(string_b)==0) then
+     concat_string=string_a
+     return
+    endif
+
     len_string_a = len(string_a)
 
     ALLOCATE(concat_string%chars(len_string_a+len(string_b)))
