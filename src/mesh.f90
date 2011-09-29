@@ -398,7 +398,7 @@ contains
 !call mesh_setReflectedLR(.false.)
 !        call transform_x_to_wigner_dumb
 !        call transform_x_to_w_dumb_kshift
-!        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
+        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_x_to_k_norepeat
 !call mesh_setReflectedLR(.true.)
@@ -418,14 +418,14 @@ contains
        case (SPACE)
         call transform_w_to_x_norepeat_fft
 !        call transform_wigner_to_x_dumb
-!        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
+        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_wigner_to_k_dumb
 !        call transform_w_to_k_norepeat
 !call mesh_setReflectedLR(.true.)
         call transform_wigner_to_k_fft_exp
 !call mesh_setReflectedLR(.false.)
-!        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
+        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
       end select
   
      case (MOMENTUM)
@@ -433,7 +433,7 @@ contains
        case (WIGNER)
         call transform_k_to_wigner_fft_exp
 !        call transform_k_to_wigner_dumb
-!        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
+        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
        case (SPACE)
         call transform_k_to_wigner_fft_exp
 !        call transform_k_to_wigner_dumb

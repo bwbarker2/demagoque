@@ -1,24 +1,24 @@
 ! ........... READ AND WRITE PARAMETERS
-10 ! ntime
+1 ! ntime
 ! ........... PHYSICAL PARAMETERS
-0.5d0 ! delt 
-40 ! Nevt
+50d0 ! delt 
+300 ! Nevt
 0d0 ! EA 
 50d0  ! xLa 
 50d0 ! xLr 
-152 ! Nxa  !must be divisible by 4
-152 ! Nxr  !must be divisible by 4
+100 ! Nxa  !must be divisible by 4
+100 ! Nxr  !must be divisible by 4
 ! ............. POTENTIAL PARAMETERS
-0  ! potInitial
+4  ! potInitial
 4 ! potFinal
-1000 100 4000  ! tad,wtad,Nad
+100000 10000 2500  ! tad,wtad,Nad
 1  ! iadib
 ! ............. IMAGINARY EVOLUTION PARAMETERS
 .false.     ! useImEvol - use imaginary evolution?
 10   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
   !initialSeparation 15d0       !separation between centers in fm
-pot4 0.004 5.278 0.000529 400
+pot4 0.0008 5.278 0.000529 20
 !pot4 0.088 5.278 0.000529 5e5
 !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
 !initState_gaussianNuclear 0  

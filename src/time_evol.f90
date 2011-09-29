@@ -566,8 +566,7 @@ subroutine potBEC_1D_HO_Mateo2011(potX,ix,wz,wt,scat,Npart)
  potX=0.5_Long*m0*wz**2*xa(ix)**2 &
   +sign(1d0,dble(getDenX(ix,0))) &
    *hbar*wt*(sqrt(1_Long+4_Long*scat*Npart*abs(getDenX(ix,0)))-1_Long)
-!   +2_Long*scat*hbar*wt*Npart*dble(getDen(ix,0))
-!      +hbar*
+!   +2_Long*scat*hbar*wt*Npart*dble(getDen(ix,0))  !original 1D GPE
 ! write(*,*)'m0,wz,xa=',m0,wz,xa(ix)
 
 end subroutine potBEC_1D_HO_Mateo2011
