@@ -1,0 +1,7 @@
+Thu Sep 29 13:55:02 EDT 2011
+
+-implement getNextUnit to never worry about file unit numbers
+--can use INQUIRE intrinsic function
+(Fortran 2003 has newunit= specifier)
+
+
