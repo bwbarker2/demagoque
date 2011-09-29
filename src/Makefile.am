@@ -1,6 +1,6 @@
-AM_FCFLAGS = -fbounds-check -Wall -ggdb -O3
+AM_FCFLAGS = -fcheck=all -Wall -ggdb -O3
 AM_FCFLAGS_f90 = -g -O3
-AM_FFLAGS = -fbounds-check -Wall -ggdb -O3
+AM_FFLAGS = -fcheck=all -Wall -ggdb -O3
 
 bin_PROGRAMS = demagoque
 demagoque_SOURCES = iso_varying_string.f95 \
@@ -15,7 +15,7 @@ demagoque_SOURCES = iso_varying_string.f95 \
           time_evol.f90 wfnho.f90
 
 #demagoque_CPPFLAGS = -fbounds-check -Wall -ggdb -O3
-demagoque_FCFLAGS = -fbounds-check -Wall -ggdb -O3
+demagoque_FCFLAGS = -fcheck=all -Wall -ggdb -O3
 
 mostlyclean-local:
 	rm -f *.mod
