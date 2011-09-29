@@ -82,6 +82,7 @@ SUBROUTINE outX
   CALL outDiagX
   CALL outDenMat(61,62)
   call outDenMatXPhys
+  call outSpikinessX
   call ener_x
 
   ! output analytic oscillator to compare with numeric
@@ -333,6 +334,47 @@ subroutine outDenUnf
  enddo
 
 end subroutine outDenUnf
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Calculates and outputs an observable I call spikiness.
+!!
+!! \f[\textrm{spikiness}=\frac{1}{N}\sum_i^N \left|\frac{y(i+1)-y(i)}{x(i+1)-x(i)}\right|\f]
+!!
+!! This gives the average slope between two adjacent points on the diagonal. Maybe this should be over whole density matrix? Should I care about slope, or just difference in height?
+subroutine outSpikinessX
+ use formatting
+ use mesh
+ use time
+ implicit none
+
+ integer :: ixa
+ integer, save :: spikifile   !file unit number
+
+ real (Long) :: spike
+
+ if(firstOutput)then
+  open(newunit=spikifile, file=char(fout_ev_pre)//'spikiness.dat')
+  write(spikifile,*)'# time     spikiness'
+ endif
+
+ !need to handle last point cyclically
+ do ixa=-Nxa2,Nxa2-2
+  spike=spike+abs((getDen(ixa,0)-getDen(ixa+1,0))/(xa(ixa)-xa(ixa+1)))
+ enddo
+
+ spike=spike+abs((getDen(Nxa2-1,0)-getDen(-Nxa2,0))/(xa(Nxa2-1)-xa(-Nxa2)))
+
+ spike=spike/Nxa
+
+ write(spikifile,*)t,spike
+
+ if(lastOutput) then
+  close(spikifile)
+ endif
+
+end subroutine outSpikinessX
+
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
