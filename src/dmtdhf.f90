@@ -113,10 +113,13 @@ PROGRAM dmtdhf
 
 !  call mesh_setReflectedLR(.true.) !debug, reflect it
 
+  ! set output directory
+  fout_dir='results/'
+
   !write(*,*)'finished initialState'
   if (useImEvol) then
 
-   fout_mode_prefix='imev_'
+   call setModePrefix('imev_')
 
    open(unit=41,file='results/imev_denmat_x_t.dat')
    open(unit=42,file='results/imev_denmat_k_t.dat')
@@ -166,7 +169,7 @@ PROGRAM dmtdhf
 
   if (useAdiabatic.and.iadib==1) then
 
-   fout_mode_prefix='ad_'
+   call setModePrefix('ad_')
 
    ! open files to output adiabatic evolution information
    open(unit=41,file='results/ad_denmat_x_t.dat')
@@ -233,8 +236,8 @@ PROGRAM dmtdhf
 
    useAdiabatic=.false.
 
-  fout_mode_prefix=''
- 
+  call setModePrefix('')
+   
   ! open files to output time evolution information
   open(unit=41,file='results/denmat_x_t.dat')
   open(unit=42,file='results/denmat_k_t.dat')
