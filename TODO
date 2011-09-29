@@ -28,3 +28,5 @@ Convert complex*16 to complex (cLong), defining cLong in prec_def
 Investigate migrating from autotools to another, like scons, cmake, waf, gyp?
 
 Make gprof-able FFTW library
+
+Create "spikiness" observable. abs(den(i)-den(i+1))/delxa

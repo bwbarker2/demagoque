@@ -44,7 +44,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_demagoque_OBJECTS = demagoque-iso_varying_string.$(OBJEXT) \
+am_demagoque_OBJECTS = demagoque-bfile.$(OBJEXT) \
+	demagoque-iso_varying_string.$(OBJEXT) \
 	demagoque-bexception.$(OBJEXT) demagoque-bmath.$(OBJEXT) \
 	demagoque-bstring.$(OBJEXT) demagoque-prec_def.$(OBJEXT) \
 	demagoque-cons_laws.$(OBJEXT) \
@@ -161,7 +162,8 @@ top_srcdir = @top_srcdir@
 AM_FCFLAGS = -fbounds-check -Wall -ggdb -O3
 AM_FCFLAGS_f90 = -g -O3
 AM_FFLAGS = -fbounds-check -Wall -ggdb -O3
-demagoque_SOURCES = iso_varying_string.f95 bexception.f90 bmath.f90 \
+demagoque_SOURCES = bfile.f90 iso_varying_string.f95 \
+          bexception.f90 bmath.f90 \
           bstring.f90 prec_def.f90 \
           cons_laws.f90 input_parameters.f90 phys_cons.f90 lib_lapack.f90 \
           lib_fftw.f90 mesh.f90 time.f90 dmtdhf.f90 ener.f90 \
@@ -266,6 +268,12 @@ distclean-compile:
 
 .f90.obj:
 	$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) `$(CYGPATH_W) '$<'`
+
+demagoque-bfile.o: bfile.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-bfile.o $(FCFLAGS_f90) `test -f 'bfile.f90' || echo '$(srcdir)/'`bfile.f90
+
+demagoque-bfile.obj: bfile.f90
+	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-bfile.obj $(FCFLAGS_f90) `if test -f 'bfile.f90'; then $(CYGPATH_W) 'bfile.f90'; else $(CYGPATH_W) '$(srcdir)/bfile.f90'; fi`
 
 demagoque-iso_varying_string.o: iso_varying_string.f95
 	$(FC) $(demagoque_FCFLAGS) $(FCFLAGS) -c -o demagoque-iso_varying_string.o `test -f 'iso_varying_string.f95' || echo '$(srcdir)/'`iso_varying_string.f95

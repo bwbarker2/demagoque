@@ -1,3 +1,6 @@
+!> partial implementation of Java's "ArrayList", an array that has whatever 
+!! size is necessary. One is able to append a value to the end of the array,
+!! and it will grow if needed.
 module class_ArrayList
 ! Copyright (C) 2011  Brent W. Barker
 !
@@ -29,74 +32,80 @@ implicit none
  type dArrayList
   private
   integer :: capacity
-  integer :: size
+  integer :: sizeOfIt  !"OfIt" is so it is different from size below
   real*8, dimension(:), allocatable  :: values
+ contains
+  procedure :: add => dArrayList_add
+  procedure :: ensureCapacity => dArrayList_ensureCapacity
+  procedure :: get => dArrayList_get
+  procedure :: set => dArrayList_set
+  procedure :: size => dArrayList_size
  end type dArrayList
  
 contains
 
- function make_dArrayList(initLength) result (name)
+ function make_dArrayList(initLength) result (self)
   implicit none
 
   integer, optional, intent(in) :: initLength
-  type (dArrayList) :: name
+  type (dArrayList) :: self
   real*8, dimension(:), allocatable :: list_construct
 
   if(present(initLength)) then
    allocate(list_construct(initLength))
-   name = dArrayList(initLength,0,list_construct)
+   self = dArrayList(initLength,0,list_construct)
   else
    allocate(list_construct(INITIAL_LENGTH))
-   name = dArrayList(INITIAL_LENGTH,0,list_construct)
+   self = dArrayList(INITIAL_LENGTH,0,list_construct)
   endif
 
  end function make_dArrayList
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- subroutine dArrayList_add(list, newValue)
+ subroutine dArrayList_add(self, newValue)
   implicit none
 
-  type (dArrayList), intent(inout) :: list
+  class (dArrayList), intent(inout) :: self
   real*8,            intent(in)    :: newValue
 
-  if(list%size==list%capacity) then
-   call reallocate(list,list%capacity*2)
+  if(self%size()==self%capacity) then
+   call reallocate(self,self%capacity*2)
   endif
 
-  list%values(list%size+1)=newValue
-  list%size=list%size+1
+  self%values(self%size()+1)=newValue
+  self%sizeOfIt=self%size()+1
 
  end subroutine dArrayList_add
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- subroutine dArrayList_ensureCapacity(list, newCapacity)
+ subroutine dArrayList_ensureCapacity(self, newCapacity)
   implicit none
 
-  type (dArrayList), intent(inout) :: list
+  class (dArrayList), intent(inout) :: self
   integer,           intent(in)    :: newCapacity
 
-  if(list%capacity<newCapacity) then
-   call reallocate(list, newCapacity)
+  if(self%capacity<newCapacity) then
+   call reallocate(self, newCapacity)
   endif
 
  end subroutine dArrayList_ensureCapacity
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- function dArrayList_get(list, indix) result(val)
+ function dArrayList_get(self, indix) result(val)
   implicit none
 
-  type(dArrayList), intent(in) :: list
+  class(dArrayList), intent(in) :: self
   integer,         intent(in) :: indix
   real*8                      :: val
 
-  if(indix<=list%size) then
-   val=list%values(indix)
+  if(indix<=self%size()) then
+   val=self%values(indix)
   else
    write(102,*)'dArrayList_get: ArrayOutOfBoundsError, index,size=', &
-                indix,list%size
+                indix,self%size()
    write(102,*)'dArrayList_get: Returning value -1'
    val=-1
   endif
@@ -105,18 +114,18 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- subroutine dArrayList_set(list, indix, val)
+ subroutine dArrayList_set(self, indix, val)
   implicit none
 
-  type(dArrayList), intent(inout) :: list
+  class(dArrayList), intent(inout) :: self
   integer,          intent(in)    :: indix
   real*8,           intent(in)    :: val
 
-  if(indix<=list%size) then
-   list%values(indix)=val
+  if(indix<=self%size()) then
+   self%values(indix)=val
   else
    write(102,*)'dArrayList_set: ArrayOutOfBoundsError, indix,size=' &
-               ,indix,list%size
+               ,indix,self%size()
    write(102,*)'dArrayList_set: Doing nothing...'
   endif
 
@@ -124,36 +133,36 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- integer function dArrayList_size(list)
+ integer function dArrayList_size(self)
   implicit none
 
-  type(dArrayList), intent(in) :: list
+  class(dArrayList), intent(in) :: self
 
-  dArrayList_size=list%size
+  dArrayList_size=self%sizeOfIt
 
  end function dArrayList_size
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- subroutine reallocate(list, newCapacity)
+ subroutine reallocate(self, newCapacity)
   implicit none
 
-  type (dArrayList), intent(inout) :: list
+  class (dArrayList), intent(inout) :: self
   integer,           intent(in)    :: newCapacity
 
-  real*8, dimension(list%capacity) :: newList
+  real*8, dimension(self%capacity) :: newList
 
-  if(newCapacity==list%capacity) return
+  if(newCapacity==self%capacity) return
 
-  newList=list%values
-  deallocate(list%values)
-  allocate(list%values(newCapacity))
-  if(newCapacity<list%capacity) then
-   list%values=newList(1:newCapacity)
+  newList=self%values
+  deallocate(self%values)
+  allocate(self%values(newCapacity))
+  if(newCapacity<self%capacity) then
+   self%values=newList(1:newCapacity)
   else
-   list%values(1:list%capacity)=newList
+   self%values(1:self%capacity)=newList
   endif
-  list%capacity=newCapacity
+  self%capacity=newCapacity
 
  end subroutine reallocate
 
