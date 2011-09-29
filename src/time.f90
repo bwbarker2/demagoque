@@ -20,16 +20,17 @@
 !            Michigan State University
 !            1 Cyclotron, East Lansing, MI 48824-1321
 
-! time parameters
+!> time parameters
 MODULE time
   USE prec_def
 
-  INTEGER     :: it     ! current iteration of time
-  REAL*8      :: t      ! current time during time evolution [fm/c]
-  INTEGER     :: Nt     ! number of timesteps in current mode (adiabatic or
-                        !  time)
+  INTEGER     :: it     !< current iteration of time
+  REAL*8      :: t      !< current time during time evolution [fm/c]
+  INTEGER     :: Nt     !< number of timesteps in current mode (adiabatic or
+                        !!  time)
 
-  logical     :: firstOutput  ! first output of a given evolution
+  logical     :: firstOutput  !< first output of a given evolution
+  logical     :: lastOutput   !< last output of given evolution
 
 END MODULE time
 

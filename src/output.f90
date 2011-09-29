@@ -37,6 +37,8 @@ SUBROUTINE output
      RETURN
   ENDIF
 
+  if(it==Nt)lastOutput=.true.
+
   write(*,*)'running step',it
 
 !  call mesh_setReflectedLR(.false.)
@@ -63,6 +65,7 @@ SUBROUTINE output
   !write(*,*)'timestep,kinetic_correction_factor:',it,(epot-ep0)/(ek0-ekin)
 
  if(firstOutput)firstOutput=.false.
+ if(lastOutput)lastOutput=.false.
 
 ! call mesh_setReflectedLR(.true.)
 
