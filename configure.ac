@@ -30,12 +30,14 @@ if test X$FC == Xgfortran; then
  if $FC -c -fcheck=all ${filetest}.f90 &> /dev/null; then
   HAVE_FCHECK='yes'
   FCFLAGS="$FCFLAGS -fcheck=all"
+  FFLAGS="$FFLAGS -fcheck=all"
   echo 'yes'
  else
   echo 'no'
   echo -n '   fbounds-check...'
   if $FC -c -fbounds-check ${filetest}.f90 &> /dev/null; then
    FCFLAGS="$FCFLAGS -fbounds-check"
+   FFLAGS="$FFLAGS -fbounds-check"
    echo 'yes'
   else
    echo 'no'
