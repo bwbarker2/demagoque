@@ -21,6 +21,29 @@ if test X$user_set_fcflags != Xyes; then
  FFLAGS=`echo ${FFLAGS} | ${SED} s/\ -O2//`
 fi
 
+if test X$FC == Xgfortran; then
+ $FCFLAGS="$FCFLAGS -Wall"
+ echo 'checking for gfortran compiler options... '
+ filetest=`date +%N`
+ touch ${filetest}.f90
+ echo -n '   fcheck=all... '
+ if $FC -c -fcheck=all ${filetest}.f90 &> /dev/null; then
+  HAVE_FCHECK='yes'
+  FCFLAGS="$FCFLAGS -fcheck=all"
+  echo 'yes'
+ else
+  echo 'no'
+  echo -n '   fbounds-check...'
+  if $FC -c -fbounds-check ${filetest}.f90 &> /dev/null; then
+   FCFLAGS="$FCFLAGS -fbounds-check"
+   echo 'yes'
+  else
+   echo 'no'
+  fi
+ fi
+ rm ${filetest}*
+fi
+ 
 AC_LANG([Fortran])
 AC_FC_SRCEXT([f90])
 AC_CHECK_LIB([fftw3],[dfftw_execute],[],[AC_MSG_ERROR([library 'fftw3' not found])])
