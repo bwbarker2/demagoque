@@ -28,4 +28,4 @@ Investigate migrating from autotools to another, like scons, cmake, waf, gyp?
 
 Make gprof-able FFTW library
 
-Create "spikiness" observable. abs(den(i)-den(i+1))/delxa
+with gfortran 4.6, use -M to autogenerate makefile module dependency rules

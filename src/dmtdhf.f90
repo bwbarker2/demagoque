@@ -96,7 +96,7 @@ PROGRAM dmtdhf
   IMPLICIT NONE
 
 !  integer :: fftw_init_out
-  real :: timeElapsed(2)
+  real :: timeElapsed
 
 !  call dfftw_init_threads(fftw_init_out)
 !  if(fftw_init_out==0)write(*,*)'ERROR: dfftw_init_threads error:',fftw_init_out
@@ -327,8 +327,8 @@ PROGRAM dmtdhf
   close(76)
 !  close(101)
 
-  write(*,*)'total time:',etime(timeElapsed)
-  write(*,*)'user,walltime:',timeElapsed
+  call cpu_time(timeElapsed)
+  write(*,*)'total time:',timeElapsed,'seconds'
 
 END PROGRAM dmtdhf
 

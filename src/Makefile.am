@@ -3,7 +3,7 @@ AM_FCFLAGS_f90 = -g -O3
 AM_FFLAGS = -ggdb -O3
 
 bin_PROGRAMS = demagoque
-demagoque_SOURCES = iso_varying_string.f95 \
+demagoque_SOURCES = iso_varying_string.f90 \
           bexception.f90 bmath.f90 \
           bstring.f90 prec_def.f90 \
           cons_laws.f90 input_parameters.f90 phys_cons.f90 lib_lapack.f90 \

@@ -379,12 +379,11 @@ contains
    
    integer, intent(in) :: state
 
-   real :: elapsed(2)
-   real :: totalelapsed  
+   real :: totalelapsed, elapsed
 
    if(denState.NE.state) then
 
-   totalelapsed=etime(elapsed)
+   call cpu_time(totalelapsed)
 
 !call mesh_setReflectedLR(.true.)
 
@@ -398,7 +397,8 @@ contains
 !call mesh_setReflectedLR(.false.)
 !        call transform_x_to_wigner_dumb
 !        call transform_x_to_w_dumb_kshift
-        write(*,*)'transform_x_to_w:',etime(elapsed)-totalelapsed,'seconds'
+        call cpu_time(elapsed)
+        write(*,*)'transform_x_to_w:',elapsed-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_x_to_k_norepeat
 !call mesh_setReflectedLR(.true.)
@@ -418,14 +418,16 @@ contains
        case (SPACE)
         call transform_w_to_x_norepeat_fft
 !        call transform_wigner_to_x_dumb
-        write(*,*)'transform_w_to_x:',etime(elapsed)-totalelapsed,'seconds'
+        call cpu_time(elapsed)
+        write(*,*)'transform_w_to_x:',elapsed-totalelapsed,'seconds'
        case (MOMENTUM)
 !        call transform_wigner_to_k_dumb
 !        call transform_w_to_k_norepeat
 !call mesh_setReflectedLR(.true.)
         call transform_wigner_to_k_fft_exp
 !call mesh_setReflectedLR(.false.)
-        write(*,*)'transform_w_to_k:',etime(elapsed)-totalelapsed,'seconds'
+        call cpu_time(elapsed)
+        write(*,*)'transform_w_to_k:',elapsed-totalelapsed,'seconds'
       end select
   
      case (MOMENTUM)
@@ -433,7 +435,8 @@ contains
        case (WIGNER)
         call transform_k_to_wigner_fft_exp
 !        call transform_k_to_wigner_dumb
-        write(*,*)'transform_k_to_w:',etime(elapsed)-totalelapsed,'seconds'
+        call cpu_time(elapsed)
+        write(*,*)'transform_k_to_w:',elapsed-totalelapsed,'seconds'
        case (SPACE)
         call transform_k_to_wigner_fft_exp
 !        call transform_k_to_wigner_dumb
@@ -1049,7 +1052,7 @@ contains
    complex*16 :: val
 !   complex*16,dimension(Nxa,Nxr) :: vals
 
-   real :: elapsed(2)
+   real :: elapsed
 
    delka2=2*delka
    delkr2=2*delkr
@@ -1057,7 +1060,8 @@ contains
    !store in denmat2. Must zero it out first.
    denmat2=cmplx(0d0,0d0,8)
 
-   write(*,*)'time at starting even k ft:',etime(elapsed)
+   call cpu_time(elapsed)
+   write(*,*)'time at starting even k ft:',elapsed
 
    !first transform even ka and kr
    !first calculate rho'(ja,ka')
@@ -1084,8 +1088,8 @@ contains
     enddo !ikr2
    enddo !ika2
 
-
-   write(*,*)'time at starting odd k ft:',etime(elapsed)
+   call cpu_time(elapsed)
+   write(*,*)'time at starting odd k ft:',elapsed
 
    !now transform odd ka and kr
    do ikr2=-Nkr2/2,Nkr2/2-1
@@ -1114,7 +1118,8 @@ contains
     enddo !ikr2
    enddo !ika2
 
-   write(*,*)'time at finishing odd k ft:',etime(elapsed)
+   call cpu_time(elapsed)
+   write(*,*)'time at finishing odd k ft:',elapsed
 
    do ikr=-Nkr2,Nkr2-1
     do ika=-Nka,Nka2-1

@@ -1,3 +1,5 @@
+Create "spikiness" observable. abs(den(i)-den(i+1))/delxa
+
 Thu Sep 29 13:55:02 EDT 2011
 
 -implement getNextUnit to never worry about file unit numbers
