@@ -433,11 +433,13 @@ contains
      case (MOMENTUM)
       select case (state)
        case (WIGNER)
+!        call transform_k_to_w_fft_norepeat
         call transform_k_to_wigner_fft_exp
 !        call transform_k_to_wigner_dumb
         call cpu_time(elapsed)
         write(*,*)'transform_k_to_w:',elapsed-totalelapsed,'seconds'
        case (SPACE)
+!        call transform_k_to_w_fft_norepeat
         call transform_k_to_wigner_fft_exp
 !        call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
@@ -1041,6 +1043,101 @@ contains
   end subroutine transform_k_to_wigner_fft_exp
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  
+  subroutine transform_k_to_w_fft_norepeat
+   use phys_cons
+   use prec_def
+   implicit none
+  
+   integer :: ixa,ika,ikr
+   real(Long) :: trigarg
+   real*8, allocatable, dimension(:),save :: arraycos, arraysin
+   integer*8, save :: plan_cos, plan_sin  !< plans for FFTW
+
+   include '/usr/include/fftw3.f'
+
+   !do only odd ika, even ika is done below
+   do ika=-Nka+1,Nka-1,2
+    do ixa=-Nxa2,Nxa2-1
+     denmat2(ixa,ika)=0.d0
+      do ikr=1,Nkr2-1
+       trigarg=xa(ixa)*kr(ikr)
+!      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
+      denmat2(ixa,ika)=denmat2(ixa,ika) &
+                       +denmat(ikr,ika)*(cos(trigarg)+imagi*sin(trigarg)) &
+!                       +DBLE(denmat(ikr,ika))*cos(trigarg) &
+!                       -Dimag(denmat(ikr,ika))*sin(trigarg)
+                       +denmat(-ikr,ika)*(cos(trigarg) &
+                                         -imagi*sin(trigarg))
+     enddo !ixa
+     denmat2(ixa,ika)=denmat2(ixa,ika) &
+                      +dble(denmat(-Nkr2,ika))*cos(xa(ixa)*kr(-Nkr2)) &
+                      +denmat(0,ika)
+
+!     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
+!     enddo
+!      denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*
+     denmat2(ixa,ika)=denmat2(ixa,ika)*delkr*invsqrt2pi
+    enddo
+   enddo
+  
+   denmat=denmat2
+
+   if(.not.allocated(arraycos)) then
+!    allocate(arraycos(0:Nkr2/2),arraysin(0:Nkr2/2))
+    allocate(arraycos(0:Nkr2/2),arraysin(0:Nkr2/2))
+
+    call dfftw_plan_r2r_1d(plan_cos,size(arraycos),arraycos,arraycos &
+                           ,FFTW_REDFT00,FFTW_ESTIMATE)
+    call dfftw_plan_r2r_1d(plan_sin,Nkr2/2-1,arraysin(1:Nkr2/2-1),arraysin(1:Nkr2/2-1) &
+                           ,FFTW_RODFT00,FFTW_ESTIMATE)
+
+    !these will always be zero, but they are so handy to have 
+    !for whole-array operations below
+    arraysin(0)=0d0  !if I use 0_Long here, then plan_sin init fails below, not sure why...
+    arraysin(Nkr2/2)=0d0
+
+!    arraycos=0
+
+   endif !not allocated
+
+   !now do even ika rows
+   do ika=-Nka,Nka-2,2
+     arraycos(0)=dble(denmat(0,ika))
+    do ikr=1,Nkr2/2-1
+     arraycos(ikr)=dble(denmat(ikr*2,ika))
+     arraysin(ikr)=dimag(denmat(ikr*2,ika))
+    enddo
+    arraycos(Nkr2/2)=dble(denmat(-Nkr2,ika))
+
+    call dfftw_execute(plan_cos)
+    call dfftw_execute(plan_sin)
+
+    arraycos=arraycos*delkr*invsqrt2pi
+    arraysin=arraysin*delkr*invsqrt2pi
+
+    ! fill density matrix, starting with 3rd quarter of data (0 to N/4)
+    denmat(0:Nxa2/2,ika)=arraycos-arraysin
+
+    ! now do 2nd quarter (-N/4 to 0)
+    do ixa=-Nxa2/2,-1
+     denmat(ixa,ika)=arraycos(-ixa)+arraysin(-ixa)
+    enddo !ixa
+
+    ! copy from 2nd quarter to 4th quarter of matrix
+    denmat(Nxa2/2+1:Nxa2-1,ika)=denmat(-Nxa2/2+1:-1,ika)
+
+    ! copy from 3rd quarter to 1st quarter (-N/2 to -N/4)
+    denmat(-Nxa2:-Nxa2/2-1,ika)=denmat(0:Nxa2/2-1,ika)
+
+   enddo !ika
+
+   denState=WIGNER
+  
+  end subroutine transform_k_to_w_fft_norepeat
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
   subroutine transform_x_to_k_norepeat
    !! transform_x_to_k_nozeroes - transforms from coordinate to momentum space, with no redundancy from periodic extensions. See paper notes BWB 2011-03-11.
