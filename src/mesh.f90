@@ -373,11 +373,12 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Sets Fourier state of system to desired state (position, wigner, or
+  !! momentum. If already in desired state, does nothing.
   subroutine setState(state)
-   !! only implemented for x to wigner and inverse transforms so far
    implicit none
    
-   integer, intent(in) :: state
+   integer, intent(in) :: state !< state to set system to
 
    real :: totalelapsed, elapsed
 

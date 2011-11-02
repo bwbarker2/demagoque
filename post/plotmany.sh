@@ -1,18 +1,42 @@
 #!/bin/bash
 #
 # plots 2d density matrices
+# WARNING: Incomplete, not ready to run yet.
 
 path_to_results="./"
-path_from_results="../../post/"
+path_from_results="../post/"
+
+if [$# -ne 1]
+then
+ echo "Usage: $0 [basefname]"
+ exit -1
+fi
+
+outmode=$1
+
+case "${outmode}" in
+ 2dxre)		pltfile="2dx.plt"
+		basefname="2dxre"
+		options="matrix"
+		;;
+ 2dx_re)	pltfile="2dx.plt"
+                basefname="2dx"
+		options="u 1:2:3"
+		;;
+ *)		echo "plot2d.sh: Not valid outmode: ${outmode}"
+		;;
+esac
 
 # test file to get timestep information
 filetest="${path_to_results}/2dxre"
 
-filelistx="2dwre"
+#filelistx="2dxre 2dxim"
+filelistx="2dx"
 #filelistk="2dkre 2dkim"
+filelistk=""  # only printing k right now
 
 # get number of timesteps in file
-nindex=`grep time ${filetest}.dat | wc -l`
+nindex=`grep 'time' ${basefname}.dat | wc -l`
 
 # get timestep information
 for ((index=1; index <= nindex; index++))
@@ -54,11 +78,8 @@ for ((index=1; index <= nindex; index++)) ; do
       i=${i}
 
     let "ind0 = index - 1"
-    sed -e "s/INPUTFILE/$i/" \
-        -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" \
-        -e "s/INDEX/$ind0/" \
-        -e "s/TIME/$(echo ${times[index]} | sed -e "s/\_/\./")/g" \
-	${path_from_results}/2dw.plt | gnuplot
+    sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$ind0/" \
+	${path_from_results}/2dx.plt | gnuplot
   done
 
   for i in $filelistk ;  do
@@ -70,10 +91,7 @@ for ((index=1; index <= nindex; index++)) ; do
       
       i=${i}
       let "ind0 = index - 1"
-      sed -e "s/INPUTFILE/$i/" \
-          -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" \
-          -e "s/INDEX/$ind0/" \
-          -e "s/TIME/$(echo ${times[index]} | sed -e "s/\_/\./")/g" \
+      sed -e "s/INPUTFILE/$i/" -e "s/OUTPUTFILE/${i}\/${i}${times[index]}/" -e "s/INDEX/$ind0/" \
 	${path_from_results}/2dk.plt | gnuplot
   done
 

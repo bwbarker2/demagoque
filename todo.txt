@@ -29,3 +29,5 @@ Investigate migrating from autotools to another, like scons, cmake, waf, gyp?
 Make gprof-able FFTW library
 
 with gfortran 4.6, use -M to autogenerate makefile module dependency rules
+
+create make target to change compile options for debugging (it makes the code slower)

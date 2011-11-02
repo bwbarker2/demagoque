@@ -69,7 +69,7 @@ for i in $filelist ;  do
       sed -e "s/INPUTFILE/$i/g" \
           -e "s/OUTPUTFILE/${fili}\/${fili}${times[index]}/g" \
           -e "s/INDEX/$ind1/g" \
-          -e "s/TIME/${times[index]}/g" \
+          -e "s/TIME/$(echo ${times[index]} | sed -e "s/\_/\./")/g" \
 	  -e "s/NUM/$reim/g" \
 	  ${path_from_results}denmat_diag.plt | gnuplot
     done #time
