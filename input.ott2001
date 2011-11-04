@@ -1,5 +1,5 @@
 ! ........... READ AND WRITE PARAMETERS
-4 ! ntime
+40 ! ntime
 ! ........... PHYSICAL PARAMETERS
 2.5d0 ! delt 
 320 ! Nevt
@@ -9,9 +9,9 @@
 200 ! Nxa  !must be divisible by 4
 200 ! Nxr  !must be divisible by 4
 ! ............. POTENTIAL PARAMETERS
-4  ! potInitial
+0  ! potInitial
 4 ! potFinal
-10000 1000 2000  ! tad,wtad,Nad
+2500 250 2000  ! tad,wtad,Nad
 1  ! iadib
 ! ............. IMAGINARY EVOLUTION PARAMETERS
 .false.     ! useImEvol - use imaginary evolution?

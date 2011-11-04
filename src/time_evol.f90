@@ -562,11 +562,36 @@ subroutine potBEC_1D_HO_Mateo2011(potX,ix,wz,wt,scat,Npart)
  !> total number of particles in condensate
  real (Long), intent(in) :: Npart
 
+! real (Long) :: smearing !< amount of density smearing over adjacent cells to do
+ real (Long) :: denav !< average density after smearing
+! integer :: ibefore, iafter ! index of adjacent cells
+!
+! smearing=0.64_Long
+!
+! ! edge of box periodicity
+! if (ix == -Nxa2) then
+!  ibefore=Nxa2-1
+!  iafter=-Nxa2+1
+! elseif (ix == Nxa2-1) then
+!  ibefore=Nxa2-2
+!  iafter=-Nxa2
+! else
+!  ibefore=ix-1
+!  iafter=ix+1
+! endif
+!
+! !density smearing over adjacent cells
+! denav=(0.5_Long*smearing)*dble(getDen(ibefore,0)) &
+!       +(1_Long-smearing)*dble(getDen(ix,0)) &
+!       +(0.5_Long*smearing)*dble(getDen(iafter,0))
+
+denav=dble(getDen(ix,0))
+
 !potX=1
  potX=0.5_Long*m0*wz**2*xa(ix)**2 &
 !  +sign(1d0,dble(getDenX(ix,0))) &
 !   *hbar*wt*(sqrt(1_Long+4_Long*scat*Npart*abs(getDenX(ix,0)))-1_Long)
-   +2_Long*scat*hbar*wt*Npart*dble(getDen(ix,0))  !original 1D GPE
+   +2_Long*scat*hbar*wt*Npart*denav  !original 1D GPE
 ! write(*,*)'m0,wz,xa=',m0,wz,xa(ix)
 
 end subroutine potBEC_1D_HO_Mateo2011
