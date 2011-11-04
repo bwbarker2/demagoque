@@ -20,6 +20,8 @@ module bmath
 !            National Superconducting Cyclotron Laboratory
 !            Michigan State University
 !            1 Cyclotron, East Lansing, MI 48824-1321
+ use prec_def
+ implicit none
 
 contains
 
@@ -71,6 +73,22 @@ contains
 !end function findLargestPrimeFactor
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Finds the zero of a function f between a and b.
+!! f(a) and f(b) must have opposite signs.
+!! Official reference: R.P. Brent (1973). Algorithms for Minimization without Derivatives, Chapter 4. Prentice-Hall, Englewood Cliffs, NJ. ISBN 0-13-022335-2.
+!! My reference: http://en.wikipedia.org/w/index.php?title=Brent%27s_method&oldid=457696075
+real (Long) function bmath_dZeroBrent(a,b,f) result(zero)
+ implicit none
+
+ real (Long), intent(in) :: a,b !< upper or lower bound of interval to search
+ real (Long), external :: f   !< function to find roots of
+
+ 
+
+end function bmath_dZeroBrent
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 complex*16 function zdet2d(cmat,n)
  !! zdet2d - nonoptimized calculation of determinant of 2D complex double matrix - order N^2

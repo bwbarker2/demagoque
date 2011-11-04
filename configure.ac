@@ -9,7 +9,7 @@ if test -n "${FCFLAGS}"; then
 fi
 
 AC_CONFIG_SRCDIR([src/dmtdhf.f90])
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 AC_PROG_AWK
 AC_PROG_FC
 AC_PROG_F77
@@ -22,7 +22,7 @@ if test X$user_set_fcflags != Xyes; then
 fi
 
 if test X$FC == Xgfortran; then
- $FCFLAGS="$FCFLAGS -Wall"
+ FCFLAGS="$FCFLAGS -Wall"
  echo 'checking for gfortran compiler options... '
  filetest=`date +%N`
  touch ${filetest}.f90
@@ -52,5 +52,6 @@ AC_CHECK_LIB([fftw3],[dfftw_execute],[],[AC_MSG_ERROR([library 'fftw3' not found
 AC_CHECK_LIB([lapack],[zgeev],[],[AC_MSG_ERROR([library 'lapack' not found])])
 #AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile
-                 src/Makefile])
+                 src/Makefile
+                 tests/Makefile])
 AC_OUTPUT
