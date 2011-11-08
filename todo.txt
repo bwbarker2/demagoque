@@ -4,7 +4,6 @@ Make mesh into an object (do this before going to 2D)
 
 Unify file opens for different modes to not duplicate code (ad_, im_, etc)
 
-
 Implement subroutine in module 'mesh' that takes a function of ixa and ixr and multiplies matrix elements by that function - less things outside of mesh need to know about how we store matrix.
 
 autotools:
@@ -13,8 +12,6 @@ autotools:
 
 Copy library files to local directory for more portability
 -maybe... what about HPCC apps where HPCC libs are more optimized for arch?
-
-Add error handling module - for example, see http://sourceware.org/autobook/autobook/autobook_54.html#SEC54
 
 Add unit conversion module
  -see how GNU Scientific Library or ROOT does it?
@@ -31,3 +28,9 @@ Make gprof-able FFTW library
 with gfortran 4.6, use -M to autogenerate makefile module dependency rules
 
 create make target to change compile options for debugging (it makes the code slower)
+
+Convert to non-recursive Makefiles to hopefully stop building entire src tree for small test codes.
+
+Make iflag module to define constants so we can say iflag=IFLAG_VERBOSE and such in function calls for debugging output - add to bmath_dZeroBrent, for example.
+
+bug: make check compiles entire code in src, when we only need certain modules for the tests. Would this be fixed with non-recursive target above?

@@ -74,17 +74,159 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+!> Swaps two real(Long) values
+subroutine dswap(a,b)
+ implicit none
+
+ real(Long), intent(inout) :: a,b !< variables to swap
+
+ real(Long) :: c
+
+ c=a
+ a=b
+ b=c
+
+end subroutine dswap
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Finds if a is between b and c
+logical function bmath_dIsBetween(a,bin,cin) result(ans)
+ implicit none
+
+ real(Long), intent(in) :: a !< value to test
+ real(Long), intent(in) :: bin,cin !< bounds
+
+ real(Long) :: b,c
+
+ b=bin
+ c=cin
+
+ if(b>c)then
+  call dswap(b,c)
+ endif
+
+ if ( (b<a) .and. (a<c) ) then
+  ans=.true.
+ else
+  ans=.false.
+ endif
+
+end function bmath_dIsBetween
+
+
 !> Finds the zero of a function f between a and b.
 !! f(a) and f(b) must have opposite signs.
 !! Official reference: R.P. Brent (1973). Algorithms for Minimization without Derivatives, Chapter 4. Prentice-Hall, Englewood Cliffs, NJ. ISBN 0-13-022335-2.
-!! My reference: http://en.wikipedia.org/w/index.php?title=Brent%27s_method&oldid=457696075
-real (Long) function bmath_dZeroBrent(a,b,f) result(zero)
+!! My reference: http://en.wikipedia.org/w/index.php?title=Brent%27s_method&oldid=457696075#Algorithm .
+real (Long) function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero)
+ use bexception
  implicit none
 
- real (Long), intent(in) :: a,b !< upper or lower bound of interval to search
+ real (Long), intent(in) :: ain !< one bound of search interval
+ real (Long), intent(in) :: bin !< the other bound
  real (Long), external :: f   !< function to find roots of
+ integer, optional, intent(out) :: iflag !< error flag, 0 = no errors
+ real (Long), optional, intent(in) :: err !< convergence tolerance, default=1e-10
+ integer, optional, intent(in) :: maxiterin !< maximum iterations, default=1000
 
- 
+ real (Long) :: fa,fb,fc,fs !< function evaluated at a,b,c,s
+
+ real (Long) :: a,b,c,d,s !< trial positions
+
+ logical :: mflag
+
+ real (Long) :: erruse  !convergence interval to use
+ integer :: maxiters !maximum iterations to use
+ integer :: iters  !number of iterations used
+
+ if(present(iflag))iflag=0
+
+ if(present(err)) then
+  erruse=err
+ else
+  erruse=1e-10_Long
+ endif
+
+ if(present(maxiterin)) then
+  maxiters=maxiterin
+ else
+  maxiters=1000
+ endif
+
+ a=ain
+ b=bin
+
+ fa=f(a)
+ fb=f(b)
+ fs=fb
+
+ if (fa*fb>=0) then
+  call throwException('bmath_dZeroBrent: root is not bracketed',BEXCEPTION_WARNING)
+  if(present(iflag))iflag=1
+  return
+ endif
+
+ if (abs(fa) < abs(fb)) then
+  call dswap(a,b)
+  call dswap(fa,fb)
+ endif
+
+ c=a
+ fc=fa
+
+ mflag=.true.
+
+ iters=0
+
+ do while ((fb /= 0) .and. (fs /= 0) .and. abs(b-a)>erruse)
+  iters=iters+1
+  if(iters>maxiters) call throwException('bmath_dZeroBrent: iterations exceeded maximum',BEXCEPTION_FATAL)
+
+  if ( (fa/=fc) .and. (fb/=fc) ) then
+   s= a*fb*fc/((fa-fb)*(fa-fc)) &
+     +b*fc*fa/((fb-fa)*(fb-fc)) &
+     +c*fa*fb/((fc-fa)*(fc-fb))
+!   write(ERROR_UNIT,*)'tried quad'
+  else
+   s=b-fb*(b-a)/(fb-fa)
+!   write(ERROR_UNIT,*)'tried secant'
+  endif
+
+  if(     .not.bmath_dIsBetween(s,(3_Long*a+b)*0.25_Long,b) &
+     .or. (     mflag .and. abs(s-b)>=abs(b-c)*0.5_Long) &
+     .or. (.not.mflag .and. abs(s-b)>=abs(c-d)*0.5_Long) &
+     .or. (     mflag .and. abs(b-c)<abs(erruse)) &
+     .or. (.not.mflag .and. abs(c-d)<abs(erruse)) ) then
+   s = (a+b)*0.5_Long
+   mflag=.true.
+!   write(ERROR_UNIT,*)'...but used bisection'
+  else
+   mflag=.false.
+!   write(ERROR_UNIT,*)'...and used it'
+  endif
+
+  fs=f(s)
+  d=c
+  c=b
+  fc=fb
+
+  if(fa*fs<0) then
+   b=s
+   fb=fs
+  else
+   a=s
+   fa=fs
+  endif
+
+  if (abs(fa) < abs(fb)) then
+   call dswap(a,b)
+   call dswap(fa,fb)
+  endif
+!  write(ERROR_UNIT,*)'s:',s
+ end do
+
+ zero=s
 
 end function bmath_dZeroBrent
 

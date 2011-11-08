@@ -35,7 +35,7 @@ contains
   if(errlevel<0) then
    write(*,*)
    write(*,*)'Exiting...'
-   stop
+   stop 1
   endif
 
  end subroutine throwException

@@ -1,3 +1,8 @@
+Fri Nov  4 15:44:53 EDT 2011
+
+Add error handling module - for example, see http://sourceware.org/autobook/autobook/autobook_54.html#SEC54
+
+
 Create "spikiness" observable. abs(den(i)-den(i+1))/delxa
 
 Thu Sep 29 13:55:02 EDT 2011
