@@ -72,6 +72,11 @@ MODULE phys_cons
   REAL (long) :: m0   !< mass of particle being evolved in time
   REAL (long) , PARAMETER :: deg=4.d0 ! degeneracy
 
+  real (Long) :: kilogram !< magnitude of kilogram in current unit system
+  real (Long) :: joule !< magnitude of joule in current unit system
+  real (Long) :: meter !< magnitude of meter in current unit system
+  real (Long) :: second
+
 contains
 
  !> \brief Initializes physical constants, using nuclear system:
@@ -99,15 +104,17 @@ contains
  subroutine phys_cons_initializeBEC
   implicit none
 
-  hbar = SI_PLANCKS_CONSTANT_HBAR &
-         *1_Long    / SI_ATOMIC_MASS_CONSTANT  &  ! u / kg
-!         * 1_Long / MASS_REL_RUBIDIUM_87       &  ! 1 mass of 87Rb / u
-         *(1e5_Long / 1_Long)**2               &  ! 10 um / m twice
-         *1_Long    / 1e3_Long                    ! s / ms
- 
-  write(*,*)'hbar=',hbar
+  kilogram = 1e0_Long / SI_ATOMIC_MASS_CONSTANT
+  meter = 1e5_Long
+  second = 1e3_Long
+
+  hbar = SI_PLANCKS_CONSTANT_HBAR*kilogram*meter**2/second
+
+  joule=kilogram*(meter/second)**2
+!  write(*,*)'hbar=',hbar
  
   m0 = MASS_REL_RUBIDIUM_87
+
 !  m0 = 1
 
  end subroutine phys_cons_initializeBEC
