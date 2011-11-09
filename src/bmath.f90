@@ -162,7 +162,7 @@ real (Long) function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero
  fs=fb
 
  if (fa*fb>=0) then
-  call throwException('bmath_dZeroBrent: root is not bracketed',BEXCEPTION_WARNING)
+  call throwException('bmath_dZeroBrent: root is not bracketed',BEXCEPTION_FATAL)
   if(present(iflag))iflag=1
   return
  endif
