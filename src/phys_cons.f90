@@ -35,6 +35,10 @@ MODULE phys_cons
        PLANCKS_CONSTANT_HBAR_MEV_FM_C = 197.3269718_Long, &
        PLANCKS_CONSTANT_HBAR_MEV_FM_C_D = 0.0000044_Long  !< uncertainty
 
+  !> elementary charge, e, in C= A s, from 2010 CODATA
+  real (Long), parameter :: SI_ELEMENTARY_CHARGE = 1.602176565e-19_Long &
+                         ,SI_ELEMENTARY_CHARGE_D = 0.000000035e-19_Long
+
   !> speed of light in vacuum, c, in m s<sup>-1</sup>, from 2010 CODATA
   !! recommended values
   real (Long), parameter :: SI_SPEED_OF_LIGHT   = 299792458d0
@@ -88,8 +92,20 @@ contains
  subroutine phys_cons_initializeNuclear
   implicit none
 
-  hbar = PLANCKS_CONSTANT_HBAR_MEV_FM_C  !MeV fm
-  m0 = 0.5_Long*(MASS_NEUTRON_MEV_C2+MASS_PROTON_MEV_C2)
+!  fm=1e0_Long
+!  fm_c=1e0_Long
+!  Mev=1e0_Long
+!  Mev_c2=1e0_Long
+!
+!  amp=1e0_Long
+!  meter=1e15_Long*fm
+!  second=SI_SPEED_OF_LIGHT*meter
+!  joule=
+!  kilogram=1e-6_Long*amp*second**3*SI_SPEED_OF_LIGHT**2 &
+!           /(SI_meter**2)
+!
+!  hbar = PLANCKS_CONSTANT_HBAR_MEV_FM_C  !MeV fm/c
+!  m0 = 0.5_Long*(MASS_NEUTRON_MEV_C2+MASS_PROTON_MEV_C2)
   
 
  end subroutine phys_cons_initializeNuclear
@@ -108,9 +124,10 @@ contains
   meter = 1e5_Long
   second = 1e3_Long
 
-  hbar = SI_PLANCKS_CONSTANT_HBAR*kilogram*meter**2/second
-
   joule=kilogram*(meter/second)**2
+
+  hbar = SI_PLANCKS_CONSTANT_HBAR*joule*second
+
 !  write(*,*)'hbar=',hbar
  
   m0 = MASS_REL_RUBIDIUM_87
