@@ -7,7 +7,8 @@ module class_SquareWellState
  use prec_def
  implicit none
 
-  private :: currentState
+  private :: currentState, squareWellState_calcEnergy, &
+             squareWellState_calcNorm, squareWellState_energyRoot
 
   public
   type squareWellState
@@ -21,6 +22,7 @@ module class_SquareWellState
 
    contains
     procedure :: getWavefn => squareWellState_getWavefn
+    procedure :: getPotential => squareWellState_getPotential
   end type squareWellState
 
   type(squareWellState) :: currentState !< for root-finding function, it can only have one argument, so set this as current state before running root finder
@@ -124,6 +126,24 @@ module class_SquareWellState
       /(hbar**2*(1e0_Long+tan(uu)**2))-uu**2
 
   end function squareWellState_energyRoot
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns potential of state
+  function squareWellState_getPotential(self,xx) result(pot)
+   implicit none
+
+   class (squareWellState), intent(in) :: self !< state
+   real (Long) :: xx  !< position at which to get potential
+   real (Long) :: pot
+
+   if(abs(xx)<=self%d) then
+    pot=self%v0
+   else
+    pot=0e0_Long
+   endif
+
+  end function squareWellState_getPotential
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
