@@ -17,5 +17,7 @@ doc/latex
 results/*
 results.*
 src/demagoque
+tests/bmath_dZeroBrent_run
+tests/class_SquareWellState_run
 a.out
 data

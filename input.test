@@ -1,30 +1,32 @@
 ! ........... READ AND WRITE PARAMETERS
-1 ! ntime
+10 ! ntime
 ! ........... PHYSICAL PARAMETERS
-0.5d0 ! delt [fm/c]
-16 ! Nevt
+100d0 ! delt [fm/c]
+400 ! Nevt
 0d0 ! EA [MeV]
-5d0  ! xLa [fm]
-5d0 ! xLr [fm]
-20 ! Nxa
-20 ! Nxr
+50d0  ! xLa [fm]
+50d0 ! xLr [fm]
+100 ! Nxa
+100 ! Nxr
 ! ............. POTENTIAL PARAMETERS
--1  ! potInitial
--1 ! potFinal
+5  ! potInitial
+5 ! potFinal
 30 70 1200  ! tad,wtad,Nad
 1  ! iadib
 ! ............. IMAGINARY EVOLUTION PARAMETERS
 .false.     ! useImEvol - use imaginary evolution?
 10   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
+unitSystem bec
   !initialSeparation 15d0       !separation between centers in fm
-initState_gaussianNuclear 0  !use this, Nmax
-!initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
-!initState_kdelta 1d0 0d0     !norm, position
-!initState_plane 3 1d0 0d0    !wave number, norm, phase shift
-unitSystem nuclear
+initState_sqWell 87.0d0 0 0.001 14.5d0
+  !initState_gaussianNuclear 0  !use this, Nmax
+  !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
+  !initState_kdelta 1d0 0d0     !norm, position
+  !initState_plane 3 1d0 0d0    !wave number, norm, phase shift
+  !unitSystem nuclear
 splitOperatorMethod 3  !use this, setting order of accuracy in time
-!useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
+  !useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
 END_OF_OPTIONS !sentinel for end of optional parameters
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

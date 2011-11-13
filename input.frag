@@ -17,6 +17,7 @@
 .false.     ! useImEvol - use imaginary evolution?
 100   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
+unitSystem nuclear
 initialSeparation 15d0
 initState_gaussianNuclear 1
 splitOperatorMethod 3
