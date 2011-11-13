@@ -140,6 +140,8 @@ real (Long) function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero
  integer :: maxiters !maximum iterations to use
  integer :: iters  !number of iterations used
 
+ character(len=130) :: errmsg
+
  if(present(iflag))iflag=0
 
  if(present(err)) then
@@ -162,7 +164,8 @@ real (Long) function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero
  fs=fb
 
  if (fa*fb>=0) then
-  call throwException('bmath_dZeroBrent: root is not bracketed',BEXCEPTION_FATAL)
+  write(errmsg,*)'bmath_dZeroBrent: root is not bracketed, f(a),f(b)=',fa,fb
+  call throwException(errmsg,BEXCEPTION_FATAL)
   if(present(iflag))iflag=1
   return
  endif
