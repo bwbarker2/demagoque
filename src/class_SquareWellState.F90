@@ -47,6 +47,9 @@ module class_SquareWellState
 
    self=squareWellState(mass,level,v0,d,energy,norm,normTail)
 
+!   write(*,*)self
+!   write(*,*)'hbar=',hbar
+
    self%energy=squareWellState_calcEnergy(self)
    call squareWellState_calcNorm(self)
 
@@ -79,6 +82,8 @@ module class_SquareWellState
    upbound = lowbound+0.5_Long*pi
 
    currentState=state
+
+!   write(ERROR_UNIT,*)squareWellState_energyRoot(lowbound)
 
    energy=bmath_dZeroBrent(lowbound,upbound,squareWellState_energyRoot)
 !   write(ERROR_UNIT,*)'level,root:',state%level,energy
@@ -138,9 +143,9 @@ module class_SquareWellState
    real (Long) :: pot
 
    if(abs(xx)<=self%d) then
-    pot=self%v0
-   else
     pot=0e0_Long
+   else
+    pot=self%v0
    endif
 
   end function squareWellState_getPotential
