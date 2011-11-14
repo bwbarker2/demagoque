@@ -485,7 +485,7 @@ contains
                                     +DIMAG(array(ixr))*sin(trigarg)
      enddo
      wigden(ixa,ika)=wigden(ixa,ika)*2d0
-     wigden(ixa,ika)=wigden(ixa,ika)+array(0)+array(Nxr)*(-1)**ika
+     wigden(ixa,ika)=wigden(ixa,ika)+dble(array(0))+dble(array(Nxr))*(-1)**ika
      wigden(ixa,ika)=wigden(ixa,ika)*delxr*invsqrt2pi
   
      ! if the cell is unreasonably large, write out

@@ -52,7 +52,7 @@ module lib_lapack
 !   write(*,*)'lwork should be',work(0)
 !   write(*,*)
 
-   lwork=work(0)
+   lwork=nint(dble(work(0)))
    deallocate(work)
    allocate(work(0:lwork-1))
 
@@ -104,7 +104,7 @@ module lib_lapack
 
 !   write(*,*)'lwork should be',work(0)
  
-   lwork=work(0)
+   lwork=nint(dble(work(0)))
 
    deallocate(work)
    allocate(work(0:lwork-1))
