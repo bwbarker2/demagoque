@@ -22,7 +22,7 @@ if test X$user_set_fcflags != Xyes; then
 fi
 
 if test X$FC == Xgfortran; then
- FCFLAGS="$FCFLAGS -Wall"
+ FCFLAGS="$FCFLAGS -Wall -Wno-surprising"
  echo 'checking for gfortran compiler options... '
  filetest=`date +%N`
  touch ${filetest}.f90
