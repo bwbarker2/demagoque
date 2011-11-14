@@ -470,11 +470,15 @@ subroutine procOptionLine(inline)
  use bstring
  use input_parameters
  use mesh
+ use phys_cons
+ use prec_def
  implicit none
 
  character(*), intent(in) :: inline !< line to be processed
 
  integer :: ibeg,iend
+ integer, dimension(3) :: iin
+ real(Long), dimension(3) :: rin
 
  call findFirstWord(inline,' ',ibeg,iend)
 
@@ -520,6 +524,16 @@ subroutine procOptionLine(inline)
     write(*,*)'                     initState_cosine_norm  =',initState_plane_norm
     write(*,*)'                     initState_cosine_shift =',initState_plane_shift
 
+   case("initState_sqWell")
+    if(.not.phys_cons_isInitialized) then
+     call throwException('procOptionLine: option "unitSystem" must be set before initState_sqWell',BEXCEPTION_FATAL)
+    else
+     useInitState_sqWell=.true.
+     read(inline(iend+1:len(inline)),*)rin(1),iin(1),rin(2),rin(3)
+     initState_sqWell=make_SquareWellState(rin(1),iin(1),rin(2),rin(3))
+     norm_thy=norm_thy+1
+    endif
+
    case("pot4")
     read(inline(iend+1:len(inline)),*)ho_mateo_wz, ho_mateo_wt, &
                                       ho_mateo_scat, ho_mateo_Npart
@@ -552,10 +566,12 @@ subroutine procOptionLine(inline)
      case("bec")
       unitSystem_bec=.true.
       write(*,*)'Defining unit system: bec'
+      call phys_cons_initializeBEC
 
      case("nuclear")
       unitSystem_nuclear=.true.
       write(*,*)'Defining unit system: nuclear'
+      call phys_cons_initializeNuclear
 
      case default
       call throwException('getStdIn: invalid unit system chosen: '//inline(ibeg:iend),BEXCEPTION_FATAL)

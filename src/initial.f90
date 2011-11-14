@@ -30,13 +30,6 @@ SUBROUTINE calcInitial
   use phys_cons
   implicit none
 
-
-  if(unitSystem_bec) then
-   call phys_cons_initializeBEC
-  elseif(unitSystem_nuclear) then
-   call phys_cons_initializeNuclear
-  endif
-
   call initializeMesh
 
   write(*,*) '1D to 3D factor:',facd
@@ -127,6 +120,12 @@ subroutine initialState
               *exp(-imagi*initState_plane_number*pi*xx2/xLa &
                    +initState_plane_shift)
            den0=den0+conjg(y1)*y2
+          endif
+
+          if(useInitState_SqWell) then
+           y1=initState_sqWell%getWavefn(xx1)
+           y2=initState_sqWell%getWavefn(xx2)
+           den0=den0+y1*y2
           endif
 
 !           if(useImEvol) then

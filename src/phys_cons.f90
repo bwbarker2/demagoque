@@ -7,6 +7,8 @@ MODULE phys_cons
   USE prec_def
   IMPLICIT NONE
 
+  logical :: phys_cons_isInitialized
+
   !math constants (unitless)
   complex*16,   parameter :: imagi=cmplx(0.d0,1.d0,8)  !sqrt(-1)
   REAL (long) , PARAMETER :: pi=4d0*atan(1d0)
@@ -104,9 +106,10 @@ contains
 !  kilogram=1e-6_Long*amp*second**3*SI_SPEED_OF_LIGHT**2 &
 !           /(SI_meter**2)
 !
-!  hbar = PLANCKS_CONSTANT_HBAR_MEV_FM_C  !MeV fm/c
-!  m0 = 0.5_Long*(MASS_NEUTRON_MEV_C2+MASS_PROTON_MEV_C2)
-  
+  hbar = PLANCKS_CONSTANT_HBAR_MEV_FM_C  !MeV fm/c
+  m0 = 0.5_Long*(MASS_NEUTRON_MEV_C2+MASS_PROTON_MEV_C2)
+
+  phys_cons_isInitialized=.true.
 
  end subroutine phys_cons_initializeNuclear
 
@@ -133,6 +136,8 @@ contains
   m0 = MASS_REL_RUBIDIUM_87
 
 !  m0 = 1
+
+  phys_cons_isInitialized=.true.
 
  end subroutine phys_cons_initializeBEC
  

@@ -529,6 +529,8 @@ subroutine getPotX(potX,potType,ix)
    call potHOexact(potX,ix)
   case (4)
    call potBEC_1D_HO_Mateo2011(potX,ix,ho_mateo_wz,ho_mateo_wt,ho_mateo_scat,ho_mateo_Npart)
+  case (5)
+   potX=initState_sqWell%getPotential(xa(ix))
   case default
    call throwException('getPotX: improper potential type', BEXCEPTION_FATAL)
    potX=0.d0
