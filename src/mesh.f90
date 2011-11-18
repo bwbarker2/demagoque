@@ -908,8 +908,7 @@ contains
      !Analytically (see notes BWB 2011-01-25p2), for ika+ikr odd, denmat should
      ! be exactly zero. Make it so. This subroutine is not built for speed,
      ! so leave the above computation alone, but add the following:
-!     if(mod(ika+ikr,2)==1)denmat2(ikr,ika)=0d0
-     !This doesn't seem to help, and it breaks lr symmetry, so don't do it.
+     if(abs(mod(ika+ikr,2))==1)denmat2(ikr,ika)=0e0_Long
 
     enddo
    enddo
