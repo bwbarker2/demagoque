@@ -450,13 +450,9 @@ SUBROUTINE getStdIn
  !verify option dependencies
 
  if(useFlipClone.and.abs(initialSeparation)<xLa/Nxa)then
-  write(stderr,*)
-  write(stderr,*)'*****'
-  write(stderr,*)'getStdIn: useFlipClone is set, but not initialSeparation!'
-  write(stderr,*)'getStdIn: Setting initialSeparation to half xLa'
-  write(stderr,*)'*****'
-  write(stderr,*)
-
+  call throwException( &
+   'getStdIn: useFlipClone is set, but not initialSeparation!' &
+    //'Setting initialSeparation to half xLa',BEXCEPTION_WARNING)
   initialSeparation=xLa/2d0
  endif
 

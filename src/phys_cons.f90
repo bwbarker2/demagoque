@@ -10,10 +10,11 @@ MODULE phys_cons
   logical :: phys_cons_isInitialized
 
   !math constants (unitless)
-  complex*16,   parameter :: imagi=cmplx(0.d0,1.d0,8)  !sqrt(-1)
-  REAL (long) , PARAMETER :: pi=4d0*atan(1d0)
-  real (long) , parameter :: invpi=1d0/pi  !1/pi
-  real (long) , parameter :: invsqrt2pi=1d0/sqrt(2d0*pi)
+  complex (Long), parameter :: czero=cmplx(0e0_Long,0e0_Long,Long)
+  complex (Long),   parameter :: imagi=cmplx(0e0_Long,1e0_Long,Long)  !sqrt(-1)
+  REAL (long) , PARAMETER :: pi=4e0_Long*atan(1e0_Long)
+  real (long) , parameter :: invpi=1e0_Long/pi  !1/pi
+  real (long) , parameter :: invsqrt2pi=1e0_Long/sqrt(2e0_Long*pi)
 
   !physical constants in SI units, with "current units" as well
 
@@ -43,8 +44,8 @@ MODULE phys_cons
 
   !> speed of light in vacuum, c, in m s<sup>-1</sup>, from 2010 CODATA
   !! recommended values
-  real (Long), parameter :: SI_SPEED_OF_LIGHT   = 299792458d0
-  real (Long), parameter :: SI_SPEED_OF_LIGHT_D = 0d0 !< uncertainty
+  real (Long), parameter :: SI_SPEED_OF_LIGHT   = 299792458e0_Long
+  real (Long), parameter :: SI_SPEED_OF_LIGHT_D = 0e0_Long !< uncertainty
   real (Long)            :: SPEED_OF_LIGHT            !< in current units
 
   !> Planck's constant divided by 2 pi, hbar, in J s, from 2010 CODATA
@@ -73,10 +74,10 @@ MODULE phys_cons
   !> in current units
   real (Long)            :: MASS_PROTON
 
-  REAL (long) , PARAMETER :: rho0=0.16d0       !nuclear saturation density [fm^-3]
+  REAL (long) , PARAMETER :: rho0=0.16_Long       !nuclear saturation density [fm^-3]
   REAL (long) :: hbar  !< Planck's constant in current unit system
   REAL (long) :: m0   !< mass of particle being evolved in time
-  REAL (long) , PARAMETER :: deg=4.d0 ! degeneracy
+  REAL (long) , PARAMETER :: deg=4e0_Long ! degeneracy
 
   real (Long) :: kilogram !< magnitude of kilogram in current unit system
   real (Long) :: joule !< magnitude of joule in current unit system

@@ -35,7 +35,7 @@ SUBROUTINE time_evolution
  firstOutput=.true.
 
   it=0
-  t=0d0
+  t=0e0_Long
 
   call calcPotDiag
   do ii=1,4
@@ -44,9 +44,10 @@ SUBROUTINE time_evolution
 
 !return
 
- dt2=delt*0.5d0
+ dt2=delt*0.5_Long
 
- soms5=1d0/3d0*(2d0+2d0**(-1d0/3d0)+2d0**(1d0/3d0))
+ soms5=1e0_Long/3e0_Long &
+       *(2e0_Long+2e0_Long**(-1e0_Long/3e0_Long)+2e0_Long**(1e0_Long/3e0_Long))
 
 !call mesh_setReflectedLR(.true.)
 
@@ -77,18 +78,19 @@ SUBROUTINE time_evolution
 !call mesh_setReflectedLR(.false.)
 !    else
 !     call setState(MOMENTUM)
-     CALL evol_k(dt2)
+     CALL evol_k(delt)
+!     call makeMomentumHermitian()
 !     call output
-     CALL evol_x(delt)
+!     CALL evol_x(delt)
 !     call output
-     CALL evol_k(dt2)
+!     CALL evol_k(dt2)
 !    endif
    elseif(splitOperatorMethod==5)then
     call evol_x(soms5*dt2)
     call evol_k(soms5*delt)
-    call evol_x((1d0-soms5)*dt2)
-    call evol_k((1d0-2d0*soms5)*delt)
-    call evol_x((1d0-soms5)*dt2)
+    call evol_x((1e0_Long-soms5)*dt2)
+    call evol_k((1e0_Long-2e0_Long*soms5)*delt)
+    call evol_x((1e0_Long-soms5)*dt2)
     call evol_k(soms5*delt)
     call evol_x(soms5*dt2)
    endif
@@ -123,7 +125,7 @@ SUBROUTINE evol_k(dtim)
 
   INTEGER ika, ikr !loop variables
 !  real*8 :: cos2k, sin2k, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
-  real*8 :: edt,k1,k2
+  real (Long) :: edt,k1,k2
 
 !call mesh_setReflectedLR(.true.)
 
@@ -152,20 +154,26 @@ SUBROUTINE evol_k(dtim)
        if(potFinal==3)then
         edt=sin(w*delt)/(w*delt)
        else
-        edt=1d0
+        edt=1e0_Long
        endif
 
        if(useImEvol)then
-        edt=edt*(-hbar/m0*0.5d0*(k1*k1+k2*k2)*dtim)
+        edt=edt*(-hbar/m0*0.5_Long*(k1*k1+k2*k2)*dtim)
         call setDenK(ikr,ika,exp(edt)*getDenK(ikr,ika))
        else
         !time evolution operator = exp(-i(E-E')t/h)
         !                        = exp(-ih/2m(k^2-k'^2))
-        edt=edt*(-hbar/m0*0.5d0*(k1*k1-k2*k2)*dtim)
+        edt=edt*(-hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
 !        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
-        if(ika==-Nka) then
+
+        ! For ika=-Nka, there is no matching ika=Nka, so if we do normal time
+        ! evolution on it, we treat positive momentum differently than
+        ! negative momentum. So we operate with the average of the time
+        ! evolution operator acting on Nka and -Nka. This is
+        ! \frac{\e^{i edt} + \e^{-i edt}}{2} = \cos(edt)
+        if(ika==-Nka.or.ikr==-Nkr) then
          call setDenK(ikr,ika,cos(edt)*getDenK(ikr,ika))
-        else
+        elseif(ika/=0.and.ikr/=0)then
          call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
         endif
 !        cos2k=cos(edt)
@@ -195,6 +203,23 @@ SUBROUTINE evol_k(dtim)
      
   ENDDO
 
+  do ikr=1,Nkr2-1
+   do ika=1,Nka-1
+    if(abs(denmat(ikr,ika)-conjg(denmat(-ikr,ika)))>1d-15) then
+     write(*,*)'momentum not hermitian',ikr,ika,(denmat(ikr,ika)-conjg(denmat(-ikr,ika))) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
+    endif
+   enddo
+  enddo
+
+  do ikr=1,Nkr2-1
+   do ika=1,Nka-1
+    if(abs(denmat(ikr,ika)-denmat(-ikr,-ika))>1d-13) then
+     write(*,*)'momentum density not reflection symmetric',ikr,ika,(denmat(ikr,ika)-denmat(-ikr,-ika)) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
+    endif
+   enddo
+  enddo
+
+
 !  write(*,*)'ending evol_k loop'
 
 !call mesh_setReflectedLR(.false.)
@@ -218,6 +243,9 @@ subroutine makeMomentumHermitian()
  do ikr=-Nkr2+1,-1
   denmat(ikr,:)=conjg(denmat(-ikr,:))
  enddo
+
+ denmat(0,:)=abs(denmat(0,:))
+ denmat(-Nkr2,:)=abs(denmat(-Nkr2,:))
 
 end subroutine makeMomentumHermitian
 

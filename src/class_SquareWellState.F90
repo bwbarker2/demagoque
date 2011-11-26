@@ -41,9 +41,9 @@ module class_SquareWellState
    real (Long) :: energy, norm, normTail
 
    ! initial values
-   energy=0
-   norm=0
-   normTail=0
+   energy=0e0_Long
+   norm=0e0_Long
+   normTail=0e0_Long
 
    self=squareWellState(mass,level,v0,d,energy,norm,normTail)
 

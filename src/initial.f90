@@ -468,10 +468,10 @@ subroutine getK12(ika,ikr,k1,k2)
  implicit none
 
  integer,     intent(in)  :: ika, ikr !human-read index of grid in xa,xr space
- real*8, intent(out) :: k1,k2    !x,x' position in x,x' space
+ real (Long), intent(out) :: k1,k2    !x,x' position in x,x' space
 
- k1=ka(ika)+0.5d0*kr(ikr)
- k2=ka(ika)-0.5d0*kr(ikr)
+ k1=ka(ika)+0.5_Long*kr(ikr)
+ k2=ka(ika)-0.5_Long*kr(ikr)
 
 ! k isn't periodic, so don't move periodically - BWB 2010-11-21
 ! ! if k1,k2 is outside the box, move it in periodically
