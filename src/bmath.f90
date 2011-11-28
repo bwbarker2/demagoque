@@ -119,10 +119,11 @@ end function bmath_dIsBetween
 !! f(a) and f(b) must have opposite signs.
 !! Official reference: R.P. Brent (1973). Algorithms for Minimization without Derivatives, Chapter 4. Prentice-Hall, Englewood Cliffs, NJ. ISBN 0-13-022335-2.
 !! My reference: http://en.wikipedia.org/w/index.php?title=Brent%27s_method&oldid=457696075#Algorithm .
-real (Long) function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero)
+function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero)
  use bexception
  implicit none
 
+ real (Long) :: zero ! return variable
  real (Long), intent(in) :: ain !< one bound of search interval
  real (Long), intent(in) :: bin !< the other bound
  real (Long), external :: f   !< function to find roots of
@@ -147,7 +148,7 @@ real (Long) function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero
  if(present(err)) then
   erruse=err
  else
-  erruse=1e-10_Long
+  erruse=10.0**(-Long)
  endif
 
  if(present(maxiterin)) then
@@ -181,6 +182,8 @@ real (Long) function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero
  mflag=.true.
 
  iters=0
+
+ d=0e0_Long !set this to suppress compiler warning
 
  do while ((fb /= 0) .and. (fs /= 0) .and. abs(b-a)>erruse)
   iters=iters+1
