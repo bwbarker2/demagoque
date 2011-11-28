@@ -133,8 +133,8 @@ SUBROUTINE outDenMat(fileim_u, filere_u)
   WRITE(filere_u,*)'# time=',t,'fm/c'
 
   DO ixr=-Nxr,Nxr-1
-     WRITE(fileim_u,919) (DIMAG(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2-1)
-     WRITE(filere_u,919) (DBLE(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2-1)
+     WRITE(fileim_u,919) (AIMAG(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2-1)
+     WRITE(filere_u,919) (REAL(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2-1)
   ENDDO
 
   ! two blank lines give proper formatting for gnuplot
@@ -167,7 +167,7 @@ subroutine outDenMatKPhys()
  do ikr=-Nkr2,Nkr2-1
   do ika=-Nka2,Nka2-1
    if(abs(mod(ika+ikr,2))==1) cycle
-   write(funit,*)kr(ikr),ka(ika),0.5d0*DBLE(getDenK(ikr,ika)),0.5d0*DIMAG(getDenK(ikr,ika))
+   write(funit,*)kr(ikr),ka(ika),0.5_Long*REAL(getDenK(ikr,ika)),0.5_Long*AIMAG(getDenK(ikr,ika))
   enddo
   write(funit,*)
  enddo
@@ -195,7 +195,7 @@ subroutine outDenMatXPhys()
 
  do ixa=-Nxa2,Nxa2-1
   do ixr=-Nxr2,Nxr2-1
-   write(funit,*)xa(ixa),xr(ixr),DBLE(getDenX(ixa,ixr)),DIMAG(getDenX(ixa,ixr))
+   write(funit,*)xa(ixa),xr(ixr),REAL(getDenX(ixa,ixr)),AIMAG(getDenX(ixa,ixr))
   enddo
   write(funit,*)
  enddo
@@ -220,8 +220,8 @@ SUBROUTINE outDiagK
   WRITE(42,*)'# k [fm], real, imaginary amplitudes'
 
   DO ika=-Nka2,Nka2-1
-     ddre=DBLE(getDenK(0,ika))
-     dddim=DIMAG(getDenK(0,ika))
+     ddre=REAL(getDenK(0,ika))
+     dddim=AIMAG(getDenK(0,ika))
      WRITE(42,*) ka(ika),ddre,dddim
   ENDDO
 
@@ -247,8 +247,8 @@ SUBROUTINE outDiagX
   WRITE(41,*)'# x [fm], real, imaginary amplitudes'
 
   DO ixa=-Nxa2,Nxa2-1
-     ddre=DBLE(getDen(ixa,0))
-     dddim=DIMAG(getDen(ixa,0))
+     ddre=REAL(getDen(ixa,0))
+     dddim=AIMAG(getDen(ixa,0))
 !     write(*,*)'den_im,dddim:',den_im(iNxa2(ixa),iixr0),dddim
      WRITE(41,*) xa(ixa),ddre,dddim
   ENDDO
@@ -264,8 +264,8 @@ SUBROUTINE outDiagX
   sum2=0_Long
 
   do ixa=-Nxa2,Nxa2-1
-   sum1=sum1+dble(getDenX(ixa,0))
-   sum2=sum2+abs(xa(ixa))*dble(getDenX(ixa,0))
+   sum1=sum1+REAL(getDenX(ixa,0))
+   sum2=sum2+abs(xa(ixa))*REAL(getDenX(ixa,0))
   enddo
 
   if(firstOutput) write(75,*)'# time     <|x|>'
@@ -305,10 +305,10 @@ SUBROUTINE outEner
   relekin=(ekin-ek0)/ek0
   relepot=(epot-ep0)/ep0
   !propagated error - fixed 2010-07-09
-  relekerr=(ekerr/ek0)**2+(ek0err/ek0*(1+relekin))**2
-  relekerr=dsqrt(relekerr)
-  releperr=(eperr/ep0)**2+(ep0err/ep0*(1+relepot))**2
-  releperr=dsqrt(releperr)
+  relekerr=(ekerr/ek0)**2+(ek0err/ek0*(1e0_Long+relekin))**2
+  relekerr=sqrt(relekerr)
+  releperr=(eperr/ep0)**2+(ep0err/ep0*(1e0_Long+relepot))**2
+  releperr=sqrt(releperr)
 
   write(43,*)t,relekin,relekerr,relepot,releperr
   write(44,*)t,ekin,ekerr,epot,eperr

@@ -1,8 +1,8 @@
 ! ........... READ AND WRITE PARAMETERS
 1 ! ntime
 ! ........... PHYSICAL PARAMETERS
-0.5d0 ! delt [fm/c]
-5 ! Nevt
+100d0 ! delt [fm/c]
+10 ! Nevt
 0d0 ! EA [MeV]
 25d0  ! xLa [fm]
 25d0 ! xLr [fm]
@@ -17,11 +17,11 @@
 .false.     ! useImEvol - use imaginary evolution?
 10   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
-  !unitSystem bec
-unitSystem nuclear
+unitSystem bec
+  !unitSystem nuclear
   !initialSeparation 15d0       !separation between centers in fm
-  !initState_sqWell 87.0d0 0 0.001 14.5d0
-initState_gaussianNuclear 0  !use this, Nmax
+initState_sqWell 87.0d0 0 0.001 14.5d0
+  !initState_gaussianNuclear 0  !use this, Nmax
   !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
   !initState_kdelta 1d0 0d0     !norm, position
   !initState_plane 3 1d0 0d0    !wave number, norm, phase shift

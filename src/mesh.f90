@@ -682,7 +682,7 @@ contains
     !second input array
     array=0e0_Long
     do ika=1,Nka-1
-     array(ika-1)=0.5_Long*(-AIMAG(denmat(ixa,ika))+DIMAG(denmat(ixa,-ika)))
+     array(ika-1)=0.5_Long*(-AIMAG(denmat(ixa,ika))+AIMAG(denmat(ixa,-ika)))
     enddo !ika
 
     call ft_ro_1d(array,array,Nka-1)
@@ -697,9 +697,9 @@ contains
                                        -AIMAG(denmat(ixa,0))
  
     !third input array
-    array=0d0
+    array=0e0_Long
     do ika=1,Nka-1
-     array(ika)=0.5d0*(AIMAG(denmat(ixa,ika))+DIMAG(denmat(ixa,-ika)))
+     array(ika)=0.5e0_Long*(AIMAG(denmat(ixa,ika))+AIMAG(denmat(ixa,-ika)))
     enddo !ika
     array(0)=AIMAG(denmat(ixa,0))
     array(Nka)=AIMAG(denmat(ixa,-Nka))
@@ -713,7 +713,7 @@ contains
 
 !Now do the same thing for the other 3 terms.
 
-    array=0d0
+    array=0e0_Long
     do ika=1,Nka-1
      array(ika)=0.5_Long*(REAL(denmat(ixa,ika))-REAL(denmat(ixa,-ika)))
     enddo !ika
@@ -1198,8 +1198,8 @@ contains
      do ixa=-Nxa2,Nxa2-1
       do ixr=-Nxr2,Nxr2-1
 
-       exparg=xa(ixa)*delkr2*5d-1 &
-             +xr(ixr)*delka2*5d-1 &
+       exparg=xa(ixa)*delkr2*0.5_Long &
+             +xr(ixr)*delka2*0.5_Long &
              +xa(ixa)*delkr2*ikr2 &
              +xr(ixr)*delka2*ika2
 

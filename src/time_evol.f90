@@ -237,7 +237,7 @@ subroutine makeMomentumHermitian()
  integer :: ikr
 
  do ikr=1,Nkr2-1
-  denmat(ikr,:)=(denmat(ikr,:)+conjg(denmat(-ikr,:)))*0.5d0
+  denmat(ikr,:)=(denmat(ikr,:)+conjg(denmat(-ikr,:)))*0.5_Long
  enddo
 
  do ikr=-Nkr2+1,-1
@@ -262,26 +262,26 @@ SUBROUTINE evol_x(dtim)
  use time
  IMPLICIT NONE
 
- real*8, intent(in) :: dtim !< timestep
+ real (Long), intent(in) :: dtim !< timestep
 
  INTEGER :: ixr, ixa !loop variables
- real*8 :: cos2k, sin2k, udt !cos,sin part of exp, exponent itself
- real*8 :: xim,xre,xre2,xim2 !x density matrix, imaginary, real
- real*8 :: x1,x2,ux1,ux2 !position in x,x' basis, potential at x,x'
- real*8 :: cutfac   !factor for imaginary off-diagonal cutoff
+ real (Long) :: cos2k, sin2k, udt !cos,sin part of exp, exponent itself
+ real (Long) :: xim,xre,xre2,xim2 !x density matrix, imaginary, real
+ real (Long) :: x1,x2,ux1,ux2 !position in x,x' basis, potential at x,x'
+ real (Long) :: cutfac   !factor for imaginary off-diagonal cutoff
 
  integer :: ki !used by LIN_INT
 
  logical :: debugxall
- real*8 :: debugudt
+ real (Long) :: debugudt
 
 !call mesh_setReflectedLR(.true.)
 
 ! real*8, dimension(-Nxr2:Nxr2):: tpots !debugging vars
 
  ! initialize potential (esp. if no potential)
- ux1=0.0d0
- ux2=0.0d0
+ ux1=0e0_Long
+ ux2=0e0_Long
 
 ! tpots=0.d0
 
@@ -311,7 +311,7 @@ SUBROUTINE evol_x(dtim)
   if(useImCutoff)then
    call getImCutoff(cutfac, ixr,dtim)
   else
-   cutfac=1d0
+   cutfac=1e0_Long
   endif
 
 !  write(*,*)'timestep,ixr,cutfac=',it,ixr,cutfac
@@ -348,13 +348,13 @@ SUBROUTINE evol_x(dtim)
     udt=-(ux1-ux2)*dtim/hbar
    if(debugxall)debugudt=udt
  !   tpots(ixr)=udt  !debugging
-    cos2k=dcos(udt)
-    sin2k=dsin(udt)
+    cos2k=cos(udt)
+    sin2k=sin(udt)
  !     if(ixr==0)write(*,*)'ixa,ixr,cos2k,sin2k=',ixa,ixr,cos2k,sin2k
  
  !     if(ixr==0)write(*,*)'ixa,ixr,den_im-pree=',ixa,ixr,den_im(iixa,iixr)     
-    xre=DBLE(getDenX(ixa,ixr))
-    xim=DIMAG(getDenX(ixa,ixr))
+    xre=REAL(getDenX(ixa,ixr))
+    xim=AIMAG(getDenX(ixa,ixr))
 
 !    if(ixa==2)then
 !     if(ixr==1.or.ixr==-1)then
@@ -369,7 +369,7 @@ SUBROUTINE evol_x(dtim)
 
 
  
-    call setDenX(ixa,ixr,cutfac*cmplx(xre2,xim2,8))
+    call setDenX(ixa,ixr,cutfac*cmplx(xre2,xim2,Long))
 
    if(debugxall.and.ixa==24.and.ixr==-49)then
     write(*,*)'debugudt,udt',debugudt,udt
@@ -397,7 +397,7 @@ SUBROUTINE evol_x(dtim)
    endif !not useImEvol
 
    !find maximum value of imaginary component, BWB 2011-03-11
-   if(DIMAG(getDenX(ixa,ixr))>maxxim)maxxim=DIMAG(getDenX(ixa,ixr))
+   if(AIMAG(getDenX(ixa,ixr))>maxxim)maxxim=AIMAG(getDenX(ixa,ixr))
 !   if(ixr>0) then
 !    write(*,*)'ixr,tpots-diff:',ixr,tpots(ixr)+tpots(-ixr)
 !   endif
@@ -426,7 +426,7 @@ subroutine makeSpaceHermitian()
  integer :: ixr
 
  do ixr=1,Nxr2-1
-  denmat(:,ixr)=(denmat(:,ixr)+conjg(denmat(:,-ixr)))*0.5d0
+  denmat(:,ixr)=(denmat(:,ixr)+conjg(denmat(:,-ixr)))*0.5_Long
  enddo
 
  do ixr=-Nxr2+1,-1
@@ -457,7 +457,7 @@ subroutine calcPotDiag()
  if (useAdiabatic)then
   weight=getWeight()
  else
-  weight=1d0
+  weight=1e0_Long
  endif
 
 
@@ -469,7 +469,7 @@ subroutine calcPotDiag()
 !call mesh_setReflectedLR(.true.)
    call getPotX(potI,potInitial,ixa)
    call getPotX(potF,potFinal,ixa)
-   potDiag(ixa)=weight*potI + (1.d0-weight)*potF
+   potDiag(ixa)=weight*potI + (1e0_Long-weight)*potF
 !  write(*,*)'sofar:',ixa,potDiag(ixa)
 !   write(*,*)potDiag(ixa),getPotX(potInitial,ixa)
 !call mesh_setReflectedLR(.false.)
@@ -494,24 +494,24 @@ subroutine getImCutoff(cutfac, ixr,dtim)
  implicit none
 
  integer, intent(in) :: ixr
- real*8, intent(out) :: cutfac
- real*8, intent(in) :: dtim !timestep
+ real (Long), intent(out) :: cutfac
+ real (Long), intent(in) :: dtim !timestep
 
- real*8 :: xxr
+ real (Long) :: xxr
 
  xxr=abs(xr(ixr))
 
  if(xxr<=cutoff_x0) then
-  cutfac=0d0
- elseif(xxr<=cutoff_x0+cutoff_d0/2d0) then
-  cutfac=2d0*(xxr-cutoff_x0)**2/cutoff_d0**2
+  cutfac=0e0_Long
+ elseif(xxr<=cutoff_x0+cutoff_d0*0.5_Long) then
+  cutfac=2e0_Long*(xxr-cutoff_x0)**2/cutoff_d0**2
  elseif(xxr<=cutoff_x0+cutoff_d0) then
-  cutfac=1d0-2d0*(xxr-(cutoff_x0+cutoff_d0))**2/cutoff_d0**2
+  cutfac=1e0_Long-2e0_Long*(xxr-(cutoff_x0+cutoff_d0))**2/cutoff_d0**2
  else
-  cutfac=1d0
+  cutfac=1e0_Long
  endif
 ! write(*,*)cutfac
- cutfac=exp(-2d0*cutoff_w0*cutfac*dtim/hbar)
+ cutfac=exp(-2e0_Long*cutoff_w0*cutfac*dtim/hbar)
 ! write(*,*)ixr,xxr,cutfac
 
 end subroutine getImCutoff
@@ -519,14 +519,15 @@ end subroutine getImCutoff
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
 
-real*8 function getWeight()
+function getWeight() result(self)
  use input_parameters
  use time
  implicit none
 
+ real (Long) :: self
 ! real (Long), intent(out) :: weight
 
- getWeight=1.d0/(1.d0+exp((t-tad)/wtad))
+ self=1e0_Long/(1e0_Long+exp((t-tad)/wtad))
 
 end function getWeight
 
@@ -546,7 +547,7 @@ subroutine getPotX(potX,potType,ix)
 
  select case (potType)
   case (-1)
-   potX=0d0
+   potX=0e0_Long
   case (0)
    call potHO(potX,ix)
   case (1)
@@ -561,7 +562,7 @@ subroutine getPotX(potX,potType,ix)
    potX=initState_sqWell%getPotential(xa(ix))
   case default
    call throwException('getPotX: improper potential type', BEXCEPTION_FATAL)
-   potX=0.d0
+   potX=0e0_Long
  end select
 
 end subroutine getPotX
@@ -615,7 +616,7 @@ subroutine potBEC_1D_HO_Mateo2011(potX,ix,wz,wt,scat,Npart)
 !       +(1_Long-smearing)*dble(getDen(ix,0)) &
 !       +(0.5_Long*smearing)*dble(getDen(iafter,0))
 
-denav=dble(getDen(ix,0))
+denav=REAL(getDen(ix,0))
 
 !potX=1
  potX=0.5_Long*m0*wz**2*xa(ix)**2 &
@@ -636,12 +637,12 @@ subroutine potHO(potX,ix)
   use mesh
   implicit none
 
-  real*8,  intent(out) :: potX
+  real (Long),  intent(out) :: potX
   integer, intent(in)  :: ix
 
 !  write(*,*)'debug: m0,w,ix,delxa',m0,w,ix,delxa
 
-  potX=0.5d0*m0*(w*xa(ix))**2
+  potX=0.5_Long*m0*(w*xa(ix))**2
 !  write(*,*)potX
 
 end subroutine potHO
@@ -655,10 +656,10 @@ subroutine potHOexact(potX,ix)
  use phys_cons
  implicit none
 
- real*8,  intent(out) :: potX
+ real (Long),  intent(out) :: potX
  integer, intent(in)  :: ix
 
- potX=0.5d0*m0*(w*xa(ix))**2*2*(1-cos(w*delt))/(w*delt*sin(w*delt))
+ potX=0.5_Long*m0*(w*xa(ix))**2*2e0_Long*(1e0_Long-cos(w*delt))/(w*delt*sin(w*delt))
 
 end subroutine potHOexact
 
@@ -698,13 +699,13 @@ subroutine potHOmf(potX,ixa1)
 
     !write(*,*)ixa1,id,ixa2
 !      potMF(ixa1)=potMF(ixa1)+den_re(iixa1,iixr0)*den_re(iixa2,iixr0) &
-   potX=potX+DBLE(getDenX(ixa2,0)) &
+   potX=potX+REAL(getDenX(ixa2,0)) &
                            *(xa(id))**2
 !      testtot=testtot+den_re(iixa1,iixr0)*den_re(iixa2,iixr0) &
 !                      *2*xa(ixa1)*xa(ixa2)
   enddo !id
 !    read(*,*)itry
-  potX=potX*0.25d0*m0*w*w/(Nmax+1)
+  potX=potX*0.25_Long*m0*w*w/(Nmax+1)
 !    write(*,*)'ixa,potMF=',ixa1,potMF(ixa1)
 
 
@@ -720,14 +721,14 @@ subroutine potSkyrme(potX,ix)
  use skyrme_params
  implicit none
 
- real*8,  intent(out) :: potX
+ real (Long),  intent(out) :: potX
  integer, intent(in)  :: ix
- real*8               :: xxr ! density corrected for dimensionality
- real*8               :: skyContact  !contact skyrme potential
+ real (Long)               :: xxr ! density corrected for dimensionality
+ real (Long)               :: skyContact  !contact skyrme potential
 
 
 
- xxr=DBLE(getDen(ix,0))*facd
+ xxr=REAL(getDen(ix,0))*facd
 ! write(*,*)ix,facd,den_re(iNxa2(ix),iNxr2(0)),xxr
 ! write(*,*)xxr,abs(xxr)
 
@@ -741,7 +742,7 @@ subroutine potSkyrme(potX,ix)
 
  !prescription for negative density 2
  potX=skyContact(xxr)
- if(xxr<0.d0)potX=potX*(-1.d0)
+ if(xxr<0e0_Long)potX=potX*(-1e0_Long)
 
 ! !prescription 3 - if surrounding cells are opposite sign, then pot=0
 ! if(ix.lt.Nxa2.and.ix.gt.-Nxa2) then
@@ -760,13 +761,16 @@ end subroutine potSkyrme
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-real*8 function skyContact(rho)
+function skyContact(rho) result(self)
+ use prec_def
  use skyrme_params
+ implicit none
+ 
+ real (Long) :: self
+ real (Long), intent(in) :: rho
 
- real*8, intent(in) :: rho
-
- skyContact=0.75d0*t0*dabs(rho) &
-       + (2.0d0+sig)/16.0d0*t3*dabs(rho)**(1.0d0+sig)
+ self=0.75_Long*t0*abs(rho) &
+       + (2e0_Long+sig)/16e0_Long*t3*abs(rho)**(1e0_Long+sig)
 end function skyContact
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -34,16 +34,16 @@ subroutine ener_k
   
   call setState(MOMENTUM)
 
-  ekin=0d0
-  knum=0d0
+  ekin=0e0_Long
+  knum=0e0_Long
   do ika=-Nka2,Nka2-1
-     ekin=ekin+ka(ika)*ka(ika)*DBLE(getDen(0,ika))
-     knum=knum+DBLE(getDenK(0,ika))
+     ekin=ekin+ka(ika)*ka(ika)*REAL(getDen(0,ika))
+     knum=knum+REAL(getDenK(0,ika))
 !     write(*,*)pk2(ixa)
 !     write(70,*)'ika,pk2',it,ika,pk2(ika)
   enddo
 
-  ekin=ekin*hbar*hbar/(2d0*m0)/norm_thy*delka
+  ekin=ekin*hbar*hbar/(2e0_Long*m0)/norm_thy*delka
   knum=knum*delka/norm_thy
 
 !  call dint_simp1(Nxr+1, pk2, delka, ekin, ekerr)
@@ -94,12 +94,12 @@ subroutine ener_x
   write(76,*)
   write(76,*)
 
-  epot=0d0
-  nnum=0d0
+  epot=0e0_Long
+  nnum=0e0_Long
   do ixa=-Nxa2,Nxa2-1
-     epot=epot+potDiag(ixa)*DBLE(getDenX(ixa,0))
+     epot=epot+potDiag(ixa)*REAL(getDenX(ixa,0))
 !     uu(ixa)=uu(ixa)*den_re(iNxa2(ixa),iNxr2(0))/(Nmax+1)
-     nnum=nnum+DBLE(getDenX(ixa,0))
+     nnum=nnum+REAL(getDenX(ixa,0))
     !write(*,*)uu(ixa)
 !    uoth(ixa)=potMF(ixa)*den_re(iNxa2(ixa),iNxr2(0))/(Nmax+1)/(Nmax+1)/2
 !    uoth(ixa)=potMF(ixa)*0.5/(Nmax+1)/(Nmax+1)/2

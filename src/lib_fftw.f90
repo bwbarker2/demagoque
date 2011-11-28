@@ -21,6 +21,7 @@
 !            1 Cyclotron, East Lansing, MI 48824-1321
 
 module lib_fftw
+ use prec_def
  implicit none
 
  include '/usr/include/fftw3.f'
@@ -34,8 +35,8 @@ module lib_fftw
    implicit none
 
    integer,    intent(in)  :: num
-   complex*16 :: arrayin(0:num-1)
-   complex*16 :: arrayout(0:num-1)
+   complex (Long) :: arrayin(0:num-1)
+   complex (Long) :: arrayout(0:num-1)
 
    integer*8 :: plan
 
@@ -58,8 +59,8 @@ module lib_fftw
    implicit none
 
    integer,    intent(in)  :: num
-   complex*16 :: arrayin(0:num-1)
-   complex*16 :: arrayout(0:num-1)
+   complex (Long) :: arrayin(0:num-1)
+   complex (Long) :: arrayout(0:num-1)
 
    integer*8 :: plan
 
@@ -76,8 +77,8 @@ module lib_fftw
    implicit none
    
    integer,    intent(in)  :: num
-   real*8 :: arrayin(0:num-1)
-   real*8 :: arrayout(0:num-1)
+   real (Long) :: arrayin(0:num-1)
+   real (Long) :: arrayout(0:num-1)
 
    integer*8 :: plan
 
@@ -93,8 +94,8 @@ module lib_fftw
    implicit none
    
    integer,    intent(in)  :: num
-   real*8 :: arrayin(0:num-1)
-   real*8 :: arrayout(0:num-1)
+   real (Long) :: arrayin(0:num-1)
+   real (Long) :: arrayout(0:num-1)
 
    integer*8 :: plan
 

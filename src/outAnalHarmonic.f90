@@ -7,8 +7,8 @@ subroutine outAnalHarmonic
  implicit none
 
   INTEGER :: ixa
-  REAL*8 :: ddre
-  real*8 :: calcHarmonicEv
+  REAL (Long) :: ddre
+  real (Long) :: calcHarmonicEv
 
   WRITE(45,*)'# time=',t,'fm/c'
   WRITE(45,*)'# x [fm], real, imaginary amplitudes'
@@ -16,12 +16,12 @@ subroutine outAnalHarmonic
   DO ixa=-Nxa2,Nxa2-1
      !add wave packets from surrounding cells, important for long times
      ddre=calcHarmonicEv(xa(ixa),t) &
-          +calcHarmonicEv(2d0*xLa+xa(ixa),t) &
-          +calcHarmonicEv(2d0*xLa-xa(ixa),t) &
-          +calcHarmonicEv(4d0*xLa+xa(ixa),t) &
-          +calcHarmonicEv(4d0*xLa-xa(ixa),t)
+          +calcHarmonicEv(2e0_Long*xLa+xa(ixa),t) &
+          +calcHarmonicEv(2e0_Long*xLa-xa(ixa),t) &
+          +calcHarmonicEv(4e0_Long*xLa+xa(ixa),t) &
+          +calcHarmonicEv(4e0_Long*xLa-xa(ixa),t)
          
-     WRITE(45,93) xa(ixa),ddre,0.d0
+     WRITE(45,93) xa(ixa),ddre,0e0_Long
   ENDDO
 
   WRITE(45,*)
@@ -33,7 +33,7 @@ end subroutine outAnalHarmonic
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-real*8 function calcHarmonicEv(xx,tt)
+function calcHarmonicEv(xx,tt) result(self)
  !! computes the time evolution of the square modulus of a normalized
   ! Gaussian wave packet. For derivation, see written notes BWB 2010-12-15.
   ! Form of Gaussian:
@@ -44,15 +44,17 @@ real*8 function calcHarmonicEv(xx,tt)
  use phys_cons
  implicit none
 
- real*8, intent(in) :: xx, tt
- real*8 :: sigma2   !sigma squared
- real*8 :: sigma02  !sigma-naught squared
+ real (Long) :: self
 
- sigma02=1d0/whm
+ real (Long), intent(in) :: xx, tt
+ real (Long)             :: sigma2   !sigma squared
+ real (Long)             :: sigma02  !sigma-naught squared
 
- sigma2=sigma02*(1d0+(hbar*tt/(m0*sigma02))**2)
+ sigma02=1e0_Long/whm
 
- calcHarmonicEv=sqrt(1/(pi*sigma2))*exp(-xx**2/sigma2)
+ sigma2=sigma02*(1e0_Long+(hbar*tt/(m0*sigma02))**2)
+
+ self=sqrt(1e0_Long/(pi*sigma2))*exp(-xx**2/sigma2)
 
 !do we need this check anymore?
 ! if(calcHarmonicEv<1.d-30)calcHarmonicEv=0.d0

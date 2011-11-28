@@ -36,7 +36,7 @@ SUBROUTINE calcInitial
 
   ! oscillator data
   if(initState_gaussianNuclear) then
-   w=hbar/m0*6.d0*(rho0/facd)**2/(Nmax+1.d0)!   *0.1
+   w=hbar/m0*6e0_Long*(rho0/facd)**2/(Nmax+1e0_Long)!   *0.1
    whm=m0*w/hbar
   endif
 
@@ -46,7 +46,7 @@ SUBROUTINE calcInitial
 !  endif
 !  whm=2.25e-2
 !  w=2.5e-5_Long  !hard-coded for Ott2001
-  w=0.00016
+  w=0.00016_Long
 !  w=0.088
 !  w=whm*hbar/m0
   whm=m0*w/hbar
@@ -71,7 +71,7 @@ subroutine initialState
   implicit none
 
   real (Long) :: wfnho,xx1,xx2
-  complex*16  :: y1,y2,den0
+  complex (Long)  :: y1,y2,den0
   integer :: ixa, ixr, iin
   integer :: initState_kdelta_index
 
@@ -88,9 +88,9 @@ subroutine initialState
 !        xx1=(xa(ixa)+xr(ixr)/2.d0)
 !        xx2=(xa(ixa)-xr(ixr)/2.d0)
 
-        den0=0.0d0
-        y1=0d0
-        y2=0d0
+        den0=0e0_Long
+        y1=0e0_Long
+        y2=0e0_Long
         do iin=0,Nmax
           if(initState_gaussianNuclear.OR.initState_gaussian) then
            y1=wfnho(xx1,iin,whm)
@@ -108,15 +108,15 @@ subroutine initialState
 
           if(initState_kdelta) then
            if(ixr==0.AND.ixa==initState_kdelta_index) then
-            den0=den0+initState_kdelta_norm*2d0*pi/kLa
+            den0=den0+initState_kdelta_norm*2e0_Long*pi/kLa
            endif
           endif
 
           if(initState_plane) then
-           y1=sqrt(initState_plane_norm*0.5d0/xLa) &
+           y1=sqrt(initState_plane_norm*0.5_Long/xLa) &
               *exp(-imagi*initState_plane_number*pi*xx1/xLa &
                    +initState_plane_shift)
-           y2=sqrt(initState_plane_norm*0.5d0/xLa) &
+           y2=sqrt(initState_plane_norm*0.5_Long/xLa) &
               *exp(-imagi*initState_plane_number*pi*xx2/xLa &
                    +initState_plane_shift)
            den0=den0+conjg(y1)*y2
@@ -198,7 +198,7 @@ subroutine copyExtra
 
  enddo
 
- denmat(:,Nxr2)=0.5d0*DBLE((denmat(:,-Nxr2)+denmat(:,Nxr2)))
+ denmat(:,Nxr2)=0.5_Long*REAL((denmat(:,-Nxr2)+denmat(:,Nxr2)))
  denmat(:,-Nxr2)=denmat(:,Nxr2)
 
 end subroutine copyExtra
@@ -212,17 +212,17 @@ subroutine boost
   implicit none
 
   INTEGER ixr !loop variables
-  real*8 :: kea !momentum, given ea
+  real (Long) :: kea !momentum, given ea
 !  real*8 :: cos2k, sin2k !cos,sin part of exp, exponent itself
 !  real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real
 !  real*8 :: x1,x2   !position in x,x' basis
 
-  complex*16 :: epx
+  complex (Long) :: epx
 
   call setState(SPACE)
 
   ! non-relativistic conversion
-  kea=sign(1d0,ea)*sqrt(2.d0*m0*abs(ea))/hbar
+  kea=sign(1e0_Long,ea)*sqrt(2e0_Long*m0*abs(ea))/hbar
 
   !loop over all grid points
   DO ixr=-Nxr2,Nxr2-1
@@ -280,7 +280,7 @@ subroutine displaceLeft(nx)
 
  integer, intent(in) :: nx
 
- complex*16, dimension(0:nx-1,-Nxr:Nxr-1) :: wmat  !working matrix
+ complex (Long), dimension(0:nx-1,-Nxr:Nxr-1) :: wmat  !working matrix
 
  integer :: i
 
@@ -310,7 +310,7 @@ subroutine displaceRight(nx)
 
  integer, intent(in) :: nx
 
- complex*16, dimension(0:nx-1,-Nxr:Nxr-1) :: wmat  !working matrix
+ complex (Long), dimension(0:nx-1,-Nxr:Nxr-1) :: wmat  !working matrix
 
  integer :: i
 
@@ -340,7 +340,7 @@ subroutine flipclone
  use mesh
  implicit none
 
- complex*16, dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1) :: den2
+ complex (Long), dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1) :: den2
 
  integer :: ixa
 
@@ -421,7 +421,7 @@ subroutine getX12(ixa, ixr, x1, x2)
  integer,     intent(in)  :: ixa, ixr !human-read index of grid in xa,xr space
  real (Long), intent(out) :: x1,x2    !x,x' position in x,x' space
 
- real*8 :: xa1,xr1
+ real (Long) :: xa1,xr1
 
  xa1=xa(ixa)
  xr1=xr(ixr)
@@ -446,11 +446,11 @@ subroutine getrX12(xa1,xr1,x1,x2)
  use mesh
  implicit none
 
- real*8, intent(in)  :: xa1,xr1
- real*8, intent(out) :: x1,x2
+ real (Long), intent(in)  :: xa1,xr1
+ real (Long), intent(out) :: x1,x2
 
- x1=xa1+0.5d0*xr1
- x2=xa1-0.5d0*xr1
+ x1=xa1+0.5_Long*xr1
+ x2=xa1-0.5_Long*xr1
 
 ! if xx is outside the box, move it in periodically
  if(x1.ge.xLa)x1=x1-xLa-xLa

@@ -21,22 +21,25 @@
 !            1 Cyclotron, East Lansing, MI 48824-1321
 
 module lib_lapack
+ use prec_def
+ implicit none
 
  contains
 
   subroutine getEigenSq(mat,num,evals,evecs)
+   implicit none
 
-   complex*16, dimension(0:num-1,0:num-1), intent(inout) :: mat ! input matrix
+   complex (Long), dimension(0:num-1,0:num-1), intent(inout) :: mat ! input matrix
    integer,                                intent(in) :: num  ! dimension and rank of matrix
-   complex*16, dimension(0:num-1),         intent(out) :: evals !eigenvalues
-   complex*16, dimension(0:num-1,0:num-1), intent(inout) :: evecs !eigenvectors, ith column corresponds to ith eigenvalue in evals array
+   complex (Long), dimension(0:num-1),         intent(out) :: evals !eigenvalues
+   complex (Long), dimension(0:num-1,0:num-1), intent(inout) :: evecs !eigenvectors, ith column corresponds to ith eigenvalue in evals array
 
-   complex*16, dimension(0:num-1,0:num-1) :: mat2 ! copy of input matrix
+   complex (Long), dimension(0:num-1,0:num-1) :: mat2 ! copy of input matrix
    integer                           :: lwork  !length of work array
    integer                           :: info   !return statement from zgeev
-   complex*16, dimension(1)          :: vl  !left eigenvalues, not calculated
-   complex*16, allocatable, dimension(:) :: work  !working array
-   complex*16, dimension(0:2*num-1)  :: rwork      !other working array
+   complex (Long), dimension(1)          :: vl  !left eigenvalues, not calculated
+   complex (Long), allocatable, dimension(:) :: work  !working array
+   complex (Long), dimension(0:2*num-1)  :: rwork      !other working array
 
    !initialize values for first ZGEEV call
    mat2=mat

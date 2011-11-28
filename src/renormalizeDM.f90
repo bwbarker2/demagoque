@@ -5,11 +5,11 @@ subroutine renormalizeDM
  implicit none
 
  integer :: ixa,ixr
- real*8  :: factor
+ real (Long)  :: factor
 
  call setState(SPACE)
 
- factor=1d0/nnum
+ factor=1e0_Long/nnum
 
  do ixa=-Nxa2,Nxa2-1
   do ixr=-Nxr2,Nxr2-1

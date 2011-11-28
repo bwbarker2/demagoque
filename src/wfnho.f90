@@ -30,10 +30,10 @@ real (Long) FUNCTION wfnho(x,n,whm)
   
 !  write(*,*)nfac
 
-  xnorm=1/sqrt((2.d0**n)*dble(nfac))*(whm/pi)**0.25d0
+  xnorm=1e0_Long/sqrt((2e0_Long**n)*nfac)*(whm/pi)**0.25_Long
   xx=x*sqrt(whm)
   
-  wfnho=xnorm*dexp(-xx**2/2.d0)*Hn(xx,n)
+  wfnho=xnorm*exp(-xx**2/2e0_Long)*Hn(xx,n)
 
 !  write(*,*)wfnho
   
@@ -45,6 +45,7 @@ end FUNCTION wfnho
 !! \author Arnau Rios
 !!
 real (Long) FUNCTION Hn(x,n)
+  use bexception
   use prec_def
   implicit none
 
@@ -55,26 +56,20 @@ real (Long) FUNCTION Hn(x,n)
   integer :: m
   
   if(n.eq.0) then
-     Hn=1d0
+     Hn=1e0_Long
   else if(n.eq.1) then
-     Hn=2.d0*x
+     Hn=2e0_Long*x
   else if(n.gt.1) then
-     hm2=1d0
-     hm1=2d0*x
+     hm2=1e0_Long
+     hm1=2e0_Long*x
      do m=2,n
-        hm=2d0*x*hm1 - 2d0*(m-1)*hm2
+        hm=2e0_Long*x*hm1 - 2e0_Long*(m-1)*hm2
         hm2=hm1
         hm1=hm
      enddo
      Hn=hm
    else
-     write(*,*)
-     write(*,*)'*****'
-     write(*,*)'Hn: cannot have negative order of Hermite polynomial, n=,',n
-     write(*,*)'Hn: setting n=0 -> Hn=1'
-     write(*,*)'*****'
-     write(*,*)
-     Hn=1d0
+    call throwException('wfnho:Hn: cannot have negative order of Hermite polynomial',BEXCEPTION_FATAL)
   endif
   
 !  write(*,*)x,Hn

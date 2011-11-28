@@ -453,7 +453,7 @@ SUBROUTINE getStdIn
   call throwException( &
    'getStdIn: useFlipClone is set, but not initialSeparation!' &
     //'Setting initialSeparation to half xLa',BEXCEPTION_WARNING)
-  initialSeparation=xLa/2d0
+  initialSeparation=xLa/2e0_Long
  endif
 
 END SUBROUTINE getStdIn

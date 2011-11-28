@@ -25,7 +25,7 @@ MODULE time
   USE prec_def
 
   INTEGER     :: it     !< current iteration of time
-  REAL*8      :: t      !< current time during time evolution [fm/c]
+  REAL (Long) :: t      !< current time during time evolution [fm/c]
   INTEGER     :: Nt     !< number of timesteps in current mode (adiabatic or
                         !!  time)
 
