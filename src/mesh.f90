@@ -528,7 +528,7 @@ contains
   
     do ika=-Nka,Nka-1
 !     denmat2(ixa,ika)=cmplx(0d0,0d0,8)
-     denmat2(ixa,ika)=0e0_Long
+     denmat2(ixa,ika)=czero
      do ixr=1,Nxr-1
 
 !      !debug up-down symmetry
@@ -779,16 +779,16 @@ contains
 !     do ika=-Nka,Nka-1
 !      denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
 !     enddo
-     do ika=-Nka,Nka-1
+     do ika=1,Nka-1
 
       exparg=xr(ixr)*ka(ika)
       denmat2(ixa,ixr)=denmat2(ixa,ixr) &
-                       +denmat(ixa,ika)*(cos(exparg)+imagi*sin(exparg))
-!                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
+                       +denmat(ixa,ika)*(cos(exparg)+imagi*sin(exparg)) &
+                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
      enddo
-!     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
-!                      +denmat(ixa,-Nka)*cos(xr(ixr)*ka(-Nka)) &
-!                      +denmat(ixa,0)
+     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
+                      +denmat(ixa,-Nka)*cos(xr(ixr)*ka(-Nka)) &
+                      +denmat(ixa,0)
 
      denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka*invsqrt2pi
     enddo
@@ -886,7 +886,7 @@ contains
 
    do ika=-Nka,Nka-1
     do ikr=-Nkr2,Nkr2-1
-     denmat2(ikr,ika)=0e0_Long
+     denmat2(ikr,ika)=czero
 !     do ixa=-Nxa2,Nxa2-1
      do ixa=1,Nxa2-1
       trigarg=xa(ixa)*kr(ikr)
@@ -898,8 +898,8 @@ contains
                                          +imagi*sin(trigarg))
      enddo !ixa
      denmat2(ikr,ika)=denmat2(ikr,ika) &
-                      +denmat(-Nxa2,ika)*(cos(xa(-Nxa2)*kr(ikr)) &
-                                          -imagi*sin(xa(-Nxa2)*kr(ikr))) &
+                      +denmat(-Nxa2,ika)*cos(xa(-Nxa2)*kr(ikr)) &
+!                                          -imagi*sin(xa(-Nxa2)*kr(ikr))) &
                       +denmat(0,ika)
 
      denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
@@ -972,7 +972,7 @@ contains
   
    do ika=-Nka,Nka-1
     do ixa=-Nxa2,Nxa2-1
-     denmat2(ixa,ika)=0e0_Long
+     denmat2(ixa,ika)=czero
       do ikr=1,Nkr2-1
        trigarg=xa(ixa)*kr(ikr)
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
@@ -984,7 +984,7 @@ contains
                                          -imagi*sin(trigarg))
      enddo !ixa
      denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +real(denmat(-Nkr2,ika),Long)*cos(xa(ixa)*kr(-Nkr2)) &
+                      +denmat(-Nkr2,ika)*cos(xa(ixa)*kr(-Nkr2)) &
                       +denmat(0,ika)
 
 !     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
