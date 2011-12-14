@@ -61,11 +61,17 @@ MODULE mesh
  REAL (Long) , DIMENSION(:,:) , ALLOCATABLE :: den_re, den_im
  complex (Long), dimension(:,:), allocatable :: denmat !when I need complex, I store here
  complex (Long), dimension(:,:), allocatable :: denmat2 !when I need complex, I store here
+
+ real (Long), dimension(:), allocatable :: denDiagX !< diagonal of spatial density matrix
+ real (Long), dimension(:), allocatable :: denDiagK !< diagonal of momentum density matrix
+
  integer denState  ! gives current coordinate space of density matrix,
                    ! according to the following integer settings:
  integer, parameter :: SPACE = 0
  integer, parameter :: WIGNER = 1
  integer, parameter :: MOMENTUM = 2
+
+ logical :: isDenProcessed !have the diagonals been calculated?
 
  logical :: isReflectedLR !is the matrix LR reflected?
 
@@ -87,16 +93,16 @@ contains
   real (Long), intent(in) :: xx
 
   real (Long) :: aixx  ! interpolated index for result
-  integer, dimension(Nxam:Nxax) :: ixen  !array of indices
+  integer, dimension(-Nxa2:Nxa2-1) :: ixen  !array of indices
  
   integer :: ixa,ki
  
-  do ixa=Nxam,Nxax
+  do ixa=-Nxa2,Nxa2-1
    ixen(ixa)=ixa
   enddo
 
   ki=1
-  call lin_int(xa(Nxam:Nxax),ixen,Nxax-Nxam+1,xx,aixx,ki)
+  call lin_int(xa(-Nxa2:Nxa2-1),ixen,Nxa,xx,aixx,ki)
 
   ixx=nint(aixx)
 
@@ -105,11 +111,13 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine initializeMesh
+   use input_parameters
    use phys_cons
    use prec_def
    implicit none
 
    integer :: ixa,ixr,ikr,ika
+   real (Long) :: shift   !amount to shift xa,xr,ka,kr definitions
  
    Nxa2=Nxa/2
    Nxr2=Nxr/2
@@ -122,6 +130,8 @@ contains
    allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
    allocate(denmat(-Nxa2:Nxa2-1,-Nxr:Nxr-1)) !2x size in xr for naive FT - BWB 2011-01-10
    allocate(denmat2(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
+   allocate(denDiagX(-Nxa2:Nxa2-1))
+   allocate(denDiagK(-Nka:Nka-1))
    allocate(potDiag(-Nxa2:Nxa2))
    allocate(den_re(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
 
@@ -146,29 +156,32 @@ contains
    Nkam=-Nka2
    Nkax=Nka2-1
 
+   if(useMeshShifted) then
+    shift=0.5_Long
+   else
+    shift=0e0_Long
+   endif
+
    do ixa=-Nxa2,Nxa2
-!    xa(ixa)=(ixa+0.5_Long)*delxa
-    xa(ixa)=ixa*delxa
+    xa(ixa)=ixa*(delxa+shift)
    enddo
 
    do ixr=-Nxr,Nxr
-!    xr(ixr)=(ixr+0.5_Long)*delxr
-    xr(ixr)=ixr*delxr
+    xr(ixr)=ixr*(delxr+shift)
    enddo
 
    do ikr=-Nkr2,Nkr2
-    kr(ikr)=ikr*delkr
-!    kr(ikr)=(ikr+0.5_Long)*delkr
+    kr(ikr)=ikr*(delkr+shift)
    enddo
 
    do ika=-Nka,Nka
-    ka(ika)=ika*delka
-!    ka(ika)=(ika+0.5_Long)*delka
+    ka(ika)=ika*(delka+shift)
    enddo
  
    kLa=ka(Nka2)
 
    isReflectedLR=.false.
+   isDenProcessed=.false.
 
   end subroutine initializeMesh
 
@@ -197,15 +210,42 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> gets diagonal of x-space density matrix
+  real (Long) function getDenDiagX(ixa) result(den)
+   use input_parameters
+   implicit none
+
+   integer, intent(in) :: ixa
+
+   if(.not.useMeshShifted) then
+    den=abs(getDenX(ixa,0))
+   else
+    if(.not.isDenProcessed) then
+     call mesh_processDen
+    endif
+    den=denDiagX(ixa)
+   endif
+
+  end function getDenDiagX
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> gets diagonal of k-space density matrix. 
-  complex (Long) function getDenDiagK(ika) result(den)
+  real (Long) function getDenDiagK(ika) result(den)
+   use input_parameters
    use prec_def
    implicit none
 
    integer, intent(in) :: ika
 
-   den=getDenK(0,ika)
-!   den=0.5_Long*(getDenK(-1,ika)+getDenK(0,ika))
+   if(.not.useMeshShifted) then
+    den=abs(getDenK(0,ika))
+   else
+    if(.not.isDenProcessed) then
+     call mesh_processDen
+    endif
+    den=denDiagK(ika)
+   endif
 
   end function getDenDiagK
 
@@ -220,6 +260,30 @@ contains
    getDenX=denmat(ixa,ixr)
 
   end function getDenX
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine mesh_processDen
+  use phys_cons
+  implicit none
+
+  if(denState.ne.WIGNER) then
+   call throwException( &
+    'getDenDiagX: density matrix has been changed since last processed.' &
+    //'Processing now. Suggest re-ordering to avoid extra FFTs.' &
+    ,BEXCEPTION_WARNING)
+   call setState(WIGNER)
+  endif
+
+  ! sum the momentum components to get diagonal in space
+  denDiagX=delka*invsqrt2pi*real(sum(denmat(:,0:Nka2-1),2))
+
+  ! sum the space components to get diagonal in momentum
+  denDiagK=delxa*invsqrt2pi*real(sum(denmat(0:Nxa2-1,:),1))
+  
+  isDenProcessed=.true.
+ 
+ end subroutine mesh_processDen
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -283,6 +347,8 @@ contains
 
    denmat(ixa,ixr)=value
 
+   if(isDenProcessed) isDenProcessed=.false.
+
   end subroutine setDenX
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -299,6 +365,7 @@ contains
     getDenW=denmat(-Nxa2,ika)
    endif
 
+
   end function getDenW
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -310,6 +377,8 @@ contains
    complex (Long), intent(in) :: this_value
 
    denmat(ixa,ika)=this_value
+
+   if(isDenProcessed) isDenProcessed=.false.
 
   end subroutine setDenW
 
@@ -335,6 +404,8 @@ contains
    integer, intent(in)    :: ikr, ika
 
    denmat(ikr,ika)=val
+
+   if(isDenProcessed) isDenProcessed=.false.
 
   end subroutine setDenK
 

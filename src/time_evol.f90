@@ -172,15 +172,18 @@ SUBROUTINE evol_k(dtim)
         edt=edt*(-hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
 !        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
 
-        ! For ika=-Nka, there is no matching ika=Nka, so if we do normal time
-        ! evolution on it, we treat positive momentum differently than
-        ! negative momentum. So we operate with the average of the time
-        ! evolution operator acting on Nka and -Nka. This is
-        ! \frac{\e^{i edt} + \e^{-i edt}}{2} = \cos(edt)
-        if(ika==-Nka.or.ikr==-Nkr) then
-         call setDenK(ikr,ika,cos(edt)*getDenK(ikr,ika))
-        elseif(ika/=0.and.ikr/=0)then
-         call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
+        ! The following is valid only for useMeshShifted=.false.
+        if(.not.useMeshShifted) then
+         ! For ika=-Nka, there is no matching ika=Nka, so if we do normal time
+         ! evolution on it, we treat positive momentum differently than
+         ! negative momentum. So we operate with the average of the time
+         ! evolution operator acting on Nka and -Nka. This is
+         ! \frac{\e^{i edt} + \e^{-i edt}}{2} = \cos(edt)
+         if(ika==-Nka.or.ikr==-Nkr) then
+          call setDenK(ikr,ika,cos(edt)*getDenK(ikr,ika))
+         elseif(ika/=0.and.ikr/=0)then
+          call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
+         endif
         endif
 !        cos2k=cos(edt)
 !        sin2k=sin(edt)
@@ -235,6 +238,8 @@ END SUBROUTINE evol_k
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !> Enforces Hermiticity by setting cells equal to the average of left and right.
+!!
+!! \warning Only valid for useMeshShifted=.false.
 subroutine makeMomentumHermitian()
  use mesh
  use phys_cons
@@ -424,6 +429,8 @@ END SUBROUTINE evol_x
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !> Enforces Hermiticity by setting cells equal to the average of top and bottom.
+!!
+!! \warning Only valid for useMeshShifted=.false.
 subroutine makeSpaceHermitian()
  use mesh
  use phys_cons
@@ -622,7 +629,7 @@ subroutine potBEC_1D_HO_Mateo2011(potX,ix,wz,wt,scat,Npart)
 !       +(1_Long-smearing)*dble(getDen(ix,0)) &
 !       +(0.5_Long*smearing)*dble(getDen(iafter,0))
 
-denav=REAL(getDen(ix,0))
+denav=getDenDiagX(ix)
 
 !potX=1
  potX=0.5_Long*m0*wz**2*xa(ix)**2 &
@@ -705,7 +712,7 @@ subroutine potHOmf(potX,ixa1)
 
     !write(*,*)ixa1,id,ixa2
 !      potMF(ixa1)=potMF(ixa1)+den_re(iixa1,iixr0)*den_re(iixa2,iixr0) &
-   potX=potX+REAL(getDenX(ixa2,0)) &
+   potX=potX+getDenDiagX(ixa2) &
                            *(xa(id))**2
 !      testtot=testtot+den_re(iixa1,iixr0)*den_re(iixa2,iixr0) &
 !                      *2*xa(ixa1)*xa(ixa2)
@@ -734,7 +741,7 @@ subroutine potSkyrme(potX,ix)
 
 
 
- xxr=REAL(getDen(ix,0))*facd
+ xxr=getDenDiagX(ix)*facd
 ! write(*,*)ix,facd,den_re(iNxa2(ix),iNxr2(0)),xxr
 ! write(*,*)xxr,abs(xxr)
 

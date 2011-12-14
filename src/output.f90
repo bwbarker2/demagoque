@@ -214,15 +214,15 @@ SUBROUTINE outDiagK
   IMPLICIT NONE
 
   INTEGER :: ika 
-  REAL*8 :: ddre, dddim
+  REAL*8 :: ddre  !, dddim
 
   WRITE(42,*)'# time=',t,'fm/c'
   WRITE(42,*)'# k [fm], real, imaginary amplitudes'
 
   DO ika=-Nka2,Nka2-1
-     ddre=REAL(getDenK(0,ika))
-     dddim=AIMAG(getDenK(0,ika))
-     WRITE(42,*) ka(ika),ddre,dddim
+     ddre=getDenDiagK(ika)
+!     dddim=AIMAG(getDenK(0,ika))
+     WRITE(42,*) ka(ika),ddre
   ENDDO
 
   WRITE(42,*)
@@ -239,7 +239,7 @@ SUBROUTINE outDiagX
   IMPLICIT NONE
 
   INTEGER :: ixa
-  REAL (Long) :: ddre, dddim
+  REAL (Long) :: ddre  !, dddim
 
   real (Long) :: sum1, sum2
 
@@ -247,10 +247,10 @@ SUBROUTINE outDiagX
   WRITE(41,*)'# x [fm], real, imaginary amplitudes'
 
   DO ixa=-Nxa2,Nxa2-1
-     ddre=REAL(getDen(ixa,0))
-     dddim=AIMAG(getDen(ixa,0))
+     ddre=getDenDiagX(ixa)
+!     dddim=AIMAG(getDen(ixa,0))
 !     write(*,*)'den_im,dddim:',den_im(iNxa2(ixa),iixr0),dddim
-     WRITE(41,*) xa(ixa),ddre,dddim
+     WRITE(41,*) xa(ixa),ddre  !,dddim
   ENDDO
 
   WRITE(41,*)
@@ -264,8 +264,8 @@ SUBROUTINE outDiagX
   sum2=0_Long
 
   do ixa=-Nxa2,Nxa2-1
-   sum1=sum1+REAL(getDenX(ixa,0))
-   sum2=sum2+abs(xa(ixa))*REAL(getDenX(ixa,0))
+   sum1=sum1+getDenDiagX(ixa)
+   sum2=sum2+abs(xa(ixa))*getDenDiagX(ixa)
   enddo
 
   if(firstOutput) write(75,*)'# time     <|x|>'
@@ -360,10 +360,10 @@ subroutine outSpikinessX
 
  !need to handle last point cyclically
  do ixa=-Nxa2,Nxa2-2
-  spike=spike+abs((getDen(ixa,0)-getDen(ixa+1,0))/(xa(ixa)-xa(ixa+1)))
+  spike=spike+abs((getDenDiagX(ixa)-getDenDiagX(ixa+1))/(xa(ixa)-xa(ixa+1)))
  enddo
 
- spike=spike+abs((getDen(Nxa2-1,0)-getDen(-Nxa2,0))/(xa(Nxa2-1)-xa(-Nxa2)))
+ spike=spike+abs((getDenDiagX(Nxa2-1)-getDenDiagX(-Nxa2))/(xa(Nxa2-1)-xa(-Nxa2)))
 
  spike=spike/Nxa
 

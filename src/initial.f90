@@ -85,8 +85,6 @@ subroutine initialState
      do ixr=-Nxr2,Nxr2-1
         !convert to x,x' representation
         call getX12(ixa,ixr,xx1,xx2)
-!        xx1=(xa(ixa)+xr(ixr)/2.d0)
-!        xx2=(xa(ixa)-xr(ixr)/2.d0)
 
         den0=0e0_Long
         y1=0e0_Long
@@ -107,7 +105,9 @@ subroutine initialState
           endif
 
           if(initState_kdelta) then
-           if(ixr==0.AND.ixa==initState_kdelta_index) then
+           !if we are on the diagonal and at the delta index
+           if(abs(xr(ixr))<(0.1_Long*delxr) &
+              .AND.ixa==initState_kdelta_index) then
             den0=den0+initState_kdelta_norm*2e0_Long*pi/kLa
            endif
           endif
@@ -162,7 +162,7 @@ end subroutine initialState
 
 subroutine copyExtra
  !! copyExtra - copies matrix to extra part (>Nxr2 and <-Nxr2)
- ! 2011-06-30 - now copy directly denmat(:,Nxr2)=denmat(:,-Nxr2) to satisfy numerical hermiticity for xLr.lt.xLa
+ use input_parameters
  use mesh
  implicit none
 
@@ -198,8 +198,11 @@ subroutine copyExtra
 
  enddo
 
- denmat(:,Nxr2)=0.5_Long*REAL((denmat(:,-Nxr2)+denmat(:,Nxr2)))
- denmat(:,-Nxr2)=denmat(:,Nxr2)
+ if(.not.useMeshShifted) then
+  !enforce numerical hermiticity
+  denmat(:,Nxr2)=0.5_Long*(denmat(:,-Nxr2)+denmat(:,Nxr2))
+  denmat(:,-Nxr2)=denmat(:,Nxr2)
+ endif
 
 end subroutine copyExtra
 
