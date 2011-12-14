@@ -163,22 +163,23 @@ contains
    endif
 
    do ixa=-Nxa2,Nxa2
-    xa(ixa)=ixa*(delxa+shift)
+    xa(ixa)=delxa*(ixa+shift)
    enddo
 
    do ixr=-Nxr,Nxr
-    xr(ixr)=ixr*(delxr+shift)
+    xr(ixr)=delxr*(ixr+shift)
    enddo
 
    do ikr=-Nkr2,Nkr2
-    kr(ikr)=ikr*(delkr+shift)
+    kr(ikr)=delkr*(ikr+shift)
    enddo
 
    do ika=-Nka,Nka
-    ka(ika)=ika*(delka+shift)
+    ka(ika)=delka*(ika+shift)
    enddo
- 
-   kLa=ka(Nka2)
+
+   kLa=-ka(-Nka)+delka*shift
+!   write(*,*)'kLa=',kLa
 
    isReflectedLR=.false.
    isDenProcessed=.false.
