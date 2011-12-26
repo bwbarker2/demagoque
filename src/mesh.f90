@@ -264,7 +264,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- subroutine mesh_processDen
+ recursive subroutine mesh_processDen
   use phys_cons
   implicit none
 
@@ -274,14 +274,14 @@ contains
     //'Processing now. Suggest re-ordering to avoid extra FFTs.' &
     ,BEXCEPTION_WARNING)
    call setState(WIGNER)
-  endif
+  else
+   ! sum the momentum components to get diagonal in space
+   denDiagX=delka*invsqrt2pi*real(sum(denmat(:,-Nka2:Nka2-1),2))
 
-  ! sum the momentum components to get diagonal in space
-  denDiagX=delka*invsqrt2pi*real(sum(denmat(:,0:Nka2-1),2))
+   ! sum the space components to get diagonal in momentum
+   denDiagK=delxa*invsqrt2pi*real(sum(denmat(-Nxa2:Nxa2-1,:),1))
+  endif  
 
-  ! sum the space components to get diagonal in momentum
-  denDiagK=delxa*invsqrt2pi*real(sum(denmat(0:Nxa2-1,:),1))
-  
   isDenProcessed=.true.
  
  end subroutine mesh_processDen
@@ -448,6 +448,7 @@ contains
   !> Sets Fourier state of system to desired state (position, wigner, or
   !! momentum. If already in desired state, does nothing.
   subroutine setState(state)
+   use input_parameters
    implicit none
    
    integer, intent(in) :: state !< state to set system to
@@ -460,8 +461,32 @@ contains
 
 !call mesh_setReflectedLR(.true.)
 
-    select case (denState)
-  
+    if(useMeshShifted) then
+
+     select case (denState)
+
+      case (SPACE)
+
+       select case (state)
+
+        case (WIGNER)
+
+         call transform_x_to_w_shift
+         write(*,*)'transform_x_to_w_shift'
+       end select !state
+
+      case (WIGNER)
+
+       select case (state)
+
+        case (SPACE)
+         call transform_w_to_x_shift
+         write(*,*)'transform_w_to_x_shift'
+       end select !state
+     end select !denState
+    else
+
+    select case (denState)  
      case (SPACE)
       select case (state)
        case (WIGNER)
@@ -523,8 +548,47 @@ contains
     end select
 !call mesh_setReflectedLR(.false.)
    endif
+   endif !useMeshShifted
   
   end subroutine setState
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+   subroutine transform_w_to_x_shift
+   use phys_cons
+   implicit none
+
+!   real(Long), dimension(0:Nxr-1,0:Nxr-1) :: sins,coss
+   real (Long) :: denr,deni
+
+   integer :: ixa, ixr, ika
+!   real(Long),dimension(:), allocatable :: iip5  !integer+0.5 array
+!   real(Long) :: piN 
+
+   do ixa=-Nxa2,Nxa2-1
+
+    do ixr=-Nxr,Nxr-1
+
+     denr=0e0_Long
+     deni=0e0_Long
+
+     do ika=0,Nka-1
+      denr = denr &
+             + real(denmat(ixa,ika)+denmat(ixa,-ika-1)) &
+               * cos(pi*(ixr+0.5_Long)*(ika+0.5_Long)/Nxr)
+      deni = deni &
+             + real(denmat(ixa,ika)-denmat(ixa,-ika-1)) &
+               * sin(pi*(ixr+0.5_Long)*(ika+0.5_Long)/Nxr)
+     enddo !ika
+     denmat2(ixa,ixr)=cmplx(denr,deni,Long)
+    enddo !ixr
+   enddo !ixa
+
+   denmat=delka*invsqrt2pi*denmat2
+
+   denState=SPACE
+
+  end subroutine transform_w_to_x_shift 
   
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -674,6 +738,64 @@ contains
    denState=WIGNER
 
   end subroutine transform_x_to_w_dumb_kshift
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine transform_x_to_w_shift
+   use phys_cons
+   implicit none
+
+!   real(Long), dimension(0:Nxr-1,0:Nxr-1) :: sins,coss
+
+   integer :: ixa, ixr, ika
+!   real(Long),dimension(:), allocatable :: iip5  !integer+0.5 array
+!   real(Long) :: piN 
+
+   do ixa=-Nxa2,Nxa2-1
+
+    do ika=-Nka,Nka-1
+
+     denmat2(ixa,ika)=czero
+
+     do ixr=0,Nxr-1
+      denmat2(ixa,ika) = denmat2(ixa,ika) &
+         +  real(denmat(ixa,ixr))*cos(pi*(ixr+0.5_Long)*(ika+0.5_Long)/Nxr) &
+         + aimag(denmat(ixa,ixr))*sin(pi*(ixr+0.5_Long)*(ika+0.5_Long)/Nxr)
+     enddo !ixr
+    enddo !ika
+   enddo !ixa
+
+   denmat=2e0_Long*delxr*invsqrt2pi*denmat2
+
+   denState=WIGNER
+
+   call mesh_processDen
+
+!!! The following is for optimizing the algorithm to minimize arithmetic operations and to maximize use of whole array operations
+
+!   piN = pi/Nxr
+
+!   allocate(iip5(-max(Nxa,Nxr)/2:max(Nxa,Nxr)/2-1))
+
+!   do ixr=lbound(iip5),ubound(iip5)
+!    iip5=ixr+0.5_Long
+!   enddo
+
+!   do ika=-Nka,-1
+!    do ixr=0,Nxr-1
+!     coss(ixr,ika)=cos(piN*iip5(ixr)*iip5(ika))
+!     sins(ixr)=sin(piN*iip5(ixr)*iip5(ika))
+!    enddo
+!   enddo
+!
+!   do ika=0,Nka-1
+!    coss(ika)=coss(-ika-1)
+!    sins(ika)=-sins(-ika-1)
+!   enddo
+
+!   sum(real(denmat(ixa,0:Nxr-1)
+    
+  end subroutine transform_x_to_w_shift
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
