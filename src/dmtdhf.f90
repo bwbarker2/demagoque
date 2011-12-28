@@ -296,8 +296,13 @@ PROGRAM dmtdhf
 !  call mesh_setReflectedLR(.false.)
   maxxim=0e0_Long
 
+  call outX
+  call transform_x_to_w_shift
+  call transform_w_to_x_shift
+  call outX
 
-  CALL time_evolution
+
+!  CALL time_evolution
 
   write(*,*)'maxxim:',maxxim
 

@@ -133,6 +133,8 @@ SUBROUTINE evol_k(dtim)
 !  real*8 :: cos2k, sin2k, xre, xim,xre2,xim2   ! cos,sin part of exp, exponent itself, den_re, den_im
   real (Long) :: edt,k1,k2
 
+  real (Long) :: testSym  !storage for testing symmetry after evolution
+
 !call mesh_setReflectedLR(.true.)
 
   call setState(MOMENTUM)
@@ -212,19 +214,35 @@ SUBROUTINE evol_k(dtim)
      
   ENDDO
 
-  do ikr=1,Nkr2-1
-   do ika=1,Nka-1
-    if(abs(denmat(ikr,ika)-conjg(denmat(-ikr,ika)))>1d-15) then
+  do ikr=0,Nkr2-1
+   do ika=0,Nka-1
+
+    if(useMeshShifted) then
+     testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr-1,ika)))
+    else
+     testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr,ika)))
+    endif
+
+    if(testSym>1d-15) then
      write(*,*)'momentum not hermitian',ikr,ika,(denmat(ikr,ika)-conjg(denmat(-ikr,ika))) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
     endif
+
    enddo
   enddo
 
-  do ikr=1,Nkr2-1
-   do ika=1,Nka-1
-    if(abs(denmat(ikr,ika)-denmat(-ikr,-ika))>1d-13) then
+  do ikr=0,Nkr2-1
+   do ika=0,Nka-1
+
+    if(useMeshShifted) then
+     testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr-1,-ika-1)))
+    else
+     testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr,-ika)))
+    endif
+
+    if(testSym>1d-13) then
      write(*,*)'momentum density not reflection symmetric',ikr,ika,(denmat(ikr,ika)-denmat(-ikr,-ika)) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
     endif
+
    enddo
   enddo
 
