@@ -78,9 +78,9 @@ SUBROUTINE outX
   IMPLICIT NONE
 
 
+  CALL outDenMat(61,62)
   CALL outDiagX
   call setState(SPACE)
-  CALL outDenMat(61,62)
   call outDenMatXPhys
   call outSpikinessX
   call ener_x
