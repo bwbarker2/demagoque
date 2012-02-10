@@ -4,10 +4,10 @@
 0.1d0 ! delt [fm/c]
 10 ! Nevt
 0d0 ! EA [MeV]
-25d0  ! xLa [fm]
-25d0 ! xLr [fm]
-100 ! Nxa
-100 ! Nxr
+20d0  ! xLa [fm]
+20d0 ! xLr [fm]
+40 ! Nxa
+40 ! Nxr
 ! ............. POTENTIAL PARAMETERS
 -1  ! potInitial
 -1 ! potFinal
@@ -17,15 +17,15 @@
 .false.     ! useImEvol - use imaginary evolution?
 10   ! nimev - number of timesteps for this evolution
 ! ............. START OPTIONAL PARAMETERS
-useMeshShifted
+  !useMeshShifted
 unitSystem bec
   !unitSystem nuclear
   !initialSeparation 15d0       !separation between centers in fm
 initState_sqWell 87.0d0 0 0.001 14.5d0
   !initState_gaussianNuclear 0  !use this, Nmax
   !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
-  !initState_kdelta 1d0 0d0     !norm, position
-  !initState_plane 3 1d0 0d0    !wave number, norm, phase shift
+  !initState_kdelta 1d0 0.5d0     !norm, position
+  !initState_plane 1 1d0 0d0    !wave number, norm, phase shift
 splitOperatorMethod 3  !use this, setting order of accuracy in time
   !useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
 END_OF_OPTIONS !sentinel for end of optional parameters

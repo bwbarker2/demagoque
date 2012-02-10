@@ -234,9 +234,9 @@ SUBROUTINE evol_k(dtim)
    do ika=0,Nka-1
 
     if(useMeshShifted) then
-     testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr-1,-ika-1)))
+     testSym=abs(denmat(ikr,ika)-denmat(-ikr-1,-ika-1))
     else
-     testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr,-ika)))
+     testSym=abs(denmat(ikr,ika)-denmat(-ikr,-ika))
     endif
 
     if(testSym>1d-13) then
