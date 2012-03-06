@@ -77,7 +77,7 @@ SUBROUTINE outX
   use mesh
   IMPLICIT NONE
 
-
+  call setState(SPACE)
   CALL outDenMat(61,62)
   CALL outDiagX
   call setState(SPACE)
