@@ -55,7 +55,7 @@ module lib_lapack
 !   write(*,*)'lwork should be',work(0)
 !   write(*,*)
 
-   lwork=nint(dble(work(0)))
+   lwork=nint(real(work(0)))
    deallocate(work)
    allocate(work(0:lwork-1))
 
@@ -77,13 +77,13 @@ module lib_lapack
   subroutine getInvMat(mat,num,matinv)
    implicit none
 
-   complex*16, dimension(0:num-1,0:num-1), intent(in) :: mat !matrix to invert
+   complex (Long), dimension(0:num-1,0:num-1), intent(in) :: mat !matrix to invert
    integer, intent(in) :: num
-   complex*16, dimension(0:num-1,0:num-1), intent(out) :: matinv !inverted matrix
+   complex (Long), dimension(0:num-1,0:num-1), intent(out) :: matinv !inverted matrix
 
    integer, dimension(0:num-1) :: ipiv ! pivot array for LU factorization
    integer :: info ! return status of zgetrf
-   complex*16, allocatable, dimension(:) :: work !work array for zgetri
+   complex (Long), allocatable, dimension(:) :: work !work array for zgetri
    integer :: lwork !size of work array for zgetri
 
    matinv=mat
@@ -107,7 +107,7 @@ module lib_lapack
 
 !   write(*,*)'lwork should be',work(0)
  
-   lwork=nint(dble(work(0)))
+   lwork=nint(real(work(0)))
 
    deallocate(work)
    allocate(work(0:lwork-1))

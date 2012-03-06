@@ -238,20 +238,20 @@ end function bmath_dZeroBrent
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-complex*16 function zdet2d(cmat,n)
+complex(Long) function zdet2d(cmat,n)
  !! zdet2d - nonoptimized calculation of determinant of 2D complex double matrix - order N^2
  implicit none
 
  integer,                    intent(in) :: n    !dimension of square matrix cmat
- complex*16, dimension(n,n), intent(in) :: cmat   !matrix
+ complex (Long), dimension(n,n), intent(in) :: cmat   !matrix
 
  integer, dimension(n) :: l  !row ordering after Gaussian elimination
  integer, dimension(n) :: lo !work array for ordering
- complex*16, dimension(n,n) :: wmat  !writable matrix for using in zGauss
+ complex (Long), dimension(n,n) :: wmat  !writable matrix for using in zGauss
 
  integer :: i !loop variables
  integer :: j !dummy variable for exchange
- real*8 :: rsign  !row interchange sign factor for determinant
+ real (Long) :: rsign  !row interchange sign factor for determinant
 
  wmat=cmat
 
@@ -277,7 +277,7 @@ complex*16 function zdet2d(cmat,n)
 ! write(*,*)'rsign:',rsign
 
  !multiply diagonal terms together to get determinant
- zdet2d=dsign(1.d0,rsign)
+ zdet2d=sign(1.0_Long,rsign)
  do i=1,n
   zdet2d=zdet2d*wmat(l(i),i)
  enddo
@@ -320,16 +320,16 @@ subroutine zGauss(n,a,l)
  implicit none
 
  integer,                    intent(in)    :: n !dimension of square matrix
- complex*16, dimension(n,n), intent(inout) :: a !matrix
+ complex (Long), dimension(n,n), intent(inout) :: a !matrix
  integer,    dimension(n),   intent(out)   :: l !index array
 
- integer                  :: i,j,k  !loop variables
- complex*16               :: r,rmax,smax,xmult
- complex*16, dimension(n) :: s
+ integer                      :: i,j,k  !loop variables
+ complex (Long)               :: r,rmax,smax,xmult
+ complex (Long), dimension(n) :: s
  
  do i=1,n
    l(i)=i
-   smax=0.d0
+   smax=0.0_Long
    do j=1,n
      if(abs(a(i,j))>abs(smax)) smax=a(i,j)
    enddo
@@ -337,7 +337,7 @@ subroutine zGauss(n,a,l)
  enddo
 
  do k=1,n-1
-   rmax=0.d0
+   rmax=0.0_Long
    j=k
    do i=k,n
      r=a(l(i),k)/s(l(i))
@@ -366,16 +366,16 @@ subroutine zlin_int(xa,ya,n,x,y,ki)
  !! zlin_int - linear interpolation for complex double arrays
  implicit none
 
- integer,                  intent(in) :: n  !size of xa,ya arrays
- real*8,     dimension(n), intent(in) :: xa !independent values
- complex*16, dimension(n), intent(in) :: ya !dependent values
- real*8,                   intent(in) :: x  !x value desired
+ integer,                      intent(in) :: n  !size of xa,ya arrays
+ real (Long),    dimension(n), intent(in) :: xa !independent values
+ complex (Long), dimension(n), intent(in) :: ya !dependent values
+ real (Long),                  intent(in) :: x  !x value desired
  
- complex*16, intent(out)   :: y  !function value at x
- integer,    intent(inout) :: ki !index to interpolate around, or index of lower value used for interpolation (good for incremented calls)
+ complex (Long), intent(out)   :: y  !function value at x
+ integer,        intent(inout) :: ki !index to interpolate around, or index of lower value used for interpolation (good for incremented calls)
 
- integer :: k,khi,klo
- real*8  :: h
+ integer     :: k,khi,klo
+ real (Long) :: h
 
  klo=1
  khi=n
@@ -402,7 +402,7 @@ subroutine zlin_int(xa,ya,n,x,y,ki)
  ki=klo
 
  h=xa(khi)-xa(klo)
- if(h.eq.0.d0) then
+ if(h.eq.0.0_Long) then
   write(*,*) 'bad xa input'
   read(*,*)
  endif
@@ -410,6 +410,5 @@ subroutine zlin_int(xa,ya,n,x,y,ki)
  y=ya(klo)+(ya(khi)-ya(klo))/(xa(khi)-xa(klo))*(x-xa(klo))
 
 end subroutine zlin_int
-
 
 end module bmath

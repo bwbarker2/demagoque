@@ -33,3 +33,4 @@ Convert to non-recursive Makefiles to hopefully stop building entire src tree fo
 
 Make iflag module to define constants so we can say iflag=IFLAG_VERBOSE and such in function calls for debugging output - add to bmath_dZeroBrent, for example.
 
+Fix initState_kdelta to work with 'useMeshShifted' - I think it's because getNearestIndex isn't working.

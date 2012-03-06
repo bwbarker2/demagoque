@@ -276,15 +276,15 @@ PROGRAM dmtdhf
 !call mesh_setReflectedLR(.true.)
 !call mesh_setReflectedLR(.false.)
 
-  if(ea>0d0.or.ea<0d0)call boost
+  if(ea>0e0_Long.or.ea<0e0_Long)call boost
  
 !call mesh_setReflectedLR(.false.)
 
-  if(abs(initialSeparation)>(delxa*0.5d0)) then
-   if(initialSeparation>0d0) then
-    call displaceLeft(NINT(initialSeparation*0.5d0/delxa))
+  if(abs(initialSeparation)>(delxa*0.5_Long)) then
+   if(initialSeparation>0e0_Long) then
+    call displaceLeft(NINT(initialSeparation*0.5_Long/delxa))
    else
-    call displaceRight(NINT(abs(initialSeparation)*0.5d0/delxa))
+    call displaceRight(NINT(abs(initialSeparation)*0.5_Long/delxa))
    endif
   endif
 
@@ -294,7 +294,13 @@ PROGRAM dmtdhf
 !  write(*,*)'flipclone finished'
 
 !  call mesh_setReflectedLR(.false.)
-  maxxim=0.d0
+  maxxim=0e0_Long
+
+!  call outX
+!  call transform_x_to_w_shift
+!  call outW
+!  call transform_w_to_x_shift
+!  call outX
 
 
   CALL time_evolution
@@ -426,6 +432,7 @@ SUBROUTINE getStdIn
  unitSystem_nuclear=.true.
  useImCutoff=.false.
  useFlipClone=.false.
+ useMeshShifted=.false.
  splitOperatorMethod=0  !don't use Split Operator Method
 
  !read optional lines
@@ -549,6 +556,10 @@ subroutine procOptionLine(inline)
     read(inline(iend+1:len(inline)),*)cutoff_w0,cutoff_x0,cutoff_d0
     write(*,*)'Using imaginary off-diagonal cutoff, w0,x0,d0=' &
               ,cutoff_w0,cutoff_x0,cutoff_d0
+
+   case("useMeshShifted")
+    useMeshShifted=.true.
+    write(*,*)'Using shifted mesh: xj=dx*(j+1/2), k=dk*(k+1/2)'
 
    case("unitSystem")
     ! reset unit system declaration so we can specify a new one.
