@@ -159,7 +159,7 @@ contains
    if(useMeshShifted) then
     shift=0.5_Long
    else
-    shift=0e0_Long
+    shift=0.e0_Long
    endif
 
    do ixa=-Nxa2,Nxa2
@@ -219,7 +219,7 @@ contains
    integer, intent(in) :: ixa
 
    if(.not.useMeshShifted) then
-    den=abs(getDenX(ixa,0))
+    den=real(getDenX(ixa,0))
    else
     if(.not.isDenProcessed) then
      call mesh_processDen
