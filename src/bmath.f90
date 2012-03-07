@@ -286,6 +286,17 @@ end function zdet2d
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+logical function isEven(num)
+ implicit none
+
+ integer, intent(in) :: num
+
+ isEven=.not.isOdd(num)
+
+end function isEven
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 logical function isOdd(num)
  implicit none
 
