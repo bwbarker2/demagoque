@@ -357,12 +357,12 @@ contains
   !> sets the value of the spatial density matrix at index (ixa,ixr)
   !!
   !! \note Only sets elements that are actually used in getDenX
-  subroutine setDenX(ixa,ixr,value)
+  subroutine setDenX(ixa,ixr,valu)
 
    integer, intent(in)    :: ixa,ixr
-   complex (Long), intent(in) :: value
+   complex (Long), intent(in) :: valu
 
-   denmat(ixa,ixr)=value
+   denmat(ixa,ixr)=valu
 
    if(isDenProcessed) isDenProcessed=.false.
 
