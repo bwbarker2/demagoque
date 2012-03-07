@@ -438,7 +438,9 @@ contains
    if(Nxa==Nxr) then
     continue
    else
-    write(*,*)'getEigens only works for Nxa=Nxr, exiting subroutine'
+    call throwException( &
+         'getEigens only works for Nxa=Nxr, exiting subroutine' &
+         ,BEXCEPTION_FATAL)
     return
    endif
 
