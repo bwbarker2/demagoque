@@ -148,10 +148,10 @@ SUBROUTINE evol_k(dtim)
 !  write(*,*)'starting evol_k loop'
   !loop over all grid points
 
-  DO ikr=-Nkr2,Nkr2-1
+  DO ikr=Nkrn,Nkrx
 !  DO ikr=Nkr2-1,-Nkr2,-1  !reverse direction of indices
      
-     DO ika=-Nka,Nka-1
+     DO ika=Nkan,Nkax
 !     DO ika=Nka-1,-Nka,-1  !reverse direction of indices
 !        call getDenPtsK(ikr,ika,iikr,iika)
         
@@ -174,19 +174,19 @@ SUBROUTINE evol_k(dtim)
         edt=edt*(-hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
 !        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
 
-        ! The following is valid only for useMeshShifted=.false.
-        if(.not.useMeshShifted) then
-         ! For ika=-Nka, there is no matching ika=Nka, so if we do normal time
-         ! evolution on it, we treat positive momentum differently than
-         ! negative momentum. So we operate with the average of the time
-         ! evolution operator acting on Nka and -Nka. This is
-         ! \frac{\e^{i edt} + \e^{-i edt}}{2} = \cos(edt)
-         if(ika==-Nka.or.ikr==-Nkr) then
-          call setDenK(ikr,ika,cos(edt)*getDenK(ikr,ika))
-         elseif(ika/=0.and.ikr/=0)then
-          call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
-         endif
-        endif
+!        ! The following is valid only for useMeshShifted=.false.
+!        if(.not.useMeshShifted) then
+!         ! For ika=-Nka, there is no matching ika=Nka, so if we do normal time
+!         ! evolution on it, we treat positive momentum differently than
+!         ! negative momentum. So we operate with the average of the time
+!         ! evolution operator acting on Nka and -Nka. This is
+!         ! \frac{\e^{i edt} + \e^{-i edt}}{2} = \cos(edt)
+!         if(ika==-Nka.or.ikr==-Nkr) then
+!          call setDenK(ikr,ika,cos(edt)*getDenK(ikr,ika))
+!         elseif(ika/=0.and.ikr/=0)then
+!          call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
+!         endif
+!        endif
 !        cos2k=cos(edt)
 !        sin2k=sin(edt)
 
@@ -214,8 +214,8 @@ SUBROUTINE evol_k(dtim)
      
   ENDDO
 
-  do ikr=0,Nkr2-1
-   do ika=0,Nka-1
+  do ikr=0,Nkrx
+   do ika=0,Nkax
 
     if(useMeshShifted) then
      testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr-1,ika)))
@@ -230,8 +230,8 @@ SUBROUTINE evol_k(dtim)
    enddo
   enddo
 
-  do ikr=0,Nkr2-1
-   do ika=0,Nka-1
+  do ikr=0,Nkrx
+   do ika=0,Nkax
 
     if(useMeshShifted) then
      testSym=abs(denmat(ikr,ika)-denmat(-ikr-1,-ika-1))
@@ -333,7 +333,7 @@ SUBROUTINE evol_x(dtim)
 
  !loop over all grid points
 
- DO ixr=-Nxr2,Nxr2-1
+ DO ixr=Nxrn,Nxrx
 
   !get imaginary cutoff factor if needed (not for adiabatic evolution)
 !  if(useImCutoff.and..not.useAdiabatic)then
@@ -346,7 +346,7 @@ SUBROUTINE evol_x(dtim)
 !  write(*,*)'timestep,ixr,cutfac=',it,ixr,cutfac
 
 !  DO ixa=Nxa2-1,-Nxa2,-1  !reverse index direction
-  DO ixa=-Nxa2,Nxa2-1
+  DO ixa=Nxan,Nxax
 
 !  if(ixa.eq.-24.and.ixr.eq.-49)then
 !   debugxall=.true.
@@ -361,8 +361,8 @@ SUBROUTINE evol_x(dtim)
    call getX12(ixa,ixr,x1,x2)
 
    ki=1
-   call LIN_INT(xa,potDiag,Nxa+1,x1,ux1,ki)
-   call LIN_INT(xa,potDiag,Nxa+1,x2,ux2,ki)
+   call LIN_INT(xa,potDiag,Nxa+2,x1,ux1,ki)
+   call LIN_INT(xa,potDiag,Nxa+2,x2,ux2,ki)
 
 ! debugging test - straight-calc HO:
 !     if(ixr==0) then
@@ -437,7 +437,7 @@ SUBROUTINE evol_x(dtim)
  ENDDO
 
  !copy cells to extra redundant parts
- call copyExtra
+! call copyExtra
 
 ! write(*,*)
 ! write(*,*)
@@ -494,7 +494,7 @@ subroutine calcPotDiag()
 
 ! write(*,*)'time,weight:',t,weight,1.0-weight
 
- do ixa=-Nxa2,Nxa2-1
+ do ixa=Nxan,Nxax
 !  write(*,*)'debug: ixa=',ixa
   if (useAdiabatic) then
 !call mesh_setReflectedLR(.true.)
@@ -510,7 +510,8 @@ subroutine calcPotDiag()
 !   write(*,*)'debug: ixa,potDiag:',ixa,potDiag(ixa)
   endif
  enddo
- potDiag(Nxa2)=potDiag(-Nxa2)
+ potDiag(Nxan-1)=potDiag(Nxax)
+ potDiag(Nxax+1)=potDiag(Nxan)
 
 !call mesh_setReflectedLR(.false.)
 
@@ -719,10 +720,10 @@ subroutine potHOmf(potX,ixa1)
    ! to obey periodic boundary conditions, it is necessary to construct the
    ! meanfield with this periodicity, and treat the distances properly.
    itry=ixa1+id
-   if(itry.LT.-Nxa2)then
-    ixa2=itry+Nxa+1
-   elseif(itry.GT.Nxa2)then
-    ixa2=itry-Nxa-1
+   if(itry.LT.Nxan)then
+    ixa2=itry+Nxa
+   elseif(itry.GT.Nxax)then
+    ixa2=itry-Nxa
    else
     ixa2=itry
    endif

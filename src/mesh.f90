@@ -164,7 +164,9 @@ contains
    endif
 
    ! allocate arrays
-   allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
+   ! xa has the following bounds so that it can easily be used in evol_x's
+   !  linear interpolation
+   allocate(xa(Nxan-1:Nxax+1), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
    allocate(denmat(Nxan:Nxax,Nxrn:Nxrx)) !2x size in xr for naive FT - BWB 2011-01-10
    allocate(denmat2(Nxan:Nxax,Nxrn:Nxrx))
    allocate(denDiagX(Nxan:Nxax))
@@ -178,7 +180,7 @@ contains
     shift=0.e0_Long
    endif
 
-   do ixa=-Nxa2,Nxa2
+   do ixa=Nxan-1,Nxax+1
     xa(ixa)=delxa*(ixa+shift)
    enddo
 

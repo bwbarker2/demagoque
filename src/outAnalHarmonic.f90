@@ -13,7 +13,7 @@ subroutine outAnalHarmonic
   WRITE(45,*)'# time=',t,'fm/c'
   WRITE(45,*)'# x [fm], real, imaginary amplitudes'
 
-  DO ixa=-Nxa2,Nxa2-1
+  DO ixa=Nxan,Nxax
      !add wave packets from surrounding cells, important for long times
      ddre=calcHarmonicEv(xa(ixa),t) &
           +calcHarmonicEv(2e0_Long*xLa+xa(ixa),t) &

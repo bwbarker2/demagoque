@@ -36,7 +36,7 @@ subroutine ener_k
 
   ekin=0e0_Long
   knum=0e0_Long
-  do ika=-Nka2,Nka2-1
+  do ika=Nkan,Nkax
      ekin=ekin+ka(ika)*ka(ika)*getDenDiagK(ika)
      knum=knum+getDenDiagK(ika)
 !     write(*,*)pk2(ixa)
@@ -87,7 +87,7 @@ subroutine ener_x
    write(76,*)'# x   pot(x)'
   endif
 
-  do ixa=-Nxa2,Nxa2-1
+  do ixa=Nxan,Nxax
    write(76,*)xa(ixa),potDiag(ixa)
   enddo
 
@@ -96,7 +96,7 @@ subroutine ener_x
 
   epot=0e0_Long
   nnum=0e0_Long
-  do ixa=-Nxa2,Nxa2-1
+  do ixa=Nxan,Nxax
      epot=epot+potDiag(ixa)*getDenDiagX(ixa)
 !     uu(ixa)=uu(ixa)*den_re(iNxa2(ixa),iNxr2(0))/(Nmax+1)
      nnum=nnum+getDenDiagX(ixa)
