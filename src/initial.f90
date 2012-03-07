@@ -89,12 +89,14 @@ subroutine initialState
         den0=0e0_Long
         y1=0e0_Long
         y2=0e0_Long
-        do iin=0,Nmax
-          if(initState_gaussianNuclear.OR.initState_gaussian) then
+
+        if(initState_gaussianNuclear.OR.initState_gaussian) then
+         do iin=0,Nmax
            y1=wfnho(xx1,iin,whm)
            y2=wfnho(xx2,iin,whm)
            den0=den0+y1*y2
-          endif
+         enddo !iin
+        endif
 
           if(initState_cosine) then
            y1=sqrt(initState_cosine_norm/xLa) &
@@ -134,8 +136,6 @@ subroutine initialState
 !           else
 !            den0=den0+y1*y2
 !           endif
-
-        enddo !in
 
 !        if(abs(den0).lt.1e-40) den0=0.0d0
 
