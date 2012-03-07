@@ -463,6 +463,18 @@ SUBROUTINE getStdIn
   initialSeparation=xLa/2e0_Long
  endif
 
+ if(useMeshShifted.and.(isOdd(Nxa).or.isOdd(Nxr))) then
+  call throwException( &
+   'getStdIn: useMeshShifted is set, but it requires even Nxa and Nxr!' &
+   ,BEXCEPTION_FATAL)
+ endif
+
+ if(.not.useMeshShifted.and.(isEven(Nxa).or.isEven(Nxr))) then
+  call throwException( &
+   'getStdIn: useMeshShifted=.false., but this requires odd Nxa and Nxr!' &
+   ,BEXCEPTION_FATAL)
+ endif
+
 END SUBROUTINE getStdIn
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
