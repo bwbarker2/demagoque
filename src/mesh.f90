@@ -93,16 +93,16 @@ contains
   real (Long), intent(in) :: xx
 
   real (Long) :: aixx  ! interpolated index for result
-  integer, dimension(-Nxa2:Nxa2-1) :: ixen  !array of indices
+  integer, dimension(Nxan:Nxax) :: ixen  !array of indices
  
   integer :: ixa,ki
  
-  do ixa=-Nxa2,Nxa2-1
+  do ixa=Nxan,Nxax
    ixen(ixa)=ixa
   enddo
 
   ki=1
-  call lin_int(xa(-Nxa2:Nxa2-1),ixen,Nxa,xx,aixx,ki)
+  call lin_int(xa(Nxan:Nxax),ixen,Nxa,xx,aixx,ki)
 
   ixx=nint(aixx)
 
@@ -126,15 +126,6 @@ contains
    Nkr=Nxa
    Nka=Nxr
 
-   ! allocate arrays
-   allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
-   allocate(denmat(-Nxa2:Nxa2-1,-Nxr:Nxr-1)) !2x size in xr for naive FT - BWB 2011-01-10
-   allocate(denmat2(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
-   allocate(denDiagX(-Nxa2:Nxa2-1))
-   allocate(denDiagK(-Nka:Nka-1))
-   allocate(potDiag(-Nxa2:Nxa2))
-   allocate(den_re(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
-
    !facd calc'd here because can't initialize with non-integer exponents
    facd=sqrt(5e0_Long/3e0_Long)*(deg*pi*(rho0**2)/6e0_Long)**(1e0_Long/3e0_Long) 
 
@@ -148,7 +139,7 @@ contains
    potDiag=0e0_Long
 
    !set minimum and maximum indices for the density matrix. These limits will
-   !be used every time something loops over the entire matrix. These are set in
+   !be used every time something loops over the entire logical matrix. These are set in
    !in a way that makes the src/initial.f90 (copyExtra) routine not needed, as
    !the extra sections are looped over as well.
    Nxan=-Nxa2
@@ -171,6 +162,15 @@ contains
     Nxrx=Nxr
     Nkax=Nka
    endif
+
+   ! allocate arrays
+   allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
+   allocate(denmat(Nxan:Nxax,Nxrn:Nxrx)) !2x size in xr for naive FT - BWB 2011-01-10
+   allocate(denmat2(Nxan:Nxax,Nxrn:Nxrx))
+   allocate(denDiagX(Nxan:Nxax))
+   allocate(denDiagK(Nkan:Nkax))
+   allocate(potDiag(-Nxa2:Nxa2))
+   allocate(den_re(Nxan:Nxax,Nxrn:Nxrx))
 
    if(useMeshShifted) then
     shift=0.5_Long
@@ -431,7 +431,7 @@ contains
    implicit none
 
    complex (Long), dimension(0:Nxa-1), intent(out) :: evals
-   complex (Long), dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1), intent(out) :: evecs
+   complex (Long), dimension(-Nxan:Nxax,-Nxrn+Nxr2:Nxrx-Nxr2), intent(out) :: evecs
 
    integer :: ixa,ixr
 
@@ -446,8 +446,8 @@ contains
 
    call setState(SPACE)
 
-   do ixa=-Nxa2,Nxa2-1
-    do ixr=-Nxr2,Nxr2-1
+   do ixa=-Nxan,Nxax
+    do ixr=-Nxrn+Nxr2,Nxrx-Nxr2
      evecs(ixa,ixr)=getDenX(ixa,ixr)
     enddo
    enddo
@@ -662,23 +662,23 @@ contains
   
    integer :: ixa,ixr,ika
    real (Long) :: exparg
-   complex (Long) :: array(-Nxr:Nxr-1)
+   complex (Long) :: array(Nxrn:Nxrx)
 
 !write(*,*)'x to w dumb go'
   
-   do ixa=-Nxa2,Nxa2-1
+   do ixa=Nxan,Nxax
   
     array=cmplx(0e0_Long,0e0_Long,Long)
   
     ! fill arrays to be transformed
-    do ixr=-Nxr,Nxr-1
+    do ixr=Nxrn,Nxrx
      array(ixr)=getDenX(ixa,ixr)
     enddo
   
-    do ika=-Nka,Nka-1
+    do ika=Nkan,Nkax
 !     denmat2(ixa,ika)=cmplx(0d0,0d0,8)
      denmat2(ixa,ika)=czero
-     do ixr=1,Nxr-1
+     do ixr=Nxrn,Nxrx
 
 !      !debug up-down symmetry
 !      if(ixr.ne.-Nxr)then
@@ -691,12 +691,11 @@ contains
 !      exparg=mod(exparg,2*pi)  !this doesn't seem to have any effect
 !      denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
-                       +array(ixr)*(cos(exparg)-imagi*sin(exparg)) &
-                       +array(-ixr)*(cos(exparg)+imagi*sin(exparg))
+                       +array(ixr)*exp(-imagi*exparg)
      enddo
-     denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +array(-Nxr)*cos(xr(-Nxr)*ka(ika)) &
-                      +array(0)
+!     denmat2(ixa,ika)=denmat2(ixa,ika) &
+!                      +array(-Nxr)*cos(xr(-Nxr)*ka(ika)) &
+!                      +array(0)
 
      denmat2(ixa,ika)=delxr*denmat2(ixa,ika)*invsqrt2pi
   
@@ -706,8 +705,8 @@ contains
   
    enddo
   
-   do ixa=-Nxa2,Nxa2-1
-    do ika=-Nka,Nka-1
+   do ixa=Nxan,Nxax
+    do ika=Nkan,Nkax
      call setDenW(ixa,ika,denmat2(ixa,ika))
     enddo
    enddo
@@ -981,21 +980,21 @@ contains
 
    denmat2=CMPLX(0e0_Long,0e0_Long,Long)
 
-   do ixa=-Nxa2,Nxa2-1
-    do ixr=-Nxr,Nxr-1
+   do ixa=Nxan,Nxax
+    do ixr=Nxrn,Nxrx
 !     do ika=-Nka,Nka-1
 !      denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
 !     enddo
-     do ika=1,Nka-1
+     do ika=Nkan,Nkax
 
       exparg=xr(ixr)*ka(ika)
       denmat2(ixa,ixr)=denmat2(ixa,ixr) &
-                       +denmat(ixa,ika)*(cos(exparg)+imagi*sin(exparg)) &
-                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
+                       +denmat(ixa,ika)*(cos(exparg)+imagi*sin(exparg))
+!                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
      enddo
-     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
-                      +denmat(ixa,-Nka)*cos(xr(ixr)*ka(-Nka)) &
-                      +denmat(ixa,0)
+!     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
+!                      +denmat(ixa,-Nka)*cos(xr(ixr)*ka(-Nka)) &
+!                      +denmat(ixa,0)
 
      denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka*invsqrt2pi
     enddo
@@ -1091,23 +1090,23 @@ contains
    integer :: ixa,ika,ikr
    real(Long) :: trigarg
 
-   do ika=-Nka,Nka-1
-    do ikr=-Nkr2,Nkr2-1
+   do ika=Nkan,Nkax
+    do ikr=Nkrn,Nkrx
      denmat2(ikr,ika)=czero
 !     do ixa=-Nxa2,Nxa2-1
-     do ixa=1,Nxa2-1
+     do ixa=Nxan,Nxax
       trigarg=xa(ixa)*kr(ikr)
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ikr,ika)=denmat2(ikr,ika) &
                        +denmat(ixa,ika)*(cos(trigarg) &
-                                         -imagi*sin(trigarg)) &
-                       +denmat(-ixa,ika)*(cos(trigarg) &
-                                         +imagi*sin(trigarg))
+                                         -imagi*sin(trigarg))
+!                       +denmat(-ixa,ika)*(cos(trigarg) &
+!                                         +imagi*sin(trigarg))
      enddo !ixa
-     denmat2(ikr,ika)=denmat2(ikr,ika) &
-                      +denmat(-Nxa2,ika)*cos(xa(-Nxa2)*kr(ikr)) &
+!     denmat2(ikr,ika)=denmat2(ikr,ika) &
+!                      +denmat(-Nxa2,ika)*cos(xa(-Nxa2)*kr(ikr)) &
 !                                          -imagi*sin(xa(-Nxa2)*kr(ikr))) &
-                      +denmat(0,ika)
+!                      +denmat(0,ika)
 
      denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
 
@@ -1177,22 +1176,22 @@ contains
    integer :: ixa,ika,ikr
    real(Long) :: trigarg
   
-   do ika=-Nka,Nka-1
-    do ixa=-Nxa2,Nxa2-1
+   do ika=Nkan,Nkax
+    do ixa=Nxan,Nxax
      denmat2(ixa,ika)=czero
-      do ikr=1,Nkr2-1
+      do ikr=Nkrn,Nkrx
        trigarg=xa(ixa)*kr(ikr)
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
-                       +denmat(ikr,ika)*(cos(trigarg)+imagi*sin(trigarg)) &
+                       +denmat(ikr,ika)*(cos(trigarg)+imagi*sin(trigarg))
 !                       +REAL(denmat(ikr,ika))*cos(trigarg) &
 !                       -Dimag(denmat(ikr,ika))*sin(trigarg)
-                       +denmat(-ikr,ika)*(cos(trigarg) &
-                                         -imagi*sin(trigarg))
+!                       +denmat(-ikr,ika)*(cos(trigarg) &
+!                                         -imagi*sin(trigarg))
      enddo !ixa
-     denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +denmat(-Nkr2,ika)*cos(xa(ixa)*kr(-Nkr2)) &
-                      +denmat(0,ika)
+!     denmat2(ixa,ika)=denmat2(ixa,ika) &
+!                      +denmat(-Nkr2,ika)*cos(xa(ixa)*kr(-Nkr2)) &
+!                      +denmat(0,ika)
 
 !     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
 !     enddo

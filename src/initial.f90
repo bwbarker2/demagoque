@@ -81,8 +81,8 @@ subroutine initialState
    initState_kdelta_index=99
   endif
 
-  do ixa=-Nxa2,Nxa2-1
-     do ixr=-Nxr2,Nxr2-1
+  do ixa=Nxan,Nxax
+     do ixr=Nxrn,Nxrx
         !convert to x,x' representation
         call getX12(ixa,ixr,xx1,xx2)
 
@@ -151,7 +151,7 @@ subroutine initialState
      enddo !ixr
   enddo !ixa
 
-  call copyExtra
+!  call copyExtra
 
   ! set density matrix to X state
   denState=SPACE
@@ -228,7 +228,7 @@ subroutine boost
   kea=sign(1e0_Long,ea)*sqrt(2e0_Long*m0*abs(ea))/hbar
 
   !loop over all grid points
-  DO ixr=-Nxr2,Nxr2-1
+  DO ixr=Nxrn,Nxrx
 
      epx=exp(imagi*kea*xr(ixr))
 
@@ -268,8 +268,7 @@ subroutine boost
      
   ENDDO
 
-
-  call copyExtra 
+! call copyExtra
 
 
 end subroutine boost
