@@ -147,7 +147,12 @@ contains
 
    potDiag=0e0_Long
 
+   !set minimum and maximum indices for the density matrix. These limits will
+   !be used every time something loops over the entire matrix. These are set in
+   !in a way that makes the src/initial.f90 (copyExtra) routine not needed, as
+   !the extra sections are looped over as well.
    Nxan=-Nxa2
+   Nxrn=-Nxr
    Nkrn=-Nkr2
    Nkan=-Nka
 
@@ -160,12 +165,9 @@ contains
    endif
 
    if(isEven(Nxr)) then
-    Nxrn=-Nxr2
     Nxrx=Nxr2-1
-    Nkan=-Nka2
     Nkax=Nka-1
    else
-    Nxrn=-Nxr
     Nxrx=Nxr
     Nkax=Nka
    endif
