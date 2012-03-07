@@ -37,13 +37,13 @@ MODULE mesh
  INTEGER :: Nkr2    ! Nkr/2 = Nxa/2
  INTEGER :: Nka2    ! Nka/2 = Nxr/2
 
- integer :: Nxam    ! minimum logical index of cell in xa
+ integer :: Nxan    ! minimum logical index of cell in xa
  integer :: Nxax    ! maximum logical index of cell in xa
- integer :: Nxrm    ! minimum logical index of cell in xr
+ integer :: Nxrn    ! minimum logical index of cell in xr
  integer :: Nxrx    ! maximum logical index of cell in xr
- integer :: Nkam    ! minimum logical index of cell in ka
+ integer :: Nkan    ! minimum logical index of cell in ka
  integer :: Nkax    ! maximum logical index of cell in ka
- integer :: Nkrm    ! minimum logical index of cell in kr
+ integer :: Nkrn    ! minimum logical index of cell in kr
  integer :: Nkrx    ! maximum logical index of cell in kr
 
  REAL (Long)    :: delxa   ! interval in x_average
@@ -147,14 +147,28 @@ contains
 
    potDiag=0e0_Long
 
-   Nxam=-Nxa2
-   Nxax=Nxa2-1
-   Nxrm=-Nxr2
-   Nxrx=Nxr2-1
-   Nkrm=-Nkr2
-   Nkrx=Nkr2-1
-   Nkam=-Nka2
-   Nkax=Nka2-1
+   Nxan=-Nxa2
+   Nkrn=-Nkr2
+   Nkan=-Nka
+
+   if(isEven(Nxa)) then
+    Nxax=Nxa2-1
+    Nkrx=Nkr2-1
+   else
+    Nxax=Nxa2
+    Nkrx=Nkr2
+   endif
+
+   if(isEven(Nxr)) then
+    Nxrn=-Nxr2
+    Nxrx=Nxr2-1
+    Nkan=-Nka2
+    Nkax=Nka-1
+   else
+    Nxrn=-Nxr
+    Nxrx=Nxr
+    Nkax=Nka
+   endif
 
    if(useMeshShifted) then
     shift=0.5_Long
