@@ -376,12 +376,7 @@ contains
 
    integer, intent(in) :: ixa,ika
 
-   if(ixa<Nxa2) then
-    getDenW=denmat(ixa,ika)
-   else
-    getDenW=denmat(-Nxa2,ika)
-   endif
-
+   getDenW=denmat(ixa,ika)
 
   end function getDenW
 
