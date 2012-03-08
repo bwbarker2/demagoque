@@ -132,7 +132,13 @@ contains
 
    ! mesh in x and k
    delxa=(2e0_Long*xLa)/real(Nxa)
-   delxr=(2e0_Long*xLr)/real(Nxr)
+
+   ! if Nxr is odd, then for periodicity across 4L with 2N-1 points, we need:
+   if(isEven(Nxr)) then
+    delxr=(2e0_Long*xLr)/real(Nxr)
+   else
+    delxr=(4e0_Long*xLr)/(2e0_Long*Nxr-1e0_Long)
+   endif
    delka=pi/(2e0_Long*xLr)
    delkr=pi/xLa
 
@@ -142,26 +148,26 @@ contains
    !be used every time something loops over the entire logical matrix. These are set in
    !in a way that makes the src/initial.f90 (copyExtra) routine not needed, as
    !the extra sections are looped over as well.
+
    Nxan=-Nxa2
-   Nxrn=-Nxr
-   Nkrn=-Nkr2
-   Nkan=-Nka
+   Nxrx=Nxr-1
 
    if(isEven(Nxa)) then
     Nxax=Nxa2-1
-    Nkrx=Nkr2-1
    else
     Nxax=Nxa2
-    Nkrx=Nkr2
    endif
 
    if(isEven(Nxr)) then
-    Nxrx=Nxr2-1
-    Nkax=Nka-1
+    Nxrn=-Nxr
    else
-    Nxrx=Nxr
-    Nkax=Nka
+    Nxrn=-Nxr+1
    endif
+
+   Nkrn=Nxan
+   Nkrx=Nxax
+   Nkan=Nxrn
+   Nkax=Nxrx
 
    ! allocate arrays
    ! xa has the following bounds so that it can easily be used in evol_x's
