@@ -223,7 +223,7 @@ SUBROUTINE evol_k(dtim)
      testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr,ika)))
     endif
 
-    if(testSym>1d-15) then
+    if(testSym>1d-14) then
      write(*,*)'momentum not hermitian',ikr,ika,(denmat(ikr,ika)-conjg(denmat(-ikr,ika))) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
     endif
 
