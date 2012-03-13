@@ -248,7 +248,7 @@ SUBROUTINE outDiagX
   WRITE(41,*)'# time=',t,'fm/c'
   WRITE(41,*)'# x [fm], real, imaginary amplitudes'
 
-  DO ixa=-Nxan,Nxax
+  DO ixa=Nxan,Nxax
      ddre=getDenDiagX(ixa)
 !     dddim=AIMAG(getDen(ixa,0))
 !     write(*,*)'den_im,dddim:',den_im(iNxa2(ixa),iixr0),dddim
