@@ -135,11 +135,11 @@ contains
    delxa=(2e0_Long*xLa)/real(Nxa)
 
    ! if Nxr is odd, then for periodicity across 4L with 2N-1 points, we need:
-   if(isEven(Nxr)) then
+!   if(isEven(Nxr)) then
     delxr=(2e0_Long*xLr)/real(Nxr)
-   else
-    delxr=(4e0_Long*xLr)/(2e0_Long*Nxr-1e0_Long)
-   endif
+!   else
+!    delxr=(4e0_Long*xLr)/(2e0_Long*Nxr-1e0_Long)
+!   endif
    delka=pi/(2e0_Long*xLr)
    delkr=pi/xLa
 
@@ -158,11 +158,11 @@ contains
     Nxax=Nxa2
    endif
 
-   if(isEven(Nxr)) then
+!   if(isEven(Nxr)) then
     Nxrn=-Nxr
-   else
-    Nxrn=-Nxr+1
-   endif
+!   else
+!    Nxrn=-Nxr+1
+!   endif
 
    Nkrn=Nxan
    Nkrx=Nxax
