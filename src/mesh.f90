@@ -126,6 +126,7 @@ contains
    Nkr=Nxa
    Nka=Nxr
 
+
    !facd calc'd here because can't initialize with non-integer exponents
    facd=sqrt(5e0_Long/3e0_Long)*(deg*pi*(rho0**2)/6e0_Long)**(1e0_Long/3e0_Long) 
 
@@ -142,7 +143,6 @@ contains
    delka=pi/(2e0_Long*xLr)
    delkr=pi/xLa
 
-   potDiag=0e0_Long
 
    !set minimum and maximum indices for the density matrix. These limits will
    !be used every time something loops over the entire logical matrix. These are set in
@@ -177,8 +177,10 @@ contains
    allocate(denmat2(Nxan:Nxax,Nxrn:Nxrx))
    allocate(denDiagX(Nxan:Nxax))
    allocate(denDiagK(Nkan:Nkax))
-   allocate(potDiag(-Nxa2:Nxa2))
+   allocate(potDiag(Nxan-1:Nxax+1))
    allocate(den_re(Nxan:Nxax,Nxrn:Nxrx))
+
+   potDiag=0e0_Long
 
    if(useMeshShifted) then
     shift=0.5_Long
