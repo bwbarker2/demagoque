@@ -29,16 +29,16 @@ SUBROUTINE time_evolution
   
   REAL (Long) :: dt2  ! half delt
   real (Long) :: soms5  !split operator method s_5
-  real (Long) :: ch_unc !check uncertainty condition
+!  real (Long) :: ch_unc !check uncertainty condition
 
   integer :: ii
 
  !check to be sure that uncertainty condition is met:
- ch_unc=hbar*kLa**2/(2e0_Long*m0)*delt
- if(ch_unc>0.1_Long) then
-  write(*,*)'time_evolution: ch_unc=',ch_unc
-  call throwException('time_evolution: uncertainty condition too high, ch_unc>0.1',BEXCEPTION_FATAL)
- endif
+! ch_unc=hbar*kLa**2/(2e0_Long*m0)*delt
+! if(ch_unc>0.1_Long) then
+!  write(*,*)'time_evolution: ch_unc=',ch_unc
+!  call throwException('time_evolution: uncertainty condition too high, ch_unc>0.1',BEXCEPTION_FATAL)
+! endif
 
  firstOutput=.true.
 
@@ -84,12 +84,12 @@ SUBROUTINE time_evolution
 !call mesh_setReflectedLR(.false.)
 !    else
 !     call setState(MOMENTUM)
-     CALL evol_k(delt)
+     CALL evol_k(dt2)
 !     call makeMomentumHermitian()
 !     call output
-!     CALL evol_x(delt)
+     CALL evol_x(delt)
 !     call output
-!     CALL evol_k(dt2)
+     CALL evol_k(dt2)
 !    endif
    elseif(splitOperatorMethod==5)then
     call evol_x(soms5*dt2)
@@ -171,8 +171,8 @@ SUBROUTINE evol_k(dtim)
        else
         !time evolution operator = exp(-i(E-E')t/h)
         !                        = exp(-ih/2m(k^2-k'^2))
-        edt=edt*(-hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
-!        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
+!        edt=edt*(-hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
+        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
 
 !        ! The following is valid only for useMeshShifted=.false.
 !        if(.not.useMeshShifted) then
@@ -184,7 +184,7 @@ SUBROUTINE evol_k(dtim)
 !         if(ika==-Nka.or.ikr==-Nkr) then
 !          call setDenK(ikr,ika,cos(edt)*getDenK(ikr,ika))
 !         elseif(ika/=0.and.ikr/=0)then
-!          call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
+          call setDenK(ikr,ika,exp(imagi*edt)*getDenK(ikr,ika))
 !         endif
 !        endif
 !        cos2k=cos(edt)
@@ -223,7 +223,7 @@ SUBROUTINE evol_k(dtim)
      testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr,ika)))
     endif
 
-    if(testSym>1d-14) then
+    if(testSym>1d-10) then
      write(*,*)'momentum not hermitian',ikr,ika,(denmat(ikr,ika)-conjg(denmat(-ikr,ika))) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
     endif
 
@@ -239,7 +239,7 @@ SUBROUTINE evol_k(dtim)
      testSym=abs(denmat(ikr,ika)-denmat(-ikr,-ika))
     endif
 
-    if(testSym>1d-13) then
+    if(testSym>1d-10) then
      write(*,*)'momentum density not reflection symmetric',ikr,ika,(denmat(ikr,ika)-denmat(-ikr,-ika)) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
     endif
 
