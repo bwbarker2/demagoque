@@ -132,9 +132,9 @@ SUBROUTINE outDenMat(fileim_u, filere_u)
   WRITE(fileim_u,*)'# time=',t,'fm/c'
   WRITE(filere_u,*)'# time=',t,'fm/c'
 
-  DO ixr=-Nxr,Nxr-1
-     WRITE(fileim_u,919) (AIMAG(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2-1)
-     WRITE(filere_u,919) (REAL(getDen(ixa,ixr)),ixa=-Nxa2,Nxa2-1)
+  DO ixr=Nxrn,Nxrx
+     WRITE(fileim_u,919) (AIMAG(getDen(ixa,ixr)),ixa=Nxan,Nxax)
+     WRITE(filere_u,919) (REAL(getDen(ixa,ixr)),ixa=Nxan,Nxax)
   ENDDO
 
   ! two blank lines give proper formatting for gnuplot
@@ -165,7 +165,7 @@ subroutine outDenMatKPhys()
  write(funit,*)'# time=',t,'fm/c'
 
  do ikr=-Nkr2,Nkr2-1
-  do ika=-Nka2,Nka2-1
+  do ika=Nkan,Nkax
    if(abs(mod(ika+ikr,2))==1) cycle
    write(funit,*)kr(ikr),ka(ika),0.5_Long*REAL(getDenK(ikr,ika)),0.5_Long*AIMAG(getDenK(ikr,ika))
   enddo
@@ -193,8 +193,8 @@ subroutine outDenMatXPhys()
 
  write(funit,*)'# time=',t,'fm/c'
 
- do ixa=-Nxa2,Nxa2-1
-  do ixr=-Nxr2,Nxr2-1
+ do ixa=Nxan,Nxax
+  do ixr=Nxrn+Nxr2,Nxrx-Nxr2
    write(funit,*)xa(ixa),xr(ixr),REAL(getDenX(ixa,ixr)),AIMAG(getDenX(ixa,ixr))
   enddo
   write(funit,*)
@@ -205,6 +205,7 @@ subroutine outDenMatXPhys()
 
 end subroutine outDenMatXPhys
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 SUBROUTINE outDiagK
   !! outDiagK - writes the value of the density matrices along the k=k' line.
@@ -219,7 +220,7 @@ SUBROUTINE outDiagK
   WRITE(42,*)'# time=',t,'fm/c'
   WRITE(42,*)'# k [fm], real, imaginary amplitudes'
 
-  DO ika=-Nka2,Nka2-1
+  DO ika=Nkan,Nkax
      ddre=getDenDiagK(ika)
 !     dddim=AIMAG(getDenK(0,ika))
      WRITE(42,*) ka(ika),ddre
@@ -232,6 +233,7 @@ SUBROUTINE outDiagK
 
 END SUBROUTINE outDiagK
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 SUBROUTINE outDiagX
   USE mesh
@@ -246,7 +248,7 @@ SUBROUTINE outDiagX
   WRITE(41,*)'# time=',t,'fm/c'
   WRITE(41,*)'# x [fm], real, imaginary amplitudes'
 
-  DO ixa=-Nxa2,Nxa2-1
+  DO ixa=Nxan,Nxax
      ddre=getDenDiagX(ixa)
 !     dddim=AIMAG(getDen(ixa,0))
 !     write(*,*)'den_im,dddim:',den_im(iNxa2(ixa),iixr0),dddim
@@ -263,7 +265,7 @@ SUBROUTINE outDiagX
   sum1=0_Long
   sum2=0_Long
 
-  do ixa=-Nxa2,Nxa2-1
+  do ixa=Nxan,Nxax
    sum1=sum1+getDenDiagX(ixa)
    sum2=sum2+abs(xa(ixa))*getDenDiagX(ixa)
   enddo
@@ -359,11 +361,11 @@ subroutine outSpikinessX
  endif
 
  !need to handle last point cyclically
- do ixa=-Nxa2,Nxa2-2
-  spike=spike+abs((getDenDiagX(ixa)-getDenDiagX(ixa+1))/(xa(ixa)-xa(ixa+1)))
+ do ixa=Nxan,Nxax-1
+  spike=spike+abs((getDenDiagX(ixa)-getDenDiagX(ixa+1))/delxa)
  enddo
 
- spike=spike+abs((getDenDiagX(Nxa2-1)-getDenDiagX(-Nxa2))/(xa(Nxa2-1)-xa(-Nxa2)))
+ spike=spike+abs((getDenDiagX(Nxax)-getDenDiagX(Nxan))/delxa)
 
  spike=spike/Nxa
 

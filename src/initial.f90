@@ -81,20 +81,22 @@ subroutine initialState
    initState_kdelta_index=99
   endif
 
-  do ixa=-Nxa2,Nxa2-1
-     do ixr=-Nxr2,Nxr2-1
+  do ixa=Nxan,Nxax
+     do ixr=Nxrn,Nxrx
         !convert to x,x' representation
         call getX12(ixa,ixr,xx1,xx2)
 
         den0=0e0_Long
         y1=0e0_Long
         y2=0e0_Long
-        do iin=0,Nmax
-          if(initState_gaussianNuclear.OR.initState_gaussian) then
+
+        if(initState_gaussianNuclear.OR.initState_gaussian) then
+         do iin=0,Nmax
            y1=wfnho(xx1,iin,whm)
            y2=wfnho(xx2,iin,whm)
            den0=den0+y1*y2
-          endif
+         enddo !iin
+        endif
 
           if(initState_cosine) then
            y1=sqrt(initState_cosine_norm/xLa) &
@@ -135,8 +137,6 @@ subroutine initialState
 !            den0=den0+y1*y2
 !           endif
 
-        enddo !in
-
 !        if(abs(den0).lt.1e-40) den0=0.0d0
 
         call setDenX(ixa,ixr,den0)
@@ -151,7 +151,7 @@ subroutine initialState
      enddo !ixr
   enddo !ixa
 
-  call copyExtra
+!  call copyExtra
 
   ! set density matrix to X state
   denState=SPACE
@@ -228,7 +228,7 @@ subroutine boost
   kea=sign(1e0_Long,ea)*sqrt(2e0_Long*m0*abs(ea))/hbar
 
   !loop over all grid points
-  DO ixr=-Nxr2,Nxr2-1
+  DO ixr=Nxrn,Nxrx
 
      epx=exp(imagi*kea*xr(ixr))
 
@@ -268,8 +268,7 @@ subroutine boost
      
   ENDDO
 
-
-  call copyExtra 
+! call copyExtra
 
 
 end subroutine boost

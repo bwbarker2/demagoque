@@ -93,16 +93,16 @@ contains
   real (Long), intent(in) :: xx
 
   real (Long) :: aixx  ! interpolated index for result
-  integer, dimension(-Nxa2:Nxa2-1) :: ixen  !array of indices
+  integer, dimension(Nxan:Nxax) :: ixen  !array of indices
  
   integer :: ixa,ki
  
-  do ixa=-Nxa2,Nxa2-1
+  do ixa=Nxan,Nxax
    ixen(ixa)=ixa
   enddo
 
   ki=1
-  call lin_int(xa(-Nxa2:Nxa2-1),ixen,Nxa,xx,aixx,ki)
+  call lin_int(xa(Nxan:Nxax),ixen,Nxa,xx,aixx,ki)
 
   ixx=nint(aixx)
 
@@ -126,14 +126,6 @@ contains
    Nkr=Nxa
    Nka=Nxr
 
-   ! allocate arrays
-   allocate(xa(-Nxa2:Nxa2), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
-   allocate(denmat(-Nxa2:Nxa2-1,-Nxr:Nxr-1)) !2x size in xr for naive FT - BWB 2011-01-10
-   allocate(denmat2(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
-   allocate(denDiagX(-Nxa2:Nxa2-1))
-   allocate(denDiagK(-Nka:Nka-1))
-   allocate(potDiag(-Nxa2:Nxa2))
-   allocate(den_re(-Nxa2:Nxa2-1,-Nxr:Nxr-1))
 
    !facd calc'd here because can't initialize with non-integer exponents
    facd=sqrt(5e0_Long/3e0_Long)*(deg*pi*(rho0**2)/6e0_Long)**(1e0_Long/3e0_Long) 
@@ -141,36 +133,56 @@ contains
 
    ! mesh in x and k
    delxa=(2e0_Long*xLa)/real(Nxa)
-   delxr=(2e0_Long*xLr)/real(Nxr)
+
+   ! if Nxr is odd, then for periodicity across 4L with 2N-1 points, we need:
+!   if(isEven(Nxr)) then
+    delxr=(2e0_Long*xLr)/real(Nxr)
+!   else
+!    delxr=(4e0_Long*xLr)/(2e0_Long*Nxr-1e0_Long)
+!   endif
    delka=pi/(2e0_Long*xLr)
    delkr=pi/xLa
 
-   potDiag=0e0_Long
 
    !set minimum and maximum indices for the density matrix. These limits will
-   !be used every time something loops over the entire matrix. These are set in
+   !be used every time something loops over the entire logical matrix. These are set in
    !in a way that makes the src/initial.f90 (copyExtra) routine not needed, as
    !the extra sections are looped over as well.
-   Nxan=-Nxa2
-   Nxrn=-Nxr
-   Nkrn=-Nkr2
-   Nkan=-Nka
+
+!   Nxan=-Nxa2
+   Nxax=Nxa2
+   Nxrx=Nxr
 
    if(isEven(Nxa)) then
-    Nxax=Nxa2-1
-    Nkrx=Nkr2-1
+!    Nxax=Nxa2-1
+    Nxan=-Nxa2+1
    else
-    Nxax=Nxa2
-    Nkrx=Nkr2
+    Nxan=-Nxa2
    endif
 
-   if(isEven(Nxr)) then
-    Nxrx=Nxr2-1
-    Nkax=Nka-1
-   else
-    Nxrx=Nxr
-    Nkax=Nka
-   endif
+!   if(isEven(Nxr)) then
+    Nxrn=-Nxr+1
+!   else
+!    Nxrn=-Nxr+1
+!   endif
+
+   Nkrn=Nxan
+   Nkrx=Nxax
+   Nkan=Nxrn
+   Nkax=Nxrx
+
+   ! allocate arrays
+   ! xa has the following bounds so that it can easily be used in evol_x's
+   !  linear interpolation
+   allocate(xa(Nxan-1:Nxax+1), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
+   allocate(denmat(Nxan:Nxax,Nxrn:Nxrx)) !2x size in xr for naive FT - BWB 2011-01-10
+   allocate(denmat2(Nxan:Nxax,Nxrn:Nxrx))
+   allocate(denDiagX(Nxan:Nxax))
+   allocate(denDiagK(Nkan:Nkax))
+   allocate(potDiag(Nxan-1:Nxax+1))
+   allocate(den_re(Nxan:Nxax,Nxrn:Nxrx))
+
+   potDiag=0e0_Long
 
    if(useMeshShifted) then
     shift=0.5_Long
@@ -178,7 +190,7 @@ contains
     shift=0.e0_Long
    endif
 
-   do ixa=-Nxa2,Nxa2
+   do ixa=Nxan-1,Nxax+1
     xa(ixa)=delxa*(ixa+shift)
    enddo
 
@@ -431,7 +443,7 @@ contains
    implicit none
 
    complex (Long), dimension(0:Nxa-1), intent(out) :: evals
-   complex (Long), dimension(-Nxa2:Nxa2-1,-Nxr2:Nxr2-1), intent(out) :: evecs
+   complex (Long), dimension(-Nxan:Nxax,-Nxrn+Nxr2:Nxrx-Nxr2), intent(out) :: evecs
 
    integer :: ixa,ixr
 
@@ -446,8 +458,8 @@ contains
 
    call setState(SPACE)
 
-   do ixa=-Nxa2,Nxa2-1
-    do ixr=-Nxr2,Nxr2-1
+   do ixa=-Nxan,Nxax
+    do ixr=-Nxrn+Nxr2,Nxrx-Nxr2
      evecs(ixa,ixr)=getDenX(ixa,ixr)
     enddo
    enddo
@@ -661,24 +673,35 @@ contains
    implicit none
   
    integer :: ixa,ixr,ika
-   real (Long) :: exparg
-   complex (Long) :: array(-Nxr:Nxr-1)
+!   complex (Long) :: array(Nxrn:Nxrx)
+   real(Long), dimension(:,:), allocatable,save :: coses, sines
+
+   if(.not.allocated(coses)) then
+    allocate(coses(1:Nxrx,Nkan:Nkax))
+    allocate(sines(1:Nxrx,Nkan:Nkax))
+    do ika=Nkan,Nkax
+     do ixr=1,Nxrx
+      coses(ixr,ika)=cos(xr(ixr)*ka(ika))
+      sines(ixr,ika)=sin(xr(ixr)*ka(ika))
+     enddo
+    enddo
+   endif
 
 !write(*,*)'x to w dumb go'
   
-   do ixa=-Nxa2,Nxa2-1
+   do ixa=Nxan,Nxax
   
-    array=cmplx(0e0_Long,0e0_Long,Long)
+!    array=cmplx(0e0_Long,0e0_Long,Long)
   
     ! fill arrays to be transformed
-    do ixr=-Nxr,Nxr-1
-     array(ixr)=getDenX(ixa,ixr)
-    enddo
+!    do ixr=Nxrn,Nxrx
+!     array(ixr)=getDenX(ixa,ixr)
+!    enddo
   
-    do ika=-Nka,Nka-1
+    do ika=Nkan,Nkax
 !     denmat2(ixa,ika)=cmplx(0d0,0d0,8)
      denmat2(ixa,ika)=czero
-     do ixr=1,Nxr-1
+     do ixr=1,Nxrx-1
 
 !      !debug up-down symmetry
 !      if(ixr.ne.-Nxr)then
@@ -687,16 +710,16 @@ contains
 !       endif
 !      endif
 
-      exparg=xr(ixr)*ka(ika)
 !      exparg=mod(exparg,2*pi)  !this doesn't seem to have any effect
 !      denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
-                       +array(ixr)*(cos(exparg)-imagi*sin(exparg)) &
-                       +array(-ixr)*(cos(exparg)+imagi*sin(exparg))
+                       +2.d0*(REAL(denmat(ixa,ixr))*coses(ixr,ika) &
+                              +AIMAG(denmat(ixa,ixr))*sines(ixr,ika))
+!                       +array(ixr)*exp(-imagi*exparg)
      enddo
      denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +array(-Nxr)*cos(xr(-Nxr)*ka(ika)) &
-                      +array(0)
+                      +denmat(ixa,Nxr)*coses(Nxrx,ika) &
+                      +denmat(ixa,0)
 
      denmat2(ixa,ika)=delxr*denmat2(ixa,ika)*invsqrt2pi
   
@@ -706,8 +729,8 @@ contains
   
    enddo
   
-   do ixa=-Nxa2,Nxa2-1
-    do ika=-Nka,Nka-1
+   do ixa=Nxan,Nxax
+    do ika=Nkan,Nkax
      call setDenW(ixa,ika,denmat2(ixa,ika))
     enddo
    enddo
@@ -978,24 +1001,34 @@ contains
 
    real (Long) :: exparg
    integer :: ixa,ixr,ika
+   complex(Long), dimension(:,:), allocatable,save :: exps
+
+   if(.not.allocated(exps)) then
+    allocate(exps(Nxrn:Nxrx,Nkan:Nkax))
+    do ika=Nkan,Nkax
+     do ixr=Nxrn,Nxrx
+      exps(ixr,ika)=exp(imagi*xr(ixr)*ka(ika))
+     enddo
+    enddo
+   endif
+
 
    denmat2=CMPLX(0e0_Long,0e0_Long,Long)
 
-   do ixa=-Nxa2,Nxa2-1
-    do ixr=-Nxr,Nxr-1
+   do ixa=Nxan,Nxax
+    do ixr=Nxrn,Nxrx
 !     do ika=-Nka,Nka-1
 !      denmat2(ixa,ixr)=denmat2(ixa,ixr)+denmat(ixa,ika)*exp(imagi*delxr*delka*ixr*ika)
 !     enddo
-     do ika=1,Nka-1
+     do ika=Nkan,Nkax
 
-      exparg=xr(ixr)*ka(ika)
       denmat2(ixa,ixr)=denmat2(ixa,ixr) &
-                       +denmat(ixa,ika)*(cos(exparg)+imagi*sin(exparg)) &
-                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
+                       +real(denmat(ixa,ika))*exps(ixr,ika)
+!                       +denmat(ixa,-ika)*(cos(exparg)-imagi*sin(exparg))
      enddo
-     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
-                      +denmat(ixa,-Nka)*cos(xr(ixr)*ka(-Nka)) &
-                      +denmat(ixa,0)
+!     denmat2(ixa,ixr)=denmat2(ixa,ixr) &
+!                      +denmat(ixa,-Nka)*cos(xr(ixr)*ka(-Nka)) &
+!                      +denmat(ixa,0)
 
      denmat2(ixa,ixr)=denmat2(ixa,ixr)*delka*invsqrt2pi
     enddo
@@ -1089,32 +1122,43 @@ contains
    implicit none
 
    integer :: ixa,ika,ikr
-   real(Long) :: trigarg
+!   real(Long) :: trigarg
+   complex(Long), dimension(:,:), allocatable,save :: exps
 
-   do ika=-Nka,Nka-1
-    do ikr=-Nkr2,Nkr2-1
+   if(.not.allocated(exps)) then
+    allocate(exps(Nxan:Nxax,Nkrn:Nkrx))
+    do ikr=Nkrn,Nkrx
+     do ixa=Nxan,Nxax
+      exps(ixa,ikr)=exp(-imagi*xa(ixa)*kr(ikr))
+     enddo
+    enddo
+   endif
+
+
+   do ika=Nkan,Nkax
+    do ikr=Nkrn,Nkrx
      denmat2(ikr,ika)=czero
 !     do ixa=-Nxa2,Nxa2-1
-     do ixa=1,Nxa2-1
-      trigarg=xa(ixa)*kr(ikr)
+     do ixa=Nxan,Nxax
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ikr,ika)=denmat2(ikr,ika) &
-                       +denmat(ixa,ika)*(cos(trigarg) &
-                                         -imagi*sin(trigarg)) &
-                       +denmat(-ixa,ika)*(cos(trigarg) &
-                                         +imagi*sin(trigarg))
+                       +denmat(ixa,ika)*exps(ixa,ikr)
+!                       +denmat(ixa,ika)*(cos(trigarg) &
+!                                         -imagi*sin(trigarg))
+!                       +denmat(-ixa,ika)*(cos(trigarg) &
+!                                         +imagi*sin(trigarg))
      enddo !ixa
-     denmat2(ikr,ika)=denmat2(ikr,ika) &
-                      +denmat(-Nxa2,ika)*cos(xa(-Nxa2)*kr(ikr)) &
+!     denmat2(ikr,ika)=denmat2(ikr,ika) &
+!                      +denmat(-Nxa2,ika)*cos(xa(-Nxa2)*kr(ikr)) &
 !                                          -imagi*sin(xa(-Nxa2)*kr(ikr))) &
-                      +denmat(0,ika)
+!                      +denmat(0,ika)
 
      denmat2(ikr,ika)=denmat2(ikr,ika)*delxa*invsqrt2pi
 
      !Analytically (see notes BWB 2011-01-25p2), for ika+ikr odd, denmat should
      ! be exactly zero. Make it so. This subroutine is not built for speed,
      ! so leave the above computation alone, but add the following:
-     if(abs(mod(ika+ikr,2))==1)denmat2(ikr,ika)=0e0_Long
+!     if(abs(mod(ika+ikr,2))==1)denmat2(ikr,ika)=0e0_Long
 
     enddo
    enddo
@@ -1175,23 +1219,35 @@ contains
    implicit none
   
    integer :: ixa,ika,ikr
-   real(Long) :: trigarg
-  
-   do ika=-Nka,Nka-1
-    do ixa=-Nxa2,Nxa2-1
+   real(Long), dimension(:,:), allocatable,save :: coses, sines
+
+   if(.not.allocated(coses)) then
+    allocate(coses(Nxan:Nxax,0:Nkrx))
+    allocate(sines(Nxan:Nxax,0:Nkrx))
+    do ikr=0,Nkrx
+     do ixa=Nxan,Nxax
+      coses(ixa,ikr)=cos(xa(ixa)*kr(ikr))
+      sines(ixa,ikr)=sin(xa(ixa)*kr(ikr))
+     enddo
+    enddo
+   endif
+
+
+   do ika=Nkan,Nkax
+    do ixa=Nxan,Nxax
      denmat2(ixa,ika)=czero
-      do ikr=1,Nkr2-1
-       trigarg=xa(ixa)*kr(ikr)
+      do ikr=1,Nkrx-1
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
-                       +denmat(ikr,ika)*(cos(trigarg)+imagi*sin(trigarg)) &
+                       +2.d0*(real(denmat(ikr,ika))*coses(ixa,ikr) &
+                              -aimag(denmat(ikr,ika))*sines(ixa,ikr))
 !                       +REAL(denmat(ikr,ika))*cos(trigarg) &
 !                       -Dimag(denmat(ikr,ika))*sin(trigarg)
-                       +denmat(-ikr,ika)*(cos(trigarg) &
-                                         -imagi*sin(trigarg))
+!                       +denmat(-ikr,ika)*(cos(trigarg) &
+!                                         -imagi*sin(trigarg))
      enddo !ixa
      denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +denmat(-Nkr2,ika)*cos(xa(ixa)*kr(-Nkr2)) &
+                      +denmat(Nkrx,ika)*coses(ixa,Nkrx) &
                       +denmat(0,ika)
 
 !     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
