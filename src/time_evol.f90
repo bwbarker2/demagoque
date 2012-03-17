@@ -223,7 +223,7 @@ SUBROUTINE evol_k(dtim)
      testSym=abs(denmat(ikr,ika)-conjg(denmat(-ikr,ika)))
     endif
 
-    if(testSym>1d-8) then
+    if(testSym>1d-9) then
      write(*,*)'momentum not hermitian',ikr,ika,(denmat(ikr,ika)-conjg(denmat(-ikr,ika))) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
     endif
 
@@ -239,9 +239,9 @@ SUBROUTINE evol_k(dtim)
      testSym=abs(denmat(ikr,ika)-denmat(-ikr,-ika))
     endif
 
-    if(testSym>1d-5) then
-     write(*,*)'momentum density not reflection symmetric',ikr,ika,(denmat(ikr,ika)-denmat(-ikr,-ika)) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
-    endif
+!    if(testSym>1d-5) then
+!     write(*,*)'momentum density not reflection symmetric',ikr,ika,(denmat(ikr,ika)-denmat(-ikr,-ika)) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
+!    endif
 
    enddo
   enddo
@@ -333,8 +333,8 @@ SUBROUTINE evol_x(dtim)
 
  !loop over all grid points
 
- DO ixr=Nxrn,Nxrx
-
+ DO ixr=Nxrn,Nxrx-1
+  if(ixr==0) cycle
   !get imaginary cutoff factor if needed (not for adiabatic evolution)
 !  if(useImCutoff.and..not.useAdiabatic)then
   if(useImCutoff)then
@@ -651,10 +651,10 @@ subroutine potBEC_1D_HO_Mateo2011(potX,ix,wz,wt,scat,Npart)
 denav=getDenDiagX(ix)
 
 !potX=1
- potX=0.5_Long*m0*wz**2*xa(ix)**2 &
+ potX=0.5_Long*m0*wz**2*xa(ix)**2 
 !  +sign(1d0,dble(getDenX(ix,0))) &
 !   *hbar*wt*(sqrt(1_Long+4_Long*scat*Npart*abs(getDenX(ix,0)))-1_Long)
-   +2_Long*scat*hbar*wt*Npart*denav  !original 1D GPE
+ if(abs(denav)>1.d0) potX=potX+2_Long*scat*hbar*wt*Npart*abs(denav)  !original 1D GPE
 ! write(*,*)'m0,wz,xa=',m0,wz,xa(ix)
 
 end subroutine potBEC_1D_HO_Mateo2011
