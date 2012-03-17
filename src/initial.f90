@@ -214,8 +214,9 @@ subroutine boost
   use phys_cons
   implicit none
 
-  INTEGER ixr !loop variables
+  INTEGER ixa,ixr !loop variables
   real (Long) :: kea !momentum, given ea
+  real (Long) :: x1,x2
 !  real*8 :: cos2k, sin2k !cos,sin part of exp, exponent itself
 !  real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real
 !  real*8 :: x1,x2   !position in x,x' basis
@@ -228,14 +229,14 @@ subroutine boost
   kea=sign(1e0_Long,ea)*sqrt(2e0_Long*m0*abs(ea))/hbar
 
   !loop over all grid points
-  DO ixr=Nxrn,Nxrx
+  do ixa=Nxan,Nxax
+   DO ixr=Nxrn,Nxrx
+    call getX12(ixa,ixr,x1,x2)
+    epx=exp(imagi*kea*(x1-x2))
 
-     epx=exp(imagi*kea*xr(ixr))
-
-!call mesh_setReflectedLR(.true.)
-
-     denmat(:,ixr)=denmat(:,ixr)*epx
-
+    denmat(ixa,ixr)=denmat(ixa,ixr)*epx
+   enddo
+  ENDDO
 !call mesh_setReflectedLR(.false.)
 
 !     DO ixa=-Nxa2,Nxa2-1
@@ -266,7 +267,6 @@ subroutine boost
 
 !     ENDDO
      
-  ENDDO
 
 ! call copyExtra
 
@@ -282,23 +282,23 @@ subroutine displaceLeft(nx)
 
  integer, intent(in) :: nx
 
- complex (Long), dimension(0:nx-1,-Nxr:Nxr-1) :: wmat  !working matrix
+ complex (Long), dimension(0:nx-1,Nxrn:Nxrx) :: wmat  !working matrix
 
  integer :: i
 
  !copy cells that are shifted 'off' the left (negative) side of the matrix
  do i=0,nx-1
-  wmat(i,:)=denmat(-Nxa2+i,:)
+  wmat(i,:)=denmat(Nxan+i,:)
  enddo !i
 
  !shift cells within denmat
- do i=-Nxa2,Nxa2-1-nx
+ do i=Nxan,Nxax-nx
   denmat(i,:)=denmat(i+nx,:)
  enddo !i
 
  !copy periodically shifted cells to other (positive) side of matrix
- do i=Nxa2-nx,Nxa2-1
-  denmat(i,:)=wmat(i-Nxa2+nx,:)
+ do i=Nxax-(nx-1),Nxax
+  denmat(i,:)=wmat(i-Nxax+nx-1,:)
  enddo
 
 end subroutine displaceLeft
