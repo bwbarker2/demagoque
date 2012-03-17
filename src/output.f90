@@ -329,8 +329,8 @@ subroutine outDenUnf
 
  write(54) Nxa,Nxr,Nmax
 
- do ixa=-Nxa2,Nxa2-1
-  do ixr=-Nxr,Nxr-1
+ do ixa=Nxan,Nxax
+  do ixr=Nxrn,Nxrx
    write(54)denmat(ixa,ixr)
   enddo
  enddo
@@ -408,8 +408,8 @@ subroutine inDenUnf
   stop
  endif
 
- do ixa=-Nxa2,Nxa2-1
-  do ixr=-Nxr,Nxr-1
+ do ixa=Nxan,Nxax
+  do ixr=Nxrn,Nxrx
    read(54)denmat(ixa,ixr)
   enddo
  enddo
