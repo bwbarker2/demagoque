@@ -157,7 +157,8 @@ SUBROUTINE evol_k(dtim)
         
 !call mesh_setReflectedLR(.true.)
 
-        call getK12(ika,ikr,k1,k2)
+      k1=kk1(ikr,ika)
+      k2=kk2(ikr,ika)
 
        if(potFinal==3)then
         edt=sin(w*delt)/(w*delt)
@@ -171,8 +172,8 @@ SUBROUTINE evol_k(dtim)
        else
         !time evolution operator = exp(-i(E-E')t/h)
         !                        = exp(-ih/2m(k^2-k'^2))
-!        edt=edt*(-hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
-        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
+        edt=edt*(-hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
+!        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
 
 !        ! The following is valid only for useMeshShifted=.false.
 !        if(.not.useMeshShifted) then
@@ -214,6 +215,7 @@ SUBROUTINE evol_k(dtim)
      
   ENDDO
 
+ if(.not.useFrameXXP) then
   do ikr=Nkrn,0
    do ika=Nkan,0
 
@@ -229,22 +231,23 @@ SUBROUTINE evol_k(dtim)
 
    enddo
   enddo
+ endif ! .not.useFrameXXP
 
-  do ikr=Nkrn,0
-   do ika=Nkan,0
-
-    if(useMeshShifted) then
-     testSym=abs(denmat(ikr,ika)-denmat(-ikr-1,-ika-1))
-    else
-     testSym=abs(denmat(ikr,ika)-denmat(-ikr,-ika))
-    endif
-
+!  do ikr=Nkrn,0
+!   do ika=Nkan,0
+!
+!    if(useMeshShifted) then
+!     testSym=abs(denmat(ikr,ika)-denmat(-ikr-1,-ika-1))
+!    else
+!     testSym=abs(denmat(ikr,ika)-denmat(-ikr,-ika))
+!    endif
+!
 !    if(testSym>1d-5) then
 !     write(*,*)'momentum density not reflection symmetric',ikr,ika,(denmat(ikr,ika)-denmat(-ikr,-ika)) !/(denmat(ikr,ika)+denmat(-ikr,-ika))
 !    endif
-
-   enddo
-  enddo
+!
+!   enddo
+!  enddo
 
 
 !  write(*,*)'ending evol_k loop'
@@ -334,19 +337,22 @@ SUBROUTINE evol_x(dtim)
  !loop over all grid points
 
  DO ixr=Nxrn,Nxrx-1
-  if(ixr==0) cycle
-  !get imaginary cutoff factor if needed (not for adiabatic evolution)
 !  if(useImCutoff.and..not.useAdiabatic)then
-  if(useImCutoff)then
-   call getImCutoff(cutfac, ixr,dtim)
-  else
-   cutfac=1e0_Long
-  endif
-
 !  write(*,*)'timestep,ixr,cutfac=',it,ixr,cutfac
 
 !  DO ixa=Nxa2-1,-Nxa2,-1  !reverse index direction
   DO ixa=Nxan,Nxax
+
+   x1=xx1(ixa,ixr)
+   x2=xx2(ixa,ixr)
+
+   !get imaginary cutoff factor if needed
+   if(useImCutoff)then
+    call getImCutoff(cutfac,x1-x2,dtim)
+   else
+    cutfac=1e0_Long
+   endif
+
 
 !  if(ixa.eq.-24.and.ixr.eq.-49)then
 !   debugxall=.true.
@@ -357,8 +363,6 @@ SUBROUTINE evol_x(dtim)
   if(debugxall)then
    write(*,*)denmat(ixa,ixr)-denmat(-ixa,ixr)
   endif
-
-   call getX12(ixa,ixr,x1,x2)
 
    ki=1
    call LIN_INT(xa,potDiag,Nxa+2,x1,ux1,ki)
@@ -519,26 +523,26 @@ end subroutine calcPotDiag
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
 
-subroutine getImCutoff(cutfac, ixr,dtim)
+subroutine getImCutoff(cutfac, xxr,dtim)
  use input_parameters
  use mesh
  use phys_cons
  implicit none
 
- integer, intent(in) :: ixr
+ real (Long), intent(in) :: xxr
  real (Long), intent(out) :: cutfac
  real (Long), intent(in) :: dtim !timestep
 
- real (Long) :: xxr
+ real (Long) :: absxxr
 
- xxr=abs(xr(ixr))
+ absxxr=abs(xxr)
 
- if(xxr<=cutoff_x0) then
+ if(absxxr<=cutoff_x0) then
   cutfac=0e0_Long
- elseif(xxr<=cutoff_x0+cutoff_d0*0.5_Long) then
-  cutfac=2e0_Long*(xxr-cutoff_x0)**2/cutoff_d0**2
- elseif(xxr<=cutoff_x0+cutoff_d0) then
-  cutfac=1e0_Long-2e0_Long*(xxr-(cutoff_x0+cutoff_d0))**2/cutoff_d0**2
+ elseif(absxxr<=cutoff_x0+cutoff_d0*0.5_Long) then
+  cutfac=2e0_Long*(absxxr-cutoff_x0)**2/cutoff_d0**2
+ elseif(absxxr<=cutoff_x0+cutoff_d0) then
+  cutfac=1e0_Long-2e0_Long*(absxxr-(cutoff_x0+cutoff_d0))**2/cutoff_d0**2
  else
   cutfac=1e0_Long
  endif

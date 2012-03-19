@@ -13,8 +13,9 @@ MODULE phys_cons
   complex (Long), parameter :: czero=cmplx(0e0_Long,0e0_Long,Long)
   complex (Long),   parameter :: imagi=cmplx(0e0_Long,1e0_Long,Long)  !sqrt(-1)
   REAL (long) , PARAMETER :: pi=4e0_Long*atan(1e0_Long)
+  real (Long) , parameter :: inv2pi=1e0_Long/(2e0_Long*pi)
   real (long) , parameter :: invpi=1e0_Long/pi  !1/pi
-  real (long) , parameter :: invsqrt2pi=1e0_Long/sqrt(2e0_Long*pi)
+  real (long) , parameter :: invsqrt2pi=sqrt(inv2pi)
 
   !physical constants in SI units, with "current units" as well
 

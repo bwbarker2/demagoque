@@ -50,11 +50,11 @@ SUBROUTINE output
 !     write(*,*)'starting outK'
      CALL outK
 !     write(*,*)'ending outK'
-     call outW
+     if(.not.useFrameXXP) call outW
      CALL outX
   ELSE
      CALL outX
-     call outW
+     if(.not.useFrameXXP) call outW
      CALL outK
   ENDIF
 
@@ -71,6 +71,7 @@ SUBROUTINE output
 
 END SUBROUTINE output
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 SUBROUTINE outX
   use input_parameters
@@ -151,6 +152,7 @@ END SUBROUTINE outDenMat
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine outDenMatKPhys()
+ use input_parameters
  use mesh
  use prec_def
  use time
@@ -164,9 +166,11 @@ subroutine outDenMatKPhys()
 
  write(funit,*)'# time=',t,'fm/c'
 
- do ikr=-Nkr2,Nkr2-1
+ do ikr=Nkrn,Nkrx
   do ika=Nkan,Nkax
-   if(abs(mod(ika+ikr,2))==1) cycle
+   if(.not.useFrameXXP) then
+    if(abs(mod(ika+ikr,2))==1) cycle
+   endif
    write(funit,*)kr(ikr),ka(ika),0.5_Long*REAL(getDenK(ikr,ika)),0.5_Long*AIMAG(getDenK(ikr,ika))
   enddo
   write(funit,*)
@@ -180,6 +184,7 @@ end subroutine outDenMatKPhys
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine outDenMatXPhys()
+ use input_parameters
  use mesh
  use prec_def
  use time
@@ -187,14 +192,23 @@ subroutine outDenMatXPhys()
 
  integer, parameter :: funit = 72 ! file unit to write to
 
- integer :: ixa,ixr
+ integer :: ixa,ixr,ixrl,ixru
 
  call setState(SPACE)
 
  write(funit,*)'# time=',t,'fm/c'
 
+ !set bounds for ixr loop. Rotated frame is double Nxr
+ if(useFrameXXP) then
+  ixrl=Nxrn
+  ixru=Nxrx
+ else
+  ixrl=Nxrn+Nxr2
+  ixru=Nxrx-Nxr2
+ endif
+
  do ixa=Nxan,Nxax
-  do ixr=Nxrn+Nxr2,Nxrx-Nxr2
+  do ixr=ixrl,ixru
    write(funit,*)xa(ixa),xr(ixr),REAL(getDenX(ixa,ixr)),AIMAG(getDenX(ixa,ixr))
   enddo
   write(funit,*)

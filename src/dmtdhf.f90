@@ -281,16 +281,17 @@ PROGRAM dmtdhf
 !call mesh_setReflectedLR(.false.)
 
   if(abs(initialSeparation)>(delxa*0.5_Long)) then
-   if(initialSeparation>0e0_Long) then
-    call displaceLeft(NINT(initialSeparation*0.5_Long/delxa))
-   else
-    call displaceRight(NINT(abs(initialSeparation)*0.5_Long/delxa))
-   endif
+   call throwException('main: displaceLeft and displaceRight not implemented yet.', BEXCEPTION_FATAL)
+!   if(initialSeparation>0e0_Long) then
+!    call displaceLeft(NINT(initialSeparation*0.5_Long/delxa))
+!   else
+!    call displaceRight(NINT(abs(initialSeparation)*0.5_Long/delxa))
+!   endif
   endif
 
 !  call mesh_setReflectedLR(.false.)
 
-  if(useFlipClone) call flipclone
+  if(useFlipClone) call throwException('main: flipclone not implemented yet.', BEXCEPTION_FATAL)!call flipclone
 !  write(*,*)'flipclone finished'
 
 !  call mesh_setReflectedLR(.false.)
@@ -420,7 +421,7 @@ SUBROUTINE getStdIn
   write(*,*) 'timesteps for imaginary evolution, Nimev=',Nimev
 
  !set default options
- initialSeparation=0d0  !don't use initial separation
+ initialSeparation=0.d0  !don't use initial separation
  initState_gaussian=.false.
  initState_gaussianNuclear=.false.
  initState_cosine=.false.
@@ -432,6 +433,7 @@ SUBROUTINE getStdIn
  unitSystem_nuclear=.true.
  useImCutoff=.false.
  useFlipClone=.false.
+ useFrameXXP=.false.
  useMeshShifted=.false.
  splitOperatorMethod=0  !don't use Split Operator Method
 
@@ -463,13 +465,27 @@ SUBROUTINE getStdIn
   initialSeparation=xLa/2e0_Long
  endif
 
+ if(useFrameXXP.and.((Nxa/=Nxr).or.abs(xLa-xLr)>epzero)) then
+  call throwException( &
+   'getStdIn: useFrameXXP=.true, but Nxa/=Nxr or xLa/=xLr. Both of these ' &
+   //'need to be equal to each other.', BEXCEPTION_FATAL)
+ endif
+
+ if(useFrameXXP.and.useMeshShifted) then
+  call throwException( &
+   'getStdIn: useFrameXXP and useMeshShifted are both .true. Only one of ' &
+   //'them can be true. Do not shift the mesh when in (x,x-prime) ' &
+   //'representation.' &
+   ,BEXCEPTION_FATAL)
+ endif
+
  if(useMeshShifted.and.(isOdd(Nxa).or.isOdd(Nxr))) then
   call throwException( &
    'getStdIn: useMeshShifted is set, but it requires even Nxa and Nxr!' &
    ,BEXCEPTION_FATAL)
  endif
 
- if(.not.useMeshShifted.and.(isEven(Nxa).or.isEven(Nxr))) then
+ if(.not.useMeshShifted.and.(isEven(Nxa).or.isEven(Nxr)).and..not.useFrameXXP) then
   call throwException( &
    'getStdIn: useMeshShifted=.false., but this requires odd Nxa and Nxr!' &
    ,BEXCEPTION_FATAL)
@@ -600,6 +616,10 @@ subroutine procOptionLine(inline)
    case("useFlipClone")
     useFlipClone=.true.
     write(*,*)'Making symmetric collision with flipClone'
+
+   case("useFrameXXP")
+    useFrameXXP=.true.
+    write(*,*)'Using unrotated frame, (x,x-prime) representation'
 
    case default
     call throwException('getStdIn: Option does not exist: ' // inline(ibeg:iend),BEXCEPTION_FATAL)

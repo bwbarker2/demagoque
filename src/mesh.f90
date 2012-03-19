@@ -57,6 +57,8 @@ MODULE mesh
  REAL (Long) :: facd
  REAL (Long), DIMENSION(:), ALLOCATABLE :: xa,ka,xr,kr   ! coord of grid point  
 
+ real (Long), dimension(:,:), allocatable :: xx1,xx2,kk1,kk2 !< (x,x') coordinates as function of (ixa,ixr) indices
+
  ! density matrix, real and imaginary
  REAL (Long) , DIMENSION(:,:) , ALLOCATABLE :: den_re, den_im
  complex (Long), dimension(:,:), allocatable :: denmat !when I need complex, I store here
@@ -140,7 +142,11 @@ contains
 !   else
 !    delxr=(4e0_Long*xLr)/(2e0_Long*Nxr-1e0_Long)
 !   endif
-   delka=pi/(2e0_Long*xLr)
+   if(useFrameXXP) then
+    delka=pi/xLr
+   else
+    delka=pi/(2e0_Long*xLr)
+   endif
    delkr=pi/xLa
 
 
@@ -151,7 +157,6 @@ contains
 
 !   Nxan=-Nxa2
    Nxax=Nxa2
-   Nxrx=Nxr
 
    if(isEven(Nxa)) then
 !    Nxax=Nxa2-1
@@ -160,11 +165,17 @@ contains
     Nxan=-Nxa2
    endif
 
-!   if(isEven(Nxr)) then
+   if(useFrameXXP) then
+    if(isEven(Nxr)) then
+     Nxrn=-Nxr2+1
+    else
+     Nxrn=-Nxr2
+    endif
+    Nxrx=Nxr2
+   else
     Nxrn=-Nxr+1
-!   else
-!    Nxrn=-Nxr+1
-!   endif
+    Nxrx=Nxr
+   endif
 
    Nkrn=Nxan
    Nkrx=Nxax
@@ -175,12 +186,14 @@ contains
    ! xa has the following bounds so that it can easily be used in evol_x's
    !  linear interpolation
    allocate(xa(Nxan-1:Nxax+1), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
-   allocate(denmat(Nxan:Nxax,Nxrn:Nxrx)) !2x size in xr for naive FT - BWB 2011-01-10
+   allocate(denmat(Nxan:Nxax,Nxrn:Nxrx)) 
    allocate(denmat2(Nxan:Nxax,Nxrn:Nxrx))
    allocate(denDiagX(Nxan:Nxax))
    allocate(denDiagK(Nkan:Nkax))
    allocate(potDiag(Nxan-1:Nxax+1))
    allocate(den_re(Nxan:Nxax,Nxrn:Nxrx))
+   allocate(xx1(Nxan:Nxax,Nxrn:Nxrx), xx2(Nxan:Nxax,Nxrn:Nxrx))
+   allocate(kk1(Nkrn:Nkrx,Nkan:Nkax), kk2(Nkrn:Nkrx,Nkan:Nkax))
 
    potDiag=0e0_Long
 
@@ -208,6 +221,30 @@ contains
 
    kLa=-ka(-Nka)+delka*shift
 !   write(*,*)'kLa=',kLa
+
+   !set conversion from indices to coordinates
+   do ixa=Nxan,Nxax
+    do ixr=Nxrn,Nxrx
+     if(useFrameXXP) then
+      xx1(ixa,ixr)=xa(ixa)
+      xx2(ixa,ixr)=xr(ixr)
+      kk1(ixa,ixr)=kr(ixa)
+      kk2(ixa,ixr)=ka(ixr)
+     else
+      xx1(ixa,ixr)=xa(ixa)+0.5_Long*xr(ixr)
+      xx2(ixa,ixr)=xa(ixa)-0.5_Long*xr(ixr)
+      kk1(ixa,ixr)=ka(ixr)+0.5_Long*kr(ixa)
+      kk2(ixa,ixr)=ka(ixr)-0.5_Long*kr(ixa)
+
+      ! if xx is outside the box, move it in periodically
+      if(xx1(ixa,ixr).ge. xLa)xx1(ixa,ixr)=xx1(ixa,ixr)-xLa-xLa
+      if(xx1(ixa,ixr).le.-xLa)xx1(ixa,ixr)=xx1(ixa,ixr)+xLa+xLa
+      if(xx2(ixa,ixr).ge. xLa)xx2(ixa,ixr)=xx2(ixa,ixr)-xLa-xLa
+      if(xx2(ixa,ixr).le.-xLa)xx2(ixa,ixr)=xx2(ixa,ixr)+xLa+xLa
+
+     endif
+    enddo
+   enddo
 
    isReflectedLR=.false.
    isDenProcessed=.false.
@@ -246,6 +283,11 @@ contains
 
    integer, intent(in) :: ixa
 
+   if(useFrameXXP) then
+    den=real(denmat(ixa,ixa))
+    return
+   endif
+
    if(.not.useMeshShifted) then
     den=real(getDenX(ixa,0))
    else
@@ -266,6 +308,11 @@ contains
    implicit none
 
    integer, intent(in) :: ika
+
+   if(useFrameXXP) then
+    den=real(denmat(ika,ika))
+    return
+   endif
 
    if(.not.useMeshShifted) then
     den=abs(getDenK(0,ika))
@@ -485,6 +532,31 @@ contains
    call cpu_time(totalelapsed)
 
 !call mesh_setReflectedLR(.true.)
+
+    if(useFrameXXP) then
+     select case (denState)
+      case (SPACE)
+       select case (state)
+        case (MOMENTUM)
+         call xxp_transform_x_to_k_dumb
+        case default
+         call throwException('setState: selected state not available.' &
+                             ,BEXCEPTION_FATAL)
+       end select !state
+      case (MOMENTUM)
+       select case (state)
+        case (SPACE)
+         call xxp_transform_k_to_x_dumb
+        case default
+         call throwException('setState: selected state not available.' &
+                              ,BEXCEPTION_FATAL)
+       end select !state
+      case default
+       call throwException('setState: Current state does not exist. Weird.' &
+                           , BEXCEPTION_FATAL)
+     end select !denState
+     return
+    endif !useFrameXXP
 
     if(useMeshShifted) then
 
@@ -999,7 +1071,7 @@ contains
    use phys_cons
    implicit none
 
-   real (Long) :: exparg
+!   real (Long) :: exparg
    integer :: ixa,ixr,ika
    complex(Long), dimension(:,:), allocatable,save :: exps
 
@@ -1735,6 +1807,68 @@ contains
    denState=MOMENTUM
 
   end subroutine transform_w_to_k_norepeat
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> transforms the density matrix in (x,x') coordinates from SPACE to MOMENTUM.
+  !! Uses matrix multiplication:
+  !! \f{eqnarray*}{
+  !!    \rho(j,j') &=& \rho(k,k') e^{i k j} e^{- i k' j'} \\
+  !!               &=& e^{i k j} \rho(k,k') e^{-i k' j'} \\
+  !!               &=& A_{j k} B_{k k'} C_{k' j'}
+  !! \f}
+  !! Note that A is the conjugate transpose of C.
+  subroutine xxp_transform_k_to_x_dumb
+   use phys_cons
+
+   integer :: ix,ik
+   complex(Long), dimension(:,:), allocatable,save :: expxk, expxkp
+
+   if(.not.allocated(expxk)) then
+    allocate(expxk(Nxan:Nxax,Nxan:Nxax),expxkp(Nxan:Nxax,Nxan:Nxax))
+    do ix=Nxan,Nxax
+     do ik=Nxan,Nxax
+      expxk(ix,ik)=exp(imagi*xa(ix)*kr(ik))
+      expxkp(ik,ix)=exp(-imagi*xr(ix)*ka(ik))
+     enddo
+    enddo
+   endif
+
+   denmat=matmul(denmat,expxkp)
+   denmat=matmul(expxk,denmat)
+
+   denmat=delka*delkr*inv2pi*denmat
+
+   denState = SPACE
+
+  end subroutine xxp_transform_k_to_x_dumb
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine xxp_transform_x_to_k_dumb
+   use phys_cons
+
+   integer :: ix,ik
+   complex(Long), dimension(:,:), allocatable,save :: expxk, expxkp
+
+   if(.not.allocated(expxk)) then
+    allocate(expxk(Nxan:Nxax,Nxan:Nxax),expxkp(Nxan:Nxax,Nxan:Nxax))
+    do ix=Nxan,Nxax
+     do ik=Nxan,Nxax
+      expxk(ix,ik)=exp(-imagi*xa(ix)*kr(ik))
+      expxkp(ik,ix)=exp(imagi*xr(ix)*ka(ik))
+     enddo
+    enddo
+   endif
+
+   denmat=matmul(denmat,expxkp)
+   denmat=matmul(expxk,denmat)
+
+   denmat=delxa*delxr*inv2pi*denmat
+
+   denState = MOMENTUM
+
+  end subroutine xxp_transform_x_to_k_dumb
  
 END MODULE mesh
 

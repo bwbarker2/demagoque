@@ -70,7 +70,7 @@ subroutine initialState
   use prec_def
   implicit none
 
-  real (Long) :: wfnho,xx1,xx2
+  real (Long) :: wfnho,x1,x2
   complex (Long)  :: y1,y2,den0
   integer :: ixa, ixr, iin
   integer :: initState_kdelta_index
@@ -84,7 +84,8 @@ subroutine initialState
   do ixa=Nxan,Nxax
      do ixr=Nxrn,Nxrx
         !convert to x,x' representation
-        call getX12(ixa,ixr,xx1,xx2)
+        x1=xx1(ixa,ixr)
+        x2=xx2(ixa,ixr)
 
         den0=0e0_Long
         y1=0e0_Long
@@ -92,23 +93,23 @@ subroutine initialState
 
         if(initState_gaussianNuclear.OR.initState_gaussian) then
          do iin=0,Nmax
-           y1=wfnho(xx1,iin,whm)
-           y2=wfnho(xx2,iin,whm)
+           y1=wfnho(x1,iin,whm)
+           y2=wfnho(x2,iin,whm)
            den0=den0+y1*y2
          enddo !iin
         endif
 
           if(initState_cosine) then
            y1=sqrt(initState_cosine_norm/xLa) &
-              *cos(initState_cosine_number*pi*xx1/xLa + initState_cosine_shift)
+              *cos(initState_cosine_number*pi*x1/xLa + initState_cosine_shift)
            y2=sqrt(initState_cosine_norm/xLa) &
-              *cos(initState_cosine_number*pi*xx2/xLa + initState_cosine_shift)
+              *cos(initState_cosine_number*pi*x2/xLa + initState_cosine_shift)
            den0=den0+y1*y2
           endif
 
           if(initState_kdelta) then
            !if we are on the diagonal and at the delta index
-           if(abs(xr(ixr))<(0.1_Long*delxr) &
+           if(abs(x1-x2)<(0.1_Long*delxr) &
               .AND.ixa==initState_kdelta_index) then
             den0=den0+initState_kdelta_norm*2e0_Long*pi/kLa
            endif
@@ -116,17 +117,17 @@ subroutine initialState
 
           if(initState_plane) then
            y1=sqrt(initState_plane_norm*0.5_Long/xLa) &
-              *exp(-imagi*initState_plane_number*pi*xx1/xLa &
+              *exp(-imagi*initState_plane_number*pi*x1/xLa &
                    +initState_plane_shift)
            y2=sqrt(initState_plane_norm*0.5_Long/xLa) &
-              *exp(-imagi*initState_plane_number*pi*xx2/xLa &
+              *exp(-imagi*initState_plane_number*pi*x2/xLa &
                    +initState_plane_shift)
            den0=den0+conjg(y1)*y2
           endif
 
           if(useInitState_SqWell) then
-           y1=initState_sqWell%getWavefn(xx1)
-           y2=initState_sqWell%getWavefn(xx2)
+           y1=initState_sqWell%getWavefn(x1)
+           y2=initState_sqWell%getWavefn(x2)
            den0=den0+y1*y2
           endif
 
@@ -216,10 +217,6 @@ subroutine boost
 
   INTEGER ixa,ixr !loop variables
   real (Long) :: kea !momentum, given ea
-  real (Long) :: x1,x2
-!  real*8 :: cos2k, sin2k !cos,sin part of exp, exponent itself
-!  real*8 :: xim,xre,xim2,xre2 !x density matrix, imaginary, real
-!  real*8 :: x1,x2   !position in x,x' basis
 
   complex (Long) :: epx
 
@@ -231,8 +228,7 @@ subroutine boost
   !loop over all grid points
   do ixa=Nxan,Nxax
    DO ixr=Nxrn,Nxrx
-    call getX12(ixa,ixr,x1,x2)
-    epx=exp(imagi*kea*(x1-x2))
+    epx=exp(imagi*kea*(xx1(ixa,ixr)-xx2(ixa,ixr)))
 
     denmat(ixa,ixr)=denmat(ixa,ixr)*epx
    enddo
