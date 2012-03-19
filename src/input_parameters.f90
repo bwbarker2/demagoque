@@ -69,6 +69,8 @@ module input_parameters
  logical     :: useFlipClone  ! symmetric collision method
  logical     :: useMeshShifted !shit mesh by 1/2 of index, (j+1/2)(k+1/2)
 
+ logical     :: useFrameXXP !< use unrotated (x,x') coordinate frame
+
  logical     :: useAdiabatic  ! if true, use adiabatic switching
  integer     :: iadib         ! 1 = run adiabatic, 0 = read adiabatic from file
  integer     :: Nad           !adiabatic switching parameters

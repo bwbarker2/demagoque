@@ -420,7 +420,7 @@ SUBROUTINE getStdIn
   write(*,*) 'timesteps for imaginary evolution, Nimev=',Nimev
 
  !set default options
- initialSeparation=0d0  !don't use initial separation
+ initialSeparation=0.d0  !don't use initial separation
  initState_gaussian=.false.
  initState_gaussianNuclear=.false.
  initState_cosine=.false.
@@ -432,6 +432,7 @@ SUBROUTINE getStdIn
  unitSystem_nuclear=.true.
  useImCutoff=.false.
  useFlipClone=.false.
+ useFrameXXP=.false.
  useMeshShifted=.false.
  splitOperatorMethod=0  !don't use Split Operator Method
 
@@ -461,6 +462,12 @@ SUBROUTINE getStdIn
    'getStdIn: useFlipClone is set, but not initialSeparation!' &
     //'Setting initialSeparation to half xLa',BEXCEPTION_WARNING)
   initialSeparation=xLa/2e0_Long
+ endif
+
+ if(useFrameXXP.and.((Nxa/=Nxr).or.abs(xLa-xLr)>epzero)) then
+  call throwException( &
+   'getStdIn: useFrameXXP=.true, but Nxa/=Nxr or xLa/=xLr. Both of these ' &
+   //'need to be equal to each other.', BEXCEPTION_FATAL)
  endif
 
  if(useMeshShifted.and.(isOdd(Nxa).or.isOdd(Nxr))) then
@@ -600,6 +607,10 @@ subroutine procOptionLine(inline)
    case("useFlipClone")
     useFlipClone=.true.
     write(*,*)'Making symmetric collision with flipClone'
+
+   case("useFrameXXP")
+    useFrameXXP=.true.
+    write(*,*)'Using unrotated frame, (x,x-prime) representation'
 
    case default
     call throwException('getStdIn: Option does not exist: ' // inline(ibeg:iend),BEXCEPTION_FATAL)
