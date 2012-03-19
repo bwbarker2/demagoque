@@ -57,6 +57,8 @@ MODULE mesh
  REAL (Long) :: facd
  REAL (Long), DIMENSION(:), ALLOCATABLE :: xa,ka,xr,kr   ! coord of grid point  
 
+ real (Long), dimension(:,:), allocatable :: xx1,xx2,kk1,kk2 !< (x,x') coordinates as function of (ixa,ixr) indices
+
  ! density matrix, real and imaginary
  REAL (Long) , DIMENSION(:,:) , ALLOCATABLE :: den_re, den_im
  complex (Long), dimension(:,:), allocatable :: denmat !when I need complex, I store here
@@ -175,12 +177,14 @@ contains
    ! xa has the following bounds so that it can easily be used in evol_x's
    !  linear interpolation
    allocate(xa(Nxan-1:Nxax+1), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
-   allocate(denmat(Nxan:Nxax,Nxrn:Nxrx)) !2x size in xr for naive FT - BWB 2011-01-10
+   allocate(denmat(Nxan:Nxax,Nxrn:Nxrx)) 
    allocate(denmat2(Nxan:Nxax,Nxrn:Nxrx))
    allocate(denDiagX(Nxan:Nxax))
    allocate(denDiagK(Nkan:Nkax))
    allocate(potDiag(Nxan-1:Nxax+1))
    allocate(den_re(Nxan:Nxax,Nxrn:Nxrx))
+   allocate(xx1(Nxan:Nxax,Nxrn:Nxrx), xx2(Nxan:Nxax,Nxrn:Nxrx))
+   allocate(kk1(Nkrn:Nkrx,Nkan:Nkax), kk2(Nkrn:Nkrx,Nkan:Nkax))
 
    potDiag=0e0_Long
 
@@ -208,6 +212,30 @@ contains
 
    kLa=-ka(-Nka)+delka*shift
 !   write(*,*)'kLa=',kLa
+
+   !set conversion from indices to coordinates
+   do ixa=Nxan,Nxax
+    do ixr=Nxrn,Nxrx
+     if(useFrameXXP) then
+      xx1(ixa,ixr)=xa(ixa)
+      xx2(ixa,ixr)=xr(ixr)
+      kk1(ixa,ixr)=kr(ixa)
+      kk2(ixa,ixr)=ka(ixr)
+     else
+      xx1(ixa,ixr)=xa(ixa)+0.5_Long*xr(ixr)
+      xx2(ixa,ixr)=xa(ixa)-0.5_Long*xr(ixr)
+      kk1(ixa,ixr)=ka(ixr)+0.5_Long*kr(ixa)
+      kk2(ixa,ixr)=ka(ixr)-0.5_Long*kr(ixa)
+
+      ! if xx is outside the box, move it in periodically
+      if(xx1(ixa,ixr).ge. xLa)xx1(ixa,ixr)=xx1(ixa,ixr)-xLa-xLa
+      if(xx1(ixa,ixr).le.-xLa)xx1(ixa,ixr)=xx1(ixa,ixr)+xLa+xLa
+      if(xx2(ixa,ixr).ge. xLa)xx2(ixa,ixr)=xx2(ixa,ixr)-xLa-xLa
+      if(xx2(ixa,ixr).le.-xLa)xx2(ixa,ixr)=xx2(ixa,ixr)+xLa+xLa
+
+     endif
+    enddo
+   enddo
 
    isReflectedLR=.false.
    isDenProcessed=.false.
@@ -999,7 +1027,7 @@ contains
    use phys_cons
    implicit none
 
-   real (Long) :: exparg
+!   real (Long) :: exparg
    integer :: ixa,ixr,ika
    complex(Long), dimension(:,:), allocatable,save :: exps
 
