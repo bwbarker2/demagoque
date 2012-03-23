@@ -337,6 +337,78 @@ contains
 
   end function getDenX
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ !> Translates density matrix by <nshift> points. ix -> ix+nshift
+ !! (in positive direction). Only for (x,x') frame.
+ !!
+ !! It divides the work into 4 blocks: the square block that is simply
+ !! translated forward (pos-pos), the square block that is moved periodically
+ !! from the end of the matrix to the beginning (neg,neg), and the two 
+ !! rectangular blocks that move from one side of the diagonal to the other
+ !! (neg,pos and pos,neg). For a 3x3 matrix, with nshift=1, and (a,e,i) being
+ !! the diagonal that is shifted to (i,a,e), this is the result:
+ !! \f[ 
+ !!  \left( \begin{array}{cc|c}
+ !!   a & b & c \\
+ !!   d & e & f \\
+ !!   \hline
+ !!   g & h & i
+ !!  \end{array} \right)
+ !!  \rightarrow
+ !!  \left( \begin{array}{c|cc}
+ !!   i & g & h \\
+ !!  \hline
+ !!   c & a & b \\
+ !!   f & d & e
+ !!  \end{array} \right)
+ !! \f]
+ subroutine mesh_xxp_displace(nshiftin)
+  use input_parameters
+  integer, intent(in) :: nshiftin !< number of grid points to shift
+
+
+  integer :: ix !< loop variable
+  integer :: nshift
+
+  if(.not.useFrameXXP) then
+   call throwException('mesh_xxp_displacePos: Can only be called in' &
+    //' non-rotated frame, and useFrameXXP=.true.', BEXCEPTION_FATAL)
+  endif
+
+  nshift=nshiftin
+
+  do while(nshift<0)
+   nshift=nshift+Nxa
+  enddo
+
+  do while(nshift>=Nxa)
+   nshift=nshift-Nxa
+  enddo
+
+  if(nshift==0) return
+
+  !negative-negative
+  denmat2(Nxan:Nxan+nshift-1,Nxan:Nxan+nshift-1) &
+   =denmat(Nxax-nshift+1:Nxax,Nxax-nshift+1:Nxax)
+
+  !positive-positive
+  denmat2(Nxan+nshift:Nxax,Nxan+nshift:Nxax) &
+   =denmat(Nxan:Nxax-nshift,Nxan:Nxax-nshift)
+
+  !loop over columns (neg-pos) and rows (pos-neg)
+  do ix=Nxan,Nxan+nshift-1
+   !neg-pos
+   denmat2(ix,Nxan+nshift:Nxax)=denmat(ix+Nxa-nshift,Nxan:Nxax-nshift)
+
+   !pos-neg
+   denmat2(Nxan+nshift:Nxax,ix)=denmat(Nxan:Nxax-nshift,ix+Nxa-nshift)
+  enddo
+
+  denmat=denmat2
+
+ end subroutine mesh_xxp_displace
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  recursive subroutine mesh_processDen

@@ -280,13 +280,10 @@ PROGRAM dmtdhf
  
 !call mesh_setReflectedLR(.false.)
 
-  if(abs(initialSeparation)>(delxa*0.5_Long)) then
-   call throwException('main: displaceLeft and displaceRight not implemented yet.', BEXCEPTION_FATAL)
-!   if(initialSeparation>0e0_Long) then
-!    call displaceLeft(NINT(initialSeparation*0.5_Long/delxa))
-!   else
-!    call displaceRight(NINT(abs(initialSeparation)*0.5_Long/delxa))
-!   endif
+  if(abs(initialSeparation)>epzero) then
+   if(useFrameXXP) then
+    call mesh_xxp_displace(NINT(initialSeparation*0.5_Long/delxa))
+   endif
   endif
 
 !  call mesh_setReflectedLR(.false.)
@@ -461,8 +458,14 @@ SUBROUTINE getStdIn
  if(useFlipClone.and.abs(initialSeparation)<xLa/Nxa)then
   call throwException( &
    'getStdIn: useFlipClone is set, but not initialSeparation!' &
-    //'Setting initialSeparation to half xLa',BEXCEPTION_WARNING)
+    ,BEXCEPTION_WARNING)
   initialSeparation=xLa/2e0_Long
+ endif
+
+ if((.not.useFrameXXP).and.(initialSeparation>epzero)) then
+  call throwException( &
+   'getStdIn: initialSeparation only implemented for useFrameXXP so far.' &
+   ,BEXCEPTION_FATAL)
  endif
 
  if(useFrameXXP.and.((Nxa/=Nxr).or.abs(xLa-xLr)>epzero)) then
