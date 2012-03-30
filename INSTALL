@@ -1,12 +1,48 @@
 Installation notes:
 
-Generic Prerequisites
-These are the programs that are required to build and run demagoque:
+#################
+# Prerequisites #
+#################
+
+These are the programs that are required to build and run demagoque and the
+analysis scripts:
 
 autoconf
 automake
-gcc
+bash
+gfortran (or another fortran compiler)
 gnuplot
 fftw
 lapack
+make
+sed
 
+################
+# Installation #
+################
+
+Navigate to the base directory. Then execute the following commands:
+
+$ autoreconf --install
+$ ./configure
+$ make
+
+Now the executable file is src/demagoque.
+
+To test the distribution, once you have installed it, run:
+
+$ make check
+
+################################################
+# Notes for installing prerequisites on cygwin #
+################################################
+
+To install the fftw and lapack libraries on Cygwin, you must install the
+following packages through setup.exe:
+
+fftw3
+lapack
+lapack-devel
+libfftw3-devel
+
+The 'devel' packages install the shared libraries.
