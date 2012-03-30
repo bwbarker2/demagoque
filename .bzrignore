@@ -1,4 +1,5 @@
 *.dirstamp
+*.exe
 *.m4
 *.mod
 *.x
