@@ -1,0 +1,12 @@
+Installation notes:
+
+Generic Prerequisites
+These are the programs that are required to build and run demagoque:
+
+autoconf
+automake
+gcc
+gnuplot
+fftw
+lapack
+
