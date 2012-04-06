@@ -28,11 +28,15 @@ subroutine ener_k
   IMPLICIT NONE
 
 !  real (Long) :: pk2(-Nka2:Nka2)  !den.mat. times k^2
-  real (Long) :: knum, eknum
+  real (Long) :: eknum
 
   integer :: ika
   
-  call setState(MOMENTUM)
+!  call setState(MOMENTUM)
+  if(denState/=MOMENTUM) then
+   call throwException('ener_k: called while not in k-space. call' &
+     //' setState(MOMENTUM) first', BEXCEPTION_FATAL)
+  endif
 
   ekin=0e0_Long
   knum=0e0_Long

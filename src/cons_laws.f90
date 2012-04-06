@@ -13,7 +13,8 @@ module cons_laws
   real (Long) :: ep0    ! initial pot energy
   real (Long) :: ep0err ! error in initial
 
-  real (Long) :: nnum   ! number of particles/norm_thy
+  real (Long) :: nnum   ! number of particles/norm_thy calc'd in pos space
+  real (Long) :: knum   ! number of particles/norm_thy calc'd in mom space
 
 end module cons_laws
 
