@@ -2,7 +2,7 @@
 1 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5d0 ! delt [fm/c]
-100 ! Nevt
+20 ! Nevt
 0.d0 ! EA [MeV]
 26.5d0  ! xLa [fm]
 26.5d0 ! xLr [fm]
@@ -30,6 +30,7 @@ initState_gaussianNuclear 0  !use this, Nmax
   !initState_plane 1 1d0 0d0    !wave number, norm, phase shift
 splitOperatorMethod 3  !use this, setting order of accuracy in time
   !useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
+!useCutoffK 1
 END_OF_OPTIONS !sentinel for end of optional parameters
 
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

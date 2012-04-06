@@ -428,6 +428,7 @@ SUBROUTINE getStdIn
  norm_thy=0d0
  unitSystem_bec=.false.
  unitSystem_nuclear=.true.
+ useCutoffK=.false.
  useImCutoff=.false.
  useFlipClone=.false.
  useFrameXXP=.false.
@@ -454,6 +455,11 @@ SUBROUTINE getStdIn
  enddo !while true
 
  !verify option dependencies
+
+ if(useCutoffK.and.(2*cutoffK_ncells>=Nxr)) then
+  call throwException('getStdIn: cutoffK_ncells will cut more than' &
+                      // ' entire k-space!',BEXCEPTION_FATAL)
+ endif
 
  if(useFlipClone.and.abs(initialSeparation)<xLa/Nxa)then
   call throwException( &
@@ -615,6 +621,12 @@ subroutine procOptionLine(inline)
       call throwException('getStdIn: invalid unit system chosen: '//inline(ibeg:iend),BEXCEPTION_FATAL)
      
     end select ! unitSystem
+
+   case("useCutoffK")
+    useCutoffK=.true.
+    read(inline(iend+1:len(inline)),*)cutoffK_ncells
+    write(*,*)'Using cutoff on edges of k,k-prime space, cutoffK_ncells=' &
+              ,cutoffK_ncells
 
    case("useFlipClone")
     useFlipClone=.true.

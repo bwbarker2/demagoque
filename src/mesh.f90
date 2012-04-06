@@ -337,6 +337,58 @@ contains
 
   end function getDenX
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Sets edges of MOMENTUM mesh equal to zero. Then renormalizes so that any probability
+  !! that is lost this way is spread out over entire density matrix. 
+  subroutine mesh_cutoffEdgesK(npoints)
+   use cons_laws
+   use input_parameters
+   use phys_cons
+
+   integer, intent(in) :: npoints !< number of points to cutoff from edges
+
+   integer :: ii &
+              ,npka ! number of points to cut in ka direction
+
+   real(Long) :: probLost ! amount of probability that is lost
+
+   ! if using rotated frame, multiply number of points in ka direction
+   if(.not.useFrameXXP) then
+    npka=npoints*2
+   else
+    npka=npoints
+   endif
+
+   write(*,*)'mesh_cutoffEdgesK=',npoints,npka
+
+   ! calculate amount of probability that is lost
+   do ii=Nkan,Nkan+npka-1
+    probLost = probLost+getDenDiagK(ii)
+   enddo
+
+   do ii=Nkax-npka+1,Nkax
+    probLost = probLost+getDenDiagK(ii)
+   enddo
+
+   call ener_k
+
+   probLost = probLost*delka
+
+   if(probLost<0e0_Long) probLost=0e0_Long
+
+   write(*,*)'mesh_cutoffEdgesK probLost=',probLost
+
+   denmat(Nkrn:Nkrn+npoints-1,:) = czero
+   denmat(Nkrx-npoints+1:Nkrx,:) = czero
+   denmat(:,Nkan:Nkan+npka-1) = czero
+   denmat(:,Nkax-npka+1:Nkax) = czero
+
+   ! renormalize
+   denmat = denmat*knum/(knum-probLost)
+
+  end subroutine mesh_cutoffEdgesK
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  !> Translates density matrix by <nshift> points. ix -> ix+nshift
@@ -601,6 +653,11 @@ contains
 
    if(denState.NE.state) then
 
+   ! if in MOMENTUM and we are cutting the K edges, do so
+   if((denState==MOMENTUM).and.(useCutoffK)) then
+    call mesh_cutoffEdgesK(cutoffK_ncells)
+   endif
+
    call cpu_time(totalelapsed)
 
 !call mesh_setReflectedLR(.true.)
@@ -718,7 +775,12 @@ contains
 !call mesh_setReflectedLR(.false.)
    endif
    endif !useMeshShifted
-  
+
+   ! if in MOMENTUM and we are cutting the K edges, do so
+   if((denState==MOMENTUM).and.(useCutoffK)) then
+    call mesh_cutoffEdgesK(cutoffK_ncells)
+   endif
+
   end subroutine setState
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

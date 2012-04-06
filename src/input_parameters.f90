@@ -63,6 +63,9 @@ module input_parameters
  logical     :: unitSystem_bec      !< Use unit system for Bose-Einstein Condensate
  logical     :: unitSystem_nuclear  !< Use unit system for nuclear collision [default]
 
+ logical     :: useCutoffK  !< cutoff in both k and k' edges
+ integer     :: cutoffK_ncells  !< number of cells to cut off
+
  logical     :: useImEvol   ! use imaginary evolution?
  integer     :: Nimev  ! number of timesteps for imaginary evolution
  
