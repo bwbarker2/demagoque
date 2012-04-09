@@ -500,6 +500,12 @@ SUBROUTINE getStdIn
    ,BEXCEPTION_FATAL)
  endif
 
+ if(useMeshXAR2.and.(useMeshShifted.or.useFrameXXP)) then
+  call throwException( &
+   'getStdIn: useMeshXAR2 cannot be used with any other useMesh or useFrame' &
+   // ' option!',BEXCEPTION_FATAL)
+ endif
+
 END SUBROUTINE getStdIn
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -597,6 +603,10 @@ subroutine procOptionLine(inline)
    case("useMeshShifted")
     useMeshShifted=.true.
     write(*,*)'Using shifted mesh: xj=dx*(j+1/2), k=dk*(k+1/2)'
+
+   case("useMeshXAR2")
+    useMeshXAR2=.true.
+    write(*,*)'Using XAR2 mesh (chessboard in SPACE)'
 
    case("unitSystem")
     ! reset unit system declaration so we can specify a new one.

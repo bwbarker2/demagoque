@@ -70,7 +70,9 @@ module input_parameters
  integer     :: Nimev  ! number of timesteps for imaginary evolution
  
  logical     :: useFlipClone  ! symmetric collision method
- logical     :: useMeshShifted !shit mesh by 1/2 of index, (j+1/2)(k+1/2)
+ logical     :: useMeshShifted !shift mesh by 1/2 of index, (j+1/2)(k+1/2)
+
+ logical     :: useMeshXAR2  !< use rotated mesh with 2N x 2N system
 
  logical     :: useFrameXXP !< use unrotated (x,x') coordinate frame
 

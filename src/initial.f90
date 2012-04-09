@@ -83,6 +83,15 @@ subroutine initialState
 
   do ixa=Nxan,Nxax
      do ixr=Nxrn,Nxrx
+
+      !if useMeshXAR2, set chessboard of zeroes.
+      if(useMeshXAR2) then
+       if(abs(mod(ixa+ixr,2))==1) then
+        call setDenX(ixa,ixr,czero)
+        cycle
+       endif
+      endif
+
         !convert to x,x' representation
         x1=xx1(ixa,ixr)
         x2=xx2(ixa,ixr)
@@ -147,7 +156,6 @@ subroutine initialState
 !          write(*,'(I3,I3,O24,O24)')ixa,ixr,den0,dble(denmat(ixa,ixr))
 !         endif
 !        endif
-        
 
      enddo !ixr
   enddo !ixa

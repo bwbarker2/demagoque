@@ -188,22 +188,21 @@ contains
 
    !facd calc'd here because can't initialize with non-integer exponents
    facd=sqrt(5e0_Long/3e0_Long)*(deg*pi*(rho0**2)/6e0_Long)**(1e0_Long/3e0_Long) 
-
-
    ! mesh in x and k
-   delxa=(2e0_Long*xLa)/real(Nxa)
+   if(useMeshXAR2) then
+    delxa=xLa/Nxa
+   else
+    delxa=(2e0_Long*xLa)/real(Nxa)
+   endif
 
-   ! if Nxr is odd, then for periodicity across 4L with 2N-1 points, we need:
-!   if(isEven(Nxr)) then
-    delxr=(2e0_Long*xLr)/real(Nxr)
-!   else
-!    delxr=(4e0_Long*xLr)/(2e0_Long*Nxr-1e0_Long)
-!   endif
+   delxr=(2e0_Long*xLr)/real(Nxr)
+
    if(useFrameXXP) then
     delka=pi/xLr
    else
     delka=pi/(2e0_Long*xLr)
    endif
+
    delkr=pi/xLa
 
 
@@ -213,16 +212,27 @@ contains
    !the extra sections are looped over as well.
 
 !   Nxan=-Nxa2
-   Nxax=Nxa2
-
-   if(isEven(Nxa)) then
-!    Nxax=Nxa2-1
-    Nxan=-Nxa2+1
+   if(useMeshXAR2) then
+    Nxax=Nxa
    else
-    Nxan=-Nxa2
+    Nxax=Nxa2
    endif
 
-   if(useFrameXXP) then
+   if(useMeshXAR2) then
+    Nxan=-Nxa+1
+   else
+    if(isEven(Nxa)) then
+!     Nxax=Nxa2-1
+     Nxan=-Nxa2+1
+    else
+     Nxan=-Nxa2
+    endif
+   endif !useMeshXAR2
+
+   if(useMeshXAR2) then
+    Nxrn=0
+    Nxrx=2*Nxr-1
+   elseif(useFrameXXP) then
     if(isEven(Nxr)) then
      Nxrn=-Nxr2+1
     else
@@ -234,15 +244,21 @@ contains
     Nxrx=Nxr
    endif
 
+   if(useMeshXAR2) then
+    Nkan=-Nxr+1
+    Nkax=Nxr
+   else
+    Nkan=Nxrn
+    Nkax=Nxrx
+   endif
+
    Nkrn=Nxan
    Nkrx=Nxax
-   Nkan=Nxrn
-   Nkax=Nxrx
 
    ! allocate arrays
    ! xa has the following bounds so that it can easily be used in evol_x's
    !  linear interpolation
-   allocate(xa(Nxan-1:Nxax+1), kr(-Nkr2:Nkr2), xr(-Nxr:Nxr), ka(-Nka:Nka))
+   allocate(xa(Nxan-1:Nxax+1), kr(Nkrn:Nkrx), xr(Nxrn:Nxrx), ka(Nkan:Nkax))
    allocate(denmat(Nxan:Nxax,Nxrn:Nxrx)) 
    allocate(denmat2(Nxan:Nxax,Nxrn:Nxrx))
    allocate(denDiagX(Nxan:Nxax))
@@ -264,19 +280,19 @@ contains
     xa(ixa)=delxa*(ixa+shift)
    enddo
 
-   do ixr=-Nxr,Nxr
+   do ixr=Nxrn,Nxrx
     xr(ixr)=delxr*(ixr+shift)
    enddo
 
-   do ikr=-Nkr2,Nkr2
+   do ikr=Nkrn,Nkrx
     kr(ikr)=delkr*(ikr+shift)
    enddo
 
-   do ika=-Nka,Nka
+   do ika=Nkan,Nkax
     ka(ika)=delka*(ika+shift)
    enddo
 
-   kLa=-ka(-Nka)+delka*shift
+   kLa=-ka(Nkax)+delka*shift
 !   write(*,*)'kLa=',kLa
 
    !set conversion from indices to coordinates
@@ -285,20 +301,27 @@ contains
      if(useFrameXXP) then
       xx1(ixa,ixr)=xa(ixa)
       xx2(ixa,ixr)=xr(ixr)
-      kk1(ixa,ixr)=kr(ixa)
-      kk2(ixa,ixr)=ka(ixr)
-     else
+    else
       xx1(ixa,ixr)=xa(ixa)+0.5_Long*xr(ixr)
       xx2(ixa,ixr)=xa(ixa)-0.5_Long*xr(ixr)
-      kk1(ixa,ixr)=ka(ixr)+0.5_Long*kr(ixa)
-      kk2(ixa,ixr)=ka(ixr)-0.5_Long*kr(ixa)
-
       ! if xx is outside the box, move it in periodically
       if(xx1(ixa,ixr).ge. xLa)xx1(ixa,ixr)=xx1(ixa,ixr)-xLa-xLa
       if(xx1(ixa,ixr).le.-xLa)xx1(ixa,ixr)=xx1(ixa,ixr)+xLa+xLa
       if(xx2(ixa,ixr).ge. xLa)xx2(ixa,ixr)=xx2(ixa,ixr)-xLa-xLa
       if(xx2(ixa,ixr).le.-xLa)xx2(ixa,ixr)=xx2(ixa,ixr)+xLa+xLa
 
+     endif
+    enddo
+   enddo
+
+   do ikr=Nkrn,Nkrx
+    do ika=Nkan,Nkax
+     if(useFrameXXP) then
+      kk1(ikr,ika)=kr(ikr)
+      kk2(ikr,ika)=ka(ika)
+     else
+      kk1(ikr,ika)=ka(ika)+0.5_Long*kr(ikr)
+      kk2(ikr,ika)=ka(ika)-0.5_Long*kr(ikr)
      endif
     enddo
    enddo
