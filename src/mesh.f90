@@ -87,6 +87,63 @@ MODULE mesh
 contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+! !> calculates the density at a grid point, gaussian-smeared over the
+! !! surrounding cells with a width sigma.
+! complex function mesh_getDensitySmooth(ix,sigma)
+! 
+! integer,    intent(in) :: ix      !< index of density in center of gaussian
+! real(Long), intent(in) :: sigma   !< width of gaussian smear
+!
+! integer :: ii !loop variable
+! real(Long), allocatable, dimension(:), save :: erfs
+!
+! real(Long), allocatable, save, dimension(:) :: sigmas !< array of sigmas that have gaussian distributions calculated
+! real(Long), allocatable, save, dimension(:,:) :: gaussians !< array of gaussians, first dim is key, second is value
+! integer :: nsigs !< number of sigmas stored
+! integer,save :: isig  !< key of current sigma
+!
+! !if first run, then allocate arrays
+! if(.not.allocated(sigmas)) then
+!  allocate(sigmas(1),gaussians(1,Nxan:Nxax))
+!  allocate(erfs(Nxan-1:Nxax+1))
+!  sigmas(1)=sigma
+!  call mesh_calcSmoothGauss(gaussians(1,:),sigmas(1))
+! endif
+!
+! !calculate new gaussian list
+! do ii=Nxan-1,Nxax+1
+!  erfs(ii)=erf(ii/(sqrt(2e0_Long)*sigma))
+! enddo
+!
+! end function mesh_getDensitySmooth
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+! !> Calculates the integral of a gaussian, for each cell on the diagonal.
+! subroutine mesh_calcSmoothGauss(garray,sig)
+!  real(Long), intent(out), dimension(*) :: garray
+!  real(Long), intent(in)  :: sig
+!
+!  real(Long), dimension(:), allocatable :: erfs
+!
+!  integer :: ii
+!
+!  allocate(erfs(Nxan-1:Nxax+1))
+!
+!  do ii=Nxan-1,Nxax+1
+!   erfs(ii)=ii/(sqrt(2e0_Long)*sig)
+!  enddo
+!
+!  erfs=erf(erfs)
+!
+!  do ii=Nxan,Nxax
+!   garray(ii)=0.5_Long*(erfs(ii+1)-erfs(ii-1))
+!  enddo
+!
+! end subroutine mesh_calcSmoothGauss
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  integer function getNearestIndexX(xx) result(ixx)
   use prec_def
@@ -361,6 +418,8 @@ contains
    endif
 
    write(*,*)'mesh_cutoffEdgesK=',npoints,npka
+
+   probLost=0e0_Long
 
    ! calculate amount of probability that is lost
    do ii=Nkan,Nkan+npka-1
