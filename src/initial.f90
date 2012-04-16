@@ -82,15 +82,8 @@ subroutine initialState
   endif
 
   do ixa=Nxan,Nxax
-     do ixr=Nxrn,Nxrx
+   do ixr=Nxrn,Nxrx
 
-      !if useMeshXAR2, set chessboard of zeroes.
-      if(useMeshXAR2) then
-       if(abs(mod(ixa+ixr,2))==1) then
-        call setDenX(ixa,ixr,czero)
-        cycle
-       endif
-      endif
 
         !convert to x,x' representation
         x1=xx1(ixa,ixr)
@@ -150,7 +143,7 @@ subroutine initialState
 !        if(abs(den0).lt.1e-40) den0=0.0d0
 
         call setDenX(ixa,ixr,den0)
-
+!if(ixr==indexOfXR0) write(*,*)x1,x2,den0
 !        if(ixa==2) then
 !         if(ixr==1.or.ixr==-1)then
 !          write(*,'(I3,I3,O24,O24)')ixa,ixr,den0,dble(denmat(ixa,ixr))
@@ -160,7 +153,7 @@ subroutine initialState
      enddo !ixr
   enddo !ixa
 
-!  call copyExtra
+  if(useMeshXAR2) call mesh_xar2_setZeroesX
 
   ! set density matrix to X state
   denState=SPACE

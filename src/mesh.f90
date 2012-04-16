@@ -51,6 +51,9 @@ MODULE mesh
  REAL (Long)    :: delka   ! in momentum
  REAL (Long)    :: delkr
 
+ integer        :: indexOfXR0  ! index of xr where xr=0
+ integer        :: indexOfKR0  ! index of kr where kr=0
+
  real (Long) :: norm_thy  ! theoretical norm (what it 'should' be)
 
  ! factor to change units to 3D density matrix (calculated in initial.f90)
@@ -177,6 +180,8 @@ contains
 
    integer :: ixa,ixr,ikr,ika
    real (Long) :: shift   !amount to shift xa,xr,ka,kr definitions
+   real (Long) :: xan,xrn,krn,kan !minimums in coordinates
+
  
    Nxa2=Nxa/2
    Nxr2=Nxr/2
@@ -188,72 +193,48 @@ contains
 
    !facd calc'd here because can't initialize with non-integer exponents
    facd=sqrt(5e0_Long/3e0_Long)*(deg*pi*(rho0**2)/6e0_Long)**(1e0_Long/3e0_Long) 
-   ! mesh in x and k
-   if(useMeshXAR2) then
-    delxa=xLa/Nxa
-   else
-    delxa=(2e0_Long*xLa)/real(Nxa)
-   endif
-
-   delxr=(2e0_Long*xLr)/real(Nxr)
-
-   if(useFrameXXP) then
-    delka=pi/xLr
-   else
-    delka=pi/(2e0_Long*xLr)
-   endif
-
-   delkr=pi/xLa
-
-
    !set minimum and maximum indices for the density matrix. These limits will
    !be used every time something loops over the entire logical matrix. These are set in
    !in a way that makes the src/initial.f90 (copyExtra) routine not needed, as
    !the extra sections are looped over as well.
 
 !   Nxan=-Nxa2
-   if(useMeshXAR2) then
+
+   Nxan=1
+   Nxrn=1
+   Nkrn=1
+   Nkan=1
+
+   if(useFrameXXP) then
     Nxax=Nxa
-   else
-    Nxax=Nxa2
-   endif
-
-   if(useMeshXAR2) then
-    Nxan=-Nxa+1
-   else
-    if(isEven(Nxa)) then
-!     Nxax=Nxa2-1
-     Nxan=-Nxa2+1
-    else
-     Nxan=-Nxa2
-    endif
-   endif !useMeshXAR2
-
-   if(useMeshXAR2) then
-    Nxrn=0
-    Nxrx=2*Nxr-1
-   elseif(useFrameXXP) then
-    if(isEven(Nxr)) then
-     Nxrn=-Nxr2+1
-    else
-     Nxrn=-Nxr2
-    endif
-    Nxrx=Nxr2
-   else
-    Nxrn=-Nxr+1
     Nxrx=Nxr
-   endif
-
-   if(useMeshXAR2) then
-    Nkan=-Nxr+1
-    Nkax=Nxr
-   else
-    Nkan=Nxrn
-    Nkax=Nxrx
-   endif
-
-   Nkrn=Nxan
-   Nkrx=Nxax
+    Nkrx=Nkr
+    Nkax=Nka
+    delxa=2e0_Long*xLa/Nxa
+    delxr=2e0_Long*xLr/Nxr
+    delkr=pi/xLa
+    delka=pi/xLr
+    xan=-xLa
+    xrn=-xLr
+    krn=-delkr*(Nkrx/2)  !integer division is intentional here
+    kan=-delka*(Nkax/2)   !integer division is intentional here
+   else ! if(useMeshXAR2) then
+    Nxax=2*Nxa
+    Nxrx=2*Nxr
+    Nkrx=2*Nkr
+    Nkax=2*Nka
+    delxa=xLa/Nxa
+    delxr=2e0*xLr/Nxr
+    delkr=pi/xLa
+    delka=pi/(2e0_Long*xLr)
+    xan=-xLa
+    xrn=-2*xLr
+!    xrn=-xLr
+    krn=-delkr*(Nkrx/2)
+    kan=-delka*(Nkax/2)
+    indexOfXR0=Nxrx/2+1
+    indexOfKR0=Nkrx/2
+  endif
 
    ! allocate arrays
    ! xa has the following bounds so that it can easily be used in evol_x's
@@ -276,20 +257,22 @@ contains
     shift=0.e0_Long
    endif
 
+   write(*,*)'indexOfXR0=',indexOfXR0
    do ixa=Nxan-1,Nxax+1
-    xa(ixa)=delxa*(ixa+shift)
+    xa(ixa)=xan+delxa*(ixa-1+shift)
    enddo
 
    do ixr=Nxrn,Nxrx
-    xr(ixr)=delxr*(ixr+shift)
+    xr(ixr)=xrn+delxr*(ixr-1+shift)
+    write(*,*)'ixr,xr=',ixr,xr(ixr)
    enddo
 
    do ikr=Nkrn,Nkrx
-    kr(ikr)=delkr*(ikr+shift)
+    kr(ikr)=krn+delkr*(ikr-1+shift)
    enddo
 
    do ika=Nkan,Nkax
-    ka(ika)=delka*(ika+shift)
+    ka(ika)=kan+delka*(ika-1+shift)
    enddo
 
    kLa=-ka(Nkax)+delka*shift
@@ -305,12 +288,13 @@ contains
       xx1(ixa,ixr)=xa(ixa)+0.5_Long*xr(ixr)
       xx2(ixa,ixr)=xa(ixa)-0.5_Long*xr(ixr)
       ! if xx is outside the box, move it in periodically
+      ! xx1 needs .ge. and xx2 needs .gt., to keep it periodic
       if(xx1(ixa,ixr).ge. xLa)xx1(ixa,ixr)=xx1(ixa,ixr)-xLa-xLa
       if(xx1(ixa,ixr).le.-xLa)xx1(ixa,ixr)=xx1(ixa,ixr)+xLa+xLa
-      if(xx2(ixa,ixr).ge. xLa)xx2(ixa,ixr)=xx2(ixa,ixr)-xLa-xLa
-      if(xx2(ixa,ixr).le.-xLa)xx2(ixa,ixr)=xx2(ixa,ixr)+xLa+xLa
+      if(xx2(ixa,ixr).gt. xLa)xx2(ixa,ixr)=xx2(ixa,ixr)-xLa-xLa
+      if(xx2(ixa,ixr).lt.-xLa)xx2(ixa,ixr)=xx2(ixa,ixr)+xLa+xLa
 
-     endif
+    endif
     enddo
    enddo
 
@@ -323,6 +307,7 @@ contains
       kk1(ikr,ika)=ka(ika)+0.5_Long*kr(ikr)
       kk2(ikr,ika)=ka(ika)-0.5_Long*kr(ikr)
      endif
+!     write(*,*)'k1,k2,kk1,kk2=',ikr,ika,kk1(ikr,ika),kk2(ikr,ika)
     enddo
    enddo
 
@@ -369,7 +354,7 @@ contains
    endif
 
    if(.not.useMeshShifted) then
-    den=real(getDenX(ixa,0))
+    den=real(getDenX(ixa,indexOfXR0))
    else
     if(.not.isDenProcessed) then
      call mesh_processDen
@@ -395,7 +380,7 @@ contains
    endif
 
    if(.not.useMeshShifted) then
-    den=abs(getDenK(0,ika))
+    den=abs(getDenK(indexOfKR0,ika))
    else
     if(.not.isDenProcessed) then
      call mesh_processDen
@@ -470,6 +455,130 @@ contains
    denmat = denmat*knum/(knum-probLost)
 
   end subroutine mesh_cutoffEdgesK
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine mesh_xar2_setZeroesK
+  use phys_cons
+
+  integer :: ika,ikr
+
+  do ika=Nxan,Nkax
+   do ikr=Nkrn,Nkrx
+
+    !if outside original (k,k') diamond, set to zero
+    if(    (Nka-2-ika-ikr+2*indexOfKR0<0) &
+       .or.(Nka-2-ika+ikr<0) &
+       .or.(Nka  +ika+ikr-2*indexOfKR0<0) &
+       .or.(Nka  +ika-ikr<0) &
+                            ) then
+     call setDenK(ikr,ika,czero)
+     cycle
+    !set chessboard of zeroes, if ika+ikr is odd
+    elseif(abs(mod(ika+ikr,2))==1) then
+     call setDenK(ikr,ika,czero)
+     cycle
+    endif
+   enddo
+  enddo
+ 
+ end subroutine mesh_xar2_setZeroesK
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine mesh_xar2_setZeroesX
+  use phys_cons
+
+  integer :: ixa,ixr
+
+  do ixa=Nxan,Nxax
+   do ixr=Nxrn,Nxrx
+
+    !if outside original (x,x') diamond, set to zero
+    if(    (Nxa-2-ixa-ixr+2*indexOfXR0<0) &
+       .or.(Nxa-2-ixa+ixr<0) &
+       .or.(Nxa  +ixa+ixr-2*indexOfXR0<0) &
+       .or.(Nxa  +ixa-ixr<0) &
+                            ) then
+     call setDenX(ixa,ixr,czero)
+     cycle
+    !set chessboard of zeroes, if ixa+ixr is odd
+    elseif(abs(mod(ixa+ixr,2))==1) then
+     call setDenX(ixa,ixr,czero)
+     cycle
+    endif
+   enddo
+  enddo
+ 
+ end subroutine mesh_xar2_setZeroesX
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine mesh_xar2_transform_k_to_x
+  use phys_cons
+
+  integer :: ixa,ikr,ixr,ika
+  complex(Long), dimension(:,:), allocatable,save :: expxakr, expkaxr
+
+  call mesh_xar2_setZeroesK
+
+  if(.not.allocated(expxakr)) then
+   allocate(expxakr(Nxan:Nxax,Nkrn:Nkrx),expkaxr(Nkan:Nkax,Nxrn:Nxrx))
+   do ixa=Nxan,Nxax
+    do ikr=Nkrn,Nkrx
+     expxakr(ixa,ikr)=exp(imagi*xa(ixa)*kr(ikr))
+    enddo
+   enddo
+   do ika=Nkan,Nkax
+    do ixr=Nxrn,Nxrx
+     expkaxr(ika,ixr)=exp(imagi*ka(ika)*xr(ixr))
+    enddo
+   enddo
+  endif
+
+  denmat=matmul(denmat,expkaxr)
+  denmat=matmul(expxakr,denmat)
+
+  denmat=2*delka*delkr*inv2pi*denmat
+
+  call mesh_xar2_setZeroesX
+
+  denState=SPACE
+ end subroutine mesh_xar2_transform_k_to_x
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine mesh_xar2_transform_x_to_k
+  use phys_cons
+
+  integer :: ixa,ikr,ixr,ika
+  complex(Long), dimension(:,:), allocatable,save :: expxrka, expkrxa
+
+  call mesh_xar2_setZeroesX
+
+  if(.not.allocated(expxrka)) then
+   allocate(expxrka(Nxrn:Nxrx,Nkan:Nkax),expkrxa(Nkrn:Nkrx,Nxan:Nxax))
+   do ixr=Nxrn,Nxrx
+    do ika=Nkan,Nkax
+     expxrka(ixr,ika)=exp(imagi*xr(ixr)*ka(ika))
+    enddo
+   enddo
+   do ikr=Nkrn,Nkrx
+    do ixa=Nxan,Nxax
+     expkrxa(ikr,ixa)=exp(imagi*kr(ikr)*xa(ixa))
+    enddo
+   enddo
+  endif
+
+  denmat=matmul(denmat,expxrka)
+  denmat=matmul(expkrxa,denmat)
+
+  denmat=2*delxa*delxr*inv2pi*denmat
+
+  call mesh_xar2_setZeroesK
+
+  denState=MOMENTUM
+ end subroutine mesh_xar2_transform_x_to_k
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -733,7 +842,7 @@ contains
 
    real :: totalelapsed, elapsed
 
-   if(denState.NE.state) then
+   if(denState.eq.state) return
 
    ! if in MOMENTUM and we are cutting the K edges, do so
    if((denState==MOMENTUM).and.(useCutoffK)) then
@@ -766,10 +875,7 @@ contains
        call throwException('setState: Current state does not exist. Weird.' &
                            , BEXCEPTION_FATAL)
      end select !denState
-     return
-    endif !useFrameXXP
-
-    if(useMeshShifted) then
+    elseif(useMeshShifted) then
 
      select case (denState)
 
@@ -792,71 +898,94 @@ contains
          write(*,*)'transform_w_to_x_shift'
        end select !state
      end select !denState
-    else
 
-    select case (denState)  
-     case (SPACE)
-      select case (state)
-       case (WIGNER)
+
+    elseif(useMeshXAR2) then
+     select case (denState)
+      case (SPACE)
+       select case (state)
+        case (MOMENTUM)
+         call mesh_xar2_transform_x_to_k
+        case default
+         call throwException('setState: only SPACE and MOMENTUM states' &
+          // ' implemented for useMeshXAR2=.true.',BEXCEPTION_FATAL)
+       end select !state
+      case (MOMENTUM)
+       select case (state)
+        case (SPACE)
+         call mesh_xar2_transform_k_to_x
+        case default
+         call throwException('setState: only SPACE and MOMENTUM states' &
+         // ' implemented for useMeshXAR2=.true.',BEXCEPTION_FATAL)
+       end select !state
+     end select !denState
+    end if !useMesh selection
+
+!    select case (denState)  
+!     case (SPACE)
+!      select case (state)
+!       case (WIGNER)
 !call mesh_setReflectedLR(.true.)
 !        call transform_x_to_w_norepeat_fft
 !call mesh_setReflectedLR(.false.)
-        call transform_x_to_wigner_dumb
+!        call transform_x_to_wigner_dumb
 !        call transform_x_to_w_dumb_kshift
-        call cpu_time(elapsed)
-        write(*,*)'transform_x_to_w:',elapsed-totalelapsed,'seconds'
-       case (MOMENTUM)
+!        call cpu_time(elapsed)
+!        write(*,*)'transform_x_to_w:',elapsed-totalelapsed,'seconds'
+!       case (MOMENTUM)
 !        call transform_x_to_k_norepeat
 !call mesh_setReflectedLR(.true.)
 !        call transform_x_to_w_norepeat_fft
 !call mesh_setReflectedLR(.false.)
-        call transform_x_to_wigner_dumb
+!        call transform_x_to_wigner_dumb
 !call mesh_setReflectedLR(.true.)
 !        call transform_wigner_to_k_fft_exp
 !call mesh_setReflectedLR(.false.)
-        call transform_wigner_to_k_dumb
+!        call transform_wigner_to_k_dumb
 !        call transform_w_to_k_norepeat
 !        write(*,*)'transform_x_to_k:',etime(elapsed)-totalelapsed,'seconds'
-      end select
-  
-     case (WIGNER)
-      select case (state)
-       case (SPACE)
+!      end select
+!  
+!     case (WIGNER)
+!      select case (state)
+!       case (SPACE)
 !        call transform_w_to_x_norepeat_fft
-        call transform_wigner_to_x_dumb
-        call cpu_time(elapsed)
-        write(*,*)'transform_w_to_x:',elapsed-totalelapsed,'seconds'
-       case (MOMENTUM)
-        call transform_wigner_to_k_dumb
+!        call transform_wigner_to_x_dumb
+!        call cpu_time(elapsed)
+!        write(*,*)'transform_w_to_x:',elapsed-totalelapsed,'seconds'
+!       case (MOMENTUM)
+!        call transform_wigner_to_k_dumb
 !        call transform_w_to_k_norepeat
 !call mesh_setReflectedLR(.true.)
 !        call transform_wigner_to_k_fft_exp
 !call mesh_setReflectedLR(.false.)
-        call cpu_time(elapsed)
-        write(*,*)'transform_w_to_k:',elapsed-totalelapsed,'seconds'
-      end select
-  
-     case (MOMENTUM)
-      select case (state)
-       case (WIGNER)
+!        call cpu_time(elapsed)
+!        write(*,*)'transform_w_to_k:',elapsed-totalelapsed,'seconds'
+!      end select
+!  
+!     case (MOMENTUM)
+!      select case (state)
+!       case (WIGNER)
 !        call transform_k_to_w_fft_norepeat
 !        call transform_k_to_wigner_fft_exp
-        call transform_k_to_wigner_dumb
-        call cpu_time(elapsed)
-        write(*,*)'transform_k_to_w:',elapsed-totalelapsed,'seconds'
-       case (SPACE)
+!        call transform_k_to_wigner_dumb
+!        call cpu_time(elapsed)
+!        write(*,*)'transform_k_to_w:',elapsed-totalelapsed,'seconds'
+!       case (SPACE)
 !        call transform_k_to_w_fft_norepeat
 !        call transform_k_to_wigner_fft_exp
-        call transform_k_to_wigner_dumb
+!        call transform_k_to_wigner_dumb
 !        write(*,*)'transform_k_to_w__:',etime(elapsed)-totalelapsed,'seconds'
 !        call transform_w_to_x_norepeat_fft
-        call transform_wigner_to_x_dumb
+!        call transform_wigner_to_x_dumb
 !        write(*,*)'transform_k_to_x:',etime(elapsed)-totalelapsed,'seconds'
-      end select
-    end select
+!      end select
+!    end select
 !call mesh_setReflectedLR(.false.)
-   endif
-   endif !useMeshShifted
+!   endif
+!   endif !useMeshShifted
+
+
 
    ! if in MOMENTUM and we are cutting the K edges, do so
    if((denState==MOMENTUM).and.(useCutoffK)) then
@@ -962,15 +1091,18 @@ contains
   
    integer :: ixa,ixr,ika
 !   complex (Long) :: array(Nxrn:Nxrx)
-   real(Long), dimension(:,:), allocatable,save :: coses, sines
+!   real(Long), dimension(:,:), allocatable,save :: coses, sines
+   complex(Long), dimension(:,:), allocatable,save :: exps
 
-   if(.not.allocated(coses)) then
-    allocate(coses(1:Nxrx,Nkan:Nkax))
-    allocate(sines(1:Nxrx,Nkan:Nkax))
+   if(.not.allocated(exps)) then
+!    allocate(coses(1:Nxrx,Nkan:Nkax))
+!    allocate(sines(1:Nxrx,Nkan:Nkax))
+    allocate(exps(Nxrn:Nxrx,Nkan:Nkax))
     do ika=Nkan,Nkax
-     do ixr=1,Nxrx
-      coses(ixr,ika)=cos(xr(ixr)*ka(ika))
-      sines(ixr,ika)=sin(xr(ixr)*ka(ika))
+     do ixr=Nxrn,Nxrx
+!      coses(ixr,ika)=cos(xr(ixr)*ka(ika))
+!      sines(ixr,ika)=sin(xr(ixr)*ka(ika))
+      exps(ixr,ika)=exp(-imagi*xr(ixr)*ka(ika))
      enddo
     enddo
    endif
@@ -989,7 +1121,7 @@ contains
     do ika=Nkan,Nkax
 !     denmat2(ixa,ika)=cmplx(0d0,0d0,8)
      denmat2(ixa,ika)=czero
-     do ixr=1,Nxrx-1
+     do ixr=Nxrn,Nxrx
 
 !      !debug up-down symmetry
 !      if(ixr.ne.-Nxr)then
@@ -1001,13 +1133,14 @@ contains
 !      exparg=mod(exparg,2*pi)  !this doesn't seem to have any effect
 !      denmat2(ixa,ika)=denmat2(ixa,ika)+array(ixr)*exp(-imagi*exparg)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
-                       +2.d0*(REAL(denmat(ixa,ixr))*coses(ixr,ika) &
-                              +AIMAG(denmat(ixa,ixr))*sines(ixr,ika))
-!                       +array(ixr)*exp(-imagi*exparg)
+!                       +2.d0*(REAL(denmat(ixa,ixr))*coses(ixr,ika) &
+!                              +AIMAG(denmat(ixa,ixr))*sines(ixr,ika))
+          +denmat(ixa,ixr)*exps(ixr,ika)
+
      enddo
-     denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +denmat(ixa,Nxr)*coses(Nxrx,ika) &
-                      +denmat(ixa,0)
+!     denmat2(ixa,ika)=denmat2(ixa,ika) &
+!                      +denmat(ixa,Nxr)*coses(Nxrx,ika) &
+!                      +denmat(ixa,indexOfXR0)
 
      denmat2(ixa,ika)=delxr*denmat2(ixa,ika)*invsqrt2pi
   
@@ -1507,15 +1640,18 @@ contains
    implicit none
   
    integer :: ixa,ika,ikr
-   real(Long), dimension(:,:), allocatable,save :: coses, sines
+!   real(Long), dimension(:,:), allocatable,save :: coses, sines
+   complex(Long), dimension(:,:), allocatable,save :: exps
 
-   if(.not.allocated(coses)) then
-    allocate(coses(Nxan:Nxax,0:Nkrx))
-    allocate(sines(Nxan:Nxax,0:Nkrx))
-    do ikr=0,Nkrx
+   if(.not.allocated(exps)) then
+!    allocate(coses(Nxan:Nxax,0:Nkrx))
+!    allocate(sines(Nxan:Nxax,0:Nkrx))
+    allocate(exps(Nxan:Nxax,Nkrn:Nkrx))
+    do ikr=Nkrn,Nkrx
      do ixa=Nxan,Nxax
-      coses(ixa,ikr)=cos(xa(ixa)*kr(ikr))
-      sines(ixa,ikr)=sin(xa(ixa)*kr(ikr))
+!      coses(ixa,ikr)=cos(xa(ixa)*kr(ikr))
+!      sines(ixa,ikr)=sin(xa(ixa)*kr(ikr))
+       exps(ixa,ikr)=exp(imagi*xa(ixa)*kr(ikr))
      enddo
     enddo
    endif
@@ -1524,19 +1660,20 @@ contains
    do ika=Nkan,Nkax
     do ixa=Nxan,Nxax
      denmat2(ixa,ika)=czero
-      do ikr=1,Nkrx-1
+      do ikr=Nkrn,Nkrx
 !      denmat2(ikr,ika)=denmat2(ikr,ika)+getDen(ixa,ika)*exp(-imagi*delxa*delkr*ixa*ikr)
       denmat2(ixa,ika)=denmat2(ixa,ika) &
-                       +2.d0*(real(denmat(ikr,ika))*coses(ixa,ikr) &
-                              -aimag(denmat(ikr,ika))*sines(ixa,ikr))
+!                       +2.d0*(real(denmat(ikr,ika))*coses(ixa,ikr) &
+!                              -aimag(denmat(ikr,ika))*sines(ixa,ikr))
+        + denmat(ikr,ika)*exps(ixa,ikr)
 !                       +REAL(denmat(ikr,ika))*cos(trigarg) &
 !                       -Dimag(denmat(ikr,ika))*sin(trigarg)
 !                       +denmat(-ikr,ika)*(cos(trigarg) &
 !                                         -imagi*sin(trigarg))
      enddo !ixa
-     denmat2(ixa,ika)=denmat2(ixa,ika) &
-                      +denmat(Nkrx,ika)*coses(ixa,Nkrx) &
-                      +denmat(0,ika)
+!     denmat2(ixa,ika)=denmat2(ixa,ika) &
+!                      +denmat(Nkrx,ika)*coses(ixa,Nkrx) &
+!                      +denmat(0,ika)
 
 !     denmat2(ixa,ika)=denmat2(ixa,ika)+getDen(ikr,ika)*exp(imagi*delxa*delkr*ixa*ikr)
 !     enddo
@@ -2070,7 +2207,7 @@ contains
    if(.not.allocated(expxk)) then
     allocate(expxk(Nxan:Nxax,Nxan:Nxax),expxkp(Nxan:Nxax,Nxan:Nxax))
     do ix=Nxan,Nxax
-     do ik=Nxan,Nxax
+     do ik=Nkan,Nkax
       expxk(ix,ik)=exp(-imagi*xa(ix)*kr(ik))
       expxkp(ik,ix)=exp(imagi*xr(ix)*ka(ik))
      enddo

@@ -50,11 +50,11 @@ SUBROUTINE output
 !     write(*,*)'starting outK'
      CALL outK
 !     write(*,*)'ending outK'
-     if(.not.useFrameXXP) call outW
+!     if(.not.useFrameXXP) call outW
      CALL outX
   ELSE
      CALL outX
-     if(.not.useFrameXXP) call outW
+!     if(.not.useFrameXXP) call outW
      CALL outK
   ENDIF
 
@@ -202,13 +202,16 @@ subroutine outDenMatXPhys()
  if(useFrameXXP) then
   ixrl=Nxrn
   ixru=Nxrx
- else
+ else !if(useMeshXAR2) then
   ixrl=Nxrn+Nxr2
   ixru=Nxrx-Nxr2
  endif
 
  do ixa=Nxan,Nxax
   do ixr=ixrl,ixru
+   if(useMeshXAR2) then
+    if(abs(mod(ixa+ixr,2))==1) cycle
+   endif
    write(funit,*)xa(ixa),xr(ixr),REAL(getDenX(ixa,ixr)),AIMAG(getDenX(ixa,ixr))
   enddo
   write(funit,*)

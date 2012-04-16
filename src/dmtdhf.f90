@@ -494,10 +494,16 @@ SUBROUTINE getStdIn
    ,BEXCEPTION_FATAL)
  endif
 
- if(.not.useMeshShifted.and.(isEven(Nxa).or.isEven(Nxr)).and..not.useFrameXXP) then
+! if(.not.useMeshShifted.and.(isEven(Nxa).or.isEven(Nxr)).and..not.useFrameXXP) then
+!  call throwException( &
+!   'getStdIn: useMeshShifted=.false., but this requires odd Nxa and Nxr!' &
+!   ,BEXCEPTION_FATAL)
+! endif
+
+ if(.not.(useMeshXAR2.neqv.useFrameXXP)) then
   call throwException( &
-   'getStdIn: useMeshShifted=.false., but this requires odd Nxa and Nxr!' &
-   ,BEXCEPTION_FATAL)
+   'getStdIn: only useMeshXAR2 and useFrameXXP implemented now. Must use 1' &
+   //' of these and not both.',BEXCEPTION_FATAL)
  endif
 
  if(useMeshXAR2.and.(useMeshShifted.or.useFrameXXP)) then
