@@ -282,7 +282,9 @@ PROGRAM dmtdhf
 
   if(abs(initialSeparation)>epzero) then
    if(useFrameXXP) then
-    call mesh_xxp_displace(NINT(initialSeparation*0.5_Long/delxa))
+    call mesh_xxp_displace(NINT(initialSeparation*0.25_Long*Nxa/xLa))
+   elseif(useMeshXAR2) then
+    call mesh_xar2_displace(NINT(initialSeparation*0.25_Long*Nxa/xLa))
    endif
   endif
 
@@ -466,12 +468,6 @@ SUBROUTINE getStdIn
    'getStdIn: useFlipClone is set, but not initialSeparation!' &
     ,BEXCEPTION_WARNING)
   initialSeparation=xLa/2e0_Long
- endif
-
- if((.not.useFrameXXP).and.(initialSeparation>epzero)) then
-  call throwException( &
-   'getStdIn: initialSeparation only implemented for useFrameXXP so far.' &
-   ,BEXCEPTION_FATAL)
  endif
 
  if(useFrameXXP.and.((Nxa/=Nxr).or.abs(xLa-xLr)>epzero)) then

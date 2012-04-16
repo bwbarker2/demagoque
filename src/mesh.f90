@@ -580,6 +580,37 @@ contains
   denState=MOMENTUM
  end subroutine mesh_xar2_transform_x_to_k
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ 
+ !> Translates density matrix by <nshift> points. In (xa,xr) frame, this is 
+ !! less complicated than (x,x') frame, since we are shifting only in xa
+ !! direction and not the xr direction.
+ subroutine mesh_xar2_displace(nshiftin)
+  integer, intent(in) :: nshiftin !< number of whole places to shift
+
+  integer :: nshift ! number of grid spaces to shift
+
+  !> Because of chessboard pattern, must shift by even number of points.
+  nshift = nshiftin*2
+
+  do while(nshift<0)
+   nshift=nshift+Nxax-Nxan+1
+  enddo
+
+  do while(nshift>=Nxa)
+   nshift=nshift-Nxax-Nxan+1
+  enddo
+
+  if(nshift==0) return
+
+  denmat2(Nxan:Nxan+nshift-1,:)=denmat(Nxax-nshift+1:Nxax,:)
+
+  denmat2(Nxan+nshift:Nxax,:)=denmat(Nxan:Nxax-nshift,:)
+
+  denmat=denmat2
+  
+ end subroutine mesh_xar2_displace
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  !> Translates density matrix by <nshift> points. ix -> ix+nshift
