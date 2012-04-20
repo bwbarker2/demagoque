@@ -316,7 +316,7 @@ SUBROUTINE outEner
      write(43,*)'# time     ekin     ekerr     epot     eperr'
 
      write(44,*)'# Conserved quantities over time [MeV]'
-     write(44,*)'# time     ekin     ekerr     epot     eperr'
+     write(44,*)'# time     ekin     ekerr     epot     eperr     nnum     knum'
 
   endif
   
@@ -330,7 +330,7 @@ SUBROUTINE outEner
   releperr=sqrt(releperr)
 
   write(43,*)t,relekin,relekerr,relepot,releperr
-  write(44,*)t,ekin,ekerr,epot,eperr
+  write(44,*)t,ekin,ekerr,epot,eperr,nnum,knum
   
 END SUBROUTINE outEner
 
