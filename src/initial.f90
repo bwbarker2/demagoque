@@ -143,7 +143,7 @@ subroutine initialState
 !        if(abs(den0).lt.1e-40) den0=0.0d0
 
         call setDenX(ixa,ixr,den0)
-!if(ixr==indexOfXR0) write(*,*)x1,x2,den0
+!if(ixr==ixr0) write(*,*)x1,x2,den0
 !        if(ixa==2) then
 !         if(ixr==1.or.ixr==-1)then
 !          write(*,'(I3,I3,O24,O24)')ixa,ixr,den0,dble(denmat(ixa,ixr))

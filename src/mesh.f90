@@ -51,8 +51,10 @@ MODULE mesh
  REAL (Long)    :: delka   ! in momentum
  REAL (Long)    :: delkr
 
- integer        :: indexOfXR0  ! index of xr where xr=0
- integer        :: indexOfKR0  ! index of kr where kr=0
+ integer        :: ixr0  ! index of xr where xr=0
+ integer        :: ikr0  ! index of kr where kr=0
+ integer        :: ika0
+ integer        :: ixa0
 
  real (Long) :: norm_thy  ! theoretical norm (what it 'should' be)
 
@@ -155,12 +157,15 @@ contains
   real (Long), intent(in) :: xx
 
   real (Long) :: aixx  ! interpolated index for result
-  integer, dimension(Nxan:Nxax) :: ixen  !array of indices
+  real (Long), dimension(Nxan:Nxax) :: ixen  !array of indices
  
   integer :: ixa,ki
+
+!  ixx=nint((xx-xan)/delxa)
  
   do ixa=Nxan,Nxax
    ixen(ixa)=ixa
+   write(*,*)ixa,ixen(ixa),xa(ixa)
   enddo
 
   ki=1
@@ -200,29 +205,29 @@ contains
 
 !   Nxan=-Nxa2
 
-   Nxan=1
-   Nxrn=1
-   Nkrn=1
-   Nkan=1
+   Nxan=0
+   Nxrn=0
+   Nkrn=0
+   Nkan=0
 
    if(useFrameXXP) then
-    Nxax=Nxa
-    Nxrx=Nxr
-    Nkrx=Nkr
-    Nkax=Nka
+    Nxax=Nxa-1
+    Nxrx=Nxr-1
+    Nkrx=Nkr-1
+    Nkax=Nka-1
     delxa=2e0_Long*xLa/Nxa
     delxr=2e0_Long*xLr/Nxr
     delkr=pi/xLa
     delka=pi/xLr
     xan=-xLa
     xrn=-xLr
-    krn=-delkr*(Nkrx/2)  !integer division is intentional here
-    kan=-delka*(Nkax/2)   !integer division is intentional here
+    krn=-delkr*((Nkrx-Nkrn+1)/2)  !integer division is intentional here
+    kan=-delka*((Nkax-Nkan+1)/2)   !integer division is intentional here
    else ! if(useMeshXAR2) then
-    Nxax=2*Nxa
-    Nxrx=2*Nxr
-    Nkrx=2*Nkr
-    Nkax=2*Nka
+    Nxax=2*Nxa-1
+    Nxrx=2*Nxr-1
+    Nkrx=2*Nkr-1
+    Nkax=2*Nka-1
     delxa=xLa/Nxa
     delxr=2e0*xLr/Nxr
     delkr=pi/xLa
@@ -230,10 +235,12 @@ contains
     xan=-xLa
     xrn=-2*xLr
 !    xrn=-xLr
-    krn=-delkr*(Nkrx/2)
-    kan=-delka*(Nkax/2)
-    indexOfXR0=Nxrx/2+1
-    indexOfKR0=Nkrx/2
+    krn=-delkr*((Nkrx-Nkrn+1)/2)
+    kan=-delka*((Nkax-Nkan+1)/2)
+    ixa0=(Nxax-Nxan+1)/2
+    ixr0=(Nxrx-Nxrn+1)/2
+    ikr0=(Nkrx-Nkrn+1)/2
+    ika0=(Nkax-Nkan+1)/2
   endif
 
    ! allocate arrays
@@ -257,25 +264,29 @@ contains
     shift=0.e0_Long
    endif
 
-   write(*,*)'indexOfXR0=',indexOfXR0
    do ixa=Nxan-1,Nxax+1
-    xa(ixa)=xan+delxa*(ixa-1+shift)
+    xa(ixa)=xan+delxa*(ixa-Nxan+shift)
+    write(*,*)'ixa,xa=',ixa,xa(ixa)
    enddo
 
+   write(*,*)'ixr0=',ixr0
    do ixr=Nxrn,Nxrx
-    xr(ixr)=xrn+delxr*(ixr-1+shift)
+    xr(ixr)=xrn+delxr*(ixr-Nxrn+shift)
     write(*,*)'ixr,xr=',ixr,xr(ixr)
    enddo
 
+   write(*,*)'ikr0=',ikr0
    do ikr=Nkrn,Nkrx
-    kr(ikr)=krn+delkr*(ikr-1+shift)
+    kr(ikr)=krn+delkr*(ikr-Nkrn+shift)
+    write(*,*)'ikr,kr=',ikr,kr(ikr)
    enddo
 
    do ika=Nkan,Nkax
-    ka(ika)=kan+delka*(ika-1+shift)
+    ka(ika)=kan+delka*(ika-Nkan+shift)
+    write(*,*)'ika,ka=',ika,ka(ika)
    enddo
 
-   kLa=-ka(Nkax)+delka*shift
+   kLa=max(ka(Nkan),ka(Nkax))
 !   write(*,*)'kLa=',kLa
 
    !set conversion from indices to coordinates
@@ -354,7 +365,7 @@ contains
    endif
 
    if(.not.useMeshShifted) then
-    den=real(getDenX(ixa,indexOfXR0))
+    den=real(getDenX(ixa,ixr0))
    else
     if(.not.isDenProcessed) then
      call mesh_processDen
@@ -380,7 +391,7 @@ contains
    endif
 
    if(.not.useMeshShifted) then
-    den=abs(getDenK(indexOfKR0,ika))
+    den=abs(getDenK(ikr0,ika))
    else
     if(.not.isDenProcessed) then
      call mesh_processDen
@@ -461,21 +472,24 @@ contains
  subroutine mesh_xar2_setZeroesK
   use phys_cons
 
-  integer :: ika,ikr
+  integer :: ika,ikr, ila,ilr
 
   do ika=Nxan,Nkax
+   ila=nint(ka(ika)/delka)  ! how many grid points away from 0?
+
    do ikr=Nkrn,Nkrx
+    ilr=nint(kr(ikr)/delkr) ! how many grid points away from 0?
 
     !if outside original (k,k') diamond, set to zero
-    if(    (Nka-2-ika-ikr+2*indexOfKR0<0) &
-       .or.(Nka-2-ika+ikr<0) &
-       .or.(Nka  +ika+ikr-2*indexOfKR0<0) &
-       .or.(Nka  +ika-ikr<0) &
-                            ) then
+    if(    (Nka-2-ila-ilr<0) &
+       .or.(Nka-2-ila+ilr<0) &
+       .or.(Nka  +ila+ilr<0) &
+       .or.(Nka  +ila-ilr<0) &
+      ) then
      call setDenK(ikr,ika,czero)
      cycle
     !set chessboard of zeroes, if ika+ikr is odd
-    elseif(abs(mod(ika+ikr,2))==1) then
+    elseif(abs(mod( ika-ika0 + ikr-ikr0 ,2))==1) then
      call setDenK(ikr,ika,czero)
      cycle
     endif
@@ -489,21 +503,24 @@ contains
  subroutine mesh_xar2_setZeroesX
   use phys_cons
 
-  integer :: ixa,ixr
+  integer :: ixa,ixr,ija,ijr
 
   do ixa=Nxan,Nxax
+   ija=nint(xa(ixa)/delxa)
+
    do ixr=Nxrn,Nxrx
+    ijr=nint(xr(ixr)/delxr)
 
     !if outside original (x,x') diamond, set to zero
-    if(    (Nxa-2-ixa-ixr+2*indexOfXR0<0) &
-       .or.(Nxa-2-ixa+ixr<0) &
-       .or.(Nxa  +ixa+ixr-2*indexOfXR0<0) &
-       .or.(Nxa  +ixa-ixr<0) &
+    if(    (Nxa-2-ija-ijr<0) &
+       .or.(Nxa-2-ija+ijr<0) &
+       .or.(Nxa  +ija+ijr<0) &
+       .or.(Nxa  +ija-ijr<0) &
                             ) then
      call setDenX(ixa,ixr,czero)
      cycle
     !set chessboard of zeroes, if ixa+ixr is odd
-    elseif(abs(mod(ixa+ixr,2))==1) then
+    elseif(abs(mod( ixa-ixa0 + ixr-ixr0 ,2))==1) then
      call setDenX(ixa,ixr,czero)
      cycle
     endif
@@ -1171,7 +1188,7 @@ contains
      enddo
 !     denmat2(ixa,ika)=denmat2(ixa,ika) &
 !                      +denmat(ixa,Nxr)*coses(Nxrx,ika) &
-!                      +denmat(ixa,indexOfXR0)
+!                      +denmat(ixa,ixr0)
 
      denmat2(ixa,ika)=delxr*denmat2(ixa,ika)*invsqrt2pi
   
