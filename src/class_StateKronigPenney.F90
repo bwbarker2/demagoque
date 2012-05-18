@@ -20,6 +20,7 @@ module class_StateKronigPenney
   
  contains
   procedure,public :: getWavefn => stateKronigPenney_getWavefn
+  procedure,private :: energyRoot => stateKronigPenney_energyRoot
 
  end type StateKronigPenney
 
@@ -52,23 +53,36 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- pure real (Long) function stateKronigPenney_energyRoot(mass,aa,bb,v0,eek) result(en)
+ pure real (Long) function stateKronigPenney_dRdE(this,eek) result(dRdE)
   implicit none
 
-  real(Long), intent(in) :: mass & !< mass of particle
-                           ,aa & !< width of periodic box
-                           ,bb & !< width of barrier
-                           ,v0 & !< height of barrier
-                           ,eek  !< sqrt of energy of state
+  class(stateKronigPenney), intent(in) :: this
+  real (Long), intent(in) :: eek !< sqrt of energy of state
+
+  
+
+ end function stateKronigPenney_dRdE
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ pure real (Long) function stateKronigPenney_energyRoot(this,eek) result(en)
+  implicit none
+
+  class(stateKronigPenney), intent(in) :: this
+!  real(Long), intent(in) :: mass & !< mass of particle
+!                           ,aa & !< width of periodic box
+!                           ,bb & !< width of barrier
+!                           ,v0 & !< height of barrier
+   real (Long), intent(in) :: eek  !< sqrt of energy of state
 
   real (Long) :: alpha,beta
 
-  alpha=sqrt(2e0_Long*mass)*eek/hbar
-  beta=sqrt(2e0_Long*mass*(eek**2-v0))/hbar
+  alpha=sqrt(2e0_Long*this%mass)*eek/hbar
+  beta=sqrt(2e0_Long*this%mass*(eek**2-this%v0))/hbar
 
-  en =  cos(alpha*(aa-bb))*cos(beta*bb) &
+  en =  cos(alpha*(this%period-this%bwidth))*cos(beta*this%bwidth) &
       - (alpha**2+beta**2)/(2e0_Long*alpha*beta) &
-        * sin(alpha*(aa-bb))*sin(beta*bb) &
+        * sin(alpha*(this%period-this%bwidth))*sin(beta*this%bwidth) &
       - 1e0_Long
 
  end function stateKronigPenney_energyRoot
