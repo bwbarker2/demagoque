@@ -266,24 +266,24 @@ contains
 
    do ixa=Nxan-1,Nxax+1
     xa(ixa)=xan+delxa*(ixa-Nxan+shift)
-    write(*,*)'ixa,xa=',ixa,xa(ixa)
+!    write(*,*)'ixa,xa=',ixa,xa(ixa)
    enddo
 
-   write(*,*)'ixr0=',ixr0
+!   write(*,*)'ixr0=',ixr0
    do ixr=Nxrn,Nxrx
     xr(ixr)=xrn+delxr*(ixr-Nxrn+shift)
-    write(*,*)'ixr,xr=',ixr,xr(ixr)
+!    write(*,*)'ixr,xr=',ixr,xr(ixr)
    enddo
 
-   write(*,*)'ikr0=',ikr0
+!   write(*,*)'ikr0=',ikr0
    do ikr=Nkrn,Nkrx
     kr(ikr)=krn+delkr*(ikr-Nkrn+shift)
-    write(*,*)'ikr,kr=',ikr,kr(ikr)
+!    write(*,*)'ikr,kr=',ikr,kr(ikr)
    enddo
 
    do ika=Nkan,Nkax
     ka(ika)=kan+delka*(ika-Nkan+shift)
-    write(*,*)'ika,ka=',ika,ka(ika)
+!    write(*,*)'ika,ka=',ika,ka(ika)
    enddo
 
    kLa=max(ka(Nkan),ka(Nkax))
