@@ -577,12 +577,12 @@ contains
    allocate(expxrka(Nxrn:Nxrx,Nkan:Nkax),expkrxa(Nkrn:Nkrx,Nxan:Nxax))
    do ixr=Nxrn,Nxrx
     do ika=Nkan,Nkax
-     expxrka(ixr,ika)=exp(imagi*xr(ixr)*ka(ika))
+     expxrka(ixr,ika)=exp(-imagi*xr(ixr)*ka(ika))
     enddo
    enddo
    do ikr=Nkrn,Nkrx
     do ixa=Nxan,Nxax
-     expkrxa(ikr,ixa)=exp(imagi*kr(ikr)*xa(ixa))
+     expkrxa(ikr,ixa)=exp(-imagi*kr(ikr)*xa(ixa))
     enddo
    enddo
   endif
