@@ -336,7 +336,7 @@ SUBROUTINE evol_x(dtim)
 
  !loop over all grid points
 
- DO ixr=Nxrn,Nxrx-1
+ DO ixr=Nxrn,Nxrx
 !  if(useImCutoff.and..not.useAdiabatic)then
 !  write(*,*)'timestep,ixr,cutfac=',it,ixr,cutfac
 
