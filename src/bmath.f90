@@ -260,7 +260,8 @@ real(Long) function bmath_LDiffRichardson( &
  integer ,optional,intent(in)  :: nmaxin !< max steps, default 25
  real*8  ,optional,intent(in)  :: errin  !< tolerance, default epzero
  integer ,optional,intent(inout) :: &
-  istat  !< error flag. 0=success, 1=hit max iterations without reaching
+  istat  !< error flag. 0=success, 1=error above tolerance and algorithm is
+         !! diverging, 2=hit max iterations without reaching
          !! desired error and is still converging
 
  real (Long), allocatable, dimension(:,:) :: dd !< where the different terms are stored
@@ -321,8 +322,9 @@ real(Long) function bmath_LDiffRichardson( &
      !then either set istat or throw an exception
      if(present(istat)) then
       istat=1
-      else
-       call throwException('bmath_DiffRichardson: error tolerance not reached' &
+     else
+      call throwException('bmath_LDiffRichardson: error tolerance not reached'&
+                           //' and algorithm no longer converging' &
                           ,BEXCEPTION_FATAL)
      endif !present istat
     endif !derr>errin
@@ -331,6 +333,14 @@ real(Long) function bmath_LDiffRichardson( &
    endif !present errin
   endif !relative error
  end do !ii
+
+ if(present(istat)) then
+  istat=2
+ else
+  call throwException('bmath_LDiffRichardson: error above desired tolerance' &
+                      //' and max iterations reached '&
+                      //' (suggest increasing nmaxin).',BEXCEPTION_FATAL)
+ endif
 
 end function bmath_LDiffRichardson
 
