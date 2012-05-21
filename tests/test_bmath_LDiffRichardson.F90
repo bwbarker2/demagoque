@@ -23,6 +23,6 @@ program test_bmath_LDiffRichardson
 
  real(Long) :: diff, err
 
- diff = bmath_LDiffRichardson(fsin,acos(1._Long/3._Long),err,pi*0.1_Long)
+ diff = bmath_LDiffRichardson(fsin,acos(1._Long/3._Long),pi*0.1_Long,err)
 
 end program test_bmath_LDiffRichardson

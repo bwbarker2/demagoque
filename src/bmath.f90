@@ -248,7 +248,7 @@ end function bmath_dZeroBrent
 !! Can be called with optional arguments to set minimum error tolerance
 !! and maximum number of function calls.
 real(Long) function bmath_LDiffRichardson( &
-                    ff,xx,derr,hin,nmaxin,errin,istat) result(dfdx)
+                    ff,xx,hin,derr,nmaxin,errin,istat) result(dfdx)
  use bexception
  implicit none
 
