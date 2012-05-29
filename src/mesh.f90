@@ -888,7 +888,7 @@ contains
    
    integer, intent(in) :: state !< state to set system to
 
-   real :: totalelapsed, elapsed
+   real :: totalelapsed
 
    if(denState.eq.state) return
 
