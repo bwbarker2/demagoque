@@ -143,12 +143,15 @@ function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero)
 
  character(len=130) :: errmsg
 
+ zero=snan
+
  if(present(iflag))iflag=0
 
  if(present(err)) then
   erruse=err
  else
-  erruse=10.0**(-Long)
+!  erruse=10.0**(-Long)
+  erruse=epzero*2._Long**3
  endif
 
  if(present(maxiterin)) then
@@ -165,7 +168,8 @@ function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero)
  fs=fb
 
  if (fa*fb>=0) then
-  write(errmsg,*)'bmath_dZeroBrent: root is not bracketed, f(a),f(b)=',fa,fb
+  write(ERROR_UNIT,*)'bmath_dZeroBrent: a,f(a),b,f(b)=',a,fa,b,fb
+  write(errmsg,*)'bmath_dZeroBrent: root is not bracketed'
   call throwException(errmsg,BEXCEPTION_FATAL)
   if(present(iflag))iflag=1
   return
@@ -252,7 +256,15 @@ real(Long) function bmath_LDiffRichardson( &
  use bexception
  implicit none
 
- real (Long), external         :: ff     !< function to differentiate
+ interface
+  real(Long) function ff(xxx)
+   use prec_def
+   implicit none
+   real(Long), intent(in) :: xxx
+  end function ff
+ end interface
+
+! real (Long), external         :: ff     !< function to differentiate
  real (Long)      ,intent(in)  :: xx     !< argument of function
  real (Long)      ,intent(out) :: derr   !< uncertainty of result
  real (Long)      ,intent(in)  :: hin    !< initial step, set to ~1/10 of 
