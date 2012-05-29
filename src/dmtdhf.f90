@@ -562,6 +562,13 @@ subroutine procOptionLine(inline)
     write(*,*)'                     initState_kdelta_norm=',initState_kdelta_norm
     write(*,*)'                     initState_kdelta_x0=',initState_kdelta_x0
 
+   case("initState_KronigPenney")
+    read(inline(iend+1:len(inline)),*)iin(1),rin(1),rin(2)
+    useInitState_KronigPenney=.true.
+    initState_KronigPenney = new_StateKronigPenney( &
+                             m0,iin(1),rin(1),rin(2),2._Long*xLa)
+    write(*,*)'Initial state added: initState_KronigPenney'
+
    case("initState_plane")
     read(inline(iend+1:len(inline)),*)initState_plane_number, &
                    initState_plane_norm, initState_plane_shift 
