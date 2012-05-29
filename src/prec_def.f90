@@ -16,6 +16,9 @@ MODULE prec_def
   !! if(abs(a-b)<epzero) write(*,*)'a and be are equal'
   real(Long) :: epzero = (2._Long)**(-52)
 
+  !> double precision hexadecimal representation of a signalling-not-a-number. Great for suppressing warnings about a variable maybe not being initialized.
+  real(Long) :: snan = Z'FFFFFFFF'
+
   real (Long), parameter :: maxlong=maxdouble
 
   integer,parameter :: stderr=102  !file unit of standard error
