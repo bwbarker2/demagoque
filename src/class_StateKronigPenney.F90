@@ -10,14 +10,15 @@ module class_StateKronigPenney
 
  type StateKronigPenney
   private
-  real(Long)  :: mass  !< mass of particle
-  integer     :: level !< excitation level, 0=ground state
-  real (Long) :: v0    !< height of rectangular barrier
-  real (Long) :: bwidth    !< width of barrier
-  real (Long) :: period    !< length of period
-  real (Long) :: energy !< energy of state
-  real (Long) :: a1,a2,b1,b2 !< coefficients of wavefunctions
-  real (Long) :: alpha,beta  !< phase factors in exponents
+  real(Long)     :: mass        !< mass of particle
+  integer        :: level       !< excitation level, 0=ground state
+  real (Long)    :: v0          !< height of rectangular barrier
+  real (Long)    :: bwidth      !< width of barrier
+  real (Long)    :: period      !< length of period
+  real (Long)    :: energy      !< energy of state
+  complex (Long) :: a1,a2,b1,b2 !< coefficients of wavefunctions
+  real (Long)    :: alpha       !< phase factor in exponent
+  complex (Long) :: beta        !< another phase factor
   
  contains
   procedure,public :: getWavefn => stateKronigPenney_getWavefn
@@ -45,17 +46,108 @@ contains
   write(*,*)'Entering function new_StateKronigPenney'
 
   this=stateKronigPenney(mass,level,v0,bwidth,period &
-       ,0._Long,0._Long,0._Long,0._Long,0._Long,0._Long,0._Long)
+       ,0._Long,czero,czero,czero,czero,0._Long,czero)
 
   currState=this
 
   call stateKronigPenney_calcEnergy(this)
+
+  call stateKronigPenney_calcCoeffs(this)
+
+  write(*,*)'this=',this
 
   write(*,*)'Leaving function new_StateKronigPenney'
 
  end function new_StateKronigPenney
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine stateKronigPenney_calcCoeffs(this)
+  implicit none
+
+  class(StateKronigPenney), intent(inout) :: this
+
+  complex(Long), dimension(4,4) :: coeffeqn
+
+  ! needed for zcgesv below
+  integer, dimension(4) :: ipivs ! pivot indices, row i was interchanged with
+                                 ! row ipivs(i)
+  complex(Long), dimension(4) :: rhs,sols,rworks  !RHS, solutions of linear equation to solve
+  complex(Long), dimension(4) :: works
+  complex, dimension(20) :: sworks  !single-precision work array
+  integer :: iters !result of iterative refinement
+  integer :: infos !result of solver
+
+  complex(Long) :: norm !normalization factor
+
+  integer :: ii,jj
+ 
+  this%alpha=sqrt(2._Long*this%mass*this%energy)/hbar
+  this%beta=sqrt(cmplx(2._Long*this%mass*(this%energy-this%v0),KIND=Long))/hbar
+
+  coeffeqn(1,1) =  1._Long
+  coeffeqn(2,1) =  1._Long
+  coeffeqn(3,1) = -1._Long
+  coeffeqn(4,1) = -1._Long
+  coeffeqn(1,2) =  this%alpha
+  coeffeqn(2,2) = -this%alpha
+  coeffeqn(3,2) = -this%beta
+  coeffeqn(4,2) =  this%beta
+  coeffeqn(1,3) =             exp( imagi*this%alpha*(this%period-this%bwidth))
+  coeffeqn(2,3) =             exp(-imagi*this%alpha*(this%period-this%bwidth))
+  coeffeqn(3,3) =            -exp(-imagi*this%beta *(this%bwidth)            )
+  coeffeqn(4,3) =            -exp( imagi*this%beta *(this%bwidth)            )
+  coeffeqn(1,4) =  this%alpha*exp( imagi*this%alpha*(this%period-this%bwidth))
+  coeffeqn(2,4) = -this%alpha*exp(-imagi*this%alpha*(this%period-this%bwidth))
+  coeffeqn(3,4) = -this%beta *exp(-imagi*this%beta *(this%bwidth)            )
+  coeffeqn(4,4) =  this%beta *exp( imagi*this%beta *(this%bwidth)            )
+
+  sols=czero
+
+!evidently zcgesv (from LAPACK) wants a row-major array? Who knew?
+coeffeqn=transpose(coeffeqn)
+
+  call zcgesv(4,1,coeffeqn,4,ipivs,rhs,4,sols,4,works,sworks,rworks,iters,infos)
+
+!  write(*,*)'sols=',sols
+
+  this%a1=sols(1)
+  this%a2=sols(2)
+  this%b1=sols(3)
+  this%b2=sols(4)
+
+  !normalize to 1 over the box length, integral from -bwidth to period-bwidth
+  !this is the completed integral, from notes BWB 2012-05-08p2
+
+  norm =   (this%a1*conjg(this%a1)+this%a2*conjg(this%a2)) &
+           * (this%period-this%bwidth) &
+     + 2._Long*real(this%a1*conjg(this%a2)/(2._Long*imagi*this%alpha) &
+                    * exp(2._Long*imagi*this%alpha*(this%period-this%bwidth))) &
+     + (this%b1*conjg(this%b1)+this%b2*conjg(this%b2))*this%bwidth &
+     + 2._Long*real(conjg(this%b1)*this%b2/(2._Long*imagi*this%beta) &
+                    * exp(2._Long*imagi*this%beta*this%bwidth))
+
+  norm=1._Long/sqrt(norm)
+
+!write(*,*)'norm=',norm
+
+  this%a1=this%a1*norm
+  this%a2=this%a2*norm
+  this%b1=this%b1*norm
+  this%b2=this%b2*norm
+
+!  do ii=1,4
+!   write(*,'(4(2ES12.3,4X))')(real(coeffeqn(jj,ii)),aimag(coeffeqn(jj,ii)),jj=1,4)
+!  enddo
+
+!  write(*,*)'infos=',infos
+!  write(*,*)'iters=',iters
+!  write(*,*)'sols=',sols
+!  write(*,*)'ipivs=',ipivs
+
+ end subroutine stateKronigPenney_calcCoeffs
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  !> Calculates the energy of this level, specified by this%level.
  !!
@@ -120,6 +212,8 @@ contains
 
  enddo !while levelsofar
 
+ ! we were solving for sqrt(ee). Square to get the actual energy of the state
+ this%energy=this%energy**2
 
 !  write(*,*)'Leaving subroutine stateKronigPenney_calcEnergy'
 
