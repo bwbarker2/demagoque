@@ -90,8 +90,8 @@ subroutine initialState
         x2=xx2(ixa,ixr)
 
         den0=0e0_Long
-        y1=0e0_Long
-        y2=0e0_Long
+        y1=czero
+        y2=czero
 
         if(initState_gaussianNuclear.OR.initState_gaussian) then
          do iin=0,Nmax
@@ -115,6 +115,13 @@ subroutine initialState
               .AND.ixa==initState_kdelta_index) then
             den0=den0+initState_kdelta_norm*2e0_Long*pi/kLa
            endif
+          endif
+
+          if(useInitState_KronigPenney) then
+           y1=initState_KronigPenney%getWavefn(x1)
+           y2=initState_KronigPenney%getWavefn(x2)
+!           write(*,*)x1,x2,y1,y2
+           den0=den0+conjg(y1)*y2
           endif
 
           if(initState_plane) then
