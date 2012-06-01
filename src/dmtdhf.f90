@@ -567,6 +567,7 @@ subroutine procOptionLine(inline)
     useInitState_KronigPenney=.true.
     initState_KronigPenney = new_StateKronigPenney( &
                              m0,iin(1),rin(1),rin(2),2._Long*xLa)
+    norm_thy=norm_thy+1._Long
     write(*,*)'Initial state added: initState_KronigPenney'
 
    case("initState_plane")
