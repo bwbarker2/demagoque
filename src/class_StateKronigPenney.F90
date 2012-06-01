@@ -43,7 +43,7 @@ contains
   real (Long) ,intent(in) :: bwidth
   real (Long) ,intent(in) :: period
 
-  write(*,*)'Entering function new_StateKronigPenney'
+!  write(*,*)'Entering function new_StateKronigPenney'
 
   this=stateKronigPenney(mass,level,v0,bwidth,period &
        ,0._Long,czero,czero,czero,czero,0._Long,czero)
@@ -56,7 +56,7 @@ contains
 
   write(*,*)'this=',this
 
-  write(*,*)'Leaving function new_StateKronigPenney'
+!  write(*,*)'Leaving function new_StateKronigPenney'
 
  end function new_StateKronigPenney
 
@@ -80,10 +80,8 @@ contains
 
   complex(Long) :: norm !normalization factor
 
-  integer :: ii,jj
+!  integer :: ii,jj
  
-  this%alpha=sqrt(2._Long*this%mass*this%energy)/hbar
-  this%beta=sqrt(cmplx(2._Long*this%mass*(this%energy-this%v0),KIND=Long))/hbar
 
   coeffeqn(1,1) =  1._Long
   coeffeqn(2,1) =  1._Long
@@ -215,19 +213,53 @@ coeffeqn=transpose(coeffeqn)
  ! we were solving for sqrt(ee). Square to get the actual energy of the state
  this%energy=this%energy**2
 
+ this%alpha=sqrt(2._Long*this%mass*this%energy)/hbar
+ this%beta=sqrt(cmplx(2._Long*this%mass*(this%energy-this%v0),KIND=Long))/hbar
+
 !  write(*,*)'Leaving subroutine stateKronigPenney_calcEnergy'
 
  end subroutine stateKronigPenney_calcEnergy
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- pure real(Long) function stateKronigPenney_getWaveFn(this,xx) result(wf)
+ !> Returns the wavefunction at position xx.
+ !!
+ !! We did a coordinate shift in the calculation of the wavefunction, so,
+ !! assuming that the periodic barriers are symmetric about the origin, and
+ !! that at the origin there is no barrier, then this does the proper
+ !! coordinate shift.
+ complex(Long) function stateKronigPenney_getWaveFn(this,xxin) result(wf)
   implicit none
 
   class(StateKronigPenney), intent(in) :: this
-  real (Long)            , intent(in) :: xx
+  real (Long)            , intent(in) :: xxin
 
-  wf=1._Long
+  real (Long) :: xx !position in the coordinate frame of the calculation
+  complex(Long) :: wfhere
+
+!  select type(this)
+!   type is (stateKronigPenney)
+!    write(*,*)this
+!  end select
+
+  xx=xxin+(this%period-this%bwidth)*0.5_Long
+
+  do while ( xx < (-this%bwidth) )
+   xx=xx+this%period
+  enddo
+
+  do while(xx>=(this%period-this%bwidth))
+   xx=xx-this%period
+  enddo
+
+  if (xx >= 0._Long ) then
+   wf= this%a1*exp( imagi*this%alpha*xx) &
+      +this%a2*exp(-imagi*this%alpha*xx)
+  else
+   wf= this%b1*exp( imagi*this%beta*xx) &
+      +this%b2*exp(-imagi*this%beta*xx)
+  endif
+
  end function stateKronigPenney_getWaveFn
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
