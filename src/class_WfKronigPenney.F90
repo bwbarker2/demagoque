@@ -1,14 +1,15 @@
-module class_StateKronigPenney
+module class_WfKronigPenney
  use bmath
+ use class_Wavefunction
  use phys_cons
  use prec_def
  implicit none
 
  private
 
- public :: StateKronigPenney, new_StateKronigPenney
+ public :: WfKronigPenney, new_WfKronigPenney
 
- type StateKronigPenney
+ type, extends(Wavefunction) :: WfKronigPenney
   private
   real(Long)     :: mass        !< mass of particle
   integer        :: level       !< excitation level, 0=ground state
@@ -21,21 +22,21 @@ module class_StateKronigPenney
   complex (Long) :: beta        !< another phase factor
   
  contains
-  procedure,public :: getWavefn => stateKronigPenney_getWavefn
-  procedure,private :: energyRoot => stateKronigPenney_energyRoot
-  procedure,private :: dRdE => stateKronigPenney_dRdE
+  procedure,public :: getWavefn => WfKronigPenney_getWavefn
+  procedure,private :: energyRoot => WfKronigPenney_energyRoot
+  procedure,private :: dRdE => WfKronigPenney_dRdE
 
- end type StateKronigPenney
+ end type WfKronigPenney
 
  !> Need this to call differentiation function which takes a function with only
  !! one argument.
- type(StateKronigPenney) :: currState
+ type(WfKronigPenney) :: currState
 
 contains
  
- !> Constructor of StateKronigPenney object
- function new_StateKronigPenney(mass,level,v0,bwidth,period) result(this)
-  type (StateKronigPenney) :: this
+ !> Constructor of WfKronigPenney object
+ function new_WfKronigPenney(mass,level,v0,bwidth,period) result(this)
+  type (WfKronigPenney) :: this
 
   real (Long) ,intent(in) :: mass
   integer     ,intent(in) :: level
@@ -43,29 +44,29 @@ contains
   real (Long) ,intent(in) :: bwidth
   real (Long) ,intent(in) :: period
 
-!  write(*,*)'Entering function new_StateKronigPenney'
+!  write(*,*)'Entering function new_WfKronigPenney'
 
-  this=stateKronigPenney(mass,level,v0,bwidth,period &
+  this=WfKronigPenney(mass,level,v0,bwidth,period &
        ,0._Long,czero,czero,czero,czero,0._Long,czero)
 
   currState=this
 
-  call stateKronigPenney_calcEnergy(this)
+  call WfKronigPenney_calcEnergy(this)
 
-  call stateKronigPenney_calcCoeffs(this)
+  call WfKronigPenney_calcCoeffs(this)
 
   write(*,*)'this=',this
 
-!  write(*,*)'Leaving function new_StateKronigPenney'
+!  write(*,*)'Leaving function new_WfKronigPenney'
 
- end function new_StateKronigPenney
+ end function new_WfKronigPenney
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- subroutine stateKronigPenney_calcCoeffs(this)
+ subroutine WfKronigPenney_calcCoeffs(this)
   implicit none
 
-  class(StateKronigPenney), intent(inout) :: this
+  class(WfKronigPenney), intent(inout) :: this
 
   complex(Long), dimension(4,4) :: coeffeqn
 
@@ -143,7 +144,7 @@ coeffeqn=transpose(coeffeqn)
 !  write(*,*)'sols=',sols
 !  write(*,*)'ipivs=',ipivs
 
- end subroutine stateKronigPenney_calcCoeffs
+ end subroutine WfKronigPenney_calcCoeffs
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -155,11 +156,11 @@ coeffeqn=transpose(coeffeqn)
  !! side of an extremum, the initial guesses can be taken as the zeroes of the 1st
  !! derivative, which are much easier to guess. This is what is done here. dEdR is
  !! the derivative of energyRoot.
- subroutine stateKronigPenney_calcEnergy(this)
+ subroutine WfKronigPenney_calcEnergy(this)
   use iso_fortran_env
   implicit none
 
-  class(StateKronigPenney), intent(inout) :: this
+  class(WfKronigPenney), intent(inout) :: this
 
   real (Long) :: hinitial !< initial guess for dRdE
 
@@ -167,7 +168,7 @@ coeffeqn=transpose(coeffeqn)
   real (Long) :: elast,ecurr !< energy of level found so far
   real (Long) :: erootlast,erootcurr !< value of level
 
-!  write(*,*)'Entering subroutine stateKronigPenney_calcEnergy'
+!  write(*,*)'Entering subroutine WfKronigPenney_calcEnergy'
 
   levelsofar=-1
 
@@ -216,9 +217,9 @@ coeffeqn=transpose(coeffeqn)
  this%alpha=sqrt(2._Long*this%mass*this%energy)/hbar
  this%beta=sqrt(cmplx(2._Long*this%mass*(this%energy-this%v0),KIND=Long))/hbar
 
-!  write(*,*)'Leaving subroutine stateKronigPenney_calcEnergy'
+!  write(*,*)'Leaving subroutine WfKronigPenney_calcEnergy'
 
- end subroutine stateKronigPenney_calcEnergy
+ end subroutine WfKronigPenney_calcEnergy
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -228,71 +229,71 @@ coeffeqn=transpose(coeffeqn)
  !! assuming that the periodic barriers are symmetric about the origin, and
  !! that at the origin there is no barrier, then this does the proper
  !! coordinate shift.
- complex(Long) function stateKronigPenney_getWaveFn(this,xxin) result(wf)
+ complex(Long) function WfKronigPenney_getWaveFn(this,xx,tt) result(wf)
   implicit none
 
-  class(StateKronigPenney), intent(in) :: this
-  real (Long)            , intent(in) :: xxin
+  class(WfKronigPenney), intent(in) :: this
+  real (Long)            , intent(in) :: xx
+  real (Long), optional, intent(in) :: tt   !< time to evolve forward
 
-  real (Long) :: xx !position in the coordinate frame of the calculation
-  complex(Long) :: wfhere
+  real (Long) :: xc !position in the coordinate frame of the calculation
 
 !  select type(this)
-!   type is (stateKronigPenney)
+!   type is (WfKronigPenney)
 !    write(*,*)this
 !  end select
 
-  xx=xxin+(this%period-this%bwidth)*0.5_Long
+  xc=xx+(this%period-this%bwidth)*0.5_Long
 
-  do while ( xx < (-this%bwidth) )
-   xx=xx+this%period
+  do while ( xc < (-this%bwidth) )
+   xc=xc+this%period
   enddo
 
-  do while(xx>=(this%period-this%bwidth))
-   xx=xx-this%period
+  do while(xc>=(this%period-this%bwidth))
+   xc=xc-this%period
   enddo
 
-  if (xx >= 0._Long ) then
-   wf= this%a1*exp( imagi*this%alpha*xx) &
-      +this%a2*exp(-imagi*this%alpha*xx)
+  if (xc >= 0._Long ) then
+   wf= this%a1*exp( imagi*this%alpha*xc) &
+      +this%a2*exp(-imagi*this%alpha*xc)
   else
-   wf= this%b1*exp( imagi*this%beta*xx) &
-      +this%b2*exp(-imagi*this%beta*xx)
+   wf= this%b1*exp( imagi*this%beta*xc) &
+      +this%b2*exp(-imagi*this%beta*xc)
   endif
 
- end function stateKronigPenney_getWaveFn
+ end function WfKronigPenney_getWaveFn
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- real (Long) function stateKronigPenney_dRdE(this,eek) result(dRdE)
+ real (Long) function WfKronigPenney_dRdE(this,eek) result(dRdE)
   implicit none
 
-  class(stateKronigPenney), intent(in) :: this
+  class(WfKronigPenney), intent(in) :: this
   real (Long), intent(in) :: eek !< sqrt of energy of state
 
   real (Long) :: hinitial  ! initial step for derivative - length scale
 
   real (Long) :: error  !output tolerance of derivative
 
-!  write(*,*)'Entering function stateKronigPenney_dRdE'
+!  write(*,*)'Entering function WfKronigPenney_dRdE'
 
   ! 1/10 of a coefficient of eek in the energyRoot equation
   hinitial = 0.1_Long/(sqrt(2._Long*this%mass)/hbar*(this%period-this%bwidth))
 
   select type(this)
-   type is (stateKronigPenney)
+   type is (WfKronigPenney)
     currState=this
   end select
   dRdE=bmath_LDiffRichardson(getCurrEnergyRoot,eek,hinitial,error)
 
- end function stateKronigPenney_dRdE
+ end function WfKronigPenney_dRdE
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- real (Long) function stateKronigPenney_energyRoot(this,eek) result(en)
+ real (Long) function WfKronigPenney_energyRoot(this,eek) result(en)
   implicit none
 
-  class(stateKronigPenney), intent(in) :: this
+  class(WfKronigPenney), intent(in) :: this
   real (Long), intent(in) :: eek  !< sqrt of energy of state
 
   real (Long) :: alpha  ! trial alpha and beta
@@ -307,7 +308,7 @@ coeffeqn=transpose(coeffeqn)
             - 1._Long &
            )
 
- end function stateKronigPenney_energyRoot
+ end function WfKronigPenney_energyRoot
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -331,5 +332,5 @@ coeffeqn=transpose(coeffeqn)
 
  end function getCurrDRDE
 
-end module class_StateKronigPenney
+end module class_WfKronigPenney
 

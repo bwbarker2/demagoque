@@ -1,5 +1,5 @@
 module input_parameters
- use class_StateKronigPenney
+ use class_WfKronigPenney
  use class_SquareWellState
  use prec_def
  implicit none
@@ -52,7 +52,7 @@ module input_parameters
  real (Long) :: initState_kdelta_x0  !center of delta function
 
  logical     :: useInitState_KronigPenney !< use Kronig-Penney model eigenstates
- type(stateKronigPenney) :: initState_KronigPenney !< Kronig-Penney eigenstate
+ type(WfKronigPenney) :: initState_KronigPenney !< Kronig-Penney eigenstate
 
  logical     :: useInitState_sqWell      !< use square well potential
  ! \todo try changing this to class instead of type in future versions of gfortran - it works as a class with ifort 12.1.0

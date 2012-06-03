@@ -565,7 +565,7 @@ subroutine procOptionLine(inline)
    case("initState_KronigPenney")
     read(inline(iend+1:len(inline)),*)iin(1),rin(1),rin(2)
     useInitState_KronigPenney=.true.
-    initState_KronigPenney = new_StateKronigPenney( &
+    initState_KronigPenney = new_WfKronigPenney( &
                              m0,iin(1),rin(1),rin(2),2._Long*xLa)
     norm_thy=norm_thy+1._Long
     write(*,*)'Initial state added: initState_KronigPenney'

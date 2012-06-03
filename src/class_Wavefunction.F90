@@ -15,7 +15,7 @@ module class_Wavefunction
 
  interface
 
-  real(Long) function getWavefn(this,xx,tt)
+  complex(Long) function getWavefn(this,xx,tt)
    use prec_def
    import Wavefunction
  
