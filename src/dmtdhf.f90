@@ -586,7 +586,7 @@ subroutine procOptionLine(inline)
     else
      useInitState_sqWell=.true.
      read(inline(iend+1:len(inline)),*)rin(1),iin(1),rin(2),rin(3)
-     initState_sqWell=make_SquareWellState(rin(1),iin(1),rin(2),rin(3))
+     initState_sqWell=make_WfSquareWell(rin(1),iin(1),rin(2),rin(3))
      norm_thy=norm_thy+1
     endif
 

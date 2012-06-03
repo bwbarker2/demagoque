@@ -1,5 +1,5 @@
 !> calculates properties of the square well potential quantum system
-module class_SquareWellState
+module class_WfSquareWell
  use bexception
  use bmath
  use iso_fortran_env
@@ -7,11 +7,11 @@ module class_SquareWellState
  use prec_def
  implicit none
 
-  private :: currentState, squareWellState_calcEnergy, &
-             squareWellState_calcNorm, squareWellState_energyRoot
+  private :: currentState, WfSquareWell_calcEnergy, &
+             WfSquareWell_calcNorm, WfSquareWell_energyRoot
 
   public
-  type squareWellState
+  type WfSquareWell
    real (Long) :: mass     !< mass of particle
    integer     :: level    !< excitation level, 0=ground state, 1=first excited
    real (Long) :: v0       !< height of barrier
@@ -21,18 +21,18 @@ module class_SquareWellState
    real (Long) :: normTail !< normalization of wavefunction within barrier
 
    contains
-    procedure :: getWavefn => squareWellState_getWavefn
-    procedure :: getPotential => squareWellState_getPotential
-  end type squareWellState
+    procedure :: getWavefn => WfSquareWell_getWavefn
+    procedure :: getPotential => WfSquareWell_getPotential
+  end type WfSquareWell
 
-  type(squareWellState) :: currentState !< for root-finding function, it can only have one argument, so set this as current state before running root finder
+  type(WfSquareWell) :: currentState !< for root-finding function, it can only have one argument, so set this as current state before running root finder
 
  contains
 
-  function make_squareWellState (mass,level,v0,d) result(self)
+  function make_WfSquareWell (mass,level,v0,d) result(self)
    implicit none
 
-   type (squareWellState)  :: self
+   type (WfSquareWell)  :: self
    real (Long), intent(in) :: mass
    integer, intent(in)     :: level
    real (Long), intent(in) :: v0
@@ -45,15 +45,15 @@ module class_SquareWellState
    norm=0e0_Long
    normTail=0e0_Long
 
-   self=squareWellState(mass,level,v0,d,energy,norm,normTail)
+   self=WfSquareWell(mass,level,v0,d,energy,norm,normTail)
 
 !   write(*,*)self
 !   write(*,*)'hbar=',hbar
 
-   self%energy=squareWellState_calcEnergy(self)
-   call squareWellState_calcNorm(self)
+   self%energy=WfSquareWell_calcEnergy(self)
+   call WfSquareWell_calcNorm(self)
 
-  end function make_squareWellState
+  end function make_WfSquareWell
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -70,10 +70,10 @@ module class_SquareWellState
   !! Correction: \f$ \tan U \f$ must be positive to satisfy the original
   !! equality, so only look for solutions in 1st and 3rd quadrants of unit
   !! circle.
-  function squareWellState_calcEnergy(state) result(energy)
+  function WfSquareWell_calcEnergy(state) result(energy)
    implicit none
 
-   type(squareWellState), intent(in) :: state
+   type(WfSquareWell), intent(in) :: state
    real (Long) :: energy
 
    real (Long) :: lowbound,upbound !< bounds for zero-finding
@@ -83,22 +83,22 @@ module class_SquareWellState
 
    currentState=state
 
-!   write(ERROR_UNIT,*)squareWellState_energyRoot(lowbound)
+!   write(ERROR_UNIT,*)WfSquareWell_energyRoot(lowbound)
 
-   energy=bmath_dZeroBrent(lowbound,upbound,squareWellState_energyRoot)
+   energy=bmath_dZeroBrent(lowbound,upbound,WfSquareWell_energyRoot)
 !   write(ERROR_UNIT,*)'level,root:',state%level,energy
    energy=energy**2*hbar**2/(2e0_Long*state%mass*state%d**2)
 !   write(ERROR_UNIT,*)'energy:',energy
 
-  end function squareWellState_calcEnergy
+  end function WfSquareWell_calcEnergy
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Calculates normalization constant
-  subroutine squareWellState_calcNorm(state)
+  subroutine WfSquareWell_calcNorm(state)
    implicit none
 
-   type(squareWellState), intent(inout) :: state
+   type(WfSquareWell), intent(inout) :: state
 
    real (Long) :: sqrt2mEhbar
 
@@ -116,12 +116,12 @@ module class_SquareWellState
                        /hbar*state%d &
                       )
 
-  end subroutine squareWellState_calcNorm
+  end subroutine WfSquareWell_calcNorm
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Calculates equation to find zero of, in order to find energy level
-  function squareWellState_energyRoot(uu) result(fn)
+  function WfSquareWell_energyRoot(uu) result(fn)
    implicit none
 
    real(Long) :: fn
@@ -130,15 +130,15 @@ module class_SquareWellState
    fn=2e0_Long*currentState%mass*currentState%v0*currentState%d**2 &
       /(hbar**2*(1e0_Long+tan(uu)**2))-uu**2
 
-  end function squareWellState_energyRoot
+  end function WfSquareWell_energyRoot
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Returns potential of state
-  function squareWellState_getPotential(self,xx) result(pot)
+  function WfSquareWell_getPotential(self,xx) result(pot)
    implicit none
 
-   class (squareWellState), intent(in) :: self !< state
+   class (WfSquareWell), intent(in) :: self !< state
    real (Long) :: xx  !< position at which to get potential
    real (Long) :: pot
 
@@ -148,15 +148,15 @@ module class_SquareWellState
     pot=self%v0
    endif
 
-  end function squareWellState_getPotential
+  end function WfSquareWell_getPotential
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function squareWellState_getWavefn(self,xx) result(wf)
+  function WfSquareWell_getWavefn(self,xx) result(wf)
    implicit none
 
    real (Long) :: wf
-   class (squareWellState), intent(inout) :: self
+   class (WfSquareWell), intent(inout) :: self
    real (Long), intent(in) :: xx
 
    if(xx<-self%d) then
@@ -167,7 +167,7 @@ module class_SquareWellState
     wf=self%norm*cos(sqrt(2e0_Long*self%mass*self%energy)/hbar*xx)
    endif
 
-  end function squareWellState_getWavefn
+  end function WfSquareWell_getWavefn
 
-end module class_SquareWellState
+end module class_WfSquareWell
 
