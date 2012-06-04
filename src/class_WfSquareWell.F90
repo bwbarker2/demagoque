@@ -2,6 +2,7 @@
 module class_WfSquareWell
  use bexception
  use bmath
+ use class_Wavefunction
  use iso_fortran_env
  use phys_cons
  use prec_def
@@ -11,7 +12,7 @@ module class_WfSquareWell
              WfSquareWell_calcNorm, WfSquareWell_energyRoot
 
   public
-  type WfSquareWell
+  type, extends(Wavefunction) :: WfSquareWell
    real (Long) :: mass     !< mass of particle
    integer     :: level    !< excitation level, 0=ground state, 1=first excited
    real (Long) :: v0       !< height of barrier
@@ -152,19 +153,20 @@ module class_WfSquareWell
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function WfSquareWell_getWavefn(self,xx) result(wf)
+  function WfSquareWell_getWavefn(this,xx,tt) result(wf)
    implicit none
 
-   real (Long) :: wf
-   class (WfSquareWell), intent(inout) :: self
+   complex (Long) :: wf
+   class (WfSquareWell), intent(inout) :: this
    real (Long), intent(in) :: xx
+   real (Long), optional, intent(in) :: tt
 
-   if(xx<-self%d) then
-    wf=self%normTail*exp(sqrt(2e0_Long*self%mass*(self%v0-self%energy))/hbar*xx)
-   elseif(xx>self%d) then
-    wf=self%normTail*exp(-sqrt(2e0_Long*self%mass*(self%v0-self%energy))/hbar*xx)
+   if(xx<-this%d) then
+    wf=this%normTail*exp(sqrt(2e0_Long*this%mass*(this%v0-this%energy))/hbar*xx)
+   elseif(xx>this%d) then
+    wf=this%normTail*exp(-sqrt(2e0_Long*this%mass*(this%v0-this%energy))/hbar*xx)
    else
-    wf=self%norm*cos(sqrt(2e0_Long*self%mass*self%energy)/hbar*xx)
+    wf=this%norm*cos(sqrt(2e0_Long*this%mass*this%energy)/hbar*xx)
    endif
 
   end function WfSquareWell_getWavefn
