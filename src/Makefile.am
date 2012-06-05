@@ -6,7 +6,7 @@ bin_PROGRAMS = demagoque
 demagoque_SOURCES = iso_varying_string.f90 prec_def.f90 phys_cons.f90 \
           bexception.f90 bmath.f90 \
           bstring.f90 \
-          cons_laws.f90 class_Wavefunction.F90 \
+          cons_laws.f90 class_Wavefunction.F90 class_SuperWavefunction.F90 \
           class_WfSquareWell.F90 class_WfKronigPenney.F90 \
           input_parameters.f90 lib_lapack.f90 \
           lib_fftw.f90 mesh.f90 time.f90 formatting.f90 dmtdhf.f90 ener.f90 \
