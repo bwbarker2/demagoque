@@ -1,5 +1,4 @@
 module class_SuperWavefunction
- use class_OneWavefunction
  use class_Wavefunction
  use class_WfKronigPenney
  use prec_def
@@ -12,7 +11,7 @@ module class_SuperWavefunction
  integer, parameter :: INITIAL_CAPACITY = 1
 
  type, extends(Wavefunction) :: SuperWavefunction
-  type(OneWavefunction), allocatable, dimension(:) :: wavefunctions
+  type(Skin_Wavefunction), allocatable, dimension(:) :: wavefunctions
 !  type(WfKronigPenney), allocatable, dimension(:) :: WfKronigPenneys
   integer :: numWf  !< number of wf's
  contains
@@ -27,7 +26,7 @@ contains
 
   type(SuperWavefunction) :: new
 
-  type(OneWavefunction),allocatable, dimension(:) :: wfs
+  type(Skin_Wavefunction),allocatable, dimension(:) :: wfs
 
   allocate(wfs(INITIAL_CAPACITY))
 
@@ -47,7 +46,7 @@ contains
    call SuperWavefunction_grow(this%wavefunctions)
   endif
   this%numWf=this%numWf+1
-  this%wavefunctions(this%numWf)=new_OneWavefunction(wftoadd)
+  this%wavefunctions(this%numWf)=new_Skin_Wavefunction(wftoadd)
 
  end subroutine SuperWavefunction_add
 
@@ -74,9 +73,9 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  subroutine SuperWavefunction_grow(wfarray)
-  type(OneWavefunction), allocatable, dimension(:), intent(inout) :: wfarray
+  type(Skin_Wavefunction), allocatable, dimension(:), intent(inout) :: wfarray
 
-  type(OneWavefunction), dimension(size(wfarray)) :: wftemp
+  type(Skin_Wavefunction), dimension(size(wfarray)) :: wftemp
   integer :: newSize
 
 

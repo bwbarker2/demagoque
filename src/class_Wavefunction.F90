@@ -5,13 +5,26 @@ module class_Wavefunction
 
  private
 
- public :: Wavefunction
+ public :: Wavefunction, Skin_Wavefunction, new_Skin_Wavefunction
 
  type, abstract :: Wavefunction 
   contains
    procedure(getWavefn), deferred :: getWavefn
 
  end type Wavefunction
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ !> Wrapper (or 'skin') for class Wavefunction, so we can have an array of
+ !! different children of Wavefunction
+ type, extends(Wavefunction) :: Skin_Wavefunction
+  class(Wavefunction), allocatable :: oneWf
+ contains
+  procedure :: getWavefn => Skin_Wavefunction_getWavefn
+
+ end type Skin_Wavefunction
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  interface
 
@@ -26,6 +39,33 @@ module class_Wavefunction
   end function getWavefn
 
  end interface
+
+contains
+
+ !> Constructs new Wavefunction skin out of a Wavefunction
+ function new_Skin_Wavefunction(wavefin) result(this)
+  implicit none
+
+  type(Skin_Wavefunction) :: this
+
+  class(Wavefunction), intent(in) :: wavefin
+
+  this = Skin_Wavefunction(wavefin)
+
+ end function new_Skin_Wavefunction
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ complex(Long) function Skin_Wavefunction_getWavefn(this,xx,tt) result(wf)
+  implicit none
+
+  class(Skin_Wavefunction), intent(in) :: this
+  real (Long), intent(in) :: xx
+  real (Long), optional, intent(in) :: tt
+
+  wf=this%oneWf%getWavefn(xx,tt)
+
+ end function Skin_Wavefunction_getWavefn
 
 end module class_Wavefunction
 
