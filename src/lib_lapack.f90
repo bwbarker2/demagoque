@@ -29,8 +29,8 @@ module lib_lapack
   subroutine getEigenSq(mat,num,evals,evecs)
    implicit none
 
-   complex (Long), dimension(0:num-1,0:num-1), intent(inout) :: mat ! input matrix
    integer,                                intent(in) :: num  ! dimension and rank of matrix
+   complex (Long), dimension(0:num-1,0:num-1), intent(inout) :: mat ! input matrix
    complex (Long), dimension(0:num-1),         intent(out) :: evals !eigenvalues
    complex (Long), dimension(0:num-1,0:num-1), intent(inout) :: evecs !eigenvectors, ith column corresponds to ith eigenvalue in evals array
 
@@ -77,8 +77,8 @@ module lib_lapack
   subroutine getInvMat(mat,num,matinv)
    implicit none
 
-   complex (Long), dimension(0:num-1,0:num-1), intent(in) :: mat !matrix to invert
    integer, intent(in) :: num
+   complex (Long), dimension(0:num-1,0:num-1), intent(in) :: mat !matrix to invert
    complex (Long), dimension(0:num-1,0:num-1), intent(out) :: matinv !inverted matrix
 
    integer, dimension(0:num-1) :: ipiv ! pivot array for LU factorization
