@@ -1,6 +1,5 @@
 module class_SuperWavefunction
  use class_Wavefunction
- use class_WfKronigPenney
  use prec_def
  implicit none
 
@@ -8,15 +7,15 @@ module class_SuperWavefunction
 
  public :: SuperWavefunction, new_SuperWavefunction
 
- integer, parameter :: INITIAL_CAPACITY = 1
+ integer, parameter :: INITIAL_CAPACITY = 10
 
  type, extends(Wavefunction) :: SuperWavefunction
   type(Skin_Wavefunction), allocatable, dimension(:) :: wavefunctions
-!  type(WfKronigPenney), allocatable, dimension(:) :: WfKronigPenneys
   integer :: numWf  !< number of wf's
  contains
-!  procedure,public :: add => SuperWavefunction_add
+  procedure,public :: add => SuperWavefunction_add
   procedure,public :: getWavefn => SuperWavefunction_getWavefn
+  procedure :: grow => SuperWavefunction_grow
  end type SuperWavefunction
 
 contains
@@ -43,11 +42,12 @@ contains
   class(Wavefunction), intent(in) :: wftoadd
 
   if(size(this%wavefunctions)<=this%numWf) then
-   call SuperWavefunction_grow(this%wavefunctions)
+   call this%grow()
   endif
   this%numWf=this%numWf+1
   this%wavefunctions(this%numWf)=new_Skin_Wavefunction(wftoadd)
 
+!  write(*,*)'SuperWavefunction_add: wftoaddwf=',this%wavefunctions(this%numWf)%getWavefn(-30)
  end subroutine SuperWavefunction_add
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -66,22 +66,23 @@ contains
 
   do ii=1,this%numWf
    wf=wf+this%wavefunctions(ii)%getWavefn(xx,tt)
+   write(ERROR_UNIT,*)'SupWav_getWav=',wf
   enddo
 
  end function SuperWavefunction_getWavefn
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- subroutine SuperWavefunction_grow(wfarray)
-  type(Skin_Wavefunction), allocatable, dimension(:), intent(inout) :: wfarray
+ !> Doesn't work yet :(
+ subroutine SuperWavefunction_grow(this)
+  class(SuperWavefunction), intent(inout) :: this
+!  type(Skin_Wavefunction), allocatable, dimension(:), intent(inout) :: wfarray
 
-  type(Skin_Wavefunction), dimension(size(wfarray)) :: wftemp
+  type(Skin_Wavefunction), dimension(size(this%wavefunctions)) :: wftemp
   integer :: newSize
 
 
-  wftemp=wfarray
-
-  deallocate(wfarray)
+  wftemp=this%wavefunctions
 
   if(size(wftemp)>1) then
    newSize=nint(size(wftemp)*1.5)
@@ -91,9 +92,14 @@ contains
    newSize=1
   endif
 
-  allocate(wfarray(newSize))
+write(ERROR_UNIT,*)'SuperWavefunction_grow: dim=',size(wftemp)
+  deallocate(this%wavefunctions)
+!deallocate(this%wavefunctions(1)%oneWf)
 
-  wfarray(1:size(wftemp))=wftemp
+write(ERROR_UNIT,*)'SuperWavefunction_grow: deallocated wfarray'
+  allocate(this%wavefunctions(newSize))
+
+  this%wavefunctions(1:size(wftemp))=wftemp
 
  end subroutine SuperWavefunction_grow
 
