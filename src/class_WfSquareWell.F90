@@ -157,7 +157,7 @@ module class_WfSquareWell
    implicit none
 
    complex (Long) :: wf
-   class (WfSquareWell), intent(inout) :: this
+   class (WfSquareWell), intent(in) :: this
    real (Long), intent(in) :: xx
    real (Long), optional, intent(in) :: tt
 
