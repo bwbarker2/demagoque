@@ -75,6 +75,9 @@ subroutine initialState
   integer :: ixa, ixr, iin
   integer :: initState_kdelta_index
 
+
+!write(*,*)'initialState: initSuperWavefunction=',initSuperWavefunction%getWavefn(20.2_Long)
+
   if(initState_kdelta) then
    initState_kdelta_index=getNearestIndexX(initState_kdelta_x0)
   else
@@ -92,6 +95,9 @@ subroutine initialState
         den0=0e0_Long
         y1=czero
         y2=czero
+
+        den0=den0+conjg(initSuperWavefunction%getWavefn(x1)) &
+                  *initSuperWavefunction%getWavefn(x2)
 
         if(initState_gaussianNuclear.OR.initState_gaussian) then
          do iin=0,Nmax
@@ -118,10 +124,10 @@ subroutine initialState
           endif
 
           if(useInitState_KronigPenney) then
-           y1=initState_KronigPenney%getWavefn(x1)
-           y2=initState_KronigPenney%getWavefn(x2)
+!           y1=initState_KronigPenney%getWavefn(x1)
+!           y2=initState_KronigPenney%getWavefn(x2)
 !           write(*,*)x1,x2,y1,y2
-           den0=den0+conjg(y1)*y2
+!           den0=den0+conjg(y1)*y2
           endif
 
           if(initState_plane) then

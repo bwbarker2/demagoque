@@ -1,14 +1,14 @@
-!> Tests class_SquareWellState for expected energy and norm.
+!> Tests class_WfSquareWell for expected energy and norm.
 !!
 !! Expectations are from a sample run at initial coding, so if this test fails,
 !! it is different from original output.
-program class_SquareWellState_run
- use class_SquareWellState
+program class_WfSquareWell_run
+ use class_WfSquareWell
  use phys_cons
  use prec_def
  implicit none
 
- type(squareWellState) :: testState
+ type(WfSquareWell) :: testState
 
 ! integer :: ix
 ! real(Long) :: xlo=-25
@@ -21,20 +21,20 @@ program class_SquareWellState_run
 
  call phys_cons_initializeBEC
 
- testState=make_SquareWellState(MASS_REL_RUBIDIUM_87,0,1e10_Long*hbar**2/(2e0_Long*MASS_REL_RUBIDIUM_87*meter**2),1e-4_Long*meter)
+ testState=make_WfSquareWell(MASS_REL_RUBIDIUM_87,0,1e10_Long*hbar**2/(2e0_Long*MASS_REL_RUBIDIUM_87*meter**2),1e-4_Long*meter)
 
 ! write(*,*)testState
 
  ! test for correct energy. Divide by Joule to get dimensionless value.
  if(abs((testState%energy/joule-energyExp)/energyExp) > eps) then
-  call throwException('class_SquareWellState_run: Energy not correct',BEXCEPTION_FATAL)
+  call throwException('class_WfSquareWell_run: Energy not correct',BEXCEPTION_FATAL)
  endif
 
 ! write(*,*)testState%norm*sqrt(meter)
 
  ! test for correct norm. Multiply by sqrt(meter) to get dimensionless value.
  if(abs((testState%norm*sqrt(meter)-normExp)/normExp) > eps) then
-  call throwException('class_SquareWellState_run: Norm not correct',BEXCEPTION_FATAL)
+  call throwException('class_WfSquareWell_run: Norm not correct',BEXCEPTION_FATAL)
  endif
 
 
@@ -46,6 +46,6 @@ program class_SquareWellState_run
 !  xx=xx+(xhi-xlo)/nx
 ! enddo
  
-end program class_SquareWellState_run
+end program class_WfSquareWell_run
 
 

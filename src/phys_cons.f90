@@ -10,12 +10,12 @@ MODULE phys_cons
   logical :: phys_cons_isInitialized
 
   !math constants (unitless)
-  complex (Long), parameter :: czero=cmplx(0e0_Long,0e0_Long,Long)
-  complex (Long),   parameter :: imagi=cmplx(0e0_Long,1e0_Long,Long)  !sqrt(-1)
-  REAL (long) , PARAMETER :: pi=4e0_Long*atan(1e0_Long)
-  real (Long) , parameter :: inv2pi=1e0_Long/(2e0_Long*pi)
-  real (long) , parameter :: invpi=1e0_Long/pi  !1/pi
-  real (long) , parameter :: invsqrt2pi=sqrt(inv2pi)
+  complex (Long) :: czero
+  complex (Long) :: imagi
+  REAL (long) :: pi
+  real (Long) :: inv2pi
+  real (long) :: invpi
+  real (long) :: invsqrt2pi
 
   !physical constants in SI units, with "current units" as well
 
@@ -87,6 +87,21 @@ MODULE phys_cons
 
 contains
 
+ subroutine phys_cons_init
+  implicit none
+
+  !math constants (unitless)
+  czero=cmplx(0e0_Long,0e0_Long,Long)
+  imagi=cmplx(0e0_Long,1e0_Long,Long)  !sqrt(-1)
+  pi=4e0_Long*atan(1e0_Long)
+  inv2pi=1e0_Long/(2e0_Long*pi)
+  invpi=1e0_Long/pi  !1/pi
+  invsqrt2pi=sqrt(inv2pi)
+
+
+ end subroutine phys_cons_init
+
+
  !> \brief Initializes physical constants, using nuclear system:
  !!
  !! -# length - femtometer - fm
@@ -96,6 +111,7 @@ contains
  subroutine phys_cons_initializeNuclear
   implicit none
 
+  call phys_cons_init
 !  fm=1e0_Long
 !  fm_c=1e0_Long
 !  Mev=1e0_Long
@@ -124,6 +140,8 @@ contains
  !! -# time   = millisecond - ms
  subroutine phys_cons_initializeBEC
   implicit none
+
+  call phys_cons_init
 
   kilogram = 1e0_Long / SI_ATOMIC_MASS_CONSTANT
   meter = 1e5_Long

@@ -98,6 +98,9 @@ PROGRAM dmtdhf
 !  integer :: fftw_init_out
   real :: timeElapsed
 
+  call init_prec_def
+  call phys_cons_init
+
 !  call dfftw_init_threads(fftw_init_out)
 !  if(fftw_init_out==0)write(*,*)'ERROR: dfftw_init_threads error:',fftw_init_out
 
@@ -426,6 +429,7 @@ SUBROUTINE getStdIn
  initState_cosine=.false.
  initState_kdelta=.false.
  initState_plane=.false.
+ initSuperWavefunction=new_SuperWavefunction()
  Nmax=0
  norm_thy=0d0
  unitSystem_bec=.false.
@@ -456,6 +460,7 @@ SUBROUTINE getStdIn
 
  enddo !while true
 
+write(*,*)'procOptionLine: initSuperWavefunction=',initSuperWavefunction%getWavefn(20.2_Long)
  !verify option dependencies
 
  if(useCutoffK.and.(2*cutoffK_ncells>=Nxr)) then
@@ -565,8 +570,13 @@ subroutine procOptionLine(inline)
    case("initState_KronigPenney")
     read(inline(iend+1:len(inline)),*)iin(1),rin(1),rin(2)
     useInitState_KronigPenney=.true.
+    call initSuperWavefunction%add(new_WfKronigPenney( &
+                             m0,iin(1),rin(1),rin(2),2._Long*xLa))
     initState_KronigPenney = new_WfKronigPenney( &
                              m0,iin(1),rin(1),rin(2),2._Long*xLa)
+!    call initSuperWavefunction%add(initState_KronigPenney)
+write(*,*)'procOptionLine: initState_KronigPenney=',initState_KronigPenney%getWavefn(20.2_Long)
+write(*,*)'procOptionLine: initSuperWavefunction=',initSuperWavefunction%getWavefn(20.2_Long)
     norm_thy=norm_thy+1._Long
     write(*,*)'Initial state added: initState_KronigPenney'
 

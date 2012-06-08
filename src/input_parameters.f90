@@ -1,4 +1,5 @@
 module input_parameters
+ use class_SuperWavefunction
  use class_WfKronigPenney
  use class_WfSquareWell
  use prec_def
@@ -57,6 +58,8 @@ module input_parameters
  logical     :: useInitState_sqWell      !< use square well potential
  ! \todo try changing this to class instead of type in future versions of gfortran - it works as a class with ifort 12.1.0
  type(WfSquareWell) :: initState_SqWell !< square well state object
+
+ type(SuperWavefunction) :: initSuperWavefunction !< initial state wavefunctions
 
 ! logical :: initState_randomG  !add a random number (Gaussian) to initial state
 ! real (Long) :: initState_random_norm  !norm
