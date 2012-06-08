@@ -3,6 +3,7 @@
 *.m4
 *.mod
 *.x
+*__genmod.f90
 *Makefile
 *Makefile.in
 autom4te.cache
