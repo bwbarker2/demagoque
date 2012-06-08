@@ -28,7 +28,8 @@ unitSystem nuclear
   !initState_gaussianNuclear 0  !use this, Nmax
   !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
   !initState_kdelta 1d0 0.1d0     !norm, position
-initState_KronigPenney 12,16d0,20d0  !level, v0, rectangle width
+initState_KronigPenney 1,16d0,20d0  !level, v0, rectangle width
+initState_KronigPenney 0,16d0,20d0  !level, v0, rectangle width
   !initState_plane 0 1d0 0d0    !wave number, norm, phase shift
 splitOperatorMethod 3  !use this, setting order of accuracy in time
   !useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
