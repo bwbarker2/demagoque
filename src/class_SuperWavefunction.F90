@@ -10,7 +10,7 @@ module class_SuperWavefunction
  integer, parameter :: INITIAL_CAPACITY = 10
 
  type, extends(Wavefunction) :: SuperWavefunction
-  type(Skin_Wavefunction), allocatable, dimension(:) :: wavefunctions
+  class(Skin_Wavefunction), pointer, dimension(:) :: wavefunctions
   integer :: numWf  !< number of wf's
  contains
   procedure,public :: add => SuperWavefunction_add
@@ -23,13 +23,17 @@ contains
  function new_SuperWavefunction() result(new)
   implicit none
 
-  type(SuperWavefunction) :: new
+  class(SuperWavefunction), pointer :: new
 
-  type(Skin_Wavefunction),allocatable, dimension(:) :: wfs
+!  class(Skin_Wavefunction),pointer, dimension(:) :: wfs
 
-  allocate(wfs(INITIAL_CAPACITY))
+  allocate(new)
 
-  new = SuperWavefunction(wfs,0)
+  allocate(new%wavefunctions(INITIAL_CAPACITY))
+  new%numWf=0
+
+write(ERROR_UNIT,*)'new_SupWav: size,num=',size(new%wavefunctions),new%numWf
+!  new = SuperWavefunction(wfs(:,0)
 
  end function new_SuperWavefunction
 
@@ -39,14 +43,24 @@ contains
   implicit none
 
   class(SuperWavefunction), intent(inout) :: this
-  class(Wavefunction), intent(in) :: wftoadd
+  class(Wavefunction), target, intent(in) :: wftoadd
+
+  class(Skin_Wavefunction), pointer :: skinwf
+
+  allocate(skinwf)
+  allocate(skinwf%oneWf, source=wftoadd)
+
+  write(ERROR_UNIT,*)'SupWav_add: size(this%wavefunctions)=',size(this%wavefunctions), this%numWf
 
   if(size(this%wavefunctions)<=this%numWf) then
    call this%grow()
   endif
   this%numWf=this%numWf+1
-  this%wavefunctions(this%numWf)=new_Skin_Wavefunction(wftoadd)
+  allocate(this%wavefunctions(this%numWf),source=skinwf)
+!  this%wavefunctions(this%numWf)=>new_Skin_Wavefunction(wftoadd)
 
+write(ERROR_UNIT,*)'SupWav_add: new size=',size(this%wavefunctions)
+write(ERROR_UNIT,*)'SupWav_add: wavfun(1)=',this%wavefunctions(1)%getWavefn(20.2_Long)
 !  write(*,*)'SuperWavefunction_add: wftoaddwf=',this%wavefunctions(this%numWf)%getWavefn(-30)
  end subroutine SuperWavefunction_add
 
@@ -66,7 +80,7 @@ contains
 
   do ii=1,this%numWf
    wf=wf+this%wavefunctions(ii)%getWavefn(xx,tt)
-   write(ERROR_UNIT,*)'SupWav_getWav=',wf
+!   write(ERROR_UNIT,*)'SupWav_getWav=',wf
   enddo
 
  end function SuperWavefunction_getWavefn
@@ -78,11 +92,11 @@ contains
   class(SuperWavefunction), intent(inout) :: this
 !  type(Skin_Wavefunction), allocatable, dimension(:), intent(inout) :: wfarray
 
-  type(Skin_Wavefunction), dimension(size(this%wavefunctions)) :: wftemp
+  class(Skin_Wavefunction), pointer, dimension(:) :: wftemp
   integer :: newSize
 
 
-  wftemp=this%wavefunctions
+  wftemp => this%wavefunctions
 
   if(size(wftemp)>1) then
    newSize=nint(size(wftemp)*1.5)
@@ -99,7 +113,7 @@ write(ERROR_UNIT,*)'SuperWavefunction_grow: dim=',size(wftemp)
 write(ERROR_UNIT,*)'SuperWavefunction_grow: deallocated wfarray'
   allocate(this%wavefunctions(newSize))
 
-  this%wavefunctions(1:size(wftemp))=wftemp
+  this%wavefunctions(1:size(wftemp)) => wftemp
 
  end subroutine SuperWavefunction_grow
 

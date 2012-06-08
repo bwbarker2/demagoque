@@ -18,7 +18,7 @@ module class_Wavefunction
  !> Wrapper (or 'skin') for class Wavefunction, so we can have an array of
  !! different children of Wavefunction
  type, extends(Wavefunction) :: Skin_Wavefunction
-  class(Wavefunction), allocatable :: oneWf
+  class(Wavefunction), pointer :: oneWf
  contains
   procedure :: getWavefn => Skin_Wavefunction_getWavefn
 
@@ -46,11 +46,21 @@ contains
  function new_Skin_Wavefunction(wavefin) result(this)
   implicit none
 
-  type(Skin_Wavefunction) :: this
+  type(Skin_Wavefunction),pointer :: this
 
-  class(Wavefunction), intent(in) :: wavefin
+  class(Wavefunction), target, intent(in) :: wavefin
 
-  this = Skin_Wavefunction(wavefin)
+!  class(Wavefunction), allocatable :: wf
+
+!  if(allocated(wf)) then
+!   deallocate(wf)
+!  endif
+  allocate(this)
+  this%oneWf => wavefin
+!  allocate(wf,source=wavefin)
+!  this = Skin_Wavefunction(wavefin)
+!  deallocate(this%oneWf)
+!  allocate(this%oneWf, source=wavefin)
 
  end function new_Skin_Wavefunction
 

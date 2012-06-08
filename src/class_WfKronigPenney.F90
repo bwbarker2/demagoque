@@ -286,7 +286,7 @@ contains
       +this%b2*exp(-imagi*this%beta*xc)
   endif
 
-  write(ERROR_UNIT,*)'WfKroPen_getWav: a1,a2,wf=',this%a1,this%a2,wf
+!  write(ERROR_UNIT,*)'WfKroPen_getWav: a1,a2,wf=',this%a1,this%a2,wf
 
  end function WfKronigPenney_getWaveFn
 

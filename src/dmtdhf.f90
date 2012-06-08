@@ -429,7 +429,7 @@ SUBROUTINE getStdIn
  initState_cosine=.false.
  initState_kdelta=.false.
  initState_plane=.false.
- initSuperWavefunction=new_SuperWavefunction()
+ initSuperWavefunction => new_SuperWavefunction()
  Nmax=0
  norm_thy=0d0
  unitSystem_bec=.false.
