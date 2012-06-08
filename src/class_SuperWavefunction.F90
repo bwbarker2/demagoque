@@ -1,3 +1,5 @@
+!> Stores a superposition of wavefunctions of type Wavefunction and is 
+!! itself a Wavefunction
 module class_SuperWavefunction
  use class_Wavefunction
  use prec_def
@@ -5,35 +7,83 @@ module class_SuperWavefunction
 
  private
 
- public :: SuperWavefunction, new_SuperWavefunction
+ public :: new_SuperWavefunction, SuperWavefunction
 
  integer, parameter :: INITIAL_CAPACITY = 10
 
+ !> Superposition of wavefunctions
  type, extends(Wavefunction) :: SuperWavefunction
-  class(Skin_Wavefunction), pointer, dimension(:) :: wavefunctions
-  integer :: numWf  !< number of wf's
+  private
+  class(Link_Wavefunction), pointer :: firstLink => null()  !< first link in linked list
+  class(Link_Wavefunction), pointer :: lastLink => null()   !< last link
  contains
-  procedure,public :: add => SuperWavefunction_add
-  procedure,public :: getWavefn => SuperWavefunction_getWavefn
-  procedure :: grow => SuperWavefunction_grow
+  procedure,public :: add => SuperWavefunction_add  !< add a wavefunction to the list
+  procedure,public :: getWavefn => SuperWavefunction_getWavefn !< get sum of wavefunctions
  end type SuperWavefunction
+
+ !> Individual link in linked list
+ type :: Link_Wavefunction
+  private
+  class(Wavefunction), pointer :: myWf => null()     !< ptr to wavefunction
+  class(Link_Wavefunction), pointer :: next => null() !< ptr to next link
+ contains
+  private
+  procedure :: getWf => SuperWavefunction_getWf      !< get wavefunction
+  procedure :: nextLink => SuperWavefunction_nextLink  !< returns ptr to next link
+  procedure :: setNextLink => SuperWavefunction_setNextLink !< sets 'next'
+ end type Link_Wavefunction
 
 contains
 
- function new_SuperWavefunction() result(new)
+ function SuperWavefunction_getWf(this) result(getWf)
+  class(Wavefunction), pointer :: getWf
+  class(Link_Wavefunction), intent(in) :: this
+
+  getWf => this%myWf
+ end function SuperWavefunction_getWf
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ function SuperWavefunction_nextLink(this) result(nextLink)
+  class(Link_Wavefunction), pointer :: nextLink
+
+  class(Link_Wavefunction), intent(in) :: this
+
+  nextLink => this%next
+ end function SuperWavefunction_nextLink
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ function new_Link_Wavefunction(newWf,next)
+  class(Link_Wavefunction), pointer :: new_Link_Wavefunction
+
+  class(Wavefunction), intent(in) :: newWf
+  class(Link_Wavefunction), pointer, intent(in) :: next
+
+  allocate(new_Link_Wavefunction)
+  new_Link_Wavefunction%next => next
+  allocate(new_Link_Wavefunction%myWf, source=newWf)
+
+ end function new_Link_Wavefunction
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ subroutine SuperWavefunction_setNextLink(this,next)
+
+  class(Link_Wavefunction), intent(inout) :: this
+  class(Link_Wavefunction), pointer, intent(in) :: next
+
+  this%next => next
+ end subroutine SuperWavefunction_setNextLink
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ pure function new_SuperWavefunction() result(new)
   implicit none
 
   class(SuperWavefunction), pointer :: new
 
-!  class(Skin_Wavefunction),pointer, dimension(:) :: wfs
-
   allocate(new)
-
-  allocate(new%wavefunctions(INITIAL_CAPACITY))
-  new%numWf=0
-
-write(ERROR_UNIT,*)'new_SupWav: size,num=',size(new%wavefunctions),new%numWf
-!  new = SuperWavefunction(wfs(:,0)
 
  end function new_SuperWavefunction
 
@@ -43,25 +93,23 @@ write(ERROR_UNIT,*)'new_SupWav: size,num=',size(new%wavefunctions),new%numWf
   implicit none
 
   class(SuperWavefunction), intent(inout) :: this
-  class(Wavefunction), target, intent(in) :: wftoadd
+  class(Wavefunction), intent(in) :: wftoadd
 
-  class(Skin_Wavefunction), pointer :: skinwf
+  class(Link_Wavefunction), pointer :: newLink
 
-  allocate(skinwf)
-  allocate(skinwf%oneWf, source=wftoadd)
+!write(ERROR_UNIT,*)'Entering SuperWavefunction_add'
 
-  write(ERROR_UNIT,*)'SupWav_add: size(this%wavefunctions)=',size(this%wavefunctions), this%numWf
-
-  if(size(this%wavefunctions)<=this%numWf) then
-   call this%grow()
+  if (.not. associated(this%firstLink)) then
+   this%firstLink => new_Link_Wavefunction(wftoadd,this%firstLink)
+   this%lastLink => this%firstLink
+  else
+   newLink => new_Link_Wavefunction(wftoadd, this%lastLink%nextLink())
+   call this%lastLink%setNextLink(newLink)
+   this%lastLink => newLink
   endif
-  this%numWf=this%numWf+1
-  allocate(this%wavefunctions(this%numWf),source=skinwf)
-!  this%wavefunctions(this%numWf)=>new_Skin_Wavefunction(wftoadd)
 
-write(ERROR_UNIT,*)'SupWav_add: new size=',size(this%wavefunctions)
-write(ERROR_UNIT,*)'SupWav_add: wavfun(1)=',this%wavefunctions(1)%getWavefn(20.2_Long)
-!  write(*,*)'SuperWavefunction_add: wftoaddwf=',this%wavefunctions(this%numWf)%getWavefn(-30)
+!write(ERROR_UNIT,*)'Leaving SuperWavefunction_add'
+
  end subroutine SuperWavefunction_add
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -74,49 +122,31 @@ write(ERROR_UNIT,*)'SupWav_add: wavfun(1)=',this%wavefunctions(1)%getWavefn(20.2
   real (Long), intent(in) :: xx
   real (Long), optional, intent(in) :: tt
 
-  integer :: ii
+  class(Link_Wavefunction), pointer :: curr
 
   wf=czero
 
-  do ii=1,this%numWf
-   wf=wf+this%wavefunctions(ii)%getWavefn(xx,tt)
-!   write(ERROR_UNIT,*)'SupWav_getWav=',wf
+  curr => this%firstLink
+
+  do while(associated(curr))
+   wf=wf+curr%myWf%getWavefn(xx,tt)
+   curr => curr%next
   enddo
 
  end function SuperWavefunction_getWavefn
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- !> Doesn't work yet :(
- subroutine SuperWavefunction_grow(this)
-  class(SuperWavefunction), intent(inout) :: this
-!  type(Skin_Wavefunction), allocatable, dimension(:), intent(inout) :: wfarray
+pure function SuperWavefunction_isEmpty(this) result(isEmpty)
+    logical isEmpty
+    class(SuperWavefunction), intent(in) :: this
 
-  class(Skin_Wavefunction), pointer, dimension(:) :: wftemp
-  integer :: newSize
-
-
-  wftemp => this%wavefunctions
-
-  if(size(wftemp)>1) then
-   newSize=nint(size(wftemp)*1.5)
-  else if(size(wftemp)==1) then
-   newSize=2
-  else
-   newSize=1
-  endif
-
-write(ERROR_UNIT,*)'SuperWavefunction_grow: dim=',size(wftemp)
-  deallocate(this%wavefunctions)
-!deallocate(this%wavefunctions(1)%oneWf)
-
-write(ERROR_UNIT,*)'SuperWavefunction_grow: deallocated wfarray'
-  allocate(this%wavefunctions(newSize))
-
-  this%wavefunctions(1:size(wftemp)) => wftemp
-
- end subroutine SuperWavefunction_grow
-
+    if (associated(this%firstLink)) then
+       isEmpty = .false.
+    else
+       isEmpty = .true.
+    endif
+  end function SuperWavefunction_isEmpty
 
 end module class_SuperWavefunction
 

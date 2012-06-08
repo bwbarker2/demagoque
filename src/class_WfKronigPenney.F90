@@ -30,13 +30,13 @@ module class_WfKronigPenney
 
  !> Need this to call differentiation function which takes a function with only
  !! one argument.
- type(WfKronigPenney) :: currState
+ class(WfKronigPenney), pointer :: currState
 
 contains
  
  !> Constructor of WfKronigPenney object
  function new_WfKronigPenney(mass,level,v0,bwidth,period) result(this)
-  type (WfKronigPenney) :: this
+  class (WfKronigPenney), pointer :: this
 
   real (Long) ,intent(in) :: mass
   integer     ,intent(in) :: level
@@ -44,20 +44,29 @@ contains
   real (Long) ,intent(in) :: bwidth
   real (Long) ,intent(in) :: period
 
-!  write(*,*)'Entering function new_WfKronigPenney'
+  write(*,*)'Entering function new_WfKronigPenney'
 
-  this=WfKronigPenney(mass,level,v0,bwidth,period &
-       ,0._Long,czero,czero,czero,czero,0._Long,czero)
+  allocate(this)
 
-  currState=this
+  this%mass=mass
+  this%level=level
+  this%v0=v0
+  this%bwidth=bwidth
+  this%period=period
+!  this=WfKronigPenney(mass,level,v0,bwidth,period &
+!       ,0._Long,czero,czero,czero,czero,0._Long,czero)
+
+  currState=>this
 
   call WfKronigPenney_calcEnergy(this)
 
   call WfKronigPenney_calcCoeffs(this)
 
-  write(ERROR_UNIT,*)'new_WfKronigPenney: this=',this
+  write(ERROR_UNIT,*)'new_WfKronigPenney: mass=',this%mass &
+  ,this%level, this%v0,this%bwidth, this%period, this%energy, this%a1 &
+  ,this%a2, this%b1, this%b2, this%alpha, this%beta
 
-!  write(*,*)'Leaving function new_WfKronigPenney'
+  write(*,*)'Leaving function new_WfKronigPenney'
 
  end function new_WfKronigPenney
 
@@ -106,21 +115,21 @@ contains
   !evidently zcgesv (from LAPACK) wants a row-major array? Who knew?
   coeffeqn=transpose(coeffeqn)
 
-  !eliminate extra row by gaussian elimination
-  call zGauss(4,coeffeqn,ipivs)
-
-  !erase lower triangle that actually has weights in it
-  do ii=2,4
-   do jj=1,ii-1
-    coeffeqn(ii,jj)=czero
-   enddo
-  enddo
-
-  !set the last row (which is all zero right now) to 0 0 0 1 = 1, which will
-  ! set b2 to 1. Don't worry, normalization will happen soon.
-  coeffeqn(4,4)=cmplx(1._Long,0._Long)
-  rhs(4)=1._Long
-
+!  !eliminate extra row by gaussian elimination
+!  call zGauss(4,coeffeqn,ipivs)
+!
+!  !erase lower triangle that actually has weights in it
+!  do ii=2,4
+!   do jj=1,ii-1
+!    coeffeqn(ii,jj)=czero
+!   enddo
+!  enddo
+!
+!  !set the last row (which is all zero right now) to 0 0 0 1 = 1, which will
+!  ! set b2 to 1. Don't worry, normalization will happen soon.
+!  coeffeqn(4,4)=cmplx(1._Long,0._Long)
+!  rhs(4)=1._Long
+!
 !  write(*,*)'coeffeqn:'
 !  do ii=1,4
 !   write(*,'(8E14.5)')(coeffeqn(ii,jj),jj=1,4)
@@ -129,7 +138,8 @@ contains
 
   call zcgesv(4,1,coeffeqn,4,ipivs,rhs,4,sols,4,works,sworks,rworks,iters,infos)
 
-!  write(*,*)'sols=',sols
+  !if I comment this out, then a1,a2,b1,b2 are all NaN... I don't know why :(
+  write(*,*)'sols=',sols
 
   this%a1=sols(1)
   this%a2=sols(2)
@@ -307,10 +317,10 @@ contains
   ! 1/10 of a coefficient of eek in the energyRoot equation
   hinitial = 0.1_Long/(sqrt(2._Long*this%mass)/hbar*(this%period-this%bwidth))
 
-  select type(this)
-   type is (WfKronigPenney)
-    currState=this
-  end select
+!  select type(this)
+!   type is (WfKronigPenney)
+!    currState=>this
+!  end select
   dRdE=bmath_LDiffRichardson(getCurrEnergyRoot,eek,hinitial,error)
 
  end function WfKronigPenney_dRdE

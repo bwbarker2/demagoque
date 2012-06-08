@@ -570,13 +570,14 @@ subroutine procOptionLine(inline)
    case("initState_KronigPenney")
     read(inline(iend+1:len(inline)),*)iin(1),rin(1),rin(2)
     useInitState_KronigPenney=.true.
-    call initSuperWavefunction%add(new_WfKronigPenney( &
-                             m0,iin(1),rin(1),rin(2),2._Long*xLa))
-    initState_KronigPenney = new_WfKronigPenney( &
+!    call initSuperWavefunction%add(new_WfKronigPenney( &
+!                             m0,iin(1),rin(1),rin(2),2._Long*xLa))
+    initState_KronigPenney => new_WfKronigPenney( &
                              m0,iin(1),rin(1),rin(2),2._Long*xLa)
-!    call initSuperWavefunction%add(initState_KronigPenney)
-write(*,*)'procOptionLine: initState_KronigPenney=',initState_KronigPenney%getWavefn(20.2_Long)
-write(*,*)'procOptionLine: initSuperWavefunction=',initSuperWavefunction%getWavefn(20.2_Long)
+!write(ERROR_UNIT,*)'between'
+    call initSuperWavefunction%add(initState_KronigPenney)
+!write(*,*)'procOptionLine: initState_KronigPenney=',initState_KronigPenney%getWavefn(20.2_Long)
+!write(*,*)'procOptionLine: initSuperWavefunction=',initSuperWavefunction%getWavefn(20.2_Long)
     norm_thy=norm_thy+1._Long
     write(*,*)'Initial state added: initState_KronigPenney'
 
