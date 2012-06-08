@@ -55,7 +55,7 @@ contains
 
   call WfKronigPenney_calcCoeffs(this)
 
-  write(*,*)'this=',this
+  write(ERROR_UNIT,*)'new_WfKronigPenney: this=',this
 
 !  write(*,*)'Leaving function new_WfKronigPenney'
 
@@ -81,7 +81,7 @@ contains
 
   complex(Long) :: norm !normalization factor
 
-!  integer :: ii,jj
+  integer :: ii,jj
  
 
   coeffeqn(1,1) =  1._Long
@@ -103,8 +103,29 @@ contains
 
   sols=czero
 
-!evidently zcgesv (from LAPACK) wants a row-major array? Who knew?
-coeffeqn=transpose(coeffeqn)
+  !evidently zcgesv (from LAPACK) wants a row-major array? Who knew?
+  coeffeqn=transpose(coeffeqn)
+
+  !eliminate extra row by gaussian elimination
+  call zGauss(4,coeffeqn,ipivs)
+
+  !erase lower triangle that actually has weights in it
+  do ii=2,4
+   do jj=1,ii-1
+    coeffeqn(ii,jj)=czero
+   enddo
+  enddo
+
+  !set the last row (which is all zero right now) to 0 0 0 1 = 1, which will
+  ! set b2 to 1. Don't worry, normalization will happen soon.
+  coeffeqn(4,4)=cmplx(1._Long,0._Long)
+  rhs(4)=1._Long
+
+!  write(*,*)'coeffeqn:'
+!  do ii=1,4
+!   write(*,'(8E14.5)')(coeffeqn(ii,jj),jj=1,4)
+!  enddo
+!  write(*,*)'ipivs=',ipivs
 
   call zcgesv(4,1,coeffeqn,4,ipivs,rhs,4,sols,4,works,sworks,rworks,iters,infos)
 
@@ -242,10 +263,14 @@ coeffeqn=transpose(coeffeqn)
 !   type is (WfKronigPenney)
 !    write(*,*)this
 !  end select
+!write(ERROR_UNIT,*)'WfKronigPenney_getWavefn: this=',this%mass,this%level,this%v0 &
+!          ,this%bwidth,this%period, this%energy,this%a1,this%a2,this%b1 &
+!          ,this%b2,this%alpha,this%beta
 
   xc=xx+(this%period-this%bwidth)*0.5_Long
 
   do while ( xc < (-this%bwidth) )
+!   write(*,*)'xc=',xc,this%period
    xc=xc+this%period
   enddo
 
@@ -260,6 +285,8 @@ coeffeqn=transpose(coeffeqn)
    wf= this%b1*exp( imagi*this%beta*xc) &
       +this%b2*exp(-imagi*this%beta*xc)
   endif
+
+  write(ERROR_UNIT,*)'WfKroPen_getWav: a1,a2,wf=',this%a1,this%a2,wf
 
  end function WfKronigPenney_getWaveFn
 
