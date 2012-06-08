@@ -232,7 +232,7 @@ SUBROUTINE outDiagK
   IMPLICIT NONE
 
   INTEGER :: ika 
-  REAL*8 :: ddre  !, dddim
+  REAL(kind=8) :: ddre  !, dddim
 
   WRITE(42,*)'# time=',t,'fm/c'
   WRITE(42,*)'# k [fm], real, imaginary amplitudes'

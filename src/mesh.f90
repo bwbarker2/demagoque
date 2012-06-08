@@ -1787,7 +1787,7 @@ contains
    integer :: ixa,ika,ikr
    real(Long) :: trigarg
    real (Long), allocatable, dimension(:),save :: arraycos, arraysin
-   integer*8, save :: plan_cos, plan_sin  !< plans for FFTW
+   integer(kind=8), save :: plan_cos, plan_sin  !< plans for FFTW
 
    include '/usr/include/fftw3.f'
 
@@ -2053,7 +2053,7 @@ contains
    integer :: ixa,ika2,ika,ixr,sgnfac
    real (Long) :: delka2
 
-!   integer*8 :: plan
+!   integer(kind=8) :: plan
 
    complex (Long), dimension(-Nxr2:Nxr2-1) :: array
 

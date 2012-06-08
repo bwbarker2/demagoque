@@ -38,7 +38,7 @@ module lib_fftw
    complex (Long) :: arrayin(0:num-1)
    complex (Long) :: arrayout(0:num-1)
 
-   integer*8 :: plan
+   integer(kind=8) :: plan
 
 !$OMP MASTER
 
@@ -62,7 +62,7 @@ module lib_fftw
    complex (Long) :: arrayin(0:num-1)
    complex (Long) :: arrayout(0:num-1)
 
-   integer*8 :: plan
+   integer(kind=8) :: plan
 
    call dfftw_plan_dft_1d(plan,num,arrayin,arrayout, FFTW_BACKWARD, FFTW_ESTIMATE)
 
@@ -80,7 +80,7 @@ module lib_fftw
    real (Long) :: arrayin(0:num-1)
    real (Long) :: arrayout(0:num-1)
 
-   integer*8 :: plan
+   integer(kind=8) :: plan
 
    call dfftw_plan_r2r_1d(plan,num,arrayin,arrayout,FFTW_REDFT00,FFTW_ESTIMATE)
 
@@ -97,7 +97,7 @@ module lib_fftw
    real (Long) :: arrayin(0:num-1)
    real (Long) :: arrayout(0:num-1)
 
-   integer*8 :: plan
+   integer(kind=8) :: plan
 
    call dfftw_plan_r2r_1d(plan,num,arrayin,arrayout,FFTW_RODFT00,FFTW_ESTIMATE)
 

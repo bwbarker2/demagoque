@@ -270,7 +270,7 @@ real(Long) function bmath_LDiffRichardson( &
  real (Long)      ,intent(in)  :: hin    !< initial step, set to ~1/10 of 
                                          !! length scale
  integer ,optional,intent(in)  :: nmaxin !< max steps, default 25
- real*8  ,optional,intent(in)  :: errin  !< tolerance, default epzero
+ real (Long)  ,optional,intent(in)  :: errin  !< tolerance, default epzero
  integer ,optional,intent(inout) :: &
   istat  !< error flag. 0=success, 1=error above tolerance and algorithm is
          !! diverging, 2=hit max iterations without reaching
@@ -301,10 +301,10 @@ real(Long) function bmath_LDiffRichardson( &
  derr=maxdouble
  try=derr
  hh=hin
- dfdx=Z'FFFFFFFF'
+ dfdx=snan
 
  dd(0,0)=(ff(xx+hh)-ff(xx-hh))/(2._Long*hh)
- hh=hh*0.5d0
+ hh=hh*0.5_Long
 
  do ii=1,nmax
 
@@ -312,7 +312,7 @@ real(Long) function bmath_LDiffRichardson( &
 
   do jj=0,ii-1
 
-   dd(ii,jj+1)=dd(ii,jj)+(dd(ii,jj)-dd(ii-1,jj))/(4._Long**(jj+1)-1)
+   dd(ii,jj+1)=dd(ii,jj)+(dd(ii,jj)-dd(ii-1,jj))/real(4**(jj+1)-1)
    try=max(abs(dd(ii,jj+1)-dd(ii,jj)),abs(dd(ii,jj+1)-dd(ii-1,jj)))
 
    if(try<=derr) then
@@ -323,10 +323,10 @@ real(Long) function bmath_LDiffRichardson( &
 
   end do
 
-  hh = hh*0.5d0
+  hh = hh*0.5_Long
 
   !if relative error starts to get worse instead of better
-  if(abs(dd(ii,ii)-dd(ii-1,ii-1))>=2.d0*derr) then
+  if(abs(dd(ii,ii)-dd(ii-1,ii-1))>=2._Long*derr) then
    !if desired error is specified
    if(present(errin)) then
     !and our error is greater than that
