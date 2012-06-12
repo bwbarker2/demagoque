@@ -268,6 +268,7 @@ contains
   real (Long), optional, intent(in) :: tt   !< time to evolve forward
 
   real (Long) :: xc !position in the coordinate frame of the calculation
+  complex(Long) :: tfac !< factor for time evolution
 
 !  select type(this)
 !   type is (WfKronigPenney)
@@ -276,6 +277,12 @@ contains
 !write(ERROR_UNIT,*)'WfKronigPenney_getWavefn: this=',this%mass,this%level,this%v0 &
 !          ,this%bwidth,this%period, this%energy,this%a1,this%a2,this%b1 &
 !          ,this%b2,this%alpha,this%beta
+
+  if(present(tt)) then
+   tfac= -imagi*tt/hbar
+  else
+   tfac=czero
+  endif
 
   xc=xx+(this%period-this%bwidth)*0.5_Long
 
@@ -288,12 +295,17 @@ contains
    xc=xc-this%period
   enddo
 
+  ! if in the section with no potential barrier
   if (xc >= 0._Long ) then
-   wf= this%a1*exp( imagi*this%alpha*xc) &
-      +this%a2*exp(-imagi*this%alpha*xc)
+   wf= this%a1*exp( imagi*this%alpha*xc &
+                   + tfac*hbar**2/(2._Long*this%mass)*this%alpha**2) &
+      +this%a2*exp(-imagi*this%alpha*xc &
+                   + tfac*hbar**2/(2._Long*this%mass)*this%alpha**2)
   else
-   wf= this%b1*exp( imagi*this%beta*xc) &
-      +this%b2*exp(-imagi*this%beta*xc)
+   wf= this%b1*exp( imagi*this%beta*xc + tfac*this%beta**2 &
+                   + tfac*(hbar**2/(2._Long*this%mass)*this%beta**2 + this%v0)) &
+      +this%b2*exp(-imagi*this%beta*xc + tfac*this%beta**2 &
+                   + tfac*(hbar**2/(2._Long*this%mass)*this%beta**2 + this%v0))
   endif
 
 !  write(ERROR_UNIT,*)'WfKroPen_getWav: a1,a2,wf=',this%a1,this%a2,wf
