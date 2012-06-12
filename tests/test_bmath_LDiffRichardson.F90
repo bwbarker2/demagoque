@@ -23,6 +23,8 @@ program test_bmath_LDiffRichardson
 
  real(Long) :: diff, err
 
+ call phys_cons_init
+
  diff = bmath_LDiffRichardson(fsin,acos(1._Long/3._Long),pi*0.1_Long,err)
 
 end program test_bmath_LDiffRichardson
