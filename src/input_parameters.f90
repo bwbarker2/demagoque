@@ -1,4 +1,5 @@
 module input_parameters
+ use class_PotentialList
  use class_SuperWavefunction
  use class_WfKronigPenney
  use class_WfSquareWell
@@ -10,6 +11,8 @@ module input_parameters
                 ho_mateo_wt,   &  !< angular freq in transverse direction
                 ho_mateo_scat, &  !< s-wave scattering length
                 ho_mateo_Npart    !< total number of particles
+
+ class(PotentialList),pointer :: initPotentialList !< list of initial potentials
 
  integer :: potInitial    ! potential  with initial state
  integer :: potFinal      ! potential for time evolution

@@ -348,6 +348,7 @@ SUBROUTINE getStdIn
  use bexception
  use input_parameters
  use bstring
+ use class_PotHO
   USE mesh
   USE phys_cons
   USE prec_def
@@ -424,6 +425,7 @@ SUBROUTINE getStdIn
 
  !set default options
  initialSeparation=0.d0  !don't use initial separation
+ initPotentialList => new_PotentialList()
  initState_gaussian=.false.
  initState_gaussianNuclear=.false.
  initState_cosine=.false.
@@ -522,6 +524,8 @@ subroutine procOptionLine(inline)
  use bexception
  use bstring
  use input_parameters
+ use class_PotHO
+ use class_PotSquareWell
  use mesh
  use phys_cons
  use prec_def
@@ -541,6 +545,17 @@ subroutine procOptionLine(inline)
    read(inline(iend+1:len(inline)),*)initialSeparation
    write(*,*)'Initial Separation, initialSeparation=' &
              ,initialSeparation,'fm'
+
+  case("initPotHO")
+   read(inline(iend+1:len(inline)),*)rin(1)
+   call initPotentialList%add(new_PotHO(m0,rin(1)))
+   write(*,*)'Added initial potential HO, frequency=',rin(1)
+write(*,*)
+
+  case("initPotSquareWell")
+    read(inline(iend+1:len(inline)),*)rin(1),rin(2)
+    call initPotentialList%add(new_PotSquareWell(rin(1),rin(2)))
+    write(*,*)'Added initial potential SquareWell. half-width,v0=',rin(1),rin(2)
 
   case("initState_gaussianNuclear")
     read(inline(iend+1:len(inline)),*)Nmax

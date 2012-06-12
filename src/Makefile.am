@@ -5,7 +5,8 @@ AM_FFLAGS = -ggdb -O3
 bin_PROGRAMS = demagoque
 demagoque_SOURCES = iso_varying_string.f90 prec_def.f90 phys_cons.f90 \
           bexception.f90 bmath.f90 \
-          bstring.f90 \
+          bstring.f90 class_Potential.F90 class_PotentialList.F90 \
+          class_PotHO.F90 class_PotSquareWell.F90 \
           cons_laws.f90 class_Wavefunction.F90 class_SuperWavefunction.F90 \
           class_WfSquareWell.F90 class_WfKronigPenney.F90 \
           input_parameters.f90 lib_lapack.f90 \

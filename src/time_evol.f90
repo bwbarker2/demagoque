@@ -601,6 +601,9 @@ subroutine getPotX(potX,potType,ix)
    potX=0e0_Long
  end select
 
+ potX=potX+initPotentialList%potV_x(xa(ix)) &
+          +initPotentialList%potV_denx(getDenDiagX(ix))
+
 end subroutine getPotX
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

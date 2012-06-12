@@ -1,16 +1,16 @@
 ! ........... READ AND WRITE PARAMETERS
-1 ! ntime
+5 ! ntime
 ! ........... PHYSICAL PARAMETERS
 0.5d0 ! delt [fm/c]
-1 ! Nevt
+10000 ! Nevt
 0.d0 ! EA [MeV]
 25d0  ! xLa [fm]
 25d0 ! xLr [fm]
 100 ! Nxa
 100 ! Nxr
 ! ............. POTENTIAL PARAMETERS
-0  ! potInitial
-0 ! potFinal
+-1  ! potInitial
+-1 ! potFinal
 30 70 1200  ! tad,wtad,Nad
 1  ! iadib
 ! ............. IMAGINARY EVOLUTION PARAMETERS
@@ -23,14 +23,15 @@ useFrameXXP
   !unitSystem bec
 unitSystem nuclear
   !initialSeparation 16d0       !separation between centers in fm
+  !initPotHO 2.d0
+initPotSquareWell 14.25d0 16.d0  !half-width, height
   !initState_sqWell 87.0d0 0 0.001d0 14.5d0
   !pot4 0.003 5.278 0.000529 100
   !initState_gaussianNuclear 0  !use this, Nmax
   !initState_cosine 1 1d0 0.0d0   !wave number, norm, phase shift
   !initState_kdelta 1d0 0.1d0     !norm, position
-initState_KronigPenney 0,16d0,20d0  !level, v0, rectangle width
-initState_KronigPenney 4,16d0,20d0  !level, v0, rectangle width
-!initState_KronigPenney 3,16d0,20d0  !level, v0, rectangle width
+initState_KronigPenney 0,16d0,21.5d0  !level, v0, rectangle width
+initState_KronigPenney 2,16d0,21.5d0  !level, v0, rectangle width
   !initState_plane 0 1d0 0d0    !wave number, norm, phase shift
 splitOperatorMethod 3  !use this, setting order of accuracy in time
   !useImCutoff 1000d0 6d0 2d0  !useImCutoff, cutoff w0,x0,d0
