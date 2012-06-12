@@ -143,7 +143,7 @@ subroutine initialState
           if(useInitState_SqWell) then
            y1=initState_sqWell%getWavefn(x1)
            y2=initState_sqWell%getWavefn(x2)
-           den0=den0+y1*y2
+           den0=den0+conjg(y1)*y2
           endif
 
 !           if(useImEvol) then
