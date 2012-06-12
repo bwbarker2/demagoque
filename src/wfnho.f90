@@ -69,6 +69,7 @@ real (Long) FUNCTION Hn(x,n)
      enddo
      Hn=hm
    else
+    Hn=0._Long  !just to suppress compiler warning -Wmaybe-uninitialized
     call throwException('wfnho:Hn: cannot have negative order of Hermite polynomial',BEXCEPTION_FATAL)
   endif
   
