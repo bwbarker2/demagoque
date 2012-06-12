@@ -20,7 +20,7 @@ results/*
 results.*
 src/demagoque
 tests/bmath_dZeroBrent_run
-tests/class_SquareWellState_run
+tests/class_WfSquareWell_run
 tests/test_bmath_LDiffRichardson
 a.out
 data
