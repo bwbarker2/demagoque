@@ -24,6 +24,7 @@ class_WfSquareWell_run_SOURCES = $(srcdir)/prec_def.f90 \
 test_bmath_LDiffRichardson_SOURCES = $(srcdir)/prec_def.f90 \
                                      $(srcdir)/bexception.f90 \
                                      $(srcdir)/bmath.f90 \
+                                     $(srcdir)/phys_cons.f90 \
                                      test_bmath_LDiffRichardson.F90
 
 mostlyclean-local:
