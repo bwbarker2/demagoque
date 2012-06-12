@@ -86,6 +86,8 @@ SUBROUTINE outX
   call outSpikinessX
   call ener_x
 
+  call outAnalyticX
+
   ! output analytic oscillator to compare with numeric
   if(potFinal==-1.AND.Nmax==0.AND.EA<1d-5) call outAnalHarmonic
 !  call howHermitian
@@ -120,6 +122,32 @@ SUBROUTINE outK
 END SUBROUTINE outK
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine outAnalyticX
+ use formatting
+ use input_parameters
+ use mesh
+ use time
+ implicit none
+
+  integer, save :: analyticx_diag
+
+  integer :: ixa
+
+  if(firstOutput)then
+  open(newunit=analyticx_diag, file=char(fout_ev_pre)//'analyticx_diag.dat')
+  write(analyticx_diag,*)'# xx     probability'
+ endif
+
+ do ixa=Nxan,Nxax
+  write(analyticx_diag,*)xa(ixa),abs(initSuperWavefunction%getWavefn(xa(ixa),t))**2 
+ enddo
+
+ write(analyticx_diag,*)
+ write(analyticx_diag,*)
+
+end subroutine outAnalyticX
+
 
 SUBROUTINE outDenMat(fileim_u, filere_u)
   !! outDenMat - writes real, imaginary density matrices to file unit specified by inputs
