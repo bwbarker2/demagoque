@@ -170,9 +170,9 @@ SUBROUTINE evol_k(dtim)
         edt=edt*(-hbar/m0*0.5_Long*(k1*k1+k2*k2)*dtim)
         call setDenK(ikr,ika,exp(edt)*getDenK(ikr,ika))
        else
-        !time evolution operator = exp(-i(E-E')t/h)
-        !                        = exp(-ih/2m(k^2-k'^2))
-        edt=edt*(-hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
+        !time evolution operator = exp(i(E-E')t/h)
+        !                        = exp(ih/2m(k^2-k'^2))
+        edt=edt*(hbar/m0*0.5_Long*(k1*k1-k2*k2)*dtim)
 !        edt=edt*(-hbar/m0*ka(ika)*kr(ikr)*dtim)
 
 !        ! The following is valid only for useMeshShifted=.false.
@@ -377,8 +377,8 @@ SUBROUTINE evol_x(dtim)
     udt=-(ux1+ux2)*dtim/hbar
     call setDenX(ixa,ixr,cutfac*exp(udt)*getDenX(ixa,ixr))
    else
-     !time evolution operator = exp(-i(U(x)-U(x'))t/h)
-    udt=-(ux1-ux2)*dtim/hbar
+     !time evolution operator = exp(i(U(x)-U(x'))t/h)
+    udt=(ux1-ux2)*dtim/hbar
    if(debugxall)debugudt=udt
  !   tpots(ixr)=udt  !debugging
     cos2k=cos(udt)
