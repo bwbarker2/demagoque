@@ -312,7 +312,7 @@ real(Long) function bmath_LDiffRichardson( &
 
   do jj=0,ii-1
 
-   dd(ii,jj+1)=dd(ii,jj)+(dd(ii,jj)-dd(ii-1,jj))/real(4**(jj+1)-1)
+   dd(ii,jj+1)=dd(ii,jj)+(dd(ii,jj)-dd(ii-1,jj))/real(4**(jj+1)-1,Long)
    try=max(abs(dd(ii,jj+1)-dd(ii,jj)),abs(dd(ii,jj+1)-dd(ii-1,jj)))
 
    if(try<=derr) then

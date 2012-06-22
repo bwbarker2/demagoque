@@ -152,10 +152,10 @@ contains
   norm =   (this%a1*conjg(this%a1)+this%a2*conjg(this%a2)) &
            * (this%period-this%bwidth) &
      + 2._Long*real(this%a1*conjg(this%a2)/(2._Long*imagi*this%alpha) &
-                    * exp(2._Long*imagi*this%alpha*(this%period-this%bwidth))) &
+                    * exp(2._Long*imagi*this%alpha*(this%period-this%bwidth)),Long) &
      + (this%b1*conjg(this%b1)+this%b2*conjg(this%b2))*this%bwidth &
      + 2._Long*real(conjg(this%b1)*this%b2/(2._Long*imagi*this%beta) &
-                    * exp(2._Long*imagi*this%beta*this%bwidth))
+                    * exp(2._Long*imagi*this%beta*this%bwidth),Long)
 
   norm=1._Long/sqrt(norm)
 
@@ -355,7 +355,7 @@ contains
             - (alpha**2+beta**2)/(2._Long*alpha*beta) &
               * sin(alpha*(this%period-this%bwidth))*sin(beta*this%bwidth) &
             - 1._Long &
-           )
+           ,Long)
 
  end function WfKronigPenney_energyRoot
 
