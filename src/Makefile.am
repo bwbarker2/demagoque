@@ -19,7 +19,8 @@ demagoque_SOURCES = iso_varying_string.f90 prec_def.f90 phys_cons.f90 \
 
 #demagoque_CPPFLAGS = -fbounds-check -Wall -ggdb -O3
 #demagoque_FCFLAGS = -ggdb -std=f2008 -warn -check all -stand f03 -standard-semantics -O3 #-fdefault-real-8 -fdefault-double-8
-demagoque_FCFLAGS = -ggdb -std=f2008 -fcheck=all -Wall -O3 -Wno-surprising
+demagoque_FCFLAGS = -ggdb -std=f2008 -fcheck=all -Wall -O3 -Wno-surprising \
+                    -fdefault-real-8 -fdefault-double-8
 
 mostlyclean-local:
 	rm -f *.mod
