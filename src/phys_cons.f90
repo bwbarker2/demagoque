@@ -4,6 +4,7 @@
 !! \todo code them in SI, provide conversion routines, see
 !!       class_PhysicalConstants for current work
 MODULE phys_cons
+  use iso_varying_string
   USE prec_def
   IMPLICIT NONE
 
@@ -85,6 +86,9 @@ MODULE phys_cons
   real (Long) :: meter !< magnitude of meter in current unit system
   real (Long) :: second
 
+  !> Abbreviation of unit of time in current unit system
+  type(varying_string) :: phys_cons_unit_abbrev_time
+
 contains
 
  subroutine phys_cons_init
@@ -97,7 +101,6 @@ contains
   inv2pi=1e0_Long/(2e0_Long*pi)
   invpi=1e0_Long/pi  !1/pi
   invsqrt2pi=sqrt(inv2pi)
-
 
  end subroutine phys_cons_init
 
@@ -126,6 +129,8 @@ contains
 !
   hbar = PLANCKS_CONSTANT_HBAR_MEV_FM_C  !MeV fm/c
   m0 = 0.5_Long*(MASS_NEUTRON_MEV_C2+MASS_PROTON_MEV_C2)
+
+  phys_cons_unit_abbrev_time='fm/c'
 
   phys_cons_isInitialized=.true.
 
@@ -156,6 +161,8 @@ contains
   m0 = MASS_REL_RUBIDIUM_87
 
 !  m0 = 1
+
+  phys_cons_unit_abbrev_time='ms'
 
   phys_cons_isInitialized=.true.
 
