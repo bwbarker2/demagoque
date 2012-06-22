@@ -1,6 +1,7 @@
-AM_FCFLAGS = -ggdb -O3
 AM_FCFLAGS_f90 = $(AM_FCFLAGS)
-AM_FFLAGS = -ggdb -O3
+AM_FFLAGS = -ggdb -O3 -std=f2008 -fcheck=all -Wall -O3 -Wno-surprising \
+            -fdefault-real-8 -fdefault-double-8
+AM_FCFLAGS = $(AM_FFLAGS)
 
 bin_PROGRAMS = demagoque
 demagoque_SOURCES = iso_varying_string.f90 prec_def.f90 phys_cons.f90 \
@@ -17,19 +18,6 @@ demagoque_SOURCES = iso_varying_string.f90 prec_def.f90 phys_cons.f90 \
           renormalizeDM.f90 skyrme_params.f90 \
           time_evol.f90 wfnho.f90
 
-#demagoque_CPPFLAGS = -fbounds-check -Wall -ggdb -O3
-#demagoque_FCFLAGS = -ggdb -std=f2008 -warn -check all -stand f03 -standard-semantics -O3 #-fdefault-real-8 -fdefault-double-8
-demagoque_FCFLAGS = -ggdb -std=f2008 -fcheck=all -Wall -O3 -Wno-surprising \
-                    -fdefault-real-8 -fdefault-double-8
-
 mostlyclean-local:
 	rm -f *.mod
 
-#SUFFIXES = .mod
-#
-#.o.mod:
-#	$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
-#
-#.obj.mod:
-#	$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) `$(CYGPATH_W) '$<'`
-#
