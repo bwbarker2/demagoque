@@ -87,6 +87,8 @@ SUBROUTINE outX
   call ener_x
 
   call outAnalyticX
+  call outAnalyticXDiff
+  call outAnalyticXDiffness
 
   ! output analytic oscillator to compare with numeric
   if(potFinal==-1.AND.Nmax==0.AND.EA<1d-5) call outAnalHarmonic
@@ -127,10 +129,11 @@ subroutine outAnalyticX
  use formatting
  use input_parameters
  use mesh
+ use phys_cons
  use time
  implicit none
 
-  integer, save :: analyticx_diag
+  integer, save :: analyticx_diag  !< diagonal of analytic wavefunction output
 
   integer :: ixa
 
@@ -138,6 +141,8 @@ subroutine outAnalyticX
   open(newunit=analyticx_diag, file=char(fout_ev_pre)//'analyticx_diag.dat')
   write(analyticx_diag,*)'# xx     probability'
  endif
+
+ write(analyticx_diag,*)'# time = ',char(phys_cons_unit_abbrev_time)
 
  do ixa=Nxan,Nxax
   write(analyticx_diag,*)xa(ixa),abs(initSuperWavefunction%getWavefn(xa(ixa),t))**2 
@@ -148,6 +153,94 @@ subroutine outAnalyticX
 
 end subroutine outAnalyticX
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> outputs data of analytic minus density matrix evolution
+subroutine outAnalyticXDiff
+ use formatting
+ use input_parameters
+ use mesh
+ use phys_cons
+ use time
+ implicit none
+
+  integer, save :: file_diff_diag  !< diagonal of analytic - denmat evolution output
+
+  integer :: ixa
+
+  if(firstOutput)then
+  open(newunit=file_diff_diag, file=char(fout_ev_pre)//'analyticXDiff_diag.dat')
+  write(file_diff_diag,*)'# xx     analytic minus denmat evolution density'
+ endif
+
+ write(file_diff_diag,*)'# time = ',char(phys_cons_unit_abbrev_time)
+
+ do ixa=Nxan,Nxax
+  write(file_diff_diag,*)xa(ixa) &
+    ,abs(initSuperWavefunction%getWavefn(xa(ixa),t))**2 &
+     -getDenDiagX(ixa)
+ enddo
+
+ write(file_diff_diag,*)
+ write(file_diff_diag,*)
+
+end subroutine outAnalyticXDiff
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine outAnalyticXDiffness
+ use formatting
+ use input_parameters
+ use mesh
+ use phys_cons
+ use time
+ implicit none
+
+  integer, save :: file_diff_diag  !< diagonal of analytic - denmat evolution output
+
+  integer :: ixa,ixr
+
+  real (Long) :: sumxre,sumxim,sum2xre,sum2xim,totaln
+  complex (Long) :: diff
+
+  if(firstOutput)then
+  open(newunit=file_diff_diag, file=char(fout_ev_pre)//'analyticXDiffness.dat')
+  write(file_diff_diag,*) &
+   '# time   ave-diff-re   ave-diff-im   rms-diff-re rms-diff-im'
+ endif
+
+! write(file_diff_diag,*)'# time = ',char(phys_cons_unit_abbrev_time)
+
+ sumxre = 0._Long
+ sum2xre = 0._Long
+ sumxim = 0._Long
+ sum2xim = 0._Long
+
+ do ixa=Nxan,Nxax
+  do ixr=Nxrn,Nxrx
+   diff = conjg(initSuperWavefunction%getWavefn(xx1(ixa,ixr),t)) &
+            * initSuperWavefunction%getWavefn(xx2(ixa,ixr),t) &
+          - getDenX(ixa,ixr)
+   sumxre=sumxre+real(diff)
+   sumxim=sumxim+aimag(diff)
+   sum2xre=sum2xre+(real(diff))**2
+   sum2xim=sum2xim+(aimag(diff))**2
+  enddo
+ enddo
+
+  totaln=1._Long/((Nxax-Nxan+1)*(Nxrx-Nxrn+1))
+
+  sumxre=sumxre*totaln
+  sumxim=sumxim*totaln
+  sum2xre=sqrt(sum2xre*totaln)
+  sum2xim=sqrt(sum2xim*totaln)
+
+ write(file_diff_diag,*)t,sumxre,sumxim,sum2xre,sum2xim
+
+end subroutine outAnalyticXDiffness
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 SUBROUTINE outDenMat(fileim_u, filere_u)
   !! outDenMat - writes real, imaginary density matrices to file unit specified by inputs
