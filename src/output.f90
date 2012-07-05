@@ -90,6 +90,8 @@ SUBROUTINE outX
   call outAnalyticXDiff
   call outAnalyticXDiffness
 
+  call outEigens
+
   ! output analytic oscillator to compare with numeric
   if(potFinal==-1.AND.Nmax==0.AND.EA<1d-5) call outAnalHarmonic
 !  call howHermitian
@@ -414,6 +416,53 @@ SUBROUTINE outDiagX
   write(*,*)'mean_abs_x=',sum2/sum1
 
 END SUBROUTINE outDiagX
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine outEigens
+ use bexception
+ use formatting, only : fout_ev_pre
+ use iso_varying_string, only : char
+ use lib_lapack
+ use mesh
+ use phys_cons, only : phys_cons_unit_abbrev_time
+ use time
+ implicit none
+
+ integer, save :: filename ! unit of output file
+ integer :: ii
+
+ complex(Long), dimension(Nxax-Nxan+1) :: evals
+ complex(Long), dimension(Nxax-Nxan+1,Nxax-Nxan+1) :: evecs
+
+ if(Nxax-Nxan/=Nxrx-Nxrn) then
+  call throwException('outEigens: Matrix not square, not outputting eigenvalues', BEXCEPTION_WARNING)
+  return
+ endif
+
+ call getEigenSq(denmat,Nxax-Nxan+1,evals,evecs)
+
+ if(firstOutput) then
+  open(newunit=filename, file=char(fout_ev_pre)//'eigens.dat')
+  write(filename,*)'# List of eigenvalues at each time'
+  write(filename,*)'# real   imaginary'
+ endif
+
+ write(filename,*)'# time =',t,char(phys_cons_unit_abbrev_time)
+
+ do ii=1,size(evals)
+  write(filename,*)ii,real(evals(ii)),aimag(evals(ii))
+ enddo
+
+ write(filename,*)
+ write(filename,*)
+
+ if(lastOutput) close(filename)
+
+end subroutine outEigens
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 SUBROUTINE outEner
   use cons_laws
