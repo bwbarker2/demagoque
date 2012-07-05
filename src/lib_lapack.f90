@@ -30,7 +30,7 @@ module lib_lapack
    implicit none
 
    integer,                                intent(in) :: num  ! dimension and rank of matrix
-   complex (Long), dimension(0:num-1,0:num-1), intent(inout) :: mat ! input matrix
+   complex (Long), dimension(0:num-1,0:num-1), intent(in) :: mat ! input matrix
    complex (Long), dimension(0:num-1),         intent(out) :: evals !eigenvalues
    complex (Long), dimension(0:num-1,0:num-1), intent(inout) :: evecs !eigenvectors, ith column corresponds to ith eigenvalue in evals array
 
