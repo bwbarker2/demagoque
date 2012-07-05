@@ -107,7 +107,10 @@ SUBROUTINE time_evolution
 !   call mesh_setReflectedLR(.false.)
 
 ! NOTE: calling this subroutine during normal evolution causes divergences if ntime.ne.1
-   if(useImEvol)call renormalizeDM
+   if(useImEvol) then
+    call ener_x
+    call renormalizeDM
+   endif
 
   ENDDO
 
