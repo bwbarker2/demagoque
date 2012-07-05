@@ -139,6 +139,8 @@ PROGRAM dmtdhf
    open(unit=72,file='results/imev_2dx.dat')
    open(unit=73,file='results/imev_2dw.dat')
    open(unit=74,file='results/imev_2dk.dat')
+   open(unit=75,file='results/imev_mean_abs_x.dat')
+   open(unit=76,file='results/imev_pot.dat')
 
    Nt=Nimev
 
@@ -163,6 +165,8 @@ PROGRAM dmtdhf
    close(72)
    close(73)
    close(74)
+   close(75)
+   close(76)
 
   endif !useImEvol
 
