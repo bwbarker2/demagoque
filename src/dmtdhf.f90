@@ -144,6 +144,8 @@ PROGRAM dmtdhf
 
    Nt=Nimev
 
+   call time_initialize
+
    call time_evolution
 
    call renormalizeDM
