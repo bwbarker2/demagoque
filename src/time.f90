@@ -66,6 +66,8 @@ contains
   !! times, padding the beginning of the string with zeroes, and cutting the
   !! extra zeroes off the end.
 
+  if(allocated(timestrings)) deallocate(timestrings)
+
   allocate(timestrings(0:Nt/ntime))
 
   big=10
