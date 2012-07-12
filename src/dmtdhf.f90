@@ -122,25 +122,25 @@ PROGRAM dmtdhf
   !write(*,*)'finished initialState'
   if (useImEvol) then
 
-   call setModePrefix('imev_')
+   call setModePrefix('imev/')
 
-   open(unit=41,file='results/imev_denmat_x_t.dat')
-   open(unit=42,file='results/imev_denmat_k_t.dat')
-   open(unit=43,file='results/imev_cons_rel.dat')
-   open(unit=44,file='results/imev_cons_abs.dat')
-   open(unit=45,file='results/imev_denmatan_x_t.dat') 
-   OPEN(unit=61,file='results/imev_2dxim.dat')
-   OPEN(unit=62,file='results/imev_2dxre.dat')
-   OPEN(unit=66,file='results/imev_2dkim.dat')
-   OPEN(unit=67,file='results/imev_2dkre.dat')
-   open(unit=68,file='results/imev_2dwim.dat')
-   open(unit=69,file='results/imev_2dwre.dat')
-   OPEN(unit=70,file='results/imev_pk2.dat')
-   open(unit=72,file='results/imev_2dx.dat')
-   open(unit=73,file='results/imev_2dw.dat')
-   open(unit=74,file='results/imev_2dk.dat')
-   open(unit=75,file='results/imev_mean_abs_x.dat')
-   open(unit=76,file='results/imev_pot.dat')
+   open(unit=41,file=char(fout_ev_pre)//'denmat_x_t.dat')
+   open(unit=42,file=char(fout_ev_pre)//'denmat_k_t.dat')
+   open(unit=43,file=char(fout_ev_pre)//'cons_rel.dat')
+   open(unit=44,file=char(fout_ev_pre)//'cons_abs.dat')
+   open(unit=45,file=char(fout_ev_pre)//'denmatan_x_t.dat') 
+   OPEN(unit=61,file=char(fout_ev_pre)//'2dxim.dat')
+   OPEN(unit=62,file=char(fout_ev_pre)//'2dxre.dat')
+   OPEN(unit=66,file=char(fout_ev_pre)//'2dkim.dat')
+   OPEN(unit=67,file=char(fout_ev_pre)//'2dkre.dat')
+   open(unit=68,file=char(fout_ev_pre)//'2dwim.dat')
+   open(unit=69,file=char(fout_ev_pre)//'2dwre.dat')
+   OPEN(unit=70,file=char(fout_ev_pre)//'pk2.dat')
+   open(unit=72,file=char(fout_ev_pre)//'2dx.dat')
+   open(unit=73,file=char(fout_ev_pre)//'2dw.dat')
+   open(unit=74,file=char(fout_ev_pre)//'2dk.dat')
+   open(unit=75,file=char(fout_ev_pre)//'mean_abs_x.dat')
+   open(unit=76,file=char(fout_ev_pre)//'pot.dat')
 
    Nt=Nimev
 
