@@ -124,22 +124,6 @@ PROGRAM dmtdhf
 
    call setModePrefix('imev/')
 
-   open(unit=41,file=char(fout_ev_pre)//'denmat_x_t.dat')
-   open(unit=42,file=char(fout_ev_pre)//'denmat_k_t.dat')
-   open(unit=43,file=char(fout_ev_pre)//'cons_rel.dat')
-   open(unit=44,file=char(fout_ev_pre)//'cons_abs.dat')
-   open(unit=45,file=char(fout_ev_pre)//'denmatan_x_t.dat') 
-   OPEN(unit=61,file=char(fout_ev_pre)//'2dxim.dat')
-   OPEN(unit=62,file=char(fout_ev_pre)//'2dxre.dat')
-   OPEN(unit=66,file=char(fout_ev_pre)//'2dkim.dat')
-   OPEN(unit=67,file=char(fout_ev_pre)//'2dkre.dat')
-   open(unit=68,file=char(fout_ev_pre)//'2dwim.dat')
-   open(unit=69,file=char(fout_ev_pre)//'2dwre.dat')
-   OPEN(unit=70,file=char(fout_ev_pre)//'pk2.dat')
-   open(unit=72,file=char(fout_ev_pre)//'2dx.dat')
-   open(unit=73,file=char(fout_ev_pre)//'2dw.dat')
-   open(unit=74,file=char(fout_ev_pre)//'2dk.dat')
-   open(unit=75,file=char(fout_ev_pre)//'mean_abs_x.dat')
    open(unit=76,file=char(fout_ev_pre)//'pot.dat')
 
    Nt=Nimev
@@ -152,24 +136,8 @@ PROGRAM dmtdhf
 
    useImEvol=.false.
 
-   close(41)
-   close(42)
-   close(43)
-   close(44)
-   close(45)
-   close(61)
-   close(62)
-   close(66)
-   close(67)
-   close(68)
-   close(69)
-   close(70)
-   close(72)
-   close(73)
-   close(74)
-   close(75)
    close(76)
-
+ 
   endif !useImEvol
 
   if (potInitial.NE.potFinal) useAdiabatic=.true.
@@ -180,64 +148,26 @@ PROGRAM dmtdhf
 
    call setModePrefix('ad_')
 
-   ! open files to output adiabatic evolution information
-   open(unit=41,file='results/ad_denmat_x_t.dat')
-   open(unit=42,file='results/ad_denmat_k_t.dat')
-   open(unit=43,file='results/ad_cons_rel.dat')
-   open(unit=44,file='results/ad_cons_abs.dat')
-   open(unit=45,file='results/ad_denmatan_x_t.dat') 
-   open(unit=54,file='results/obdm.dat', form='unformatted')
-   OPEN(unit=61,file='results/ad_2dxim.dat')
-   OPEN(unit=62,file='results/ad_2dxre.dat')
-   OPEN(unit=66,file='results/ad_2dkim.dat')
-   OPEN(unit=67,file='results/ad_2dkre.dat')
-   open(unit=68,file='results/ad_2dwim.dat')
-   open(unit=69,file='results/ad_2dwre.dat')
-   OPEN(unit=70,file='results/ad_pk2.dat')
-   open(unit=72,file='results/ad_2dx.dat')
-   open(unit=73,file='results/ad_2dw.dat')
-   open(unit=74,file='results/ad_2dk.dat')
-   open(unit=75,file='results/ad_mean_abs_x.dat')
-   open(unit=76,file='results/ad_pot.dat')
+   open(unit=76,file=char(fout_ev_pre)//'pot.dat')
+
+   call output_ModeFilesOpen
 
    !set number of timesteps for adiabatic switching
    Nt=Nad
+
+   call time_initialize
 
 !  call mesh_setReflectedLR(.true.) !debug, reflect it
    call time_evolution
 !  call mesh_setReflectedLR(.false.) !debug, reflect it back
 
-   call outDenUnf
-
-   ! close files
-   close(41)
-   close(42)
-   close(43)
-   close(44)
-   close(45)
-   close(54)
-   close(61)
-   close(62)
-   close(66)
-   close(67)
-   close(68)
-   close(69)
-   close(70)
-   close(72)
-   close(73)
-   close(74)
-   close(75)
    close(76)
+
+   call output_ModeFilesClose
 
    useAdiabatic=.false.
 
   elseif(useAdiabatic) then
-
-   open(unit=54,file='results/obdm.dat', form='unformatted')
-
-   call inDenUnf
-
-   close(54)
 
    useAdiabatic=.false.
  
@@ -269,6 +199,8 @@ PROGRAM dmtdhf
 !  open(unit=101,file='results/pot_diag.dat')
 
   Nt=Nevt
+
+   call time_initialize
 
 !  write(*,*)'new Nt=',Nt
 
