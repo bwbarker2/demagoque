@@ -39,6 +39,8 @@ SUBROUTINE output
 
   if(it==Nt)lastOutput=.true.
 
+  if(firstOutput) call output_ModeFilesOpen
+
   write(*,*)'running step',it
 
 !  call mesh_setReflectedLR(.false.)
@@ -63,6 +65,8 @@ SUBROUTINE output
   ! write factor that kinetic must be multiplied by to conserve energy
   write(*,*)'timestep,kinetic_correction_factor:',it,(ep0+ek0-epot)/ekin
   !write(*,*)'timestep,kinetic_correction_factor:',it,(epot-ep0)/(ek0-ekin)
+
+ if(lastOutput) call output_ModeFilesClose
 
  if(firstOutput)firstOutput=.false.
  if(lastOutput)lastOutput=.false.
@@ -91,6 +95,8 @@ SUBROUTINE outX
   call outAnalyticXDiffness
 
   call outEigens
+
+  call outDenUnf
 
   ! output analytic oscillator to compare with numeric
   if(potFinal==-1.AND.Nmax==0.AND.EA<1d-5) call outAnalHarmonic
@@ -508,21 +514,77 @@ END SUBROUTINE outEner
 
 subroutine outDenUnf
  !! outDenUnf - writes the density matrix to the unformatted file obdm.dat
+ use formatting
  use input_parameters
  use mesh
+ use time
  implicit none
 
- integer :: ixa,ixr
+ integer :: ixa,ixr,fileu
+ 
+ open(newunit=fileu, form='unformatted', &
+      file=char(fout_ev_pre//'ufo_'//time_getString(it/ntime)//'.dat'))
 
- write(54) Nxa,Nxr,Nmax
+
+! write(fileu) Nxa,Nxr,Nmax
 
  do ixa=Nxan,Nxax
   do ixr=Nxrn,Nxrx
-   write(54)denmat(ixa,ixr)
+   write(fileu)denmat(ixa,ixr)
   enddo
  enddo
 
+ close(fileu)
+
 end subroutine outDenUnf
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine output_ModeFilesClose
+ implicit none
+
+ close(41)
+ close(42)
+ close(43)
+ close(44)
+ close(45)
+ close(61)
+ close(62)
+ close(66)
+ close(67)
+ close(68)
+ close(69)
+ close(70)
+ close(72)
+ close(73)
+ close(74)
+ close(75)
+ 
+end subroutine output_ModeFilesClose
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+subroutine output_ModeFilesOpen
+ use formatting
+ implicit none
+
+ open(unit=41,file=char(fout_ev_pre)//'denmat_x_t.dat')
+ open(unit=42,file=char(fout_ev_pre)//'denmat_k_t.dat')
+ open(unit=43,file=char(fout_ev_pre)//'cons_rel.dat')
+ open(unit=44,file=char(fout_ev_pre)//'cons_abs.dat')
+ open(unit=45,file=char(fout_ev_pre)//'denmatan_x_t.dat') 
+ OPEN(unit=61,file=char(fout_ev_pre)//'2dxim.dat')
+ OPEN(unit=62,file=char(fout_ev_pre)//'2dxre.dat')
+ OPEN(unit=66,file=char(fout_ev_pre)//'2dkim.dat')
+ OPEN(unit=67,file=char(fout_ev_pre)//'2dkre.dat')
+ open(unit=68,file=char(fout_ev_pre)//'2dwim.dat')
+ open(unit=69,file=char(fout_ev_pre)//'2dwre.dat')
+ OPEN(unit=70,file=char(fout_ev_pre)//'pk2.dat')
+ open(unit=72,file=char(fout_ev_pre)//'2dx.dat')
+ open(unit=73,file=char(fout_ev_pre)//'2dw.dat')
+ open(unit=74,file=char(fout_ev_pre)//'2dk.dat')
+ open(unit=75,file=char(fout_ev_pre)//'mean_abs_x.dat')
+
+end subroutine output_ModeFilesOpen
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -567,38 +629,26 @@ end subroutine outSpikinessX
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine inDenUnf
+subroutine inDenUnf(filename,indenmat)
  !! inDenUnf - reads the density matrix that is written in previous subroutine
  use input_parameters
  use mesh
  implicit none
 
- integer :: ixa,ixr,Nxa1,Nxr1,Nmax1
+ character(len=*), intent(in) :: filename !< name of file to read from
+ complex (Long), dimension(Nxan:Nxax,Nxrn:Nxrx), intent(out) &
+                :: indenmat !< matrix to save to
 
- read(54) Nxa1,Nxr1,Nmax1
+ integer :: ixa,ixr,fileu
 
- if(Nxa1.NE.Nxa) then
-  write(*,*) 'Nxa=',Nxa,'Nxa from obdm=',Nxa1
-  write(*,*) 'RUN ADIABATIC SWITCHING?'
-  stop
- endif
-
- if(Nxr1.NE.Nxr) then
-  write(*,*) 'Nxr=',Nxr,'Nxr from obdm=',Nxr1
-  write(*,*) 'RUN ADIABATIC SWITCHING?'
-  stop
- endif
-
- if(Nmax1.ne.Nmax) then
-  write(*,*) 'Nmaxx=',Nmax,'Nmaxx from obdm=',Nmax1
-  write(*,*) 'RUN ADIABATIC SWITCHING?'
-  stop
- endif
+ open(newunit=fileu, form='unformatted', file=filename)
 
  do ixa=Nxan,Nxax
   do ixr=Nxrn,Nxrx
-   read(54)denmat(ixa,ixr)
+   read(fileu)indenmat(ixa,ixr)
   enddo
  enddo
+
+ close(fileu)
 
 end subroutine inDenUnf

@@ -19,8 +19,10 @@ doc/latex
 results/*
 results.*
 src/demagoque
+src/demagoque-process
 tests/bmath_dZeroBrent_run
 tests/class_WfSquareWell_run
 tests/test_bmath_LDiffRichardson
 a.out
 data
+./analysis
