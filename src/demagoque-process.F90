@@ -22,6 +22,8 @@ program demagoqueprocess
 
  call calcInitial
 
+ denState=SPACE
+
  allocate(denmatInitial(Nxan:Nxax,Nxrn:Nxrx))
 
  Nt=Nevt
