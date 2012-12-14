@@ -29,16 +29,16 @@ SUBROUTINE time_evolution
   
   REAL (Long) :: dt2  ! half delt
   real (Long) :: soms5  !split operator method s_5
-!  real (Long) :: ch_unc !check uncertainty condition
+  real (Long) :: ch_unc !check uncertainty condition
 
   integer :: ii
 
  !check to be sure that uncertainty condition is met:
-! ch_unc=hbar*kLa**2/(2e0_Long*m0)*delt
-! if(ch_unc>0.1_Long) then
-!  write(*,*)'time_evolution: ch_unc=',ch_unc
-!  call throwException('time_evolution: uncertainty condition too high, ch_unc>0.1',BEXCEPTION_FATAL)
-! endif
+ ch_unc=hbar*kLa**2/(2e0_Long*m0)*delt
+ if(ch_unc>0.1_Long) then
+  write(*,*)'time_evolution: ch_unc=',ch_unc
+  call throwException('time_evolution: uncertainty condition too high, ch_unc>0.1',BEXCEPTION_FATAL)
+ endif
 
  firstOutput=.true.
 
@@ -567,6 +567,7 @@ function getWeight() result(self)
 ! real (Long), intent(out) :: weight
 
  self=1e0_Long/(1e0_Long+exp((t-tad)/wtad))
+! self=1e0_Long/(1e0_Long+exp((t-(Nad*delt*0.5))/wtad))
 
 end function getWeight
 
