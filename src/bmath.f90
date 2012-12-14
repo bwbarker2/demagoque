@@ -20,8 +20,11 @@ module bmath
 !            National Superconducting Cyclotron Laboratory
 !            Michigan State University
 !            1 Cyclotron, East Lansing, MI 48824-1321
+ use specfun
  use prec_def
  implicit none
+
+! private :: calck
 
 contains
 
@@ -71,6 +74,58 @@ contains
 ! findLargestPrimeFactor=factor
 !
 !end function findLargestPrimeFactor
+
+!> Calculates modified Bessel function of the second kind (K) for any integer order and real argument.
+!! Uses specfun.f90 to get besk0 and besk1, then uses recurrence to get other orders.
+real (Long) function bmath_besk(order,arg)
+ implicit none
+
+ integer, intent(in) :: order !< order of function (subscript of K)
+ real (Long), intent(in) :: arg !< argument of function
+ 
+ real (Long) :: bk0, bk1 !< calculation of besselk0 and k1
+
+ if(order==0) then
+  bmath_besk = besk0(arg)
+  return
+ endif
+
+ if(order==1) then
+  bmath_besk = besk1(arg)
+  return
+ endif
+
+ bk0 = besk0(arg)
+ bk1 = besk1(arg)
+
+ ! if not 0 or 1, then use recursion relation
+ bmath_besk=calcbesk(order,arg,bk0,bk1)
+
+end function bmath_besk
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Calculates modified Bessel function of the second kind (K) for any integer order, given the values of
+!! orders 1 and 2.
+real (Long) recursive function calcbesk(order,arg,bk0,bk1) result(bes)
+ implicit none
+
+ integer, intent(in) :: order !< order of function
+ real (Long), intent(in) :: arg !< argument of function
+ real (Long), intent(in) :: bk0 !< value of K_0(arg)
+ real (Long), intent(in) :: bk1 !< value of K_1(arg)
+
+ if(order>1) then
+  bes =  2._Long*(order-1)/arg*calcbesk(order-1,arg,bk0,bk1) + calcbesk(order-2,arg,bk0,bk1)
+ elseif(order<0) then
+  bes = -2._Long*(order+1)/arg*calcbesk(order+1,arg,bk0,bk1) + calcbesk(order+2,arg,bk0,bk1)
+ elseif(order==0) then
+  bes=bk0
+ else !if(order==1) then
+  bes=bk1
+ endif
+
+end function calcbesk
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -239,6 +294,47 @@ function bmath_dZeroBrent(ain,bin,f,iflag,err,maxiterin) result(zero)
  zero=s
 
 end function bmath_dZeroBrent
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Returns the inverse of a matrix calculated by finding the LU
+!! decomposition.  Depends on LAPACK.
+!!
+!! Original code public domain, by Jason Blevins, found at
+!! http://fortranwiki.org/fortran/show/inv
+!!
+function bmath_inv(A) result(Ainv)
+  real(long), dimension(:,:), intent(in) :: A
+  real(long), dimension(size(A,1),size(A,2)) :: Ainv
+
+  real(long), dimension(size(A,1)) :: work  ! work array for LAPACK
+  integer, dimension(size(A,1)) :: ipiv   ! pivot indices
+  integer :: n, info
+
+  ! External procedures defined in LAPACK
+!  external DGETRF
+!  external DGETRI
+
+  ! Store A in Ainv to prevent it from being overwritten by LAPACK
+  Ainv = A
+  n = size(A,1)
+
+  ! DGETRF computes an LU factorization of a general M-by-N matrix A
+  ! using partial pivoting with row interchanges.
+  call DGETRF(n, n, Ainv, n, ipiv, info)
+
+  if (info /= 0) then
+     stop 'Matrix is numerically singular!'
+  end if
+
+  ! DGETRI computes the inverse of a matrix using the LU factorization
+  ! computed by DGETRF.
+  call DGETRI(n, Ainv, n, ipiv, work, n, info)
+
+  if (info /= 0) then
+     stop 'Matrix inversion failed!'
+  end if
+end function bmath_inv
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
