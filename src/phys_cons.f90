@@ -143,6 +143,9 @@ contains
  !! -# length = 10 micrometer - 10 um
  !! -# mass   = atomic mass unit - u
  !! -# time   = millisecond - ms
+ !!
+ !! -# energy \f$\approx\f$ 0.104 millielectronvolt - meV
+
  subroutine phys_cons_initializeBEC
   implicit none
 
