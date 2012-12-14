@@ -94,7 +94,8 @@ logical function isComment(line)
 
  linelen=len(line)
 
- isComment=(getFirstNonBlankChar(line)=='!')
+ isComment=((getFirstNonBlankChar(line)=='!') &
+        .or.(getFirstNonBlankChar(line)=='#'))
 
 end function isComment
 
