@@ -103,6 +103,20 @@ real (Long) function bmath_besk(order,arg)
 
 end function bmath_besk
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Calculates first derivative of modified Bessel function of the second kind (K) for any integer order,
+!! using recursion relation.
+real (Long) function bmath_dbeskdx(order,arg) result (fres)
+ implicit none
+
+ integer, intent(in) :: order !< order of function (subscript of K)
+ real (Long), intent(in) :: arg !< argument of function
+
+ fres=-0.5_Long*(bmath_besk(order-1,arg)+bmath_besk(order+1,arg))
+
+end function bmath_dbeskdx
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !> Calculates modified Bessel function of the second kind (K) for any integer order, given the values of
