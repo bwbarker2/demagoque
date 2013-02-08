@@ -9,7 +9,8 @@ MODULE prec_def
 
   !> KIND of numbers. REAL64 is the KIND number of a 64-bit real number
   !! in this architecture (provided by ISO_FORTRAN_ENV)
-  INTEGER,PARAMETER :: long=REAL64
+!  INTEGER,PARAMETER :: long=REAL64
+  integer, parameter :: long=selected_real_kind(15,50)
 
   !> Machine epsilon for KIND parameter given above. Use this if you are
   !! determining whether two floating-point numbers are equal. For example,
