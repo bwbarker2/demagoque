@@ -44,7 +44,7 @@ function besei0 ( x )
   besei0 = result
 
   return
-end
+end function
 function besei1 ( x )
 
 !*****************************************************************************80
@@ -88,7 +88,7 @@ function besei1 ( x )
   besei1 = result
 
   return
-end
+end function
 function besek0 ( x )
 
 !*****************************************************************************80
@@ -133,7 +133,7 @@ function besek0 ( x )
   besek0 = result
 
   return
-end
+end function
 function besek1 ( x )
 
 !*****************************************************************************80
@@ -178,7 +178,7 @@ function besek1 ( x )
   besek1 = result
 
   return
-end
+end function
 function besi0 ( x )
 
 !*****************************************************************************80
@@ -224,7 +224,7 @@ function besi0 ( x )
   besi0 = result
 
   return
-end
+end function
 function besi1 ( x )
 
 !*****************************************************************************80
@@ -270,7 +270,7 @@ function besi1 ( x )
   besi1 = result
 
   return
-end
+end function
 function specfun_besj0 ( x ) result(besj0)
 
 !*****************************************************************************80
@@ -317,7 +317,7 @@ function specfun_besj0 ( x ) result(besj0)
   besj0 = result
 
   return
-end
+end function
 function specfun_besj1 ( x ) result(besj1)
 
 !*****************************************************************************80
@@ -364,7 +364,7 @@ function specfun_besj1 ( x ) result(besj1)
   besj1 = result
 
   return
-end
+end function
 function besk0 ( x )
 
 !*****************************************************************************80
@@ -410,7 +410,7 @@ function besk0 ( x )
   besk0 = result
 
   return
-end
+end function
 function besk1 ( x )
 
 !*****************************************************************************80
@@ -454,7 +454,7 @@ function besk1 ( x )
   besk1 = result
 
   return
-end
+end function
 function specfun_besy0 ( x ) result (besy0)
 
 !*****************************************************************************80
@@ -501,7 +501,7 @@ function specfun_besy0 ( x ) result (besy0)
   besy0 = result
 
   return
-end
+end function
 function specfun_besy1 ( x ) result(besy1)
 
 !*****************************************************************************80
@@ -546,7 +546,7 @@ function specfun_besy1 ( x ) result(besy1)
   besy1 = result
 
   return
-end
+end function
 subroutine calcei ( arg, result, jint )
 
 !*****************************************************************************80
@@ -970,7 +970,7 @@ subroutine calcei ( arg, result, jint )
   result = ei
 
   return
-end
+end subroutine
 subroutine calci0 ( arg, result, jint )
 
 !*****************************************************************************80
@@ -1165,7 +1165,7 @@ subroutine calci0 ( arg, result, jint )
   end if
 
   return
-end
+end subroutine
 subroutine calci1 ( arg, result, jint )
 
 !*****************************************************************************80
@@ -1367,7 +1367,7 @@ subroutine calci1 ( arg, result, jint )
   end if
 
   return
-end
+end subroutine
 subroutine calck0 ( arg, result, jint )
 
 !*****************************************************************************80
@@ -1556,7 +1556,7 @@ subroutine calck0 ( arg, result, jint )
   end if
 
   return
-end
+end subroutine
 subroutine calck1 ( arg, result, jint )
 
 !*****************************************************************************80
@@ -1752,7 +1752,7 @@ subroutine calck1 ( arg, result, jint )
   end if
 
   return
-end
+end subroutine
 subroutine calerf ( arg, result, jint )
 
 !*****************************************************************************80
@@ -2008,7 +2008,7 @@ subroutine calerf ( arg, result, jint )
   end if
 
   return
-end
+end subroutine
 subroutine caljy0 ( arg, result, jint )
 
 !*****************************************************************************80
@@ -2402,7 +2402,7 @@ subroutine caljy0 ( arg, result, jint )
   end if
 
   return
-end
+end subroutine
 subroutine caljy1 ( arg, result, jint )
 
 !*****************************************************************************80
@@ -2763,7 +2763,7 @@ subroutine caljy1 ( arg, result, jint )
   end if
 
   return
-end
+end subroutine
 function daw ( xx )
 
 !*****************************************************************************80
@@ -2975,7 +2975,7 @@ function daw ( xx )
   end if
 
   return
-end
+end function
 function specfun_dlgama ( x ) result (dlgama)
 
 !*****************************************************************************80
@@ -3245,7 +3245,7 @@ function specfun_dlgama ( x ) result (dlgama)
   dlgama = res
 
   return
-end
+end function
 subroutine dsubn ( x, nmax, xmax, d )
 
 !*****************************************************************************80
@@ -3426,7 +3426,7 @@ subroutine dsubn ( x, nmax, xmax, d )
   end if
 
   return
-end
+end subroutine
 function ei ( x )
 
 !*****************************************************************************80
@@ -3469,7 +3469,7 @@ function ei ( x )
   ei = result
 
   return
-end
+end function
 function eone ( x )
 
 !*****************************************************************************80
@@ -3512,7 +3512,7 @@ function eone ( x )
   eone = result
 
   return
-end
+end function
 function expei ( x )
 
 !*****************************************************************************80
@@ -3556,7 +3556,7 @@ function expei ( x )
   expei = result
 
   return
-end
+end function
 subroutine machar ( ibeta, it, irnd, ngrd, machep, negep, iexp, &
   minexp, maxexp, eps, epsneg, xmin, xmax )
 
@@ -3938,7 +3938,7 @@ subroutine machar ( ibeta, it, irnd, ngrd, machep, negep, iexp, &
   end do
 
   return
-end
+end subroutine
 function r8_erf ( x )
 
 !*****************************************************************************80
@@ -3985,7 +3985,7 @@ function r8_erf ( x )
   r8_erf = result
 
   return
-end
+end function
 function r8_erfc ( x )
 
 !*****************************************************************************80
@@ -4032,7 +4032,7 @@ function r8_erfc ( x )
   r8_erfc = result
 
   return
-end
+end function
 function r8_erfcx ( x )
 
 !*****************************************************************************80
@@ -4079,7 +4079,7 @@ function r8_erfcx ( x )
   r8_erfcx = result
 
   return
-end
+end function
 function r8_gamma ( x )
 
 !*****************************************************************************80
@@ -4340,7 +4340,7 @@ function r8_gamma ( x )
   r8_gamma = res
 
   return
-end
+end function
 function r8_psi ( xx )
 
 !*****************************************************************************80
@@ -4574,7 +4574,7 @@ function r8_psi ( xx )
   r8_psi = aug + log ( x )
 
   return
-end
+end function
 function ren ( k )
 
 !*****************************************************************************80
@@ -4636,7 +4636,7 @@ function ren ( k )
   ren = real ( iy, kind = 8 ) / c1 * ( 1.0D+00 + c2 + c3 )
 
   return
-end
+end function
 subroutine ribesl ( x, alpha, nb, ize, b, ncalc )
 
 !*****************************************************************************80
@@ -5211,7 +5211,7 @@ subroutine ribesl ( x, alpha, nb, ize, b, ncalc )
   end if
 
   return
-end
+end subroutine
 subroutine rjbesl ( x, alpha, nb, b, ncalc )
 
 !*****************************************************************************80
@@ -5872,7 +5872,7 @@ subroutine rjbesl ( x, alpha, nb, b, ncalc )
   end if
 
   return
-end
+end subroutine
 subroutine rkbesl ( x, alpha, nb, ize, bk, ncalc )
 
 !*****************************************************************************80
@@ -6473,7 +6473,7 @@ subroutine rkbesl ( x, alpha, nb, ize, bk, ncalc )
   end if
 
   return
-end
+end subroutine
 subroutine rybesl ( x, alpha, nb, by, ncalc )
 
 !*****************************************************************************80
@@ -6984,7 +6984,7 @@ subroutine rybesl ( x, alpha, nb, by, ncalc )
   end if
 
   return
-end
+end subroutine
 subroutine timestamp ( )
 
 !*****************************************************************************80
@@ -7062,6 +7062,6 @@ subroutine timestamp ( )
     d, trim ( month(m) ), y, h, ':', n, ':', s, '.', mm, trim ( ampm )
 
   return
-end
+end subroutine
 
 end module specfun
