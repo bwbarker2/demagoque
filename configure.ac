@@ -1,5 +1,8 @@
 # Process this file with autoconf to produce a configure script.
 
+# we actually need this version to get fortran module support
+AC_PREREQ([2.69])
+
 AC_CONFIG_AUX_DIR([build-aux])
 AC_INIT([demagoque], m4_esyscmd_s([echo 0.01r`bzr revno`]), [barker@nscl.msu.edu],[],[[https://launchpad.net/demagoque]])
 
@@ -14,6 +17,11 @@ AC_PROG_AWK
 AC_PROG_FC
 AC_PROG_F77
 AC_PROG_SED
+
+# finds compiler flag to include Fortran 90 module info from another directory,
+# stores in FC_MODINC. Used in tests/ to find mod files in src/
+# \TODO add error message if compiler doesn't have module directory options
+AC_FC_MODULE_FLAG
 
 # actually removes the default -O2 option from FCFLAGS
 if test X$user_set_fcflags != Xyes; then
