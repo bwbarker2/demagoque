@@ -652,4 +652,131 @@ subroutine zlin_int(xa,ya,n,x,y,ki)
 
 end subroutine zlin_int
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Calculates uncertainty of function, given uncertainties of parameters.
+!! Assumes that errors are random and normally distributed, and that the
+!! error given represents one standard deviation. Result is one standard
+!! deviation, assuming values make a normal distribution.
+!!
+!! \TODO sometimes this takes forever or hangs. Debug
+real(Long) function bmath_propagateError(fcn,params,errs) result(propErr)
+ use bexception
+
+ real (Long), dimension(:), intent(in) :: params !< list of parameters
+ real (Long), dimension(:), intent(in) :: errs   !< list of uncertainties of parameters
+
+ real (Long), dimension(:), allocatable :: params1
+ real (Long) :: fcn1,ave,var2,varvar,avevar,var,prevvar,jvar2,jave
+
+ integer :: ii,jj,kk
+
+ interface
+  real(Long) function fcn(params)
+   use prec_def
+   implicit none
+   real(Long), dimension(:), intent(in) :: params
+  end function fcn
+ end interface
+
+ if(size(params)/=size(errs)) then
+  call throwException('bmath_propagateError: number of parameters must equal' &
+   //' number of errors',BEXCEPTION_FATAL)
+ endif
+
+ allocate(params1(size(params)))
+ propErr = 0._Long
+
+ jvar2=0._Long
+ jave=0._Long
+ do kk=1,1000!00
+  ave = 0._Long
+  var2 = 0._Long
+  varvar=0._Long
+  avevar=0._Long
+  do jj=1,100000
+   do ii=1,size(params)
+    params1(ii)=bmath_rand_normal(params(ii),errs(ii))
+   enddo
+ 
+   fcn1 = fcn(params1)
+ 
+ 
+   ! calculate running sig^2 and ave to prevent large-number errors. (from https://en.wikipedia.org/w/index.php?title=Standard_deviation&oldid=541302131)
+   var2 = var2 + (jj-1._Long)/jj*(fcn1-ave)**2
+   ave = ave + (fcn1 - ave)/jj
+
+   var = sqrt(var2/jj)
+
+   varvar=varvar + (jj-1._Long)/jj*(var-avevar)**2
+   avevar=avevar + (var - avevar) / jj
+ 
+ !  write(error_unit,*)jj,fcn1,var,sqrt(varvar/jj)/var
+ 
+   if(jj>=10) then
+    ! if variance of the variances is low enough, then call it converged
+    if(sqrt(varvar/jj)/var<=0.01) then
+!     propErr=var
+ !    write(error_unit,*)'jj=',jj
+     exit
+    endif
+   endif !jj>1
+!   prevvar=var
+  enddo !jj
+  jvar2 = jvar2 + (kk - 1._Long) / kk * (var - jave)**2
+  jave = jave + (var - jave) / kk
+
+  ! if relative standard deviation of the mean is small enough
+  if(sqrt(jvar2)/(kk*jave)<0.0000001) then
+   propErr=var
+   return
+  endif
+ enddo !kk
+
+ call throwException('bmath_propagateError: max iterations reached: error not certain',BEXCEPTION_WARNING)
+ propErr=var
+end function bmath_propagateError
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!> Returns random number from the normal distribution with PDF
+!!   phi(x) = exp(-(x-mean)^2/(2*sig**2))
+!! using Marsaglia polar method and PRNG from Fortran 95 intrinsic.
+!! (implementation converted from Java here: https://en.wikipedia.org/w/index.php?title=Marsaglia_polar_method&oldid=539981976 )
+!! 
+!! \TODO replace call to random_number with custom PRNG for more repeatability, since
+!!       it looks like implementation is compiler-specific.
+!!
+!! \TODO for faster algorithm, implement Ziggurat Algorithm
+real(Long) function bmath_rand_normal(mean,sig) result(rand)
+ use phys_cons
+
+ real(Long), intent(in) :: mean !< mean of PDF of normal distribution
+ real(Long), intent(in) :: sig !< width of PDF of normal distribution
+
+ real(Long), save :: spare
+ logical, save :: isSpareReady = .false.
+
+ real (Long) :: u,v,s,mul
+
+ if(isSpareReady) then
+  isSpareReady=.false.
+  rand = spare * sig + mean
+ else
+  s = 2._Long
+  do while ((s>=1._Long).or.(s<epzero))
+   call random_number(u)
+   call random_number(v)
+   u = u * 2._Long - 1._Long
+   v = v * 2._Long - 1._Long
+   s = u*u + v*v
+  enddo
+  mul = sqrt(-2._Long*log(s)/s)
+  spare = v * mul
+  isSpareReady = .true.
+  rand = mean + sig * u * mul
+ endif
+
+end function bmath_rand_normal
+ 
 end module bmath
