@@ -667,7 +667,7 @@ real(Long) function bmath_propagateError(fcn,params,errs) result(propErr)
  real (Long), dimension(:), intent(in) :: errs   !< list of uncertainties of parameters
 
  real (Long), dimension(:), allocatable :: params1
- real (Long) :: fcn1,ave,var2,varvar,avevar,var,prevvar,jvar2,jave
+ real (Long) :: fcn1,ave,var2,varvar,avevar,var,jvar2,jave
 
  integer :: ii,jj,kk
 
