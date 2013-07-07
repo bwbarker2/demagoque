@@ -46,7 +46,8 @@ SUBROUTINE calcInitial
 !  endif
 !  whm=2.25e-2
 !  w=2.5e-5_Long  !hard-coded for Ott2001
-  w=0.00008_Long
+  w=9.5e-4_Long
+!  w=0.00008_Long
 !  w=0.00016_Long
 !  w = hbar/(m0*10000._Long)
   Nmax=0
