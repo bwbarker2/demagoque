@@ -30,15 +30,24 @@ SUBROUTINE time_evolution
   REAL (Long) :: dt2  ! half delt
   real (Long) :: soms5  !split operator method s_5
   real (Long) :: ch_unc !check uncertainty condition
+  real (Long) :: ch_unc_x ! check phase-factor-low-enough in x-space, only valid for pot4
 
   integer :: ii
 
  !check to be sure that uncertainty condition is met:
  ch_unc=hbar*kLa**2/(2e0_Long*m0)*delt
- if(ch_unc>0.1_Long) then
+ if(ch_unc>0.1_Long*pi) then
   write(*,*)'time_evolution: ch_unc=',ch_unc
-  call throwException('time_evolution: uncertainty condition too high, ch_unc>0.1',BEXCEPTION_FATAL)
+  call throwException('time_evolution: uncertainty condition too high, ch_unc>0.1*pi, lower delt/delx^2',BEXCEPTION_FATAL)
  endif
+
+ ch_unc_x = m0*ho_mateo_wz**2*0.5_Long/hbar*xLa**2*delt
+! write(*,*)'time_evolution: ch_unc_x=',ch_unc_x
+ if(ch_unc_x>0.1_Long*pi) then
+  write(*,*)'time_evolution: ch_unc_x=',ch_unc_x
+  call throwException('time_evolution: uncertainty condition too high, ch_unc_x>0.1*pi, lower xLa^2*delt',BEXCEPTION_WARNING)
+ endif
+
 
  firstOutput=.true.
 
